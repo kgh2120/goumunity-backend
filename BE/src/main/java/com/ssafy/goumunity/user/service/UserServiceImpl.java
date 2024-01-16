@@ -16,6 +16,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
@@ -28,10 +30,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public User saveUser(UserCreateDto userCreateDto, MultipartFile profileImage) {
         // 이메일 중복 검사
-        try{
-            userRepository.findByEmailAndStatus(userCreateDto.getEmail(), UserStatus.ACTIVE);
-            throw new UserException(UserErrorCode.EXIST_EMAIL);
-        } catch (UserException ignored){}
+        this.isExistEmail(userCreateDto.getEmail());
 
         Image image = imageHandler.parseFileInfo(profileImage);
 
@@ -45,6 +44,14 @@ public class UserServiceImpl implements UserService {
     public User findUserByEmail(String email) {
         return userRepository.findByEmailAndStatus(email, UserStatus.ACTIVE)
                 .orElseThrow(() -> new UserException(UserErrorCode.EMAIL_NOT_FOUND));
+    }
+
+    @Override
+    public void isExistEmail(String email) {
+        userRepository.findByEmailAndStatus(email, UserStatus.ACTIVE)
+                .ifPresent((user) -> {
+                    throw new UserException(UserErrorCode.EXIST_EMAIL);
+                });
     }
 
     @Override
