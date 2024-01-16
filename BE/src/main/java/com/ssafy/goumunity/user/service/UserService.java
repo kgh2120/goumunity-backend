@@ -7,4 +7,5 @@ import org.springframework.web.multipart.MultipartFile;
 
 public interface UserService extends UserDetailsService {
     User saveUser(UserCreateDto userCreateDto, MultipartFile profileImage);
+    User findUserByEmail(String email);
 }
