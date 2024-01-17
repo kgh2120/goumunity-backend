@@ -10,8 +10,6 @@ import com.ssafy.goumunity.user.service.port.UserRepository;
 import com.ssafy.goumunity.util.SingleImageHandler;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -51,6 +49,4 @@ public class UserServiceImpl implements UserService {
                     throw new CustomException(CustomErrorCode.EXIST_EMAIL);
                 });
     }
-
-
 }
