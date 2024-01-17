@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.http.HttpStatus;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 @Getter
 @NoArgsConstructor
@@ -19,7 +19,7 @@ public class ErrorResponse {
     private String path;
 
     public static ErrorResponse createErrorResponse(ErrorCode errorCode, String path) {
-        return new ErrorResponse(LocalDateTime.now().toString(),errorCode.getHttpStatus(), errorCode.getErrorName(),
+        return new ErrorResponse(Instant.now().toString(),errorCode.getHttpStatus(), errorCode.getErrorName(),
                 errorCode.getErrorMessage(),path);
     }
 

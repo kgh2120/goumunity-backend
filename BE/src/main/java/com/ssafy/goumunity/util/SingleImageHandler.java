@@ -8,6 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.util.Date;
 
 @Component
@@ -16,12 +17,12 @@ public class SingleImageHandler {
         if(image == null) return null;
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd");
-        String current_date = simpleDateFormat.format(new Date());
+        String currentDate = simpleDateFormat.format(Date.from(Instant.now()));
 
         String absolutePath = new File("").getAbsolutePath() + "\\";
 
-        String path = "src/main/resources/images/user-profile/" + current_date;
-        String simplePath = "/images/user-profile/" + current_date;
+        String path = "src/main/resources/images/user-profile/" + currentDate;
+        String simplePath = "/images/user-profile/" + currentDate;
         File file = new File(path);
 
         if(!file.exists()){
@@ -50,14 +51,14 @@ public class SingleImageHandler {
             }
         }
 
-        String new_file_name = Long.toString(System.nanoTime()) + originalFileExtension;
+        String newFileName = Long.toString(System.nanoTime()) + originalFileExtension;
         Image img = Image.builder()
                 .originalFileName(image.getOriginalFilename())
-                .storedFilePath(simplePath + "/" + new_file_name)
+                .storedFilePath(simplePath + "/" + newFileName)
                 .fileSize(image.getSize())
                 .build();
 
-        file = new File(absolutePath + path + "/" + new_file_name);
+        file = new File(absolutePath + path + "/" + newFileName);
 
         try {
             image.transferTo(file);
