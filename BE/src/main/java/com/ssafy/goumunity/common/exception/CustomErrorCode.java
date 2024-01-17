@@ -6,7 +6,7 @@ import org.springframework.http.HttpStatus;
 
 @RequiredArgsConstructor
 @Getter
-public enum UserErrorCode implements ErrorCode{
+public enum CustomErrorCode implements ErrorCode{
 
     EMAIL_NOT_FOUND(HttpStatus.NOT_FOUND, "이메일이 존재하지 않습니다."),
     EXIST_EMAIL(HttpStatus.BAD_REQUEST, "중복된 이메일입니다."),

@@ -1,7 +1,7 @@
 package com.ssafy.goumunity.user.service;
 
-import com.ssafy.goumunity.common.exception.UserErrorCode;
-import com.ssafy.goumunity.common.exception.UserException;
+import com.ssafy.goumunity.common.exception.CustomErrorCode;
+import com.ssafy.goumunity.common.exception.CustomException;
 import com.ssafy.goumunity.user.dto.VerificationCodeDto;
 import com.ssafy.goumunity.user.service.port.MailSender;
 import lombok.RequiredArgsConstructor;
@@ -37,7 +37,7 @@ public class VertificationServiceImpl implements VertificationService {
 
             mailSender.send(email, title, authCode);
         } catch(NoSuchAlgorithmException e){
-            throw new UserException(UserErrorCode.EMAIL_NOT_FOUND);
+            throw new CustomException(CustomErrorCode.EMAIL_NOT_FOUND);
         }
     }
 

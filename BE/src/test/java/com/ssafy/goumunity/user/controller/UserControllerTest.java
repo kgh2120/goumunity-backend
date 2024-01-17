@@ -1,8 +1,8 @@
 package com.ssafy.goumunity.user.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ssafy.goumunity.common.exception.UserErrorCode;
-import com.ssafy.goumunity.common.exception.UserException;
+import com.ssafy.goumunity.common.exception.CustomErrorCode;
+import com.ssafy.goumunity.common.exception.CustomException;
 import com.ssafy.goumunity.config.SecurityConfig;
 import com.ssafy.goumunity.user.domain.User;
 import com.ssafy.goumunity.user.domain.UserCategory;
@@ -83,7 +83,7 @@ class UserControllerTest {
         MockMultipartFile image = new MockMultipartFile("image", "test.jpg", "jpg", fileInputStream);
 
         given(userService.saveUser(any(),any())).willThrow(
-                new UserException(UserErrorCode.EXIST_EMAIL)
+                new CustomException(CustomErrorCode.EXIST_EMAIL)
         );
 
         this.mockMvc.perform(multipart("/api/users/join")
@@ -110,7 +110,7 @@ class UserControllerTest {
         UserCreateDto user = userCreateDto();
 
         given(userService.findUserByEmail(any())).willThrow(
-                new UserException(UserErrorCode.EMAIL_NOT_FOUND)
+                new CustomException(CustomErrorCode.EMAIL_NOT_FOUND)
         );
 
         this.mockMvc.perform(get("/api/users/" + user.getEmail()))

@@ -1,7 +1,7 @@
 package com.ssafy.goumunity.user.service;
 
-import com.ssafy.goumunity.common.exception.UserErrorCode;
-import com.ssafy.goumunity.common.exception.UserException;
+import com.ssafy.goumunity.common.exception.CustomErrorCode;
+import com.ssafy.goumunity.common.exception.CustomException;
 import com.ssafy.goumunity.image.Image;
 import com.ssafy.goumunity.user.domain.User;
 import com.ssafy.goumunity.user.domain.UserStatus;
@@ -41,14 +41,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findUserByEmail(String email) {
         return userRepository.findByEmailAndStatus(email, UserStatus.ACTIVE)
-                .orElseThrow(() -> new UserException(UserErrorCode.EMAIL_NOT_FOUND));
+                .orElseThrow(() -> new CustomException(CustomErrorCode.EMAIL_NOT_FOUND));
     }
 
     @Override
     public void isExistEmail(String email) {
         userRepository.findByEmailAndStatus(email, UserStatus.ACTIVE)
                 .ifPresent((user) -> {
-                    throw new UserException(UserErrorCode.EXIST_EMAIL);
+                    throw new CustomException(CustomErrorCode.EXIST_EMAIL);
                 });
     }
 

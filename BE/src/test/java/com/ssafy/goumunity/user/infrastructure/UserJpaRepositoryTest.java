@@ -1,6 +1,6 @@
 package com.ssafy.goumunity.user.infrastructure;
 
-import com.ssafy.goumunity.common.exception.UserException;
+import com.ssafy.goumunity.common.exception.CustomException;
 import com.ssafy.goumunity.user.domain.User;
 import com.ssafy.goumunity.user.domain.UserCategory;
 import com.ssafy.goumunity.user.dto.UserCreateDto;
@@ -39,6 +39,6 @@ class UserJpaRepositoryTest {
     @Test
     @Transactional
     void 없는_이메일_조회_테스트() {
-        assertThrows(UserException.class, () -> userService.findUserByEmail("ssafy@ssafy.com"));
+        assertThrows(CustomException.class, () -> userService.findUserByEmail("ssafy@ssafy.com"));
     }
 }
