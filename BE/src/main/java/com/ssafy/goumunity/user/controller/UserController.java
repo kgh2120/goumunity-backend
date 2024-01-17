@@ -3,7 +3,8 @@ package com.ssafy.goumunity.user.controller;
 import com.ssafy.goumunity.user.domain.User;
 import com.ssafy.goumunity.user.dto.UserCreateDto;
 import com.ssafy.goumunity.user.dto.UserResponse;
-import com.ssafy.goumunity.user.service.CertificationService;
+import com.ssafy.goumunity.user.dto.VerificationCodeDto;
+import com.ssafy.goumunity.user.service.VertificationService;
 import com.ssafy.goumunity.user.service.UserService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
@@ -19,7 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class UserController {
 
     private final UserService userService;
-    private final CertificationService certificationService;
+    private final VertificationService vertificationService;
 
     @PostMapping("/join")
     public ResponseEntity<UserResponse> saveUser(@RequestPart(value = "data") @Valid UserCreateDto userCreateDto,
@@ -37,8 +38,13 @@ public class UserController {
     }
 
     @GetMapping("/email/verification")
-    public ResponseEntity<Void> sendMessage(@RequestParam("email") @Valid @Email String email) {
-        certificationService.send(email);
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<Void> sendVerificationCode(@RequestParam("email") @Valid @Email String email) {
+        vertificationService.send(email);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/email/verification")
+    public ResponseEntity<Boolean> checkVerificationCode(@RequestBody @Valid VerificationCodeDto verificationCodeDto){
+        return ResponseEntity.ok(vertificationService.verificate(verificationCodeDto));
     }
 }
