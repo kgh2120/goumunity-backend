@@ -29,9 +29,9 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     private final ObjectMapper objectMapper;
     private final AuthenticationManager authenticationManager;
     private final String SESSION_LOGIN_USER_KEY;
-
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
+
 
         UserLoginDto dto = null;
         try {

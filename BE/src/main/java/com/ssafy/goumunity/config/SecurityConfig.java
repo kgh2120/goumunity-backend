@@ -40,6 +40,8 @@ public class SecurityConfig {
 
     @Value("${session.key.user}")
     private String SESSION_LOGIN_USER_KEY;
+    @Value("${api.url.login}")
+    private String LOGIN_API_URL;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
@@ -50,6 +52,9 @@ public class SecurityConfig {
                 .passwordEncoder(encoder);
         authAuthenticationManager = authenticationManagerBuilder.build();
 
+        AuthenticationFilter authenticationFilter = new AuthenticationFilter(objectMapper, authAuthenticationManager, SESSION_LOGIN_USER_KEY);
+        authenticationFilter.setFilterProcessesUrl(LOGIN_API_URL);
+
         return httpSecurity
                 .csrf(CsrfConfigurer::disable)
                 .sessionManagement(SessionManagementConfigurer ->
@@ -59,7 +64,7 @@ public class SecurityConfig {
                 .cors(c -> c.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(auth -> auth.requestMatchers("/**").permitAll())
                 .authenticationManager(authAuthenticationManager)
-                .addFilterBefore(new AuthenticationFilter(objectMapper, authAuthenticationManager, SESSION_LOGIN_USER_KEY),
+                .addFilterBefore(authenticationFilter,
                         UsernamePasswordAuthenticationFilter.class)
                 .addFilterAfter(new AuthorizationFilter(SESSION_LOGIN_USER_KEY), UsernamePasswordAuthenticationFilter.class)
                 .build();

@@ -1,3 +1,6 @@
 session:
   key:
     user : LOGIN_USER
+api:
+  url:
+    login: /api/users/login
