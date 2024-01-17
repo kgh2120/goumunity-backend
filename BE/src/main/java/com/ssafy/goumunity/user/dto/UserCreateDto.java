@@ -3,6 +3,7 @@ package com.ssafy.goumunity.user.dto;
 import com.ssafy.goumunity.user.domain.UserCategory;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,6 +21,7 @@ public class UserCreateDto {
     private String email;
 
     @NotBlank(message = "비밀번호는 필수값입니다.")
+    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#\\$%])[a-zA-Z\\d!@#\\$%]{8,20}$")
     private String password;
 
     private Long monthBudget;
