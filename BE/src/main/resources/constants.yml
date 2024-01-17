@@ -1,0 +1,3 @@
+session:
+  key:
+    user : LOGIN_USER
