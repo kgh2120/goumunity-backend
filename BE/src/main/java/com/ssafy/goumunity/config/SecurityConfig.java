@@ -1,9 +1,14 @@
 package com.ssafy.goumunity.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ssafy.goumunity.config.security.AuthenticationFilter;
+import com.ssafy.goumunity.config.security.AuthorizationFilter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.CorsConfigurer;
@@ -11,8 +16,15 @@ import org.springframework.security.config.annotation.web.configurers.CsrfConfig
 import org.springframework.security.config.annotation.web.configurers.FormLoginConfigurer;
 import org.springframework.security.config.annotation.web.configurers.HttpBasicConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
@@ -20,14 +32,23 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
     private final PasswordEncoder encoder;
-    private AuthenticationManager anthAuthenticationManager;
+    private AuthenticationManager authAuthenticationManager;
+
+    private final UserDetailsService userDetailsService;
+
+    private final ObjectMapper objectMapper;
+
+    @Value("${session.key.user}")
+    private String SESSION_LOGIN_USER_KEY;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
-        /*AuthenticationManagerBuilder authenticationManagerBuilder = httpSecurity
-                .getSharedObject(AuthenticationManagerBuilder.class)
+        AuthenticationManagerBuilder authenticationManagerBuilder = httpSecurity
+                .getSharedObject(AuthenticationManagerBuilder.class);
+        authenticationManagerBuilder
                 .userDetailsService(userDetailsService)
-                .passwordEncoder(encoder);*/
+                .passwordEncoder(encoder);
+        authAuthenticationManager = authenticationManagerBuilder.build();
 
         return httpSecurity
                 .csrf(CsrfConfigurer::disable)
@@ -35,8 +56,32 @@ public class SecurityConfig {
                         SessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .formLogin(FormLoginConfigurer::disable)
                 .httpBasic(HttpBasicConfigurer::disable)
-                .cors(CorsConfigurer::disable)
+                .cors(c -> c.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(auth -> auth.requestMatchers("/**").permitAll())
+                .authenticationManager(authAuthenticationManager)
+                .addFilterBefore(new AuthenticationFilter(objectMapper, authAuthenticationManager, SESSION_LOGIN_USER_KEY),
+                        UsernamePasswordAuthenticationFilter.class)
+                .addFilterAfter(new AuthorizationFilter(SESSION_LOGIN_USER_KEY), UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
+
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+
+        configuration.setAllowedOriginPatterns(Arrays.asList("*"));
+        configuration.setAllowedMethods(
+                Arrays.asList("POST", "GET", "DELETE", "PUT", "PATCH"));
+        configuration.setAllowedHeaders(Arrays.asList("*"));
+        configuration.setExposedHeaders(Arrays.asList("*"));
+        configuration.setAllowCredentials(true);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+    }
+
+
+
 }
