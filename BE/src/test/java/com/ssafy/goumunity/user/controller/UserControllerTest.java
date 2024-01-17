@@ -3,6 +3,7 @@ package com.ssafy.goumunity.user.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.goumunity.common.exception.CustomErrorCode;
 import com.ssafy.goumunity.common.exception.CustomException;
+import com.ssafy.goumunity.common.exception.GlobalExceptionHandler;
 import com.ssafy.goumunity.config.SecurityConfig;
 import com.ssafy.goumunity.user.domain.User;
 import com.ssafy.goumunity.user.domain.UserCategory;
@@ -35,7 +36,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(controllers = {UserController.class},
+@WebMvcTest(controllers = {UserController.class, GlobalExceptionHandler.class},
         excludeFilters = {@ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, value = SecurityConfig.class)},
         excludeAutoConfiguration = {SecurityAutoConfiguration.class,
                 SecurityFilterAutoConfiguration.class,
