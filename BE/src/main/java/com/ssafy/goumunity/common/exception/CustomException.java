@@ -1,5 +1,8 @@
 package com.ssafy.goumunity.common.exception;
 
+import lombok.Getter;
+
+@Getter
 public class CustomException extends RuntimeException{
 
     private final CustomErrorCode errorCode;
@@ -7,9 +10,5 @@ public class CustomException extends RuntimeException{
     public CustomException(CustomErrorCode errorCode){
         super(errorCode.getErrorMessage());
         this.errorCode = errorCode;
-    }
-
-    public CustomErrorCode getErrorCode(){
-        return this.errorCode;
     }
 }

@@ -8,6 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -20,14 +21,14 @@ public class MultiImageHandler {
         if(multipartFiles == null || multipartFiles.isEmpty()) return fileList;
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd");
-        String current_date = simpleDateFormat.format(new Date());
+        String currentDate = simpleDateFormat.format(Date.from(Instant.now()));
 
         String absolutePath = new File("").getAbsolutePath() + "\\";
 
 
         // 저장 path 설정 --> 추후 게시판 기능 구현시 활용
-        String path = "src/main/resources/images/board/" + current_date;
-        String simplePath = "/images/board/" + current_date;
+        String path = "src/main/resources/images/board/" + currentDate;
+        String simplePath = "/images/board/" + currentDate;
         File file = new File(path);
 
         if(!file.exists()){
@@ -57,15 +58,15 @@ public class MultiImageHandler {
                     }
                 }
 
-                String new_file_name = Long.toString(System.nanoTime()) + originalFileExtension;
+                String newFileName = Long.toString(System.nanoTime()) + originalFileExtension;
                 Image img = Image.builder()
                         .originalFileName(multipartFile.getOriginalFilename())
-                        .storedFilePath(simplePath + "/" + new_file_name)
+                        .storedFilePath(simplePath + "/" + newFileName)
                         .fileSize(multipartFile.getSize())
                         .build();
                 fileList.add(img);
 
-                file = new File(absolutePath + path + "/" + new_file_name);
+                file = new File(absolutePath + path + "/" + newFileName);
                 multipartFile.transferTo(file);
             }
         }
