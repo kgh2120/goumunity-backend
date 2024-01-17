@@ -1,5 +1,7 @@
 package com.ssafy.goumunity.config.security;
 
+import com.ssafy.goumunity.common.exception.CustomErrorCode;
+import com.ssafy.goumunity.common.exception.CustomException;
 import com.ssafy.goumunity.user.domain.UserStatus;
 import com.ssafy.goumunity.user.service.port.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +18,6 @@ public class AuthenticationService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return new CustomDetails(userRepository.findByEmailAndStatus(username, UserStatus.ACTIVE)
-                .orElseThrow());
+                .orElseThrow(() -> new CustomException(CustomErrorCode.EMAIL_NOT_FOUND)));
     }
 }
