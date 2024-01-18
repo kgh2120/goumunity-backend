@@ -6,9 +6,11 @@ import com.ssafy.goumunity.user.dto.UserResponse;
 import com.ssafy.goumunity.user.dto.VerificationCodeDto;
 import com.ssafy.goumunity.user.service.UserService;
 import com.ssafy.goumunity.user.service.VertificationService;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +23,9 @@ public class UserController {
 
     private final UserService userService;
     private final VertificationService vertificationService;
+
+    @Value("${session.key.user}")
+    private String SESSION_LOGIN_USER_KEY;
 
     @PostMapping("/join")
     public ResponseEntity<UserResponse> saveUser(
@@ -47,5 +52,11 @@ public class UserController {
     public ResponseEntity<Boolean> checkVerificationCode(
             @RequestBody @Valid VerificationCodeDto verificationCodeDto) {
         return ResponseEntity.ok(vertificationService.verificate(verificationCodeDto));
+    }
+
+    @GetMapping("/logout")
+    public ResponseEntity<Void> logout(HttpSession session) {
+        session.removeAttribute(SESSION_LOGIN_USER_KEY);
+        return ResponseEntity.ok().build();
     }
 }
