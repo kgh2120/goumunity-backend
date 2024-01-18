@@ -74,6 +74,13 @@ spotless {
 	}
 }
 
+tasks.register('updateGitHooks', Copy){
+	from './script/pre-commit.sh'
+	into '../.git/hooks'
+	fileMode 0775
+}
+compileJava.dependsOn 'updateGitHooks'
+
 tasks.named('test') {
 	useJUnitPlatform()
 }
