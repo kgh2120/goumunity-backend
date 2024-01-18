@@ -91,6 +91,14 @@ class UserControllerTest {
         this.mockMvc.perform(multipart("/api/users/join")
                 .file(image).part(data).contentType(MediaType.MULTIPART_FORM_DATA)
         ).andExpect(status().isConflict()).andDo(print());
+        this.mockMvc
+                .perform(
+                        multipart("/api/users/join")
+                                .file(image)
+                                .part(data)
+                                .contentType(MediaType.MULTIPART_FORM_DATA))
+                .andExpect(status().isConflict())
+                .andDo(print());
     }
 
     @DisplayName("이메일로 회원 조회 성공")

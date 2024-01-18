@@ -1,20 +1,19 @@
 package com.ssafy.goumunity.util;
 
 import com.ssafy.goumunity.image.Image;
-import org.springframework.stereotype.Component;
-import org.springframework.util.ObjectUtils;
-import org.springframework.web.multipart.MultipartFile;
-
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.Date;
+import org.springframework.stereotype.Component;
+import org.springframework.util.ObjectUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 @Component
 public class SingleImageHandler {
     public Image parseFileInfo(MultipartFile image) {
-        if(image == null) return null;
+        if (image == null) return null;
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd");
         String currentDate = simpleDateFormat.format(Date.from(Instant.now()));
@@ -25,7 +24,7 @@ public class SingleImageHandler {
         String simplePath = "/images/user-profile/" + currentDate;
         File file = new File(path);
 
-        if(!file.exists()){
+        if (!file.exists()) {
             file.mkdirs();
         }
 
@@ -34,29 +33,26 @@ public class SingleImageHandler {
 
         if (ObjectUtils.isEmpty(contentType)) {
             return null;
-        }
-        else {
-            if(contentType.contains("image/jpeg")){
+        } else {
+            if (contentType.contains("image/jpeg")) {
                 originalFileExtension = ".jpg";
-            }
-            else if(contentType.contains("image/png")){
+            } else if (contentType.contains("image/png")) {
                 originalFileExtension = ".png";
-            }
-            else if(contentType.contains("image/gif")){
+            } else if (contentType.contains("image/gif")) {
                 originalFileExtension = ".gif";
-            }
-            else {
+            } else {
                 // TODO: 지원하는 파일 확장자가 아닐 경우 에러 처리
                 return null;
             }
         }
 
         String newFileName = Long.toString(System.nanoTime()) + originalFileExtension;
-        Image img = Image.builder()
-                .originalFileName(image.getOriginalFilename())
-                .storedFilePath(simplePath + "/" + newFileName)
-                .fileSize(image.getSize())
-                .build();
+        Image img =
+                Image.builder()
+                        .originalFileName(image.getOriginalFilename())
+                        .storedFilePath(simplePath + "/" + newFileName)
+                        .fileSize(image.getSize())
+                        .build();
 
         file = new File(absolutePath + path + "/" + newFileName);
 

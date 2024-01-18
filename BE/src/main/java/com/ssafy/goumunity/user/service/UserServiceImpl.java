@@ -41,16 +41,19 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findUserByEmail(String email) {
-        return userRepository.findByEmailAndStatus(email, UserStatus.ACTIVE)
+        return userRepository
+                .findByEmailAndStatus(email, UserStatus.ACTIVE)
                 .orElseThrow(() -> new CustomException(CustomErrorCode.EMAIL_NOT_FOUND));
     }
 
     @Override
     public void isExistEmail(String email) {
-        userRepository.findByEmailAndStatus(email, UserStatus.ACTIVE)
-                .ifPresent((user) -> {
-                    throw new CustomException(CustomErrorCode.EXIST_EMAIL);
-                });
+        userRepository
+                .findByEmailAndStatus(email, UserStatus.ACTIVE)
+                .ifPresent(
+                        (user) -> {
+                            throw new CustomException(CustomErrorCode.EXIST_EMAIL);
+                        });
     }
 
     @Override

@@ -1,14 +1,11 @@
 package com.ssafy.goumunity.config.security;
 
-
 import com.ssafy.goumunity.user.domain.User;
+import java.util.ArrayList;
+import java.util.Collection;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
-import java.util.ArrayList;
-import java.util.Collection;
-
 
 @Getter
 public class CustomDetails implements UserDetails {

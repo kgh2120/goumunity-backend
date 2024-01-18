@@ -1,12 +1,11 @@
 package com.ssafy.goumunity.user.domain;
 
 import com.ssafy.goumunity.user.dto.UserCreateDto;
+import java.time.Instant;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.time.Instant;
 
 @Getter
 @Builder
@@ -30,7 +29,7 @@ public class User {
     private Instant createdAt;
     private Instant updatedAt;
 
-    public static User from(UserCreateDto userCreateDto, String imgUrl, String encodedPw){
+    public static User from(UserCreateDto userCreateDto, String imgUrl, String encodedPw) {
         return User.builder()
                 .email(userCreateDto.getEmail())
                 .password(encodedPw)

@@ -12,7 +12,8 @@ import static com.ssafy.goumunity.common.exception.GlobalErrorCode.BIND_ERROR;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(CustomException.class)
-    public ResponseEntity<ErrorResponse> handleGlobalException(CustomException e, HttpServletRequest request) {
+    public ResponseEntity<ErrorResponse> handleGlobalException(
+            CustomException e, HttpServletRequest request) {
         return ResponseEntity.status(e.getErrorCode().getHttpStatus())
                 .body(ErrorResponse.createErrorResponse(e.getErrorCode(), request.getRequestURI()));
     }

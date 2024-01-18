@@ -18,15 +18,18 @@ import java.util.ArrayList;
 @Slf4j
 public class AuthorizationFilter extends OncePerRequestFilter {
 
-
     private final String SESSION_LOGIN_USER_KEY;
+
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(
+            HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+            throws ServletException, IOException {
         User member = (User) request.getSession().getAttribute(SESSION_LOGIN_USER_KEY);
         if (member != null) {
-            SecurityContextHolder.getContext().setAuthentication(
-                    new UsernamePasswordAuthenticationToken(member, member.getPassword(), new ArrayList<>())
-            );
+            SecurityContextHolder.getContext()
+                    .setAuthentication(
+                            new UsernamePasswordAuthenticationToken(
+                                    member, member.getPassword(), new ArrayList<>()));
         }
         filterChain.doFilter(request,response);
     }
