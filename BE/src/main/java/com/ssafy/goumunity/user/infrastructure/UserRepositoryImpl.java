@@ -3,10 +3,9 @@ package com.ssafy.goumunity.user.infrastructure;
 import com.ssafy.goumunity.user.domain.User;
 import com.ssafy.goumunity.user.domain.UserStatus;
 import com.ssafy.goumunity.user.service.port.UserRepository;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
-
-import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -21,8 +20,6 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public Optional<User> findByEmailAndStatus(String email, UserStatus userStatus) {
-        return userJpaRepository
-                .findByEmailAndUserStatus(email, userStatus)
-                .map(UserEntity::toModel);
+        return userJpaRepository.findByEmailAndUserStatus(email, userStatus).map(UserEntity::toModel);
     }
 }

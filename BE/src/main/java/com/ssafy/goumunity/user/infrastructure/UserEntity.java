@@ -1,15 +1,14 @@
 package com.ssafy.goumunity.user.infrastructure;
 
+import com.ssafy.goumunity.user.domain.User;
 import com.ssafy.goumunity.user.domain.UserCategory;
 import com.ssafy.goumunity.user.domain.UserStatus;
-import com.ssafy.goumunity.user.domain.User;
 import jakarta.persistence.*;
+import java.time.Instant;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.time.Instant;
 
 @Builder
 @AllArgsConstructor
@@ -68,7 +67,7 @@ public class UserEntity {
     @Column(name = "updated_at")
     private Instant updatedAt;
 
-    public static UserEntity fromModel(User user){
+    public static UserEntity fromModel(User user) {
         return UserEntity.builder()
                 .id(user.getId())
                 .email(user.getEmail())
@@ -86,7 +85,7 @@ public class UserEntity {
                 .build();
     }
 
-    public User toModel(){
+    public User toModel() {
         return User.builder()
                 .id(this.id)
                 .email(this.email)
