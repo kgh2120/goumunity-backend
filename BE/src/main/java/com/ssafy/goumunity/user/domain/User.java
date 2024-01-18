@@ -45,4 +45,8 @@ public class User {
                 .regionId(userCreateDto.getRegionId())
                 .build();
     }
+
+    public void modifyPassword(String password) {
+        this.password = password;
+    }
 }

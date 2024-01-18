@@ -28,7 +28,7 @@ public class AuthorizationFilter extends OncePerRequestFilter {
             SecurityContextHolder.getContext()
                     .setAuthentication(
                             new UsernamePasswordAuthenticationToken(
-                                    member.getId(), member.getPassword(), new ArrayList<>()));
+                                    member, member.getPassword(), new ArrayList<>()));
         }
         filterChain.doFilter(request, response);
     }

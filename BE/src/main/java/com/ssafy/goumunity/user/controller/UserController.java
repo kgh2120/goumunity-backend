@@ -1,6 +1,7 @@
 package com.ssafy.goumunity.user.controller;
 
 import com.ssafy.goumunity.user.domain.User;
+import com.ssafy.goumunity.user.dto.PasswordDto;
 import com.ssafy.goumunity.user.dto.UserCreateDto;
 import com.ssafy.goumunity.user.dto.UserResponse;
 import com.ssafy.goumunity.user.dto.VerificationCodeDto;
@@ -13,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -52,6 +54,16 @@ public class UserController {
     public ResponseEntity<Boolean> checkVerificationCode(
             @RequestBody @Valid VerificationCodeDto verificationCodeDto) {
         return ResponseEntity.ok(vertificationService.verificate(verificationCodeDto));
+    }
+
+    @PutMapping("/my/password")
+    public ResponseEntity<Void> modifyPassword(
+            @AuthenticationPrincipal User user,
+            @RequestBody @Valid PasswordDto passwordDto,
+            HttpSession session) {
+        User modifiedUser = userService.modifyPassword(user, passwordDto.getPassword());
+        session.setAttribute(SESSION_LOGIN_USER_KEY, modifiedUser);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/logout")

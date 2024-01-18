@@ -2,18 +2,21 @@ package com.ssafy.goumunity.user.controller;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.goumunity.common.exception.CustomErrorCode;
 import com.ssafy.goumunity.common.exception.CustomException;
+import com.ssafy.goumunity.common.exception.GlobalErrorCode;
 import com.ssafy.goumunity.common.exception.GlobalExceptionHandler;
 import com.ssafy.goumunity.config.SecurityConfig;
+import com.ssafy.goumunity.config.security.CustomDetails;
 import com.ssafy.goumunity.user.domain.User;
 import com.ssafy.goumunity.user.domain.UserCategory;
+import com.ssafy.goumunity.user.dto.PasswordDto;
 import com.ssafy.goumunity.user.dto.UserCreateDto;
 import com.ssafy.goumunity.user.service.UserService;
 import com.ssafy.goumunity.user.service.VertificationService;
@@ -22,8 +25,6 @@ import java.io.FileNotFoundException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.security.oauth2.client.servlet.OAuth2ClientAutoConfiguration;
-import org.springframework.boot.autoconfigure.security.oauth2.resource.servlet.OAuth2ResourceServerAutoConfiguration;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityFilterAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -31,8 +32,10 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpSession;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.mock.web.MockPart;
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest(
@@ -42,9 +45,7 @@ import org.springframework.test.web.servlet.MockMvc;
         },
         excludeAutoConfiguration = {
             SecurityAutoConfiguration.class,
-            SecurityFilterAutoConfiguration.class,
-            OAuth2ClientAutoConfiguration.class,
-            OAuth2ResourceServerAutoConfiguration.class
+            SecurityFilterAutoConfiguration.class
         })
 class UserControllerTest {
 
@@ -96,7 +97,15 @@ class UserControllerTest {
                                 .file(image)
                                 .part(data)
                                 .contentType(MediaType.MULTIPART_FORM_DATA))
-                .andExpect(status().isBadRequest())
+                .andExpect(status().isConflict())
+                .andDo(print());
+        this.mockMvc
+                .perform(
+                        multipart("/api/users/join")
+                                .file(image)
+                                .part(data)
+                                .contentType(MediaType.MULTIPART_FORM_DATA))
+                .andExpect(status().isConflict())
                 .andDo(print());
     }
 
@@ -124,6 +133,45 @@ class UserControllerTest {
         this.mockMvc
                 .perform(get("/api/users/" + user.getEmail()))
                 .andExpect(status().isNotFound())
+                .andDo(print());
+    }
+
+    @DisplayName("내 비밀번호 변경")
+    @Test
+    void 비밀번호변경성공() throws Exception {
+        ObjectMapper mapper = new ObjectMapper();
+        User user = fromUserCreateDto(userCreateDto());
+        PasswordDto dto = PasswordDto.builder().password("ab214A2!!").build();
+        MockHttpSession session = new MockHttpSession();
+
+        given(userService.modifyPassword(user, dto.getPassword())).willReturn(user);
+
+        this.mockMvc
+                .perform(
+                        put("/api/users/my/password")
+                                .with(SecurityMockMvcRequestPostProcessors.user(new CustomDetails(user)))
+                                .content(mapper.writeValueAsString(dto))
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .session(session))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").doesNotExist())
+                .andDo(print());
+    }
+
+    @DisplayName("비밀번호 변경 실패 - 유효성 검사")
+    @Test
+    void 비밀번호변경실패_유효성검사() throws Exception {
+        ObjectMapper mapper = new ObjectMapper();
+        PasswordDto dto = PasswordDto.builder().password("11").build();
+
+        this.mockMvc
+                .perform(
+                        put("/api/users/my/password")
+                                .content(mapper.writeValueAsString(dto))
+                                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.errorName").value(GlobalErrorCode.BIND_ERROR.getErrorName()))
+                .andExpect(jsonPath("$.errorMessage").value(GlobalErrorCode.BIND_ERROR.getErrorMessage()))
                 .andDo(print());
     }
 
@@ -155,6 +203,6 @@ class UserControllerTest {
 
     private FileInputStream fileInputStream() throws FileNotFoundException {
         return new FileInputStream(
-                "src/main/resources/images/user-profile/20240116/24706676499700.jpg");
+                "src/main/resources/images/user-profile/20240118/12237787285700.jpg");
     }
 }
