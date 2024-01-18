@@ -46,7 +46,7 @@ public class User {
                 .build();
     }
 
-    public void modifyPassword(String password){
+    public void modifyPassword(String password) {
         this.password = password;
     }
 }

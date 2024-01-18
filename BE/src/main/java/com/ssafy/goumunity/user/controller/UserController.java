@@ -30,36 +30,45 @@ public class UserController {
     private String SESSION_LOGIN_USER_KEY;
 
     @PostMapping("/join")
-    public ResponseEntity<UserResponse> saveUser(@RequestPart(value = "data") @Valid UserCreateDto userCreateDto,
-                                                   @RequestPart(value = "image", required = false) MultipartFile profileImage){
+    public ResponseEntity<UserResponse> saveUser(
+            @RequestPart(value = "data") @Valid UserCreateDto userCreateDto,
+            @RequestPart(value = "image", required = false) MultipartFile profileImage) {
         User user = userService.saveUser(userCreateDto, profileImage);
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(UserResponse.from(user));
+        return ResponseEntity.status(HttpStatus.CREATED).body(UserResponse.from(user));
     }
 
     @GetMapping("/{email}")
-    public ResponseEntity<UserResponse> findUserByEmail(@PathVariable(value = "email") String email){
+    public ResponseEntity<UserResponse> findUserByEmail(@PathVariable(value = "email") String email) {
         User user = userService.findUserByEmail(email);
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(UserResponse.from(user));
+        return ResponseEntity.status(HttpStatus.OK).body(UserResponse.from(user));
     }
 
     @GetMapping("/email/verification")
-    public ResponseEntity<Void> sendVerificationCode(@RequestParam("email") @Valid @Email String email) {
+    public ResponseEntity<Void> sendVerificationCode(
+            @RequestParam("email") @Valid @Email String email) {
         vertificationService.send(email);
         return ResponseEntity.ok().build();
     }
 
     @PostMapping("/email/verification")
-    public ResponseEntity<Boolean> checkVerificationCode(@RequestBody @Valid VerificationCodeDto verificationCodeDto){
+    public ResponseEntity<Boolean> checkVerificationCode(
+            @RequestBody @Valid VerificationCodeDto verificationCodeDto) {
         return ResponseEntity.ok(vertificationService.verificate(verificationCodeDto));
     }
 
     @PutMapping("/my/password")
-    public ResponseEntity<Void> modifyPassword(@AuthenticationPrincipal User user,
-                                               @RequestBody @Valid PasswordDto passwordDto, HttpSession session){
+    public ResponseEntity<Void> modifyPassword(
+            @AuthenticationPrincipal User user,
+            @RequestBody @Valid PasswordDto passwordDto,
+            HttpSession session) {
         User modifiedUser = userService.modifyPassword(user, passwordDto.getPassword());
         session.setAttribute(SESSION_LOGIN_USER_KEY, modifiedUser);
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/logout")
+    public ResponseEntity<Void> logout(HttpSession session) {
+        session.removeAttribute(SESSION_LOGIN_USER_KEY);
         return ResponseEntity.ok().build();
     }
 }
