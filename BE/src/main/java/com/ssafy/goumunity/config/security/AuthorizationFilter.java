@@ -7,10 +7,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
@@ -27,7 +25,7 @@ public class AuthorizationFilter extends OncePerRequestFilter {
         User member = (User) request.getSession().getAttribute(SESSION_LOGIN_USER_KEY);
         if (member != null) {
             SecurityContextHolder.getContext().setAuthentication(
-                    new UsernamePasswordAuthenticationToken(member.getId(), member.getPassword(), new ArrayList<>())
+                    new UsernamePasswordAuthenticationToken(member, member.getPassword(), new ArrayList<>())
             );
         }
         filterChain.doFilter(request,response);
