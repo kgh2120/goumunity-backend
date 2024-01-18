@@ -8,5 +8,5 @@ public interface UserService  {
     User saveUser(UserCreateDto userCreateDto, MultipartFile profileImage);
     User findUserByEmail(String email);
     void isExistEmail(String email);
-    void modifyPassword(User user, String password);
+    User modifyPassword(User user, String password);
 }

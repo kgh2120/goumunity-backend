@@ -9,6 +9,7 @@ import com.ssafy.goumunity.user.dto.UserCreateDto;
 import com.ssafy.goumunity.user.service.port.UserRepository;
 import com.ssafy.goumunity.util.SingleImageHandler;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +23,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final SingleImageHandler imageHandler;
     private final PasswordEncoder encoder;
+    private final RedisTemplate<String, String> redisTemplate;
 
     @Override
     @Transactional
@@ -53,8 +55,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void modifyPassword(User user, String password) {
+    public User modifyPassword(User user, String password) {
         user.modifyPassword(encoder.encode(password));
-        userRepository.save(user);
+        return userRepository.save(user);
     }
 }

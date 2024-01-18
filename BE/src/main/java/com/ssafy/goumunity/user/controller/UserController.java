@@ -1,6 +1,5 @@
 package com.ssafy.goumunity.user.controller;
 
-import com.ssafy.goumunity.config.security.CustomDetails;
 import com.ssafy.goumunity.user.domain.User;
 import com.ssafy.goumunity.user.dto.PasswordDto;
 import com.ssafy.goumunity.user.dto.UserCreateDto;
@@ -8,9 +7,11 @@ import com.ssafy.goumunity.user.dto.UserResponse;
 import com.ssafy.goumunity.user.dto.VerificationCodeDto;
 import com.ssafy.goumunity.user.service.UserService;
 import com.ssafy.goumunity.user.service.VertificationService;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -24,6 +25,9 @@ public class UserController {
 
     private final UserService userService;
     private final VertificationService vertificationService;
+
+    @Value("${session.key.user}")
+    private String SESSION_LOGIN_USER_KEY;
 
     @PostMapping("/join")
     public ResponseEntity<UserResponse> saveUser(@RequestPart(value = "data") @Valid UserCreateDto userCreateDto,
@@ -52,9 +56,10 @@ public class UserController {
     }
 
     @PutMapping("/my/password")
-    public ResponseEntity<Void> modifyPassword(@AuthenticationPrincipal CustomDetails userDetails,
-                                               @RequestBody @Valid PasswordDto passwordDto){
-        userService.modifyPassword(userDetails.getUser(), passwordDto.getPassword());
+    public ResponseEntity<Void> modifyPassword(@AuthenticationPrincipal User user,
+                                               @RequestBody @Valid PasswordDto passwordDto, HttpSession session){
+        User modifiedUser = userService.modifyPassword(user, passwordDto.getPassword());
+        session.setAttribute(SESSION_LOGIN_USER_KEY, modifiedUser);
         return ResponseEntity.ok().build();
     }
 }
