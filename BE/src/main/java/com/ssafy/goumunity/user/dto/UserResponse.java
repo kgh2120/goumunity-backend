@@ -3,10 +3,9 @@ package com.ssafy.goumunity.user.dto;
 import com.ssafy.goumunity.user.domain.User;
 import com.ssafy.goumunity.user.domain.UserCategory;
 import com.ssafy.goumunity.user.domain.UserStatus;
+import java.time.Instant;
 import lombok.Builder;
 import lombok.Getter;
-
-import java.time.Instant;
 
 @Getter
 @Builder
@@ -24,7 +23,7 @@ public class UserResponse {
     private Instant lastPasswordModifiedDate;
     private Integer regionId;
 
-    public static UserResponse from(User user){
+    public static UserResponse from(User user) {
         return UserResponse.builder()
                 .email(user.getEmail())
                 .password(user.getPassword())

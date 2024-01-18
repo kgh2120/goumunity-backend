@@ -19,13 +19,16 @@ import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 @Configuration
-public class RedisConfig  implements BeanClassLoaderAware {
+public class RedisConfig implements BeanClassLoaderAware {
     @Value("${spring.redis.host}")
     private String redisHost;
+
     @Value("${spring.redis.port}")
     private String redisPort;
+
     @Value("${spring.redis.password}")
     private String redisPassword;
+
     private ClassLoader loader;
 
     @Bean
@@ -46,17 +49,18 @@ public class RedisConfig  implements BeanClassLoaderAware {
         return redisTemplate;
     }
 
-
     @Bean
     public RedisSerializer<Object> springSessionDefaultRedisSerializer() {
         ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.activateDefaultTyping(BasicPolymorphicTypeValidator.builder()
-                                .allowIfBaseType(Object.class).build(),
+        objectMapper
+                .activateDefaultTyping(
+                        BasicPolymorphicTypeValidator.builder().allowIfBaseType(Object.class).build(),
                         ObjectMapper.DefaultTyping.NON_FINAL,
                         JsonTypeInfo.As.PROPERTY)
                 .registerModules(new JavaTimeModule())
                 .disable(SerializationFeature.WRITE_DATE_KEYS_AS_TIMESTAMPS);
-        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);;
+        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        ;
         return new GenericJackson2JsonRedisSerializer(objectMapper);
     }
 

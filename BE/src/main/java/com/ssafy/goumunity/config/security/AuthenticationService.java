@@ -15,9 +15,12 @@ import org.springframework.stereotype.Service;
 public class AuthenticationService implements UserDetailsService {
 
     private final UserRepository userRepository;
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return new CustomDetails(userRepository.findByEmailAndStatus(username, UserStatus.ACTIVE)
-                .orElseThrow(() -> new CustomException(CustomErrorCode.EMAIL_NOT_FOUND)));
+        return new CustomDetails(
+                userRepository
+                        .findByEmailAndStatus(username, UserStatus.ACTIVE)
+                        .orElseThrow(() -> new CustomException(CustomErrorCode.EMAIL_NOT_FOUND)));
     }
 }
