@@ -10,6 +10,6 @@ spring:
     password:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/goumudev?useSSL=false&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    url: jdbc:mysql://ec2-3-36-165-200.ap-northeast-2.compute.amazonaws.com:3306/goumudev?useSSL=false&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
     username: ssafy
     password: ssafy12!
