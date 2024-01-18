@@ -1,16 +1,19 @@
 package com.ssafy.goumunity.user.controller;
 
+import com.ssafy.goumunity.config.security.CustomDetails;
 import com.ssafy.goumunity.user.domain.User;
+import com.ssafy.goumunity.user.dto.PasswordDto;
 import com.ssafy.goumunity.user.dto.UserCreateDto;
 import com.ssafy.goumunity.user.dto.UserResponse;
 import com.ssafy.goumunity.user.dto.VerificationCodeDto;
-import com.ssafy.goumunity.user.service.VertificationService;
 import com.ssafy.goumunity.user.service.UserService;
+import com.ssafy.goumunity.user.service.VertificationService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -46,5 +49,12 @@ public class UserController {
     @PostMapping("/email/verification")
     public ResponseEntity<Boolean> checkVerificationCode(@RequestBody @Valid VerificationCodeDto verificationCodeDto){
         return ResponseEntity.ok(vertificationService.verificate(verificationCodeDto));
+    }
+
+    @PutMapping("/my/password")
+    public ResponseEntity<Void> modifyPassword(@AuthenticationPrincipal CustomDetails userDetails,
+                                               @RequestBody @Valid PasswordDto passwordDto){
+        userService.modifyPassword(userDetails.getUser(), passwordDto.getPassword());
+        return ResponseEntity.ok().build();
     }
 }
