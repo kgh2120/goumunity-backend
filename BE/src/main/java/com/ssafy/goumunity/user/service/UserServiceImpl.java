@@ -55,7 +55,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public User modifyPassword(User user, String password) {
         user.modifyPassword(encoder.encode(password));
-        return userRepository.save(user);
+        return userRepository.modify(user);
     }
 
     @Override

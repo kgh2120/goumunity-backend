@@ -13,5 +13,7 @@ public interface UserRepository {
 
     boolean existsByEmail(String email);
 
+    User modify(User user);
+
     void delete(User user);
 }

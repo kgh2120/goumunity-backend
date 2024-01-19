@@ -34,6 +34,11 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
+    public User modify(User user) {
+        return userJpaRepository.save(UserEntity.fromModel(user)).toModel();
+    }
+
+    @Override
     public void delete(User user) {
         userJpaRepository.save(UserEntity.fromModel(user)).toModel();
     }
