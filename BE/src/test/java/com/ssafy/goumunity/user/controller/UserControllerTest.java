@@ -19,6 +19,7 @@ import com.ssafy.goumunity.user.domain.User;
 import com.ssafy.goumunity.user.domain.UserCategory;
 import com.ssafy.goumunity.user.dto.PasswordDto;
 import com.ssafy.goumunity.user.dto.UserCreateDto;
+import com.ssafy.goumunity.user.dto.UserUpdateDto;
 import com.ssafy.goumunity.user.service.UserService;
 import com.ssafy.goumunity.user.service.VertificationService;
 import java.io.FileInputStream;
@@ -215,6 +216,53 @@ class UserControllerTest {
         this.mockMvc
                 .perform(get("/api/users/my").session(session))
                 .andExpect(status().isOk())
+                .andDo(print());
+    }
+
+    @DisplayName("내 회원정보 수정 성공")
+    @Test
+    void 내정보수정성공() throws Exception {
+        ObjectMapper mapper = new ObjectMapper();
+        UserUpdateDto userUpdateDto =
+                UserUpdateDto.builder().userCategory(UserCategory.EMPLOYEE).age(100).build();
+        User user = fromUserCreateDto(userCreateDto());
+        MockHttpSession session = new MockHttpSession();
+
+        given(userService.modifyUser(any(), any())).willReturn(user);
+
+        this.mockMvc
+                .perform(
+                        put("/api/users/my")
+                                .session(session)
+                                .content(mapper.writeValueAsString(userUpdateDto))
+                                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andDo(print());
+    }
+
+    @DisplayName("내 회원정보 수정 실패_비어있는 요청")
+    @Test
+    void 내정보수정실패_비어있는요청() throws Exception {
+        ObjectMapper mapper = new ObjectMapper();
+        UserUpdateDto userUpdateDto = UserUpdateDto.builder().build();
+        MockHttpSession session = new MockHttpSession();
+
+        given(userService.modifyUser(any(), any()))
+                .willThrow(new CustomException(CustomErrorCode.NO_INPUT_FOR_MODIFY_USER_INFO));
+
+        this.mockMvc
+                .perform(
+                        put("/api/users/my")
+                                .session(session)
+                                .content(mapper.writeValueAsString(userUpdateDto))
+                                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(
+                        jsonPath("$.errorName")
+                                .value(CustomErrorCode.NO_INPUT_FOR_MODIFY_USER_INFO.getErrorName()))
+                .andExpect(
+                        jsonPath("$.errorMessage")
+                                .value(CustomErrorCode.NO_INPUT_FOR_MODIFY_USER_INFO.getErrorMessage()))
                 .andDo(print());
     }
 
