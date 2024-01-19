@@ -4,6 +4,7 @@ import com.ssafy.goumunity.common.exception.CustomErrorCode;
 import com.ssafy.goumunity.common.exception.CustomException;
 import com.ssafy.goumunity.user.dto.VerificationCodeDto;
 import com.ssafy.goumunity.user.service.port.MailSender;
+import com.ssafy.goumunity.user.service.port.UserRepository;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Random;
@@ -20,12 +21,15 @@ public class VertificationServiceImpl implements VertificationService {
     private final MailSender mailSender;
     private final UserService userService;
     private final RedisTemplate<String, String> redisTemplate;
+    private final UserRepository userRepository;
 
     @Override
     public void send(String email) {
         try {
             // 이메일 중복 검사
-            userService.isExistEmail(email);
+            if (!userRepository.existsByEmail(email)) {
+                throw new CustomException(CustomErrorCode.EMAIL_NOT_FOUND);
+            }
 
             String title = "거뮤니티 이메일 인증 번호";
             String authCode = createCode();

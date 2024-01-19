@@ -9,7 +9,6 @@ import com.ssafy.goumunity.user.dto.UserCreateDto;
 import com.ssafy.goumunity.user.service.port.UserRepository;
 import com.ssafy.goumunity.util.SingleImageHandler;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,13 +22,14 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final SingleImageHandler imageHandler;
     private final PasswordEncoder encoder;
-    private final RedisTemplate<String, String> redisTemplate;
 
     @Override
     @Transactional
     public User saveUser(UserCreateDto userCreateDto, MultipartFile profileImage) {
         // 이메일 중복 검사
-        this.isExistEmail(userCreateDto.getEmail());
+        if (!userRepository.existsByEmail(userCreateDto.getEmail())) {
+            throw new CustomException(CustomErrorCode.EMAIL_NOT_FOUND);
+        }
 
         Image image = imageHandler.parseFileInfo(profileImage);
 
@@ -47,13 +47,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void isExistEmail(String email) {
-        userRepository
-                .findByEmailAndStatus(email, UserStatus.ACTIVE)
-                .ifPresent(
-                        (user) -> {
-                            throw new CustomException(CustomErrorCode.EXIST_EMAIL);
-                        });
+    public boolean isExistEmail(String email) {
+        return userRepository.existsByEmail(email);
     }
 
     @Override
@@ -61,5 +56,10 @@ public class UserServiceImpl implements UserService {
     public User modifyPassword(User user, String password) {
         user.modifyPassword(encoder.encode(password));
         return userRepository.save(user);
+    }
+
+    @Override
+    public boolean isExistNickname(String nickname) {
+        return userRepository.existsByNickname(nickname);
     }
 }
