@@ -27,8 +27,8 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public User saveUser(UserCreateDto userCreateDto, MultipartFile profileImage) {
         // 이메일 중복 검사
-        if (!userRepository.existsByEmail(userCreateDto.getEmail())) {
-            throw new CustomException(CustomErrorCode.EMAIL_NOT_FOUND);
+        if (userRepository.existsByEmail(userCreateDto.getEmail())) {
+            throw new CustomException(CustomErrorCode.EXIST_EMAIL);
         }
 
         Image image = imageHandler.parseFileInfo(profileImage);
