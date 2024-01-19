@@ -1,0 +1,145 @@
+*{
+	font-size: 16px;
+	color: #964b00;
+}
+
+input, textarea{
+	text-indent: 10px;
+}
+input{
+	border: none;
+	width: 100%;
+	line-height: 2em;
+	border-radius: 3px;
+}
+
+input:focus{
+	outline: none;
+}
+
+textarea{
+	border: none;
+	width: 100%;
+	height: 300px;
+	line-height: 1.5em;
+	border-radius: 3px;
+	resize: none;
+	font-family: inherit;
+}
+textarea:focus{
+	outline: none;
+}
+.section{
+	margin-bottom: 20px;
+	border: 1px solid gainsboro;
+	border-radius: 3px;
+	overflow: auto;
+}
+.answer, .footer{
+	border: none;
+}
+
+.sizeRadio{
+	width: 10%;
+}
+.sizeOption{
+	width: 90%;
+}
+
+
+.wrapper{
+	width: 800px;
+	padding: 30px;
+	margin: 50px auto 0 auto;
+}
+
+.answer + .section{
+	border: none;
+}
+
+.tab{
+	width: 100%; 
+
+}
+
+.tab-nav{
+	font-size: 0; 
+	width: auto; 
+	border: 1px solid #ddd;
+}
+
+.tab-nav li{
+	display: inline-block;  
+	height: 35px; 
+	text-align: center; 
+	border-right: 1px solid #ddd;
+}
+.tab-nav li a:before{
+	content: ""; 
+	position: absolute; 
+	left: 0; 
+	top: 0px; 
+	width: 100%; 
+	height: 3px; 
+}
+
+.tab-nav li a.active:before{
+	background: #964b00;
+}
+
+.tab-nav li a.active{
+	border-bottom: 1px solid #fff;
+}
+
+.tab-nav li a{
+	position: relative;
+	display: block;
+	background: #f8f8f8;
+	color: #000; 
+	padding: 0 30px; 
+	line-height: 35px; 
+	text-decoration: none; 
+	font-size: 13px;
+}
+
+.tab-nav li a.active{
+	border-bottom: 1px solid #fff;
+}
+
+.tab-nav li a:hover,
+.tab-nav li a.active{
+	background: #fff; 
+	color: #223159;
+}
+
+.tab-content{
+	padding: 20px 0; 
+	/* height: 25px;  */
+	border: 1px solid #ddd; 
+	border-top: none;
+}
+.option{
+
+}
+
+.option_content{
+	width: 765px;
+	border: 1px solid gainsboro;
+	border-radius: 3px;
+}
+
+.short_answer{
+	border: 1px solid gainsboro;
+	border-radius: 3px;
+	margin: 0 20px;
+	width: 755px;
+}
+
+.footer{
+	text-align: center;
+	padding-top: 20px;
+}
+
+.cancel{
+	margin-right: 20px;
+}
