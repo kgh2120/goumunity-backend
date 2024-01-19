@@ -64,6 +64,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public void deleteUser(User user) {
         user.deleteUser();
         userRepository.delete(user);
