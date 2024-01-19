@@ -1,6 +1,7 @@
 package com.ssafy.goumunity.user.controller;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -175,12 +176,26 @@ class UserControllerTest {
                 .andDo(print());
     }
 
-    @DisplayName("닉네임 중복 검사 성공")
+    @DisplayName("닉네임 중복 검사 성공 중복O")
     @Test
-    void 닉네임중복검사성공() throws Exception {
+    void 닉네임중복검사성공_중복O() throws Exception {
+        String nickname = "해안짬타";
+        boolean result = true;
+        given(userService.isExistNickname(anyString())).willReturn(result);
+
+        this.mockMvc
+                .perform(get("/api/users/nickname/validation?nickname=" + nickname))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.exist").value(result))
+                .andDo(print());
+    }
+
+    @DisplayName("닉네임 중복 검사 성공 중복X")
+    @Test
+    void 닉네임중복검사성공_중복X() throws Exception {
         String nickname = "해안짬타";
         boolean result = false;
-        given(userService.isExistNickname("nickname")).willReturn(result);
+        given(userService.isExistNickname(anyString())).willReturn(result);
 
         this.mockMvc
                 .perform(get("/api/users/nickname/validation?nickname=" + nickname))
