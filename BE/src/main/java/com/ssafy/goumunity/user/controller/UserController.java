@@ -1,10 +1,7 @@
 package com.ssafy.goumunity.user.controller;
 
 import com.ssafy.goumunity.user.domain.User;
-import com.ssafy.goumunity.user.dto.PasswordDto;
-import com.ssafy.goumunity.user.dto.UserCreateDto;
-import com.ssafy.goumunity.user.dto.UserResponse;
-import com.ssafy.goumunity.user.dto.VerificationCodeDto;
+import com.ssafy.goumunity.user.dto.*;
 import com.ssafy.goumunity.user.service.UserService;
 import com.ssafy.goumunity.user.service.VertificationService;
 import jakarta.servlet.http.HttpSession;
@@ -70,5 +67,11 @@ public class UserController {
     public ResponseEntity<Void> logout(HttpSession session) {
         session.removeAttribute(SESSION_LOGIN_USER_KEY);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/nickname/validation")
+    public ResponseEntity<NicknameValidationResponse> isExistNickname(@RequestParam String nickname) {
+        return ResponseEntity.ok()
+                .body(new NicknameValidationResponse(userService.isExistNickname(nickname)));
     }
 }

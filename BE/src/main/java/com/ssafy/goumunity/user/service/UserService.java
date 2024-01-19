@@ -12,4 +12,6 @@ public interface UserService {
     void isExistEmail(String email);
 
     User modifyPassword(User user, String password);
+
+    boolean isExistNickname(String nickname);
 }

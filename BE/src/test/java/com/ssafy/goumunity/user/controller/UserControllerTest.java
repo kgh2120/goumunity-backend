@@ -175,6 +175,20 @@ class UserControllerTest {
                 .andDo(print());
     }
 
+    @DisplayName("닉네임 중복 검사 성공")
+    @Test
+    void 닉네임중복검사성공() throws Exception {
+        String nickname = "해안짬타";
+        boolean result = false;
+        given(userService.isExistNickname("nickname")).willReturn(result);
+
+        this.mockMvc
+                .perform(get("/api/users/nickname/validation?nickname=" + nickname))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.exist").value(result))
+                .andDo(print());
+    }
+
     private UserCreateDto userCreateDto() {
         return UserCreateDto.builder()
                 .email("gyu@naver.com")

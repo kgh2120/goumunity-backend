@@ -22,4 +22,9 @@ public class UserRepositoryImpl implements UserRepository {
     public Optional<User> findByEmailAndStatus(String email, UserStatus userStatus) {
         return userJpaRepository.findByEmailAndUserStatus(email, userStatus).map(UserEntity::toModel);
     }
+
+    @Override
+    public boolean existsByNickname(String nickname) {
+        return userJpaRepository.existsByNickname(nickname);
+    }
 }
