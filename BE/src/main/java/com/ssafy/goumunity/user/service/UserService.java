@@ -9,7 +9,7 @@ public interface UserService {
 
     User findUserByEmail(String email);
 
-    void isExistEmail(String email);
+    boolean isExistEmail(String email);
 
     User modifyPassword(User user, String password);
 

@@ -7,6 +7,7 @@ import com.ssafy.goumunity.user.service.VertificationService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -70,7 +71,8 @@ public class UserController {
     }
 
     @GetMapping("/nickname/validation")
-    public ResponseEntity<NicknameValidationResponse> isExistNickname(@RequestParam String nickname) {
+    public ResponseEntity<NicknameValidationResponse> isExistNickname(
+            @RequestParam @NotBlank String nickname) {
         return ResponseEntity.ok()
                 .body(new NicknameValidationResponse(userService.isExistNickname(nickname)));
     }
