@@ -59,6 +59,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User modifyUser(User user) {
+        return null;
+    }
+
+    @Override
     public boolean isExistNickname(String nickname) {
         return userRepository.existsByNickname(nickname);
     }
