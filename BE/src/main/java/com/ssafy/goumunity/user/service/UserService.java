@@ -2,6 +2,7 @@ package com.ssafy.goumunity.user.service;
 
 import com.ssafy.goumunity.user.domain.User;
 import com.ssafy.goumunity.user.dto.UserCreateDto;
+import com.ssafy.goumunity.user.dto.UserUpdateDto;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface UserService {
@@ -13,7 +14,7 @@ public interface UserService {
 
     User modifyPassword(User user, String password);
 
-    User modifyUser(User user);
+    User modifyUser(User user, UserUpdateDto dto);
 
     boolean isExistNickname(String nickname);
 
