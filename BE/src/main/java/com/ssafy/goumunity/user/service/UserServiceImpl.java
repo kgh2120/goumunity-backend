@@ -62,4 +62,10 @@ public class UserServiceImpl implements UserService {
     public boolean isExistNickname(String nickname) {
         return userRepository.existsByNickname(nickname);
     }
+
+    @Override
+    public void deleteUser(User user) {
+        user.deleteUser();
+        userRepository.save(user);
+    }
 }
