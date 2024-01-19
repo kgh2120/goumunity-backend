@@ -14,4 +14,6 @@ public interface UserService {
     User modifyPassword(User user, String password);
 
     boolean isExistNickname(String nickname);
+
+    void deleteUser(User user);
 }

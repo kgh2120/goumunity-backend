@@ -32,4 +32,14 @@ public class UserRepositoryImpl implements UserRepository {
     public boolean existsByEmail(String email) {
         return userJpaRepository.existsByEmail(email);
     }
+
+    @Override
+    public User modify(User user) {
+        return userJpaRepository.save(UserEntity.fromModel(user)).toModel();
+    }
+
+    @Override
+    public void delete(User user) {
+        userJpaRepository.save(UserEntity.fromModel(user)).toModel();
+    }
 }

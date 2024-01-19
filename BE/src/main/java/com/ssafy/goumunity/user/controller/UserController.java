@@ -76,4 +76,11 @@ public class UserController {
         return ResponseEntity.ok()
                 .body(new NicknameValidationResponse(userService.isExistNickname(nickname)));
     }
+
+    @DeleteMapping("/my")
+    public ResponseEntity<Void> deleteUser(@AuthenticationPrincipal User user, HttpSession session) {
+        userService.deleteUser(user);
+        session.removeAttribute(SESSION_LOGIN_USER_KEY);
+        return ResponseEntity.ok().build();
+    }
 }

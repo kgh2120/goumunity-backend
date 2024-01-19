@@ -55,11 +55,18 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public User modifyPassword(User user, String password) {
         user.modifyPassword(encoder.encode(password));
-        return userRepository.save(user);
+        return userRepository.modify(user);
     }
 
     @Override
     public boolean isExistNickname(String nickname) {
         return userRepository.existsByNickname(nickname);
+    }
+
+    @Override
+    @Transactional
+    public void deleteUser(User user) {
+        user.deleteUser();
+        userRepository.delete(user);
     }
 }
