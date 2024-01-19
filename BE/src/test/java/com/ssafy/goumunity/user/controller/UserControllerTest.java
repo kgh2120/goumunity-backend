@@ -204,6 +204,20 @@ class UserControllerTest {
                 .andDo(print());
     }
 
+    @DisplayName("내 정보 조회 성공")
+    @Test
+    void 내정보조회() throws Exception {
+        UserCreateDto user = userCreateDto();
+        MockHttpSession session = new MockHttpSession();
+
+        given(userService.findUserByEmail(any())).willReturn(fromUserCreateDto(user));
+
+        this.mockMvc
+                .perform(get("/api/users/my").session(session))
+                .andExpect(status().isOk())
+                .andDo(print());
+    }
+
     private UserCreateDto userCreateDto() {
         return UserCreateDto.builder()
                 .email("gyu@naver.com")

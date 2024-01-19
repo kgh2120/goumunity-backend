@@ -83,4 +83,10 @@ public class UserController {
         session.removeAttribute(SESSION_LOGIN_USER_KEY);
         return ResponseEntity.ok().build();
     }
+
+    @GetMapping("my")
+    public ResponseEntity<UserResponse> findMyUser(@AuthenticationPrincipal User user) {
+        User me = userService.findUserByEmail(user.getEmail());
+        return ResponseEntity.status(HttpStatus.OK).body(UserResponse.from(me));
+    }
 }
