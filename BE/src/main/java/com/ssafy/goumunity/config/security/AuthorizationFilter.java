@@ -1,6 +1,6 @@
 package com.ssafy.goumunity.config.security;
 
-import com.ssafy.goumunity.user.domain.User;
+import com.ssafy.goumunity.domain.user.domain.User;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

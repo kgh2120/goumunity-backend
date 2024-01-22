@@ -1,6 +1,6 @@
 package com.ssafy.goumunity.config.security;
 
-import com.ssafy.goumunity.user.domain.User;
+import com.ssafy.goumunity.domain.user.domain.User;
 import java.util.ArrayList;
 import java.util.Collection;
 import lombok.Getter;
