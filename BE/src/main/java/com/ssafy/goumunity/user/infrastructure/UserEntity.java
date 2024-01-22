@@ -68,21 +68,26 @@ public class UserEntity {
     private Instant updatedAt;
 
     public static UserEntity fromModel(User user) {
-        return UserEntity.builder()
-                .id(user.getId())
-                .email(user.getEmail())
-                .password(user.getPassword())
-                .monthBudget(user.getMonthBudget())
-                .age(user.getAge())
-                .userCategory(user.getUserCategory())
-                .gender(user.getGender())
-                .nickname(user.getNickname())
-                .imgSrc(user.getImgSrc())
-                .registerDate(user.getRegisterDate())
-                .userStatus(user.getUserStatus())
-                .lastPasswordModifiedDate(user.getLastPasswordModifiedDate())
-                .regionId(user.getRegionId())
-                .build();
+        UserEntityBuilder userEntityBuilder =
+                UserEntity.builder()
+                        .id(user.getId())
+                        .email(user.getEmail())
+                        .password(user.getPassword())
+                        .monthBudget(user.getMonthBudget())
+                        .age(user.getAge())
+                        .userCategory(user.getUserCategory())
+                        .gender(user.getGender())
+                        .nickname(user.getNickname())
+                        .imgSrc(user.getImgSrc())
+                        .registerDate(user.getRegisterDate())
+                        .userStatus(user.getUserStatus())
+                        .lastPasswordModifiedDate(user.getLastPasswordModifiedDate())
+                        .regionId(user.getRegionId());
+
+        if (user.getCreatedAt() != null) userEntityBuilder.createdAt(user.getCreatedAt());
+        if (user.getUpdatedAt() != null) userEntityBuilder.updatedAt(user.getUpdatedAt());
+
+        return userEntityBuilder.build();
     }
 
     public User toModel() {

@@ -6,14 +6,17 @@ import com.ssafy.goumunity.image.Image;
 import com.ssafy.goumunity.user.domain.User;
 import com.ssafy.goumunity.user.domain.UserStatus;
 import com.ssafy.goumunity.user.dto.UserCreateDto;
+import com.ssafy.goumunity.user.dto.UserUpdateDto;
 import com.ssafy.goumunity.user.service.port.UserRepository;
 import com.ssafy.goumunity.util.SingleImageHandler;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -27,8 +30,8 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public User saveUser(UserCreateDto userCreateDto, MultipartFile profileImage) {
         // 이메일 중복 검사
-        if (!userRepository.existsByEmail(userCreateDto.getEmail())) {
-            throw new CustomException(CustomErrorCode.EMAIL_NOT_FOUND);
+        if (userRepository.existsByEmail(userCreateDto.getEmail())) {
+            throw new CustomException(CustomErrorCode.EXIST_EMAIL);
         }
 
         Image image = imageHandler.parseFileInfo(profileImage);
@@ -59,8 +62,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User modifyUser(User user) {
-        return null;
+    @Transactional
+    public User modifyUser(User user, UserUpdateDto dto) {
+        user.modifyUserInfo(dto);
+        return userRepository.modify(user);
     }
 
     @Override

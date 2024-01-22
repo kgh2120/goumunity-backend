@@ -84,9 +84,19 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("my")
+    @GetMapping("/my")
     public ResponseEntity<UserResponse> findMyUser(@AuthenticationPrincipal User user) {
         User me = userService.findUserByEmail(user.getEmail());
         return ResponseEntity.status(HttpStatus.OK).body(UserResponse.from(me));
+    }
+
+    @PutMapping("/my")
+    public ResponseEntity<Void> ModifyMyUser(
+            @AuthenticationPrincipal User user,
+            @RequestBody @Valid UserUpdateDto userUpdateDto,
+            HttpSession session) {
+        User modifiedUser = userService.modifyUser(user, userUpdateDto);
+        session.setAttribute(SESSION_LOGIN_USER_KEY, modifiedUser);
+        return ResponseEntity.ok().build();
     }
 }
