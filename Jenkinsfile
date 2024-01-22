@@ -13,7 +13,7 @@ pipeline {
                         sh 'chmod +x gradlew'
                         sh 'ls -l'
                         sh './gradlew clean build'   
-                        sh 'curl --request POST --header "PRIVATE-TOKEN: 3WmDBHzqBCQzswYaBMp5""https://lab.ssafy.com/api/v4/projects/507757/pipeline?ref=master"'
+                        sh 'curl --request POST --header "PRIVATE-TOKEN: 3WmDBHzqBCQzswYaBMp5" "https://lab.ssafy.com/api/v4/projects/507757/pipeline?ref=master"'
                     }
                 }
             }
