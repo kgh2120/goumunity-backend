@@ -4,10 +4,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import com.ssafy.goumunity.common.exception.CustomException;
-import com.ssafy.goumunity.user.domain.User;
-import com.ssafy.goumunity.user.domain.UserCategory;
-import com.ssafy.goumunity.user.dto.UserCreateDto;
-import com.ssafy.goumunity.user.service.UserService;
+import com.ssafy.goumunity.domain.user.domain.User;
+import com.ssafy.goumunity.domain.user.domain.UserCategory;
+import com.ssafy.goumunity.domain.user.dto.UserCreateDto;
+import com.ssafy.goumunity.domain.user.service.UserService;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

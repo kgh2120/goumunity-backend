@@ -1,7 +1,7 @@
 package com.ssafy.goumunity.config.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ssafy.goumunity.user.dto.UserLoginDto;
+import com.ssafy.goumunity.domain.user.dto.UserLoginDto;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

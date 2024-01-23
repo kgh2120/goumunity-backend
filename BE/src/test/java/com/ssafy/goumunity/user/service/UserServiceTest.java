@@ -5,11 +5,12 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
+import com.ssafy.goumunity.domain.user.domain.User;
+import com.ssafy.goumunity.domain.user.domain.UserCategory;
+import com.ssafy.goumunity.domain.user.dto.UserCreateDto;
+import com.ssafy.goumunity.domain.user.service.UserServiceImpl;
+import com.ssafy.goumunity.domain.user.service.port.UserRepository;
 import com.ssafy.goumunity.image.Image;
-import com.ssafy.goumunity.user.domain.User;
-import com.ssafy.goumunity.user.domain.UserCategory;
-import com.ssafy.goumunity.user.dto.UserCreateDto;
-import com.ssafy.goumunity.user.service.port.UserRepository;
 import com.ssafy.goumunity.util.SingleImageHandler;
 import java.io.FileInputStream;
 import java.time.Clock;

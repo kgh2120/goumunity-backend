@@ -2,8 +2,8 @@ package com.ssafy.goumunity.config.security;
 
 import com.ssafy.goumunity.common.exception.CustomErrorCode;
 import com.ssafy.goumunity.common.exception.CustomException;
-import com.ssafy.goumunity.user.domain.UserStatus;
-import com.ssafy.goumunity.user.service.port.UserRepository;
+import com.ssafy.goumunity.domain.user.domain.UserStatus;
+import com.ssafy.goumunity.domain.user.service.port.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
