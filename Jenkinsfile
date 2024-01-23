@@ -22,7 +22,7 @@ pipeline {
                     withCredentials([file(credentialsId: credentialId, variable: 'SECRET_FILE')]) {
                         // SECRET_FILE 변수를 사용하여 작업 수행
                         sh 'ls -l'
-                        sh 'echo "Secret File Content: ${SECRET_FILE}" >> /src/main/resources/secret.yml'
+                        sh 'echo "Secret File Content: ${SECRET_FILE}" >> src/main/resources/secret.yml'
                         
                     }
 
