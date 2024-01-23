@@ -22,7 +22,7 @@ import com.ssafy.goumunity.domain.user.dto.PasswordDto;
 import com.ssafy.goumunity.domain.user.dto.UserCreateDto;
 import com.ssafy.goumunity.domain.user.dto.UserUpdateDto;
 import com.ssafy.goumunity.domain.user.service.UserService;
-import com.ssafy.goumunity.domain.user.service.VertificationService;
+import com.ssafy.goumunity.domain.user.service.VerificationService;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import org.junit.jupiter.api.DisplayName;
@@ -54,7 +54,7 @@ class UserControllerTest {
 
     @MockBean private UserService userService;
 
-    @MockBean private VertificationService vertificationService;
+    @MockBean private VerificationService verificationService;
 
     @Autowired private MockMvc mockMvc;
 

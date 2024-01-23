@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class VertificationServiceImpl implements VertificationService {
+public class VerificationServiceImpl implements VerificationService {
 
     private final MailSender mailSender;
     private final UserService userService;
