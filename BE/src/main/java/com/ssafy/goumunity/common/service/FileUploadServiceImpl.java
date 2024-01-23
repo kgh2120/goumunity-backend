@@ -25,7 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Service
 public class FileUploadServiceImpl implements FileUploadService {
 
-    public static final String IMAGE_CONTENT_TYPE_PREFIX = "image";
+    private static final String IMAGE_CONTENT_TYPE_PREFIX = "image";
     private final AmazonS3Client amazonS3Client;
 
     @Value("${cloud.aws.s3.bucket}")
