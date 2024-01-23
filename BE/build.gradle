@@ -35,6 +35,8 @@ dependencies {
 	implementation 'org.springframework.session:spring-session-core'
 	implementation 'org.springframework.session:spring-session-data-redis'
 
+	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+
 
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'com.h2database:h2'
