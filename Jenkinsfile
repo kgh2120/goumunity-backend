@@ -16,6 +16,17 @@ pipeline {
                     dir('BE') {
                         sh 'chmod +x gradlew'
                         sh 'ls -l'
+                        //secret.yml 가져오기
+                       def credentialId = 'secretbe'
+                    // withCredentials 블록을 사용하여 Secret 파일을 가져옴
+                    withCredentials([file(credentialsId: credentialId, variable: 'SECRET_FILE')]) {
+                        // SECRET_FILE 변수를 사용하여 작업 수행
+                        sh 'echo "Secret File Content: ${SECRET_FILE}" >> /src/main/resources/secret.yml'
+                        
+                    }
+
+
+
                         sh './gradlew clean build'   
                         sh 'jq --version'
 
