@@ -16,12 +16,10 @@ pipeline {
                         sh 'jq --version'
 
                         sh 'echo manual Auto CI Start'
-                        sh 'json_data=$(curl --header "PRIVATE-TOKEN: 3WmDBHzqBCQzswYaBMp5" "https://lab.ssafy.com/api/v4/projects/507757/jobs")'
-                        sh 'id_6th=$(echo "$json_data" | jq -r '.[5].id')'
-                        sh 'curl --request POST "https://lab.ssafy.com/api/v4/projects/507757/jobs/$id_6th/play" \
-     --header "Content-Type: application/json" \
-     --header "PRIVATE-TOKEN: 3WmDBHzqBCQzswYaBMp5"'
+                        def json_data = sh( script: 'curl --header "PRIVATE-TOKEN: 3WmDBHzqBCQzswYaBMp5" "https://lab.ssafy.com/api/v4/projects/507757/jobs"')
 
+                        def id_6th = sh( script:  "echo '''${json_data}''' | jq -r '.[5].id'", returnStdout: true)
+                        echo "BE Job id : ${id_6th}"
 
                     }
                 }
