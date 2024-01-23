@@ -12,6 +12,7 @@ import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.mock.web.MockMultipartFile;
 
 @SpringBootTest
 class UserJpaRepositoryTest {
@@ -30,8 +31,9 @@ class UserJpaRepositoryTest {
                         .gender(1)
                         .regionId(1)
                         .build();
+        MockMultipartFile image = new MockMultipartFile("image", new byte[0]);
 
-        userService.saveUser(user, null);
+        userService.saveUser(user, image);
         User saved = userService.findUserByEmail(user.getEmail());
         assertEquals(saved.getEmail(), user.getEmail());
     }
