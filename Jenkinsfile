@@ -16,10 +16,8 @@ pipeline {
                         sh 'jq --version'
 
                         sh 'echo manual Auto CI Start'
-                        def json_data = sh( script: 'curl --header "PRIVATE-TOKEN: 3WmDBHzqBCQzswYaBMp5" "https://lab.ssafy.com/api/v4/projects/507757/jobs"')
-
-                        def id_6th = sh( script:  "echo ${json_data} | jq -r '.[5].id'")
-                        echo "BE Job id : ${id_6th}"
+                        sh 'json_data = curl --header "PRIVATE-TOKEN: 3WmDBHzqBCQzswYaBMp5" "https://lab.ssafy.com/api/v4/projects/507757/jobs"'
+                        sh 'echo json_data'
 
                     }
                 }
