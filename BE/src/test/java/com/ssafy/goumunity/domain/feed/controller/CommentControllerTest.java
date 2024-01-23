@@ -35,6 +35,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
 import org.springframework.http.MediaType;
+import org.springframework.messaging.handler.annotation.support.MethodArgumentNotValidException;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.web.servlet.MockMvc;
@@ -75,6 +76,71 @@ class CommentControllerTest {
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .session(session))
                 .andExpect(status().isOk())
+                .andDo(print());
+    }
+
+    @DisplayName("댓글 작성 실패 - 댓글 내용이 비었을 때")
+    @Test
+    void saveCommentFailWithEmptyContent() throws Exception {
+        ObjectMapper mapper = new ObjectMapper();
+        MockHttpSession session = new MockHttpSession();
+        User user = fromUserCreateDto(userCreateDto());
+        Long feedId = 1L;
+        CommentRegistRequest comment = CommentRegistRequest.builder().build();
+
+        given(commentService.saveComment(any(), any(), any()))
+                .willThrow(MethodArgumentNotValidException.class);
+
+        this.mockMvc
+                .perform(
+                        post("/api/feeds/" + feedId + "/comments")
+                                .with(SecurityMockMvcRequestPostProcessors.user(new CustomDetails(user)))
+                                .content(mapper.writeValueAsString(comment))
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .session(session))
+                .andExpect(status().isBadRequest())
+                .andDo(print());
+    }
+
+    @DisplayName("댓글 작성 실패 - 댓글 내용이 200자 초과했을때")
+    @Test
+    void saveCommentFailWithLongContent() throws Exception {
+        ObjectMapper mapper = new ObjectMapper();
+        MockHttpSession session = new MockHttpSession();
+        User user = fromUserCreateDto(userCreateDto());
+        Long feedId = 1L;
+
+        String content =
+                "동해물과 백두산이 마르고 닳도록\n"
+                        + "하느님이 보우하사 우리나라 만세\n"
+                        + "무궁화 삼천리 화려 강산\n"
+                        + "대한 사람 대한으로 길이 보전하세"
+                        + "남산 위에 저 소나무 철갑을 두른 듯\n"
+                        + "바람 서리 불변함은 우리 기상일세\n"
+                        + "무궁화 삼천리 화려 강산\n"
+                        + "대한 사람 대한으로 길이 보전하세"
+                        + "가을 하늘 공활한데 높고 구름 없이\n"
+                        + "밝은 달은 우리 가슴 일편단심일세\n"
+                        + "무궁화 삼천리 화려 강산\n"
+                        + "대한 사람 대한으로 길이 보전하세"
+                        + "이 기상과 이 맘으로 충성을 다하여\n"
+                        + "괴로우나 즐거우나 나라 사랑하세\n"
+                        + "무궁화 삼천리 화려 강산\n"
+                        + "대한 사람 대한으로 길이 보전하세";
+
+        CommentRegistRequest comment = CommentRegistRequest.builder().content(content).build();
+
+        given(commentService.saveComment(any(), any(), any()))
+                .willThrow(MethodArgumentNotValidException.class);
+
+        this.mockMvc
+                .perform(
+                        post("/api/feeds/" + feedId + "/comments")
+                                .with(SecurityMockMvcRequestPostProcessors.user(new CustomDetails(user)))
+                                .content(mapper.writeValueAsString(comment))
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .session(session))
+                .andExpect(status().isBadRequest())
                 .andDo(print());
     }
 
