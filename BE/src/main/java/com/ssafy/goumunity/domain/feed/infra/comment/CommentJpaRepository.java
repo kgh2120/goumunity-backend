@@ -1,3 +1,8 @@
 package com.ssafy.goumunity.domain.feed.infra.comment;
 
-public interface CommentJpaRepository {}
+import java.util.List;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface CommentJpaRepository extends JpaRepository<CommentEntity, Long> {
+    List<CommentEntity> findAllByFeedEntity_FeedId(Long feedId);
+}

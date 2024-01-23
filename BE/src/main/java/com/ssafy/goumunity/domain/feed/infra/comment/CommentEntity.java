@@ -23,9 +23,6 @@ public class CommentEntity {
     @Column(name = "content")
     private String content;
 
-    @Column(name = "image")
-    private String image;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private UserEntity userEntity;
@@ -46,7 +43,7 @@ public class CommentEntity {
         return Comment.builder()
                 .commentId(commentId)
                 .content(content)
-                .image(image)
+                .feedId(feedEntity.getFeedId())
                 .createdAt(createdAt)
                 .updatedAt(updatedAt)
                 .build();
@@ -55,10 +52,10 @@ public class CommentEntity {
     public static CommentEntity from(Comment comment) {
         CommentEntityBuilder commentEntityBuilder =
                 CommentEntity.builder()
-                        .commentId(comment.getCommentId())
                         .content(comment.getContent())
-                        .image(comment.getImage());
+                        .feedEntity(FeedEntity.feedEntityOnlyWithId(comment.getFeedId()));
 
+        if (comment.getCommentId() != null) commentEntityBuilder.commentId(comment.getCommentId());
         if (comment.getCreatedAt() != null) commentEntityBuilder.createdAt(comment.getCreatedAt());
         if (comment.getUpdatedAt() != null) commentEntityBuilder.updatedAt(comment.getUpdatedAt());
 
