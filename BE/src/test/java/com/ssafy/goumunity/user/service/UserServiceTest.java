@@ -11,7 +11,6 @@ import com.ssafy.goumunity.domain.user.dto.UserCreateDto;
 import com.ssafy.goumunity.domain.user.service.UserServiceImpl;
 import com.ssafy.goumunity.domain.user.service.port.ProfileImageUploader;
 import com.ssafy.goumunity.domain.user.service.port.UserRepository;
-import java.io.FileInputStream;
 import java.time.Clock;
 import java.time.Instant;
 import java.time.ZoneId;
@@ -49,9 +48,7 @@ public class UserServiceTest {
                         .regionId(1)
                         .build();
 
-        FileInputStream fileInputStream =
-                new FileInputStream("src/main/resources/images/user-profile/20240118/12237787285700.jpg");
-        MockMultipartFile image = new MockMultipartFile("image", "test.jpg", "jpg", fileInputStream);
+        MockMultipartFile image = new MockMultipartFile("image", "test.jpg".getBytes());
         String imageSource = "/ppap";
         given(userRepository.existsByEmail(any())).willReturn(false);
         given(profileImageUploader.uploadProfileImage(any())).willReturn(imageSource);
