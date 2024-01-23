@@ -20,11 +20,7 @@ pipeline {
                         sh 'jq --version'
 
                         sh 'echo manual Auto CI Start'
-                        env.JSON_DATA = sh 'curl --header "PRIVATE-TOKEN: 3WmDBHzqBCQzswYaBMp5" "https://lab.ssafy.com/api/v4/projects/507757/jobs"'
-                        sh "echo \${JSON_DATA}"
-                    // JSON 데이터에서 6번째 객체의 id 값 추출
-                    def id_6th = sh(script: "echo '''${env.JSON_DATA}''' | jq -r '.[5].id'", returnStdout: true).trim()
-                    echo "6번째 객체의 id: ${id_6th}"
+                        sh 'curl "https://ssafyhelper.shop/control/dev/be"'
 
                     }
                 }
