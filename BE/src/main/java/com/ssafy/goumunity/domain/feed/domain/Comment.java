@@ -12,11 +12,12 @@ public class Comment {
     private Long commentId;
     private String content;
     private Long feedId;
+    private Long userId;
 
     private Instant createdAt;
     private Instant updatedAt;
 
-    public static Comment from(Long feedId, CommentRegistRequest comment) {
-        return Comment.builder().feedId(feedId).content(comment.getContent()).build();
+    public static Comment from(Long userId, Long feedId, CommentRegistRequest comment) {
+        return Comment.builder().feedId(feedId).userId(userId).content(comment.getContent()).build();
     }
 }

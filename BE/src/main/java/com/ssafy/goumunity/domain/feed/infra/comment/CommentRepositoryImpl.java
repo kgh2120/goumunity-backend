@@ -1,9 +1,11 @@
 package com.ssafy.goumunity.domain.feed.infra.comment;
 
+import com.ssafy.goumunity.domain.feed.controller.response.CommentResponse;
 import com.ssafy.goumunity.domain.feed.domain.Comment;
 import com.ssafy.goumunity.domain.feed.service.post.CommentRepository;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -11,6 +13,7 @@ import org.springframework.stereotype.Repository;
 public class CommentRepositoryImpl implements CommentRepository {
 
     private final CommentJpaRepository commentJpaRepository;
+    private final CommentQueryDslRepository commentQueryDslRepository;
 
     @Override
     public Comment save(Comment comment) {
@@ -18,9 +21,7 @@ public class CommentRepositoryImpl implements CommentRepository {
     }
 
     @Override
-    public List<Comment> findAllByFeedId(Long feedId) {
-        return commentJpaRepository.findAllByFeedEntity_FeedId(feedId).stream()
-                .map(CommentEntity::to)
-                .toList();
+    public Slice<CommentResponse> findAllByFeedId(Long feedId, Pageable pageable) {
+        return commentQueryDslRepository.findAllByFeedId(feedId, pageable);
     }
 }

@@ -1,11 +1,13 @@
 package com.ssafy.goumunity.domain.feed.service;
 
 import com.ssafy.goumunity.domain.feed.controller.request.CommentRegistRequest;
+import com.ssafy.goumunity.domain.feed.controller.response.CommentResponse;
 import com.ssafy.goumunity.domain.feed.domain.Comment;
-import java.util.List;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 
 public interface CommentService {
-    Comment saveComment(Long feedId, CommentRegistRequest comment);
+    Comment saveComment(Long userId, Long feedId, CommentRegistRequest comment);
 
-    List<Comment> findAllByFeedId(Long feedId);
+    Slice<CommentResponse> findAllByFeedId(Long feedId, Pageable pageable);
 }
