@@ -5,7 +5,7 @@ pipeline {
 	jdk 'A408_BE_Build'
     }
 
-    enviroment{
+    environment{
         JSON_DATA=''
     }
 
