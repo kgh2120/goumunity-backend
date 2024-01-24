@@ -4,9 +4,8 @@ pipeline {
     tools{
 	jdk 'A408_BE_Build'
     }
-
-    environment{
-        JSON_DATA=''
+    environment {
+        CONTAINER_NAME = "auto-dev-server"
     }
 
     stages {
@@ -55,51 +54,25 @@ pipeline {
                     ], command: 'bash -s', script: """
                         export PATH=$PATH:/usr/local/bin
 
-# 실행하려는 디렉토리로 이동합니다.
-cd /home/ubuntu/temp/sendData
+                        # 실행하려는 디렉토리로 이동합니다.
+                        cd /home/ubuntu/temp/sendData
 
-# Docker 이미지 빌드
-sudo docker build -t auto-dev-server .
+                        # 디렉토리 내 파일 목록 출력
+                        echo \$(ls -l)
 
-# 컨테이너 이름
-container_name="auto-dev-server"
+                        # Docker 이미지 빌드
+                        sudo docker build -t \$CONTAINER_NAME .
 
-# 실행 중인 컨테이너 확인 후 중단
-if sudo docker ps -q --filter "name=${container_name}" >/dev/null; then
-    echo "Stopping container: ${container_name}"
-    sudo docker stop "${container_name}"
-else
-    echo "Container ${container_name} is not running."
-fi
+                        # 실행 중인 컨테이너 확인 후 중단
+                        if sudo docker ps -q --filter "name=\$CONTAINER_NAME" >/dev/null; then
+                            echo "Stopping container: \$CONTAINER_NAME"
+                            sudo docker stop "\$CONTAINER_NAME"
+                        else
+                            echo "Container \$CONTAINER_NAME is not running."
+                        fi
 
-# Docker 컨테이너 실행
-sudo docker run -d -p 8081:8081 --rm -v /var/logs/dev-server:/logs --name auto-dev-server auto-dev-server
-cat AutoDevServer.sh
-#!/bin/bash
-
-# Jenkins 환경에서 실행되는지 확인하기 위해 아래 환경 변수를 설정합니다.
-export PATH=$PATH:/usr/local/bin
-
-# 실행하려는 디렉토리로 이동합니다.
-cd /home/ubuntu/temp/sendData
-
-
-# Docker 이미지 빌드
-sudo docker build -t auto-dev-server .
-
-# 컨테이너 이름
-container_name="auto-dev-server"
-
-# 실행 중인 컨테이너 확인 후 중단
-if sudo docker ps -q --filter "name=${container_name}" >/dev/null; then
-    echo "Stopping container: ${container_name}"
-    sudo docker stop "${container_name}"
-else
-    echo "Container ${container_name} is not running."
-fi
-
-# Docker 컨테이너 실행
-sudo docker run -d -p 8081:8081 --rm -v /var/logs/dev-server:/logs --name auto-dev-server auto-dev-server
+                        # Docker 컨테이너 실행
+                        sudo docker run -d -p 8081:8081 --rm -v /var/logs/dev-server:/logs --name \$CONTAINER_NAME \$CONTAINER_NAME
                     """
 
                         sh 'echo manual Auto CI Start'
