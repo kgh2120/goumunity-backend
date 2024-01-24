@@ -1,6 +1,8 @@
 package com.ssafy.goumunity.domain.feed.domain;
 
-import com.ssafy.goumunity.domain.feed.controller.request.CommentRegistRequest;
+import com.ssafy.goumunity.common.exception.CustomErrorCode;
+import com.ssafy.goumunity.common.exception.CustomException;
+import com.ssafy.goumunity.domain.feed.controller.request.CommentRequest;
 import java.time.Instant;
 import lombok.*;
 
@@ -17,7 +19,19 @@ public class Comment {
     private Instant createdAt;
     private Instant updatedAt;
 
-    public static Comment from(Long userId, Long feedId, CommentRegistRequest comment) {
+    public void modifyContent(String content) {
+        this.content = content;
+    }
+
+    public void checkUser(Long userId) {
+        if (this.getUserId() != userId) throw new CustomException(CustomErrorCode.INVALID_USER);
+    }
+
+    public void checkFeed(Long feedId) {
+        if (this.getFeedId() != feedId) throw new CustomException(CustomErrorCode.FEED_NOT_MATCH);
+    }
+
+    public static Comment from(Long userId, Long feedId, CommentRequest.Create comment) {
         return Comment.builder().feedId(feedId).userId(userId).content(comment.getContent()).build();
     }
 }

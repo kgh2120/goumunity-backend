@@ -11,7 +11,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.goumunity.common.exception.GlobalExceptionHandler;
 import com.ssafy.goumunity.config.SecurityConfig;
 import com.ssafy.goumunity.config.security.CustomDetails;
-import com.ssafy.goumunity.domain.feed.controller.request.CommentRegistRequest;
+import com.ssafy.goumunity.domain.feed.controller.request.CommentRequest;
 import com.ssafy.goumunity.domain.feed.controller.response.CommentResponse;
 import com.ssafy.goumunity.domain.feed.domain.Comment;
 import com.ssafy.goumunity.domain.feed.service.CommentService;
@@ -62,8 +62,8 @@ class CommentControllerTest {
         MockHttpSession session = new MockHttpSession();
         User user = fromUserCreateDto(userCreateDto());
         Long feedId = 1L;
-        CommentRegistRequest comment =
-                CommentRegistRequest.builder().content("댓글 테스트 입니다 아아 해안짬타 퇴화론").build();
+        CommentRequest.Create comment =
+                CommentRequest.Create.builder().content("댓글 테스트 입니다 아아 해안짬타 퇴화론").build();
 
         given(commentService.saveComment(any(), any(), any()))
                 .willReturn(Comment.from(user.getId(), feedId, comment));
@@ -86,7 +86,7 @@ class CommentControllerTest {
         MockHttpSession session = new MockHttpSession();
         User user = fromUserCreateDto(userCreateDto());
         Long feedId = 1L;
-        CommentRegistRequest comment = CommentRegistRequest.builder().build();
+        CommentRequest.Create comment = CommentRequest.Create.builder().build();
 
         given(commentService.saveComment(any(), any(), any()))
                 .willThrow(MethodArgumentNotValidException.class);
@@ -128,7 +128,7 @@ class CommentControllerTest {
                         + "무궁화 삼천리 화려 강산\n"
                         + "대한 사람 대한으로 길이 보전하세";
 
-        CommentRegistRequest comment = CommentRegistRequest.builder().content(content).build();
+        CommentRequest.Create comment = CommentRequest.Create.builder().content(content).build();
 
         given(commentService.saveComment(any(), any(), any()))
                 .willThrow(MethodArgumentNotValidException.class);
