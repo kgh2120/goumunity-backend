@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class VertificationServiceImpl implements VertificationService {
+public class VerificationServiceImpl implements VerificationService {
 
     private final MailSender mailSender;
     private final UserService userService;
@@ -27,8 +27,8 @@ public class VertificationServiceImpl implements VertificationService {
     public void send(String email) {
         try {
             // 이메일 중복 검사
-            if (!userRepository.existsByEmail(email)) {
-                throw new CustomException(CustomErrorCode.EMAIL_NOT_FOUND);
+            if (userRepository.existsByEmail(email)) {
+                throw new CustomException(CustomErrorCode.EXIST_EMAIL);
             }
 
             String title = "거뮤니티 이메일 인증 번호";

@@ -33,11 +33,17 @@ public class FileUploadServiceImpl implements FileUploadService {
 
     @Override
     public String uploadFile(MultipartFile multipartFile) {
-        if (multipartFile == null || multipartFile.isEmpty()) {
+
+        log.info("file : {}", multipartFile);
+        if (isEmpty(multipartFile)) {
             return null;
         }
         validateIsClientSendImageFile(multipartFile);
         return uploadFiles(multipartFile);
+    }
+
+    private boolean isEmpty(MultipartFile multipartFile) {
+        return multipartFile == null || multipartFile.isEmpty();
     }
 
     private void validateIsClientSendImageFile(MultipartFile multipartFile) {
@@ -54,7 +60,7 @@ public class FileUploadServiceImpl implements FileUploadService {
     }
 
     private String upload(File uploadFile) {
-        String fileName = "/upload/" + UUID.randomUUID() + uploadFile.getName(); // S3에 저장된 파일 이름
+        String fileName = "upload/" + UUID.randomUUID() + uploadFile.getName(); // S3에 저장된 파일 이름
         String uploadImageUrl = putS3(uploadFile, fileName); // s3로 업로드
         removeNewFile(uploadFile);
         return uploadImageUrl;
@@ -78,13 +84,7 @@ public class FileUploadServiceImpl implements FileUploadService {
 
     // 로컬에 파일 업로드 하기
     private Optional<File> convert(MultipartFile file) {
-        File convertFile =
-                new File(
-                        System.getProperty("user.dir")
-                                + "/"
-                                + UUID.randomUUID()
-                                + "/"
-                                + file.getOriginalFilename());
+        File convertFile = new File(System.getProperty("user.dir") + "/" + file.getOriginalFilename());
         try {
             if (convertFile.createNewFile()) { // 바로 위에서 지정한 경로에 File이 생성됨 (경로가 잘못되었다면 생성 불가능)
                 try (FileOutputStream fos =
