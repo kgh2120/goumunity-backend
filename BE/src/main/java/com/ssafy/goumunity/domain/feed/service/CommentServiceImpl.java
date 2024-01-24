@@ -14,18 +14,18 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
+@Transactional
 public class CommentServiceImpl implements CommentService {
 
     private final CommentRepository commentRepository;
 
     @Override
-    @Transactional
     public Comment saveComment(Long userId, Long feedId, CommentRequest.Create comment) {
         return commentRepository.save(Comment.from(userId, feedId, comment));
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Slice<CommentResponse> findAllByFeedId(Long feedId, Pageable pageable) {
         return commentRepository.findAllByFeedId(feedId, pageable);
     }
