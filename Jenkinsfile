@@ -57,7 +57,7 @@ pipeline {
         remote.user = 'ubuntu',
         credentialsId: 'ssafyhelperpem',
         remote.allowAnyHosts = true
-                        ], remote,script "temp/AutoDevServer.sh"
+                        ], remote,script: "temp/AutoDevServer.sh"
 
                         sh 'echo manual Auto CI Start'
                         sh 'curl "https://www.ssafyhelper.shop/control/dev/be"'
