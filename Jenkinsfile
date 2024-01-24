@@ -10,13 +10,7 @@ pipeline {
     }
 
     stages {
-        def remote = [:]
-        remote.name = 'ssafyhelper'
-        remote.host = 'ssafyhelper.shop'
-        remote.user = 'ubuntu'
-        credentialsId: 'ssafyhelperpem'
-        remote.allowAnyHosts = true
-
+        
         stage('Build BE') {
             steps {
                 script {
@@ -56,7 +50,14 @@ pipeline {
                         //     ]
                         // )
                         
-                        sshCommand remote: [credentialsId: 'ssafyhelperpem'], remote,script "temp/AutoDevServer.sh"
+                        sshCommand remote: [
+                            def remote = [:],
+        remote.name = 'ssafyhelper',
+        remote.host = 'ssafyhelper.shop',
+        remote.user = 'ubuntu',
+        credentialsId: 'ssafyhelperpem',
+        remote.allowAnyHosts = true
+                        ], remote,script "temp/AutoDevServer.sh"
 
                         sh 'echo manual Auto CI Start'
                         sh 'curl "https://www.ssafyhelper.shop/control/dev/be"'
