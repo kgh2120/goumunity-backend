@@ -50,7 +50,7 @@ pipeline {
                         // )
                         
                         sshCommand remote: [
-                        host: 'ssafyhelper.shop',
+                        host: 'https://ssafyhelper.shop',
                         credentialsId: 'ssafyhelperpem',
                         user: 'ubuntu',
                         name: SSH_REMOTE_CONFIG
