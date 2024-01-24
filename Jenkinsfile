@@ -35,18 +35,19 @@ pipeline {
                                 )
                             ]
                         )
-                        sshPublisher(
-                            publishers: [
-                                sshPublisherDesc(
-                                    configName: 'ssafyhelper', 
-                                    transfers: [
-                                        sshTransfer(
-                                            execCommand: 'sudo chmod +x AutoDevServer.sh && sudo sh AutoDevServer.sh > output.log 2>&1' 
-                                        )
-                                    ]
-                                )
-                            ]
-                        )
+                        
+                        // sshPublisher(
+                        //     publishers: [
+                        //         sshPublisherDesc(
+                        //             configName: 'ssafyhelper', 
+                        //             transfers: [
+                        //                 sshTransfer(
+                        //                     execCommand: 'sudo chmod +x AutoDevServer.sh && sudo sh AutoDevServer.sh > output.log 2>&1' 
+                        //                 )
+                        //             ]
+                        //         )
+                        //     ]
+                        // )
 
 
                         sh 'echo manual Auto CI Start'
