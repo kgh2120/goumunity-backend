@@ -50,14 +50,13 @@ pipeline {
                         //     ]
                         // )
                         
-                        sshCommand remote: [
-                            def remote = [:],
-        remote.name = 'ssafyhelper',
-        remote.host = 'ssafyhelper.shop',
-        remote.user = 'ubuntu',
-        credentialsId: 'ssafyhelperpem',
-        remote.allowAnyHosts = true
-                        ], remote,script: "temp/AutoDevServer.sh"
+                        script {
+                    sshCommand remote: [
+                        host: 'ssafyhelper.shop',
+                        credentialsId: 'ssafyhelperpem',
+                        user: 'ubuntu',
+                        allowAnyHosts: true
+                    ], remote,script: "temp/AutoDevServer.sh"
 
                         sh 'echo manual Auto CI Start'
                         sh 'curl "https://www.ssafyhelper.shop/control/dev/be"'
