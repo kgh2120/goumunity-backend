@@ -1,5 +1,6 @@
 package com.ssafy.goumunity.domain.region.domain;
 
+import com.ssafy.goumunity.domain.region.controller.response.RegionResponse;
 import java.time.Instant;
 import lombok.*;
 
@@ -14,4 +15,14 @@ public class Region {
 
     private Instant createdAt;
     private Instant updatedAt;
+
+    public RegionResponse to() {
+        return RegionResponse.builder()
+                .regionId(regionId)
+                .si(si)
+                .gungu(gungu)
+                .createdAt(createdAt.getEpochSecond())
+                .updatedAt(updatedAt.getEpochSecond())
+                .build();
+    }
 }
