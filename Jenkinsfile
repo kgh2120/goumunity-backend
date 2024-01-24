@@ -41,7 +41,7 @@ pipeline {
                                     configName: 'ssafyhelper', 
                                     transfers: [
                                         sshTransfer(
-                                            execCommand: 'sudo sh AutoDevServer.sh > output.log 2>&1' 
+                                            execCommand: 'sudo chmod +x AutoDevServer.sh && sudo sh AutoDevServer.sh > output.log 2>&1' 
                                         )
                                     ]
                                 )
