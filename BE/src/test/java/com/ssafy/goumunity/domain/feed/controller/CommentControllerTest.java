@@ -2,12 +2,14 @@ package com.ssafy.goumunity.domain.feed.controller;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ssafy.goumunity.common.exception.CustomErrorCode;
+import com.ssafy.goumunity.common.exception.CustomException;
 import com.ssafy.goumunity.common.exception.GlobalExceptionHandler;
 import com.ssafy.goumunity.config.SecurityConfig;
 import com.ssafy.goumunity.config.security.CustomDetails;
@@ -21,6 +23,7 @@ import com.ssafy.goumunity.domain.user.dto.UserCreateDto;
 import com.ssafy.goumunity.domain.user.dto.UserResponse;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.MissingFormatArgumentException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -173,6 +176,122 @@ class CommentControllerTest {
                 .andDo(print());
     }
 
+    @DisplayName("댓글 수정 성공")
+    @Test
+    void modifyComment() throws Exception {
+        ObjectMapper mapper = new ObjectMapper();
+        MockHttpSession session = new MockHttpSession();
+        User user = fromUserCreateDto(userCreateDto());
+        Long feedId = 1L;
+
+        CommentRequest.Modify comment = CommentRequest.Modify.builder().content("댓글을 수정해볼거야").build();
+
+        Comment modifiedComment =
+                Comment.builder()
+                        .commentId(1L)
+                        .userId(user.getId())
+                        .feedId(1L)
+                        .content(comment.getContent())
+                        .build();
+
+        given(commentService.modifyComment(any(), any(), any(), any())).willReturn(modifiedComment);
+
+        this.mockMvc
+                .perform(
+                        put("/api/feeds/" + feedId + "/comments/" + modifiedComment.getFeedId())
+                                .with(SecurityMockMvcRequestPostProcessors.user(new CustomDetails(user)))
+                                .content(mapper.writeValueAsString(comment))
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .session(session))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content").value(comment.getContent()))
+                .andDo(print());
+    }
+
+    @DisplayName("댓글 수정 실패_비어있는 요청")
+    @Test
+    void modifyCommentFailWithEmptyContent() throws Exception {
+        ObjectMapper mapper = new ObjectMapper();
+        MockHttpSession session = new MockHttpSession();
+        User user = fromUserCreateDto(userCreateDto());
+        Long feedId = 1L;
+
+        CommentRequest.Modify comment = CommentRequest.Modify.builder().build();
+
+        Comment modifiedComment =
+                Comment.builder().commentId(1L).userId(user.getId()).feedId(1L).build();
+
+        given(commentService.modifyComment(any(), any(), any(), any()))
+                .willThrow(MissingFormatArgumentException.class);
+
+        this.mockMvc
+                .perform(
+                        put("/api/feeds/" + feedId + "/comments/" + modifiedComment.getFeedId())
+                                .with(SecurityMockMvcRequestPostProcessors.user(new CustomDetails(user)))
+                                .content(mapper.writeValueAsString(comment))
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .session(session))
+                .andExpect(status().isBadRequest())
+                .andDo(print());
+    }
+
+    @DisplayName("댓글 수정 실패_유효하지 않은 사용자")
+    @Test
+    void modifyCommentFailWithInvalidUser() throws Exception {
+        ObjectMapper mapper = new ObjectMapper();
+        MockHttpSession session = new MockHttpSession();
+        User user = fromUserCreateDto(userCreateDto());
+        Long feedId = 1L;
+
+        CommentRequest.Modify comment = CommentRequest.Modify.builder().content("댓글을 수정해볼거야").build();
+
+        Comment modifiedComment = Comment.builder().commentId(1L).userId(3L).feedId(1L).build();
+
+        given(commentService.modifyComment(any(), any(), any(), any()))
+                .willThrow(new CustomException(CustomErrorCode.INVALID_USER));
+
+        this.mockMvc
+                .perform(
+                        put("/api/feeds/" + feedId + "/comments/" + modifiedComment.getFeedId())
+                                .with(SecurityMockMvcRequestPostProcessors.user(new CustomDetails(user)))
+                                .content(mapper.writeValueAsString(comment))
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .session(session))
+                .andExpect(status().isForbidden())
+                .andExpect(jsonPath("$.errorName").value(CustomErrorCode.INVALID_USER.getErrorName()))
+                .andExpect(jsonPath("$.errorMessage").value(CustomErrorCode.INVALID_USER.getErrorMessage()))
+                .andDo(print());
+    }
+
+    @DisplayName("댓글 수정 실패_게시글과 맞지않는 댓글수정 요청")
+    @Test
+    void modifyCommentFailWithFeedNotMatch() throws Exception {
+        ObjectMapper mapper = new ObjectMapper();
+        MockHttpSession session = new MockHttpSession();
+        User user = fromUserCreateDto(userCreateDto());
+        Long feedId = 3L;
+
+        CommentRequest.Modify comment = CommentRequest.Modify.builder().content("댓글을 수정해볼거야").build();
+
+        Comment modifiedComment = Comment.builder().commentId(1L).userId(3L).feedId(1L).build();
+
+        given(commentService.modifyComment(any(), any(), any(), any()))
+                .willThrow(new CustomException(CustomErrorCode.FEED_NOT_MATCH));
+
+        this.mockMvc
+                .perform(
+                        put("/api/feeds/" + feedId + "/comments/" + modifiedComment.getFeedId())
+                                .with(SecurityMockMvcRequestPostProcessors.user(new CustomDetails(user)))
+                                .content(mapper.writeValueAsString(comment))
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .session(session))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.errorName").value(CustomErrorCode.FEED_NOT_MATCH.getErrorName()))
+                .andExpect(
+                        jsonPath("$.errorMessage").value(CustomErrorCode.FEED_NOT_MATCH.getErrorMessage()))
+                .andDo(print());
+    }
+
     private UserCreateDto userCreateDto() {
         return UserCreateDto.builder()
                 .email("gyu@naver.com")
@@ -188,6 +307,7 @@ class CommentControllerTest {
 
     private User fromUserCreateDto(UserCreateDto dto) {
         return User.builder()
+                .id(1L)
                 .email(dto.getEmail())
                 .password(dto.getPassword())
                 .monthBudget(dto.getMonthBudget())
