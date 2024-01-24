@@ -1,5 +1,6 @@
 package com.ssafy.goumunity.domain.chat.domain;
 
+import com.ssafy.goumunity.domain.chat.controller.request.HashtagCreateRequest;
 import java.time.Instant;
 import lombok.*;
 
@@ -12,4 +13,8 @@ public class Hashtag {
     private String name;
     private Instant createdAt;
     private Instant updatedAt;
+
+    public static Hashtag create(HashtagCreateRequest dto) {
+        return Hashtag.builder().name(dto.getName()).createdAt(Instant.now()).build();
+    }
 }

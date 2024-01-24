@@ -6,4 +6,8 @@ import org.springframework.data.domain.Pageable;
 
 public interface HashtagRepository {
     SliceResponse<Hashtag> findAllByHashtagName(String hashtagName, Long time, Pageable pageable);
+
+    Hashtag save(Hashtag hashtag);
+
+    boolean existsOneByHashtagName(String hashtagName);
 }

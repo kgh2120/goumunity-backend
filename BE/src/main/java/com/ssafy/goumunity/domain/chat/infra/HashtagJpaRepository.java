@@ -12,4 +12,6 @@ public interface HashtagJpaRepository extends JpaRepository<HashtagEntity, Long>
             "select h from HashtagEntity h where h.name like :hashtagName% and h.createdAt < :retrieveTime")
     Slice<HashtagEntity> findAllByKeyword(
             String hashtagName, Instant retrieveTime, Pageable pageable);
+
+    boolean existsOneByName(String name);
 }

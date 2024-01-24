@@ -9,6 +9,7 @@ import com.ssafy.goumunity.domain.chat.domain.Hashtag;
 import com.ssafy.goumunity.domain.chat.infra.HashtagEntity;
 import com.ssafy.goumunity.domain.chat.infra.HashtagJpaRepository;
 import com.ssafy.goumunity.domain.chat.infra.HashtagRepositoryImpl;
+import java.time.Instant;
 import java.util.List;
 import javax.swing.*;
 import org.assertj.core.api.SoftAssertions;
@@ -51,5 +52,33 @@ class HashtagRepositoryTest {
             softAssertions.assertThat(tag.getName()).isEqualTo("흠..");
         }
         softAssertions.assertAll();
+    }
+
+    @Test
+    void 해시태그_생성_테스트() throws Exception {
+        // given
+        Hashtag hashtag = Hashtag.builder().name("hashtag").createdAt(Instant.now()).build();
+
+        HashtagEntity from = HashtagEntity.from(hashtag);
+        given(hashtagJpaRepository.save(any()))
+                .willReturn(
+                        HashtagEntity.builder()
+                                .id(1L)
+                                .name(from.getName())
+                                .createdAt(from.getCreatedAt())
+                                .updatedAt(from.getUpdatedAt())
+                                .build());
+
+        // when
+        Hashtag sut = hashtagRepository.save(hashtag);
+        // then
+        SoftAssertions sa = new SoftAssertions();
+
+        sa.assertThat(sut.getId()).isSameAs(1L);
+        sa.assertThat(sut.getName()).isEqualTo(hashtag.getName());
+        sa.assertThat(sut.getCreatedAt()).isEqualTo(hashtag.getCreatedAt());
+        sa.assertThat(sut.getUpdatedAt()).isNull();
+
+        sa.assertAll();
     }
 }

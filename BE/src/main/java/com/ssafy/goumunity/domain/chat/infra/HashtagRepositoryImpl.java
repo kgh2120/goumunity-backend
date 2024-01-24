@@ -22,4 +22,14 @@ public class HashtagRepositoryImpl implements HashtagRepository {
         return SliceResponse.from(
                 entity.getContent().stream().map(HashtagEntity::to).toList(), entity.hasNext());
     }
+
+    @Override
+    public Hashtag save(Hashtag hashtag) {
+        return hashtagJpaRepository.save(HashtagEntity.from(hashtag)).to();
+    }
+
+    @Override
+    public boolean existsOneByHashtagName(String hashtagName) {
+        return hashtagJpaRepository.existsOneByName(hashtagName);
+    }
 }

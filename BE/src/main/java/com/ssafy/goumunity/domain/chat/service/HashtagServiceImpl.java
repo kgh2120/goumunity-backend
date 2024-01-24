@@ -1,7 +1,10 @@
 package com.ssafy.goumunity.domain.chat.service;
 
 import com.ssafy.goumunity.common.util.SliceResponse;
+import com.ssafy.goumunity.domain.chat.controller.request.HashtagCreateRequest;
 import com.ssafy.goumunity.domain.chat.domain.Hashtag;
+import com.ssafy.goumunity.domain.chat.exception.ChatErrorCode;
+import com.ssafy.goumunity.domain.chat.exception.ChatException;
 import com.ssafy.goumunity.domain.chat.service.port.HashtagRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -19,5 +22,17 @@ public class HashtagServiceImpl implements HashtagService {
     public SliceResponse<Hashtag> findAllByHashtagName(
             String hashtagName, Pageable pageable, Long time) {
         return hashtagRepository.findAllByHashtagName(hashtagName, time, pageable);
+    }
+
+    @Override
+    public Hashtag createHashtag(HashtagCreateRequest dto) {
+        verifyDuplicateHashtag(dto);
+        return hashtagRepository.save(Hashtag.create(dto));
+    }
+
+    private void verifyDuplicateHashtag(HashtagCreateRequest dto) {
+        if (hashtagRepository.existsOneByHashtagName(dto.getName())) {
+            throw new ChatException(ChatErrorCode.ALREADY_CREATED_HASHTAG);
+        }
     }
 }
