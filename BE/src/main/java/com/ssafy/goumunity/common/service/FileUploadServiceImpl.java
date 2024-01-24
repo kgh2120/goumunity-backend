@@ -33,7 +33,7 @@ public class FileUploadServiceImpl implements FileUploadService {
 
     @Override
     public String uploadFile(MultipartFile multipartFile) {
-        if (multipartFile.isEmpty()) {
+        if (multipartFile == null || multipartFile.isEmpty()) {
             return null;
         }
         validateIsClientSendImageFile(multipartFile);
