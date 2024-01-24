@@ -79,4 +79,8 @@ public class FeedEntity {
 
         return feedEntityBuilder.build();
     }
+
+    public static FeedEntity feedEntityOnlyWithId(Long id) {
+        return FeedEntity.builder().feedId(id).build();
+    }
 }
