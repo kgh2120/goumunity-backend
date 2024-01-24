@@ -10,6 +10,13 @@ pipeline {
     }
 
     stages {
+        def remote = [:]
+        remote.name = 'ssafyhelper'
+        remote.host = 'ssafyhelper.shop'
+        remote.user = 'ubuntu'
+        credentialsId: 'ssafyhelperpem'
+        remote.allowAnyHosts = true
+
         stage('Build BE') {
             steps {
                 script {
@@ -49,35 +56,7 @@ pipeline {
                         //     ]
                         // )
                         
-                        sshCommand remote: [
-                        host: 'https://ssafyhelper.shop',
-                        credentialsId: 'ssafyhelperpem',
-                        user: 'ubuntu',
-                        name: SSH_REMOTE_CONFIG
-                    ], command: 'bash -s', script: """
-                        export PATH=$PATH:/usr/local/bin
-
-                        # 실행하려는 디렉토리로 이동합니다.
-                        cd /home/ubuntu/temp/sendData
-
-                        # 디렉토리 내 파일 목록 출력
-                        ls -l
-
-                        # Docker 이미지 빌드
-                        sudo docker build -t $CONTAINER_NAME .
-
-                        # 실행 중인 컨테이너 확인 후 중단
-                        if sudo docker ps -q --filter "name=$CONTAINER_NAME" >/dev/null; then
-                            echo "Stopping container: $CONTAINER_NAME"
-                            sudo docker stop "$CONTAINER_NAME"
-                        else
-                            echo "Container $CONTAINER_NAME is not running."
-                        fi
-
-                        # Docker 컨테이너 실행
-                        sudo docker run -d -p 8081:8081 --rm -v /var/logs/dev-server:/logs --name $CONTAINER_NAME $CONTAINER_NAME
-                    """
-
+                        sshCommand remote: [credentialsId: 'ssafyhelperpem'], remote,script "temp/AutoDevServer.sh"
 
                         sh 'echo manual Auto CI Start'
                         sh 'curl "https://www.ssafyhelper.shop/control/dev/be"'
