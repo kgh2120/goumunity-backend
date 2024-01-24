@@ -20,7 +20,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-
 @Slf4j
 @RequiredArgsConstructor
 @Service
@@ -36,11 +35,15 @@ public class FileUploadServiceImpl implements FileUploadService {
     public String uploadFile(MultipartFile multipartFile) {
 
         log.info("file : {}", multipartFile);
-        if (multipartFile.isEmpty()) {
+        if (isEmpty(multipartFile)) {
             return null;
         }
         validateIsClientSendImageFile(multipartFile);
         return uploadFiles(multipartFile);
+    }
+
+    private boolean isEmpty(MultipartFile multipartFile) {
+        return multipartFile == null || multipartFile.isEmpty();
     }
 
     private void validateIsClientSendImageFile(MultipartFile multipartFile) {
@@ -50,8 +53,8 @@ public class FileUploadServiceImpl implements FileUploadService {
 
     private String uploadFiles(MultipartFile multipartFile) {
         File uploadFile =
-            convert(multipartFile) // 파일 변환할 수 없으면 에러
-                .orElseThrow(() -> new InternalServerException("MultipartFile -> File 변환 실패", this));
+                convert(multipartFile) // 파일 변환할 수 없으면 에러
+                        .orElseThrow(() -> new InternalServerException("MultipartFile -> File 변환 실패", this));
         // TODO Exception 추가
         return upload(uploadFile);
     }
@@ -66,8 +69,8 @@ public class FileUploadServiceImpl implements FileUploadService {
     // S3로 업로드
     private String putS3(File uploadFile, String fileName) {
         amazonS3Client.putObject(
-            new PutObjectRequest(bucket, fileName, uploadFile)
-                .withCannedAcl(CannedAccessControlList.PublicRead));
+                new PutObjectRequest(bucket, fileName, uploadFile)
+                        .withCannedAcl(CannedAccessControlList.PublicRead));
         return amazonS3Client.getUrl(bucket, fileName).toString();
     }
 
@@ -85,7 +88,7 @@ public class FileUploadServiceImpl implements FileUploadService {
         try {
             if (convertFile.createNewFile()) { // 바로 위에서 지정한 경로에 File이 생성됨 (경로가 잘못되었다면 생성 불가능)
                 try (FileOutputStream fos =
-                         new FileOutputStream(convertFile)) { // FileOutputStream 데이터를 파일에 바이트 스트림으로 저장하기 위함
+                        new FileOutputStream(convertFile)) { // FileOutputStream 데이터를 파일에 바이트 스트림으로 저장하기 위함
                     fos.write(file.getBytes());
                 }
                 return Optional.of(convertFile);
