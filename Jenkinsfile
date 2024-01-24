@@ -31,6 +31,24 @@ pipeline {
                         sh './gradlew clean build'   
                         sh 'jq --version'
                         sh 'cd build/libs && ls -al'
+
+                        sshPublisher(
+                            publishers: [
+                                sshPublisherDesc(
+                                    configName: 'ssafyhelper', // Jenkins 시스템 설정에서 SSH 설정을 추가한 이름
+                                    transfers: [
+                                        sshTransfer(
+                                            execCommand: 'echo date >> logs.txt', // 원격 디렉토리 초기화
+                                            sourceFiles: 'goumunity-0.0.1-SNAPSHOT.jar', // 전송할 파일 경로 또는 패턴
+                                            removePrefix: '', // 원격 서버에 복사할 때 제거할 경로 접두사
+                                            remoteDirectory: '' // 원격 서버에 전송할 디렉토리
+                                        )
+                                    ]
+                                )
+                            ]
+                        )
+
+
                         sh 'echo manual Auto CI Start'
                         sh 'curl "https://ssafyhelper.shop/control/dev/be"'
 
