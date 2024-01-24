@@ -6,6 +6,7 @@ pipeline {
     }
     environment {
         CONTAINER_NAME = "auto-dev-server"
+        SSH_REMOTE_CONFIG = 'ssafyhelper'
     }
 
     stages {
