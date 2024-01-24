@@ -1,15 +1,15 @@
 package com.ssafy.goumunity.domain.region.controller;
 
+import com.ssafy.goumunity.domain.region.controller.request.RegionRegistRequest;
 import com.ssafy.goumunity.domain.region.controller.response.RegionResponse;
+import com.ssafy.goumunity.domain.region.domain.Region;
 import com.ssafy.goumunity.domain.region.service.RegionService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -27,5 +27,11 @@ public class RegionController {
     @GetMapping("/{regionId}")
     public ResponseEntity<RegionResponse> findOneByRegionId(@PathVariable Long regionId) {
         return ResponseEntity.ok(regionService.findOneByRegionId(regionId));
+    }
+
+    @PostMapping
+    public ResponseEntity<Region> save(@RequestBody RegionRegistRequest regionRegistRequest){
+        Region region = regionService.save(regionRegistRequest);
+        return ResponseEntity.status(HttpStatus.CREATED).body(region);
     }
 }

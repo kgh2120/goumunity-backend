@@ -11,4 +11,7 @@ public interface RegionJpaRepository extends JpaRepository<RegionEntity, Long> {
 
     @Query("select r from RegionEntity r where r.regionId=:regionId")
     Optional<RegionEntity> findOneByRegionId(@Param("regionId") Long regionId);
+
+    @Query("select r from RegionEntity r where r.si=:si and r.gungu=:gungu")
+    Optional<RegionEntity> findOneBySiGungu(@Param("si") String si, @Param("gungu") String gungu);
 }
