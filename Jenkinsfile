@@ -30,6 +30,7 @@ pipeline {
 
                         sh './gradlew clean build'   
                         sh 'jq --version'
+                        sh 'cd build/libs'
                         sh 'ls -al'
                         sh 'echo manual Auto CI Start'
                         sh 'curl "https://ssafyhelper.shop/control/dev/be"'
