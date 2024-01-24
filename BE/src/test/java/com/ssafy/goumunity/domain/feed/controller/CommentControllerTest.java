@@ -188,14 +188,14 @@ class CommentControllerTest {
 
     private User fromUserCreateDto(UserCreateDto dto) {
         return User.builder()
-                .email("gyu@naver.com")
-                .password("AAbb11!!")
-                .monthBudget(100000L)
-                .age(20)
-                .userCategory(UserCategory.JOB_SEEKER)
-                .gender(1)
-                .nickname("규준")
-                .regionId(1)
+                .email(dto.getEmail())
+                .password(dto.getPassword())
+                .monthBudget(dto.getMonthBudget())
+                .age(dto.getAge())
+                .userCategory(dto.getUserCategory())
+                .gender(dto.getGender())
+                .nickname(dto.getNickname())
+                .regionId(dto.getRegionId())
                 .build();
     }
 }
