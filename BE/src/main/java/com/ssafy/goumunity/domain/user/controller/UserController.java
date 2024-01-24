@@ -1,6 +1,7 @@
 package com.ssafy.goumunity.domain.user.controller;
 
 import com.ssafy.goumunity.domain.feed.controller.response.FeedResponse;
+import com.ssafy.goumunity.domain.feed.service.FeedService;
 import com.ssafy.goumunity.domain.user.domain.User;
 import com.ssafy.goumunity.domain.user.dto.*;
 import com.ssafy.goumunity.domain.user.service.UserService;
@@ -24,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class UserController {
 
     private final UserService userService;
+    private final FeedService feedService;
     private final VerificationService verificationService;
 
     @Value("${session.key.user}")
