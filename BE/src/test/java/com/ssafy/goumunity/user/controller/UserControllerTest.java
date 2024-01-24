@@ -23,8 +23,6 @@ import com.ssafy.goumunity.domain.user.dto.UserCreateDto;
 import com.ssafy.goumunity.domain.user.dto.UserUpdateDto;
 import com.ssafy.goumunity.domain.user.service.UserService;
 import com.ssafy.goumunity.domain.user.service.VerificationService;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,11 +61,10 @@ class UserControllerTest {
     void 회원가입성공() throws Exception {
         ObjectMapper mapper = new ObjectMapper();
         UserCreateDto user = userCreateDto();
-        FileInputStream fileInputStream = fileInputStream();
 
         MockPart data =
                 new MockPart("data", "", mapper.writeValueAsBytes(user), MediaType.APPLICATION_JSON);
-        MockMultipartFile image = new MockMultipartFile("image", "test.jpg", "jpg", fileInputStream);
+        MockMultipartFile image = new MockMultipartFile("image", "test.jpg".getBytes());
 
         given(userService.saveUser(any(), any())).willReturn(fromUserCreateDto(user));
 
@@ -85,11 +82,10 @@ class UserControllerTest {
     void 회원가입실패_중복이메일() throws Exception {
         ObjectMapper mapper = new ObjectMapper();
         UserCreateDto user = userCreateDto();
-        FileInputStream fileInputStream = fileInputStream();
 
         MockPart data =
                 new MockPart("data", "", mapper.writeValueAsBytes(user), MediaType.APPLICATION_JSON);
-        MockMultipartFile image = new MockMultipartFile("image", "test.jpg", "jpg", fileInputStream);
+        MockMultipartFile image = new MockMultipartFile("image", "test.jpg".getBytes());
 
         given(userService.saveUser(any(), any()))
                 .willThrow(new CustomException(CustomErrorCode.EXIST_EMAIL));
@@ -291,10 +287,5 @@ class UserControllerTest {
                 .nickname(dto.getNickname())
                 .regionId(dto.getRegionId())
                 .build();
-    }
-
-    private FileInputStream fileInputStream() throws FileNotFoundException {
-        return new FileInputStream(
-                "src/main/resources/images/user-profile/20240118/12237787285700.jpg");
     }
 }

@@ -6,9 +6,8 @@ import com.ssafy.goumunity.domain.user.domain.User;
 import com.ssafy.goumunity.domain.user.domain.UserStatus;
 import com.ssafy.goumunity.domain.user.dto.UserCreateDto;
 import com.ssafy.goumunity.domain.user.dto.UserUpdateDto;
+import com.ssafy.goumunity.domain.user.service.port.ProfileImageUploader;
 import com.ssafy.goumunity.domain.user.service.port.UserRepository;
-import com.ssafy.goumunity.image.Image;
-import com.ssafy.goumunity.util.SingleImageHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -23,8 +22,8 @@ import org.springframework.web.multipart.MultipartFile;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-    private final SingleImageHandler imageHandler;
     private final PasswordEncoder encoder;
+    private final ProfileImageUploader profileImageUploader;
 
     @Override
     @Transactional
@@ -34,10 +33,7 @@ public class UserServiceImpl implements UserService {
             throw new CustomException(CustomErrorCode.EXIST_EMAIL);
         }
 
-        Image image = imageHandler.parseFileInfo(profileImage);
-
-        // profileImage가 null일 경우에 imgPath도 null
-        String imgPath = image != null ? image.getStoredFilePath() : null;
+        String imgPath = profileImageUploader.uploadProfileImage(profileImage);
         User user = User.from(userCreateDto, imgPath, encoder.encode(userCreateDto.getPassword()));
         return userRepository.save(user);
     }

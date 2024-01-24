@@ -16,7 +16,16 @@ public enum CustomErrorCode implements ErrorCode {
 
     // Comment 관련 에러
     COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 댓글을 찾을 수 없습니다."),
-    FEED_NOT_MATCH(HttpStatus.BAD_REQUEST, "댓글이 게시글과 매칭되지 않습니다.");
+    FEED_NOT_MATCH(HttpStatus.BAD_REQUEST, "댓글이 게시글과 매칭되지 않습니다."),
+
+    LOCAL_FILE_UPLOAD_FAILED(
+            HttpStatus.INTERNAL_SERVER_ERROR,
+            "잠시후 시도해주세요. 계속해서 문제가 발생한 경우 관리자 이메일(goumunity@gmail.com)로 연락주세요."),
+    FILE_IS_NOT_IMAGE_TYPE(HttpStatus.BAD_REQUEST, "전송한 파일이 이미지 타입이 아닙니다."),
+
+    INTERNAL_SERVER_ERROR_CODE(
+            HttpStatus.INTERNAL_SERVER_ERROR,
+            "잠시후 시도해주세요. 계속해서 문제가 발생한 경우 관리자 이메일(goumunity@gmail.com)로 연락주세요.");
 
     private final HttpStatus httpStatus;
     private final String errorMessage;
