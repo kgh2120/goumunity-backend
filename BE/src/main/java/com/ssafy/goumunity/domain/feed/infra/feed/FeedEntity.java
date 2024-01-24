@@ -59,6 +59,7 @@ public class FeedEntity {
                 .afterPrice(afterPrice)
                 .profit(profit)
                 .region(regionEntity.to())
+                .user(userEntity.toModel())
                 .createdAt(createdAt)
                 .updatedAt(updatedAt)
                 .build();
