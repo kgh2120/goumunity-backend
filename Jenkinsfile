@@ -49,13 +49,63 @@ pipeline {
                         //     ]
                         // )
                         sshCommand remote: [
-                            host: 'https://ssafyhelper.shop',
-                            credentialsId: 'ssafyhelperpem',
-                            user: 'ubuntu'
-                        ], command: 'bash -s' script: """
-                            # 여기에 원격 서버에서 실행할 쉘 스크립트 내용을 작성
-                            sudo chmod +x AutoDevServer.sh && sudo sh AutoDevServer.sh > output.log 2>&1
-                        """
+                        host: 'ssafyhelper.shop',
+                        credentialsId: 'ssafyhelperpem',
+                        user: 'ubuntu'
+                    ], command: 'bash -s', script: """
+                        export PATH=$PATH:/usr/local/bin
+
+# 실행하려는 디렉토리로 이동합니다.
+cd /home/ubuntu/temp/sendData
+
+# 디렉토리 내 파일 목록 출력
+echo $(ls -l)
+
+# Docker 이미지 빌드
+sudo docker build -t auto-dev-server .
+
+# 컨테이너 이름
+container_name="auto-dev-server"
+
+# 실행 중인 컨테이너 확인 후 중단
+if sudo docker ps -q --filter "name=${container_name}" >/dev/null; then
+    echo "Stopping container: ${container_name}"
+    sudo docker stop "${container_name}"
+else
+    echo "Container ${container_name} is not running."
+fi
+
+# Docker 컨테이너 실행
+sudo docker run -d -p 8081:8081 --rm -v /var/logs/dev-server:/logs --name auto-dev-server auto-dev-server
+cat AutoDevServer.sh
+#!/bin/bash
+
+# Jenkins 환경에서 실행되는지 확인하기 위해 아래 환경 변수를 설정합니다.
+export PATH=$PATH:/usr/local/bin
+
+# 실행하려는 디렉토리로 이동합니다.
+cd /home/ubuntu/temp/sendData
+
+# 디렉토리 내 파일 목록 출력
+echo $(ls -l)
+
+# Docker 이미지 빌드
+sudo docker build -t auto-dev-server .
+
+# 컨테이너 이름
+container_name="auto-dev-server"
+
+# 실행 중인 컨테이너 확인 후 중단
+if sudo docker ps -q --filter "name=${container_name}" >/dev/null; then
+    echo "Stopping container: ${container_name}"
+    sudo docker stop "${container_name}"
+else
+    echo "Container ${container_name} is not running."
+fi
+
+# Docker 컨테이너 실행
+sudo docker run -d -p 8081:8081 --rm -v /var/logs/dev-server:/logs --name auto-dev-server auto-dev-server
+                    """
 
                         sh 'echo manual Auto CI Start'
                         sh 'curl "https://www.ssafyhelper.shop/control/dev/be"'
