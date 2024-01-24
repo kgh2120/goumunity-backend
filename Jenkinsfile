@@ -52,10 +52,10 @@ pipeline {
                             host: 'https://ssafyhelper.shop',
                             credentialsId: 'ssafyhelperpem',
                             user: 'ubuntu'
-                        ], command: 'bash -s' script: '''
+                        ], command: 'bash -s' script: """
                             # 여기에 원격 서버에서 실행할 쉘 스크립트 내용을 작성
                             sudo chmod +x AutoDevServer.sh && sudo sh AutoDevServer.sh > output.log 2>&1
-                        '''
+                        """
 
                         sh 'echo manual Auto CI Start'
                         sh 'curl "https://www.ssafyhelper.shop/control/dev/be"'
