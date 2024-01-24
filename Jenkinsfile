@@ -86,8 +86,6 @@ export PATH=$PATH:/usr/local/bin
 # 실행하려는 디렉토리로 이동합니다.
 cd /home/ubuntu/temp/sendData
 
-# 디렉토리 내 파일 목록 출력
-echo $(ls -l)
 
 # Docker 이미지 빌드
 sudo docker build -t auto-dev-server .
