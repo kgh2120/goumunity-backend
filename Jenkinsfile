@@ -39,9 +39,9 @@ pipeline {
                                     transfers: [
                                         sshTransfer(
                                             execCommand: 'echo date >> logs.txt', // 원격 디렉토리 초기화
-                                            sourceFiles: 'goumunity-0.0.1-SNAPSHOT.jar', // 전송할 파일 경로 또는 패턴
+                                            sourceFiles: 'build/libs/goumunity-0.0.1-SNAPSHOT.jar', // 전송할 파일 경로 또는 패턴
                                             removePrefix: '', // 원격 서버에 복사할 때 제거할 경로 접두사
-                                            remoteDirectory: '' // 원격 서버에 전송할 디렉토리
+                                            remoteDirectory: '/sendData' // 원격 서버에 전송할 디렉토리
                                         )
                                     ]
                                 )
