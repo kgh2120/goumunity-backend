@@ -78,7 +78,7 @@ class CommentControllerTest {
                                 .content(mapper.writeValueAsString(comment))
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .session(session))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andDo(print());
     }
 
@@ -165,13 +165,14 @@ class CommentControllerTest {
         Pageable pageable = PageRequest.of(page, size);
         Slice<CommentResponse> res = new SliceImpl<>(commentResponseList, pageable, true);
 
-        given(commentService.findAllByFeedId(any(), any())).willReturn(res);
+        given(commentService.findAllByFeedId(any(), any(), any())).willReturn(res);
 
         this.mockMvc
                 .perform(
                         get("/api/feeds/" + feedId + "/comments")
                                 .param("page", String.valueOf(page))
-                                .param("size", String.valueOf(size)))
+                                .param("size", String.valueOf(size))
+                                .param("time", "1706080042240"))
                 .andExpect(status().isOk())
                 .andDo(print());
     }

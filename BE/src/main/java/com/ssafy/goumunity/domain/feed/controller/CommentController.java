@@ -32,8 +32,8 @@ public class CommentController {
 
     @GetMapping
     public ResponseEntity<Slice<CommentResponse>> findAllComments(
-            @PathVariable("feed-id") Long id, Pageable pageable) {
-        return ResponseEntity.ok(commentService.findAllByFeedId(id, pageable));
+            @PathVariable("feed-id") Long id, @RequestParam("time") Long time, Pageable pageable) {
+        return ResponseEntity.ok(commentService.findAllByFeedId(id, time, pageable));
     }
 
     @PutMapping("/{comment-id}")

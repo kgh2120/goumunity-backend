@@ -9,7 +9,7 @@ import org.springframework.data.domain.Slice;
 public interface CommentService {
     Comment saveComment(Long userId, Long feedId, CommentRequest.Create comment);
 
-    Slice<CommentResponse> findAllByFeedId(Long feedId, Pageable pageable);
+    Slice<CommentResponse> findAllByFeedId(Long feedId, Long time, Pageable pageable);
 
     Comment modifyComment(Long userId, Long feedId, Long commentId, CommentRequest.Modify comment);
 

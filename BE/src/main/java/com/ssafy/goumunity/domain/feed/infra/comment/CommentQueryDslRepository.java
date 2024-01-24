@@ -4,6 +4,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.goumunity.domain.feed.controller.response.CommentResponse;
 import com.ssafy.goumunity.domain.feed.controller.response.QCommentResponse;
 import com.ssafy.goumunity.domain.user.infra.QUserEntity;
+import java.time.Instant;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -19,7 +20,7 @@ public class CommentQueryDslRepository {
     private final QCommentEntity comment = QCommentEntity.commentEntity;
     private final QUserEntity user = QUserEntity.userEntity;
 
-    public Slice<CommentResponse> findAllByFeedId(Long feedId, Pageable pageable) {
+    public Slice<CommentResponse> findAllByFeedId(Long feedId, Instant time, Pageable pageable) {
 
         final List<CommentResponse> result =
                 queryFactory
@@ -29,6 +30,8 @@ public class CommentQueryDslRepository {
                         .leftJoin(user)
                         .on(comment.userEntity.eq(user))
                         .where(comment.feedEntity.feedId.eq(feedId))
+                        .where(comment.createdAt.before(time))
+                        .orderBy(comment.createdAt.desc())
                         .offset(pageable.getOffset())
                         .limit(pageable.getPageSize() + 1)
                         .fetch();

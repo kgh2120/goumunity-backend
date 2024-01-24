@@ -6,6 +6,7 @@ import com.ssafy.goumunity.domain.feed.controller.request.CommentRequest;
 import com.ssafy.goumunity.domain.feed.controller.response.CommentResponse;
 import com.ssafy.goumunity.domain.feed.domain.Comment;
 import com.ssafy.goumunity.domain.feed.service.post.CommentRepository;
+import java.time.Instant;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -26,8 +27,8 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     @Transactional(readOnly = true)
-    public Slice<CommentResponse> findAllByFeedId(Long feedId, Pageable pageable) {
-        return commentRepository.findAllByFeedId(feedId, pageable);
+    public Slice<CommentResponse> findAllByFeedId(Long feedId, Long time, Pageable pageable) {
+        return commentRepository.findAllByFeedId(feedId, Instant.ofEpochMilli(time), pageable);
     }
 
     @Override

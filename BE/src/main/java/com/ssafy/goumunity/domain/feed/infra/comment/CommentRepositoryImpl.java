@@ -3,6 +3,7 @@ package com.ssafy.goumunity.domain.feed.infra.comment;
 import com.ssafy.goumunity.domain.feed.controller.response.CommentResponse;
 import com.ssafy.goumunity.domain.feed.domain.Comment;
 import com.ssafy.goumunity.domain.feed.service.post.CommentRepository;
+import java.time.Instant;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -22,8 +23,8 @@ public class CommentRepositoryImpl implements CommentRepository {
     }
 
     @Override
-    public Slice<CommentResponse> findAllByFeedId(Long feedId, Pageable pageable) {
-        return commentQueryDslRepository.findAllByFeedId(feedId, pageable);
+    public Slice<CommentResponse> findAllByFeedId(Long feedId, Instant time, Pageable pageable) {
+        return commentQueryDslRepository.findAllByFeedId(feedId, time, pageable);
     }
 
     @Override
