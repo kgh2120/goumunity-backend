@@ -48,10 +48,12 @@ pipeline {
                         //         )
                         //     ]
                         // )
+                        
                         sshCommand remote: [
                         host: 'ssafyhelper.shop',
                         credentialsId: 'ssafyhelperpem',
-                        user: 'ubuntu'
+                        user: 'ubuntu',
+                        name: SSH_REMOTE_CONFIG
                     ], command: 'bash -s', script: """
                         export PATH=$PATH:/usr/local/bin
 
@@ -59,22 +61,23 @@ pipeline {
                         cd /home/ubuntu/temp/sendData
 
                         # 디렉토리 내 파일 목록 출력
-                        echo \$(ls -l)
+                        ls -l
 
                         # Docker 이미지 빌드
-                        sudo docker build -t \$CONTAINER_NAME .
+                        sudo docker build -t $CONTAINER_NAME .
 
                         # 실행 중인 컨테이너 확인 후 중단
-                        if sudo docker ps -q --filter "name=\$CONTAINER_NAME" >/dev/null; then
-                            echo "Stopping container: \$CONTAINER_NAME"
-                            sudo docker stop "\$CONTAINER_NAME"
+                        if sudo docker ps -q --filter "name=$CONTAINER_NAME" >/dev/null; then
+                            echo "Stopping container: $CONTAINER_NAME"
+                            sudo docker stop "$CONTAINER_NAME"
                         else
-                            echo "Container \$CONTAINER_NAME is not running."
+                            echo "Container $CONTAINER_NAME is not running."
                         fi
 
                         # Docker 컨테이너 실행
-                        sudo docker run -d -p 8081:8081 --rm -v /var/logs/dev-server:/logs --name \$CONTAINER_NAME \$CONTAINER_NAME
+                        sudo docker run -d -p 8081:8081 --rm -v /var/logs/dev-server:/logs --name $CONTAINER_NAME $CONTAINER_NAME
                     """
+
 
                         sh 'echo manual Auto CI Start'
                         sh 'curl "https://www.ssafyhelper.shop/control/dev/be"'
