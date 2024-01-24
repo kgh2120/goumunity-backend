@@ -24,11 +24,11 @@ public class Comment {
     }
 
     public void checkUser(Long userId) {
-        if (this.getUserId() != userId) throw new CustomException(CustomErrorCode.INVALID_USER);
+        if (this.getUserId().equals(userId)) throw new CustomException(CustomErrorCode.INVALID_USER);
     }
 
     public void checkFeed(Long feedId) {
-        if (this.getFeedId() != feedId) throw new CustomException(CustomErrorCode.FEED_NOT_MATCH);
+        if (this.getFeedId().equals(feedId)) throw new CustomException(CustomErrorCode.FEED_NOT_MATCH);
     }
 
     public static Comment from(Long userId, Long feedId, CommentRequest.Create comment) {
