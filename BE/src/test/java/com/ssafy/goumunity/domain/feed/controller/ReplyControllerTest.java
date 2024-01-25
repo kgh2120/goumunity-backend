@@ -3,7 +3,7 @@ package com.ssafy.goumunity.domain.feed.controller;
 import static com.ssafy.goumunity.common.exception.CustomErrorCode.COMMENT_NOT_FOUND;
 import static com.ssafy.goumunity.common.exception.GlobalErrorCode.BIND_ERROR;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doThrow;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -70,8 +70,6 @@ class ReplyControllerTest {
         Reply reply =
                 Reply.builder().replyId(1L).userId(1L).commentId(commentId).content("규준 거준 구준표").build();
 
-        given(replyService.saveReply(any(), any(), any())).willReturn(reply);
-
         mockMvc
                 .perform(
                         post("/api/comments/" + commentId + "/replies")
@@ -80,7 +78,6 @@ class ReplyControllerTest {
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .session(session))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.content").value(reply.getContent()))
                 .andDo(print());
     }
 
@@ -195,8 +192,9 @@ class ReplyControllerTest {
         Reply reply =
                 Reply.builder().replyId(1L).userId(1L).commentId(commentId).content("규준 거준 구준표").build();
 
-        given(replyService.saveReply(any(), any(), any()))
-                .willThrow(new CustomException(COMMENT_NOT_FOUND));
+        doThrow(new CustomException(COMMENT_NOT_FOUND))
+                .when(replyService)
+                .saveReply(any(), any(), any());
 
         mockMvc
                 .perform(

@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
 
 import com.ssafy.goumunity.common.exception.CustomException;
 import com.ssafy.goumunity.domain.feed.controller.request.ReplyRequest;
@@ -36,14 +37,10 @@ class ReplyServiceImplTest {
 
         ReplyRequest.Create request = ReplyRequest.Create.builder().content(reply.getContent()).build();
 
-        given(replyRepository.save(any())).willReturn(reply);
         given(commentService.isExistComment(any())).willReturn(true);
 
-        Reply result = replyService.saveReply(userId, commentId, request);
-
-        assertThat(reply.getContent()).isEqualTo(result.getContent());
-        assertThat(reply.getUserId()).isEqualTo(result.getUserId());
-        assertThat(reply.getCommentId()).isEqualTo(result.getCommentId());
+        replyService.saveReply(userId, commentId, request);
+        verify(replyRepository).save(Reply.from(userId, commentId, request));
     }
 
     @DisplayName("답글 저장 실패 - 댓글 존재하지 않음")

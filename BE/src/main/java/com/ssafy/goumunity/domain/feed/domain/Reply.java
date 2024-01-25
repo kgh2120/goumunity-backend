@@ -4,6 +4,7 @@ import com.ssafy.goumunity.common.exception.CustomErrorCode;
 import com.ssafy.goumunity.common.exception.CustomException;
 import com.ssafy.goumunity.domain.feed.controller.request.ReplyRequest;
 import java.time.Instant;
+import java.util.Objects;
 import lombok.*;
 
 @Builder
@@ -26,5 +27,23 @@ public class Reply {
 
     public static Reply from(Long userId, Long commentId, ReplyRequest.Create reply) {
         return Reply.builder().commentId(commentId).userId(userId).content(reply.getContent()).build();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Reply reply = (Reply) o;
+        return Objects.equals(replyId, reply.replyId)
+                && Objects.equals(content, reply.content)
+                && Objects.equals(commentId, reply.commentId)
+                && Objects.equals(userId, reply.userId)
+                && Objects.equals(createdAt, reply.createdAt)
+                && Objects.equals(updatedAt, reply.updatedAt);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(replyId, content, commentId, userId, createdAt, updatedAt);
     }
 }
