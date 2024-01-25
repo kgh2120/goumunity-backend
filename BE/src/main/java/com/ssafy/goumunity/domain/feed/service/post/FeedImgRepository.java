@@ -1,3 +1,11 @@
 package com.ssafy.goumunity.domain.feed.service.post;
 
-public interface FeedImgRepository {}
+import com.ssafy.goumunity.domain.feed.domain.FeedImg;
+import java.util.List;
+import java.util.Optional;
+
+public interface FeedImgRepository {
+    Optional<FeedImg> findOneByFeedImgId(Long feedImgId);
+
+    List<FeedImg> findAllByFeedId(Long feedId);
+}
