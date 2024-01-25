@@ -54,11 +54,11 @@ pipeline {
                         // )
                         
                         sshCommand remote: [
-                        host: REMOTE_HOST,
-                        credentialsId: SSH_CREDENTIALS,
-                        user: 'ubuntu', // Update with your SSH username
-                        allowAnyHosts: true
-                    ], script: SCRIPT_PATH
+    host: 'ssafyhelper.shop',
+    credentialsId: 'ssafyhelperpem',
+    user: 'ubuntu',
+    allowAnyHosts: true
+], command: "bash -s", script: "temp/AutoDevServer.sh"
 
                         sh 'echo manual Auto CI Start'
                         sh 'curl "https://www.ssafyhelper.shop/control/dev/be"'
