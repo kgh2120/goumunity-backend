@@ -41,4 +41,9 @@ public class CommentRepositoryImpl implements CommentRepository {
     public void delete(Comment comment) {
         commentJpaRepository.delete(CommentEntity.from(comment));
     }
+
+    @Override
+    public boolean existsById(Long commentId) {
+        return commentJpaRepository.existsById(commentId);
+    }
 }
