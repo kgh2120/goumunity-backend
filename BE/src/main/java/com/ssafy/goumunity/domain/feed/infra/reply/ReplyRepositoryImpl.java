@@ -12,7 +12,7 @@ public class ReplyRepositoryImpl implements ReplyRepository {
     private final ReplyJpaRepository replyJpaRepository;
 
     @Override
-    public Reply save(Reply reply) {
-        return replyJpaRepository.save(ReplyEntity.from(reply)).to();
+    public void save(Reply reply) {
+        replyJpaRepository.save(ReplyEntity.from(reply)).to();
     }
 }

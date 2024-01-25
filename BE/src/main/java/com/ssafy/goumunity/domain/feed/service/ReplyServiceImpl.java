@@ -18,11 +18,11 @@ public class ReplyServiceImpl implements ReplyService {
     private final CommentService commentService;
 
     @Override
-    public Reply saveReply(Long userId, Long commentId, ReplyRequest.Create reply) {
+    public void saveReply(Long userId, Long commentId, ReplyRequest.Create reply) {
         if (!commentService.isExistComment(commentId)) {
             throw new CustomException(CustomErrorCode.COMMENT_NOT_FOUND);
         }
 
-        return replyRepository.save(Reply.from(userId, commentId, reply));
+        replyRepository.save(Reply.from(userId, commentId, reply));
     }
 }
