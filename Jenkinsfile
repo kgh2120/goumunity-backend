@@ -31,7 +31,9 @@ pipeline {
             }
         }
         stage('Send Artifact'){
-            sshPublisher(
+            steps{
+                script{
+                    sshPublisher(
                             publishers: [
                                 sshPublisherDesc(
                                     configName: 'ssafyhelper',
@@ -46,6 +48,9 @@ pipeline {
                                 )
                             ]
                         )
+                }
+            }
+            
         }
     }
 
