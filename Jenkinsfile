@@ -54,12 +54,13 @@ pipeline {
                         // )
                         
 
-                         def credentialId = 'DevOps'
+                         def remote = [:]
+                    remote.name = 'DevOps'  // Credential ID
+                    remote.host = 'ssafyhelper.shop'
+                    remote.user = 'ubuntu'
+                    remote.identityFile = credentials('DevOps')  // Credential ID
 
-                    // Use withCredentials block to inject the SSH key
-                    withCredentials([sshUserPrivateKey(credentialsId: credentialId, keyFileVariable: 'KEYFILE', passphraseVariable: 'PASSPHRASE')]) {
-                        // SSH command using injected key
-                        sh "ssh -i \$KEYFILE ubuntu@ssafyhelper.shop 'sh temp/AutoDevServer.sh'"
+                    sshCommand(remote: remote, command: 'ls -l')
                     }
                         
 
