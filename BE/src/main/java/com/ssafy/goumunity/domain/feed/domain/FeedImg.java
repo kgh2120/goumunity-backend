@@ -1,6 +1,5 @@
 package com.ssafy.goumunity.domain.feed.domain;
 
-import com.ssafy.goumunity.domain.feed.controller.response.FeedImgResponse;
 import java.time.Instant;
 import lombok.*;
 
@@ -15,14 +14,4 @@ public class FeedImg {
 
     private Instant createdAt;
     private Instant updatedAt;
-
-    public FeedImgResponse to() {
-        return FeedImgResponse.builder()
-                .feedImgId(feedImgId)
-                .imgSrc(imgSrc)
-                .sequence(sequence)
-                .createdAt(createdAt.getEpochSecond())
-                .updatedAt(updatedAt.getEpochSecond())
-                .build();
-    }
 }
