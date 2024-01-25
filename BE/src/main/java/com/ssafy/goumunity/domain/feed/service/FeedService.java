@@ -1,3 +1,10 @@
 package com.ssafy.goumunity.domain.feed.service;
 
-public interface FeedService {}
+import com.ssafy.goumunity.domain.feed.controller.response.FeedResponse;
+import java.util.List;
+
+public interface FeedService {
+    FeedResponse findOneByFeedId(Long feedId);
+
+    List<FeedResponse> findAllByUserId(Long userId);
+}
