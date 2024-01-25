@@ -69,4 +69,9 @@ public class CommentServiceImpl implements CommentService {
 
         commentRepository.delete(originalComment);
     }
+
+    @Override
+    public boolean isExistComment(Long commentId) {
+        return commentRepository.existsById(commentId);
+    }
 }

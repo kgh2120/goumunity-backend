@@ -17,6 +17,7 @@ public enum CustomErrorCode implements ErrorCode {
     // Comment 관련 에러
     COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 댓글을 찾을 수 없습니다."),
     FEED_NOT_MATCH(HttpStatus.BAD_REQUEST, "댓글이 게시글과 매칭되지 않습니다."),
+    COMMENT_NOT_MATCH(HttpStatus.BAD_REQUEST, "답글이 댓글과 매칭되지 않습니다."),
 
     LOCAL_FILE_UPLOAD_FAILED(
             HttpStatus.INTERNAL_SERVER_ERROR,
