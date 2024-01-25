@@ -1,6 +1,7 @@
 package com.ssafy.goumunity.domain.feed.infra.feed;
 
 import com.ssafy.goumunity.domain.feed.domain.Feed;
+import com.ssafy.goumunity.domain.feed.domain.FeedCategory;
 import com.ssafy.goumunity.domain.region.infra.RegionEntity;
 import com.ssafy.goumunity.domain.user.infra.UserEntity;
 import jakarta.persistence.*;
@@ -22,8 +23,9 @@ public class FeedEntity {
     @Column(name = "content")
     private String content;
 
-    @Column(name = "type")
-    private Integer type;
+    @Column(name = "category")
+    @Enumerated(EnumType.STRING)
+    private FeedCategory feedCategory;
 
     @Column(name = "price")
     private Integer price;
@@ -54,7 +56,7 @@ public class FeedEntity {
         return Feed.builder()
                 .feedId(feedId)
                 .content(content)
-                .type(type)
+                .feedCategory(feedCategory)
                 .price(price)
                 .afterPrice(afterPrice)
                 .profit(profit)

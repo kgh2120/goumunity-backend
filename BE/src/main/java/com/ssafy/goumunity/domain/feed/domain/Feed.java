@@ -10,7 +10,7 @@ import lombok.*;
 public class Feed {
     private Long feedId;
     private String content;
-    private Integer type;
+    private FeedCategory feedCategory;
     private Integer price;
     private Integer afterPrice;
     private Integer profit;
