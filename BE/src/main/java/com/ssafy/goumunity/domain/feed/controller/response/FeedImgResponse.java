@@ -20,8 +20,8 @@ public class FeedImgResponse {
                 .feedImgId(feedImg.getFeedImgId())
                 .imgSrc(feedImg.getImgSrc())
                 .sequence(feedImg.getSequence())
-                .createdAt(feedImg.getCreatedAt().getEpochSecond())
-                .updatedAt(feedImg.getUpdatedAt().getEpochSecond())
+                .createdAt(feedImg.getCreatedAt().toEpochMilli())
+                .updatedAt(feedImg.getUpdatedAt().toEpochMilli())
                 .build();
     }
 }
