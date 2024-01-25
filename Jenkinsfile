@@ -57,7 +57,8 @@ pipeline {
     host: 'ssafyhelper.shop',
     credentialsId: 'ssafyhelperpem',
     user: 'ubuntu',
-    allowAnyHosts: true
+    allowAnyHosts: true,
+    name: 'ubuntu'
 ], command: "bash -s", script: "temp/AutoDevServer.sh"
 
                         sh 'echo manual Auto CI Start'
