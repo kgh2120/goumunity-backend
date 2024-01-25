@@ -2,11 +2,8 @@ package com.ssafy.goumunity.domain.feed.service;
 
 import com.ssafy.goumunity.common.exception.feed.ResourceNotFoundException;
 import com.ssafy.goumunity.domain.feed.controller.response.FeedImgResponse;
-import com.ssafy.goumunity.domain.feed.domain.FeedImg;
 import com.ssafy.goumunity.domain.feed.service.post.FeedImgRepository;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,19 +15,14 @@ public class FeedImgServiceImpl implements FeedImgService {
 
     @Override
     public FeedImgResponse findOneByFeedImgId(Long feedImgId) {
-        Optional<FeedImg> feedImg = feedImgRepository.findOneByFeedImgId(feedImgId);
-
-        if (feedImg.isEmpty()) {
-            throw new ResourceNotFoundException("해당 사진을 찾을 수 없습니다.", this);
-        } else {
-            return feedImg.get().to();
-        }
+        return FeedImgResponse.from(
+                feedImgRepository
+                        .findOneByFeedImgId(feedImgId)
+                        .orElseThrow(() -> new ResourceNotFoundException("해당 사진을 찾을 수 없습니다.", this)));
     }
 
     @Override
     public List<FeedImgResponse> findAllByFeedId(Long feedId) {
-        return feedImgRepository.findAllByFeedId(feedId).stream()
-                .map(item -> item.to())
-                .collect(Collectors.toList());
+        return feedImgRepository.findAllByFeedId(feedId).stream().map(FeedImgResponse::from).toList();
     }
 }

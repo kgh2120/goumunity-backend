@@ -4,7 +4,6 @@ import com.ssafy.goumunity.domain.feed.domain.Feed;
 import com.ssafy.goumunity.domain.feed.service.post.FeedRepository;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -21,8 +20,6 @@ public class FeedRepositoryImpl implements FeedRepository {
 
     @Override
     public List<Feed> findAllByUserId(Long userId) {
-        return feedJpaRepository.findAllByUserId(userId).stream()
-                .map(item -> item.to())
-                .collect(Collectors.toList());
+        return feedJpaRepository.findAllByUserId(userId).stream().map(FeedEntity::to).toList();
     }
 }
