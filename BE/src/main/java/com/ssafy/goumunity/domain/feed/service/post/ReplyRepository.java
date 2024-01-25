@@ -1,3 +1,7 @@
 package com.ssafy.goumunity.domain.feed.service.post;
 
-public interface ReplyRepository {}
+import com.ssafy.goumunity.domain.feed.domain.Reply;
+
+public interface ReplyRepository {
+    Reply save(Reply reply);
+}

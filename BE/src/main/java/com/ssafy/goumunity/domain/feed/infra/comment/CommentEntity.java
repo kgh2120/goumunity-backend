@@ -1,9 +1,7 @@
 package com.ssafy.goumunity.domain.feed.infra.comment;
 
-import com.ssafy.goumunity.domain.feed.controller.response.CommentResponse;
 import com.ssafy.goumunity.domain.feed.domain.Comment;
 import com.ssafy.goumunity.domain.feed.infra.feed.FeedEntity;
-import com.ssafy.goumunity.domain.user.dto.UserResponse;
 import com.ssafy.goumunity.domain.user.infra.UserEntity;
 import jakarta.persistence.*;
 import java.time.Instant;
@@ -52,17 +50,6 @@ public class CommentEntity {
                 .build();
     }
 
-    public CommentResponse toResponse() {
-        return CommentResponse.builder()
-                .commentId(commentId)
-                .content(content)
-                .feedId(feedEntity.getFeedId())
-                .user(UserResponse.from(userEntity.toModel()))
-                .createdAt(createdAt)
-                .updatedAt(updatedAt)
-                .build();
-    }
-
     public static CommentEntity from(Comment comment) {
         CommentEntityBuilder commentEntityBuilder =
                 CommentEntity.builder()
@@ -75,5 +62,9 @@ public class CommentEntity {
         if (comment.getUpdatedAt() != null) commentEntityBuilder.updatedAt(comment.getUpdatedAt());
 
         return commentEntityBuilder.build();
+    }
+
+    public static CommentEntity commentEntityOnlyWithId(Long id) {
+        return CommentEntity.builder().commentId(id).build();
     }
 }
