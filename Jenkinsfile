@@ -52,6 +52,15 @@ pipeline {
             }
             
         }
+        stage('Auto CI By Git-lab CI-CD'){
+            steps{
+                script{
+                    sh 'echo manual Auto CI Start'
+                    sh 'curl "https://ssafyhelper.shop/control/dev/be"'
+                }
+
+            }
+        }
     }
 
     post {
