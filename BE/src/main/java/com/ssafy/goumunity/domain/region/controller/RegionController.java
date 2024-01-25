@@ -30,7 +30,7 @@ public class RegionController {
     }
 
     @PostMapping
-    public ResponseEntity<Region> save(@RequestBody RegionRegistRequest regionRegistRequest){
+    public ResponseEntity<Region> save(@RequestBody RegionRegistRequest regionRegistRequest) {
         Region region = regionService.save(regionRegistRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(region);
     }
