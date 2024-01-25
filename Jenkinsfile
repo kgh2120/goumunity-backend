@@ -53,16 +53,15 @@ pipeline {
                         //     ]
                         // )
                         
-                        sshCommand remote: [
-    host: 'ssafyhelper.shop',
-    credentialsId: 'DevOps',
-    user: 'ubuntu',
-    allowAnyHosts: true,
-    name: 'ubuntu'
-], command: "bash -s", script: "temp/AutoDevServer.sh"
 
-                        sh 'echo manual Auto CI Start'
-                        sh 'curl "https://www.ssafyhelper.shop/control/dev/be"'
+                         def credentialId = 'DevOps'
+
+                    // Use withCredentials block to inject the SSH key
+                    withCredentials([sshUserPrivateKey(credentialsId: credentialId, keyFileVariable: 'KEYFILE', passphraseVariable: 'PASSPHRASE')]) {
+                        // SSH command using injected key
+                        sh "ssh -i \$KEYFILE ubuntu@ssafyhelper.shop 'sh temp/AutoDevServer.sh'"
+                    }
+                        
 
                     }
                 }
