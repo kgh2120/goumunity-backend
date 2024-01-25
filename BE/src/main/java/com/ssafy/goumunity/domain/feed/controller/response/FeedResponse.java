@@ -31,8 +31,8 @@ public class FeedResponse {
                 .profit(feed.getProfit())
                 .regionId(feed.getRegion().getRegionId())
                 .userId(feed.getUser().getId())
-                .createdAt(feed.getCreatedAt().getEpochSecond())
-                .updatedAt(feed.getUpdatedAt().getEpochSecond())
+                .createdAt(feed.getCreatedAt().toEpochMilli())
+                .updatedAt(feed.getUpdatedAt().toEpochMilli())
                 .build();
     }
 }
