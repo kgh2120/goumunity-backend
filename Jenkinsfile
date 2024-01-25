@@ -6,6 +6,9 @@ pipeline {
     }
     environment {
         CONTAINER_NAME = "auto-dev-server"
+        SSH_CREDENTIALS = 'ssafyhelperpem'
+        REMOTE_HOST = 'ssafyhelper.shop'
+        SCRIPT_PATH = '/temp/AutoDevServer.sh'
         SSH_REMOTE_CONFIG = 'ssafyhelper'
     }
 
@@ -51,12 +54,11 @@ pipeline {
                         // )
                         
                         sshCommand remote: [
-        host: 'ssafyhelper.shop',
-        credentialsId: 'ssafyhelperpem',
-        user: 'ubuntu',
-        allowAnyHosts: true,
-        script: "temp/AutoDevServer.sh"
-    ]
+                        host: REMOTE_HOST,
+                        credentialsId: SSH_CREDENTIALS,
+                        user: 'ubuntu', // Update with your SSH username
+                        allowAnyHosts: true
+                    ], script: SCRIPT_PATH
 
                         sh 'echo manual Auto CI Start'
                         sh 'curl "https://www.ssafyhelper.shop/control/dev/be"'
