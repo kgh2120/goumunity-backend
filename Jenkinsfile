@@ -25,13 +25,19 @@ pipeline {
                         sh 'jq --version'
                         sh 'cd build/libs && ls -al'
 
-                        sshPublisher(
+                        
+                    }
+                }
+            }
+        }
+        stage('Send Artifact'){
+            sshPublisher(
                             publishers: [
                                 sshPublisherDesc(
                                     configName: 'ssafyhelper',
                                     transfers: [
                                         sshTransfer(
-                                            sourceFiles: 'build/libs/goumunity-0.0.1-SNAPSHOT.jar',
+                                            sourceFiles: '/BE/build/libs/goumunity-0.0.1-SNAPSHOT.jar',
                                             removePrefix: '/build/libs',
                                             remoteDirectory: '/sendData',
                                             execCommand: 'sh temp/AutoDevServer.sh'
@@ -40,9 +46,6 @@ pipeline {
                                 )
                             ]
                         )
-                    }
-                }
-            }
         }
     }
 
