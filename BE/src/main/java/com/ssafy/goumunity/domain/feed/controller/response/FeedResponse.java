@@ -1,6 +1,7 @@
 package com.ssafy.goumunity.domain.feed.controller.response;
 
 import com.ssafy.goumunity.domain.feed.domain.Feed;
+import com.ssafy.goumunity.domain.feed.domain.FeedCategory;
 import lombok.*;
 
 @Builder
@@ -10,7 +11,7 @@ import lombok.*;
 public class FeedResponse {
     private Long feedId;
     private String content;
-    private Integer type;
+    private FeedCategory feedCategory;
     private Integer price;
     private Integer afterPrice;
     private Integer profit;
@@ -25,12 +26,12 @@ public class FeedResponse {
         return FeedResponse.builder()
                 .feedId(feed.getFeedId())
                 .content(feed.getContent())
-                .type(feed.getType())
+                .feedCategory(feed.getFeedCategory())
                 .price(feed.getPrice())
                 .afterPrice(feed.getAfterPrice())
                 .profit(feed.getProfit())
-                .regionId(feed.getRegion().getRegionId())
-                .userId(feed.getUser().getId())
+                .regionId(feed.getRegionId())
+                .userId(feed.getUserId())
                 .createdAt(feed.getCreatedAt().toEpochMilli())
                 .updatedAt(feed.getUpdatedAt().toEpochMilli())
                 .build();
