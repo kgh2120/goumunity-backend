@@ -34,19 +34,12 @@ pipeline {
                                             sourceFiles: 'build/libs/goumunity-0.0.1-SNAPSHOT.jar',
                                             removePrefix: '/build/libs',
                                             remoteDirectory: '/sendData'
+                                            execCommand: 'sh temp/AutoDevServer.sh'
                                         )
                                     ]
                                 )
                             ]
                         )
-
-                        def remote = [:]
-                        remote.name = 'DevOps'  // Credential ID
-                        remote.host = 'ssafyhelper.shop'
-                        remote.user = 'ubuntu'
-                        remote.identityFile = credentials('DevOps')  // Credential ID
-
-                        sshCommand(remote: remote, command: 'ls -l')
                     }
                 }
             }
