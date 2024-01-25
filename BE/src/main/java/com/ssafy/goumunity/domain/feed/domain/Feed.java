@@ -1,7 +1,5 @@
 package com.ssafy.goumunity.domain.feed.domain;
 
-import com.ssafy.goumunity.domain.region.domain.Region;
-import com.ssafy.goumunity.domain.user.domain.User;
 import java.time.Instant;
 import lombok.*;
 
@@ -17,8 +15,8 @@ public class Feed {
     private Integer afterPrice;
     private Integer profit;
 
-    private Region region;
-    private User user;
+    private Long regionId;
+    private Long userId;
 
     private Instant createdAt;
     private Instant updatedAt;
