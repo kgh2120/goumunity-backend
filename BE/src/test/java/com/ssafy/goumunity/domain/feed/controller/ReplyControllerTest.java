@@ -18,7 +18,6 @@ import com.ssafy.goumunity.domain.feed.domain.Reply;
 import com.ssafy.goumunity.domain.feed.service.ReplyService;
 import com.ssafy.goumunity.domain.user.domain.User;
 import com.ssafy.goumunity.domain.user.domain.UserCategory;
-import java.util.MissingFormatArgumentException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -107,9 +106,6 @@ class ReplyControllerTest {
 
         Reply reply = Reply.builder().replyId(1L).userId(1L).commentId(commentId).build();
 
-        given(replyService.saveReply(any(), any(), any()))
-                .willThrow(MissingFormatArgumentException.class);
-
         mockMvc
                 .perform(
                         post("/api/comments/" + commentId + "/replies")
@@ -162,9 +158,6 @@ class ReplyControllerTest {
 
         Reply reply =
                 Reply.builder().replyId(1L).userId(1L).content(content).commentId(commentId).build();
-
-        given(replyService.saveReply(any(), any(), any()))
-                .willThrow(MissingFormatArgumentException.class);
 
         mockMvc
                 .perform(
