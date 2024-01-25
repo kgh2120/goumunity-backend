@@ -15,6 +15,7 @@ import com.ssafy.goumunity.common.exception.GlobalErrorCode;
 import com.ssafy.goumunity.common.exception.GlobalExceptionHandler;
 import com.ssafy.goumunity.config.SecurityConfig;
 import com.ssafy.goumunity.config.security.CustomDetails;
+import com.ssafy.goumunity.domain.feed.service.FeedService;
 import com.ssafy.goumunity.domain.user.controller.UserController;
 import com.ssafy.goumunity.domain.user.domain.User;
 import com.ssafy.goumunity.domain.user.domain.UserCategory;
@@ -53,6 +54,7 @@ class UserControllerTest {
     @MockBean private UserService userService;
 
     @MockBean private VerificationService verificationService;
+    @MockBean private FeedService feedService;
 
     @Autowired private MockMvc mockMvc;
 

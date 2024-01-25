@@ -54,4 +54,8 @@ public class RegionEntity {
 
         return regionEntityBuilder.build();
     }
+
+    public static RegionEntity regionEntityOnlyWithId(Long regionId) {
+        return RegionEntity.builder().regionId(regionId).build();
+    }
 }

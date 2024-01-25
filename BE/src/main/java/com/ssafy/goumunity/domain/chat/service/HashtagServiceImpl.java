@@ -30,6 +30,18 @@ public class HashtagServiceImpl implements HashtagService {
         return hashtagRepository.save(Hashtag.create(dto));
     }
 
+    @Override
+    public Hashtag findOneByHashtagId(Long id) {
+        return hashtagRepository
+                .findOneByHashtagId(id)
+                .orElseThrow(() -> new ChatException(ChatErrorCode.HASHTAG_NOT_FOUND));
+    }
+
+    @Override
+    public boolean existsOneByHashtagId(Long hashtagId) {
+        return hashtagRepository.existsOneByHashtagId(hashtagId);
+    }
+
     private void verifyDuplicateHashtag(HashtagCreateRequest dto) {
         if (hashtagRepository.existsOneByHashtagName(dto.getName())) {
             throw new ChatException(ChatErrorCode.ALREADY_CREATED_HASHTAG);

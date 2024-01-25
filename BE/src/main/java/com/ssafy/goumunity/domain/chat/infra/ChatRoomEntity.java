@@ -3,7 +3,14 @@ package com.ssafy.goumunity.domain.chat.infra;
 import com.ssafy.goumunity.domain.chat.domain.ChatRoom;
 import com.ssafy.goumunity.domain.region.infra.RegionEntity;
 import com.ssafy.goumunity.domain.user.infra.UserEntity;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import java.time.Instant;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -27,9 +34,6 @@ public class ChatRoomEntity {
 
     @Column(name = "title", length = 20)
     private String title;
-
-    @Column(name = "hashtag", columnDefinition = "TEXT")
-    private String hashtag;
 
     @Column(name = "capability")
     private Integer capability;
@@ -56,13 +60,14 @@ public class ChatRoomEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     private UserEntity host;
 
+    // private List<ChatRoomHashtag> chatRoomHashtags;
+
     public static ChatRoomEntity from(ChatRoom chatRoom) {
         ChatRoomEntityBuilder chatRoomEntityBuilder =
                 ChatRoomEntity.builder()
                         .id(chatRoom.getId())
                         .isOfficial(chatRoom.getIsOfficial())
                         .title(chatRoom.getTitle())
-                        .hashtag(chatRoom.getHashtag())
                         .capability(chatRoom.getCapability())
                         .currentUser(chatRoom.getCurrentUser())
                         .imgSrc(chatRoom.getImgSrc());
@@ -79,7 +84,6 @@ public class ChatRoomEntity {
                 .id(this.id)
                 .isOfficial(this.isOfficial)
                 .title(this.title)
-                .hashtag(this.hashtag)
                 .capability(this.capability)
                 .currentUser(this.currentUser)
                 .imgSrc(this.imgSrc)
@@ -89,5 +93,13 @@ public class ChatRoomEntity {
                 //                .region()
                 //                .host()
                 .build();
+    }
+
+    public void associatedWithUserEntity(UserEntity userEntity) {
+        this.host = userEntity;
+    }
+
+    public void associatedWithRegionEntity(RegionEntity region) {
+        this.region = region;
     }
 }
