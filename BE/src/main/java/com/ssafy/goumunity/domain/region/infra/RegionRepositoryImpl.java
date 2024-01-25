@@ -4,7 +4,6 @@ import com.ssafy.goumunity.domain.region.domain.Region;
 import com.ssafy.goumunity.domain.region.service.port.RegionRepository;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -16,7 +15,7 @@ public class RegionRepositoryImpl implements RegionRepository {
 
     @Override
     public List<Region> findAll() {
-        return regionRepository.findAll().stream().map(item -> item.to()).collect(Collectors.toList());
+        return regionRepository.findAll().stream().map(RegionEntity::to).toList();
     }
 
     @Override

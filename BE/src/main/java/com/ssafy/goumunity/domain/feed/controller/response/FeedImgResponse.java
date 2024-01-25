@@ -1,5 +1,6 @@
 package com.ssafy.goumunity.domain.feed.controller.response;
 
+import com.ssafy.goumunity.domain.feed.domain.FeedImg;
 import lombok.*;
 
 @Builder
@@ -13,4 +14,14 @@ public class FeedImgResponse {
 
     private Long createdAt;
     private Long updatedAt;
+
+    public static FeedImgResponse from(FeedImg feedImg) {
+        return FeedImgResponse.builder()
+                .feedImgId(feedImg.getFeedImgId())
+                .imgSrc(feedImg.getImgSrc())
+                .sequence(feedImg.getSequence())
+                .createdAt(feedImg.getCreatedAt().getEpochSecond())
+                .updatedAt(feedImg.getUpdatedAt().getEpochSecond())
+                .build();
+    }
 }

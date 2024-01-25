@@ -1,5 +1,6 @@
 package com.ssafy.goumunity.domain.region.controller.response;
 
+import com.ssafy.goumunity.domain.region.domain.Region;
 import lombok.*;
 
 @Builder
@@ -13,4 +14,14 @@ public class RegionResponse {
 
     private Long createdAt;
     private Long updatedAt;
+
+    public static RegionResponse from(Region region) {
+        return RegionResponse.builder()
+                .regionId(region.getRegionId())
+                .si(region.getSi())
+                .gungu(region.getGungu())
+                .createdAt(region.getCreatedAt().getEpochSecond())
+                .updatedAt(region.getUpdatedAt().getEpochSecond())
+                .build();
+    }
 }
