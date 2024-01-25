@@ -33,7 +33,7 @@ pipeline {
                                         sshTransfer(
                                             sourceFiles: 'build/libs/goumunity-0.0.1-SNAPSHOT.jar',
                                             removePrefix: '/build/libs',
-                                            remoteDirectory: '/sendData'
+                                            remoteDirectory: '/sendData',
                                             execCommand: 'sh temp/AutoDevServer.sh'
                                         )
                                     ]
