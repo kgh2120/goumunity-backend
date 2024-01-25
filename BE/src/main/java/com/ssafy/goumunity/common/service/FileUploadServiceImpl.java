@@ -35,11 +35,15 @@ public class FileUploadServiceImpl implements FileUploadService {
     public String uploadFile(MultipartFile multipartFile) {
 
         log.info("file : {}", multipartFile);
-        if (multipartFile.isEmpty()) {
+        if (isEmpty(multipartFile)) {
             return null;
         }
         validateIsClientSendImageFile(multipartFile);
         return uploadFiles(multipartFile);
+    }
+
+    private boolean isEmpty(MultipartFile multipartFile) {
+        return multipartFile == null || multipartFile.isEmpty();
     }
 
     private void validateIsClientSendImageFile(MultipartFile multipartFile) {

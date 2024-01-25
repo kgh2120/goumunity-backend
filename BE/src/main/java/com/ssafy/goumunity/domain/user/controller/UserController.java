@@ -3,7 +3,7 @@ package com.ssafy.goumunity.domain.user.controller;
 import com.ssafy.goumunity.domain.user.domain.User;
 import com.ssafy.goumunity.domain.user.dto.*;
 import com.ssafy.goumunity.domain.user.service.UserService;
-import com.ssafy.goumunity.domain.user.service.VertificationService;
+import com.ssafy.goumunity.domain.user.service.VerificationService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
@@ -22,7 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class UserController {
 
     private final UserService userService;
-    private final VertificationService vertificationService;
+    private final VerificationService verificationService;
 
     @Value("${session.key.user}")
     private String SESSION_LOGIN_USER_KEY;
@@ -44,14 +44,14 @@ public class UserController {
     @GetMapping("/email/verification")
     public ResponseEntity<Void> sendVerificationCode(
             @RequestParam("email") @Valid @Email String email) {
-        vertificationService.send(email);
+        verificationService.send(email);
         return ResponseEntity.ok().build();
     }
 
     @PostMapping("/email/verification")
     public ResponseEntity<Boolean> checkVerificationCode(
             @RequestBody @Valid VerificationCodeDto verificationCodeDto) {
-        return ResponseEntity.ok(vertificationService.verificate(verificationCodeDto));
+        return ResponseEntity.ok(verificationService.verificate(verificationCodeDto));
     }
 
     @PutMapping("/my/password")

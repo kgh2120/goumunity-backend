@@ -109,4 +109,8 @@ public class UserEntity {
                 .updatedAt(this.updatedAt)
                 .build();
     }
+
+    public static UserEntity userEntityOnlyWithId(Long id) {
+        return UserEntity.builder().id(id).build();
+    }
 }

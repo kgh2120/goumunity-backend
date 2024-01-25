@@ -22,7 +22,7 @@ import com.ssafy.goumunity.domain.user.dto.PasswordDto;
 import com.ssafy.goumunity.domain.user.dto.UserCreateDto;
 import com.ssafy.goumunity.domain.user.dto.UserUpdateDto;
 import com.ssafy.goumunity.domain.user.service.UserService;
-import com.ssafy.goumunity.domain.user.service.VertificationService;
+import com.ssafy.goumunity.domain.user.service.VerificationService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,7 +52,7 @@ class UserControllerTest {
 
     @MockBean private UserService userService;
 
-    @MockBean private VertificationService vertificationService;
+    @MockBean private VerificationService verificationService;
 
     @Autowired private MockMvc mockMvc;
 
@@ -278,14 +278,14 @@ class UserControllerTest {
 
     private User fromUserCreateDto(UserCreateDto dto) {
         return User.builder()
-                .email("gyu@naver.com")
-                .password("AAbb11!!")
-                .monthBudget(100000L)
-                .age(20)
-                .userCategory(UserCategory.JOB_SEEKER)
-                .gender(1)
-                .nickname("규준")
-                .regionId(1)
+                .email(dto.getEmail())
+                .password(dto.getPassword())
+                .monthBudget(dto.getMonthBudget())
+                .age(dto.getAge())
+                .userCategory(dto.getUserCategory())
+                .gender(dto.getGender())
+                .nickname(dto.getNickname())
+                .regionId(dto.getRegionId())
                 .build();
     }
 }
