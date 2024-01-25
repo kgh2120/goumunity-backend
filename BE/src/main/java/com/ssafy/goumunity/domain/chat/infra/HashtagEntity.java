@@ -44,4 +44,8 @@ public class HashtagEntity {
                 .updatedAt(this.getUpdatedAt())
                 .build();
     }
+
+    public static HashtagEntity hashtagEntityOnlyWithId(Long id) {
+        return HashtagEntity.builder().id(id).build();
+    }
 }

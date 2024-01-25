@@ -9,4 +9,8 @@ public interface HashtagService {
     SliceResponse<Hashtag> findAllByHashtagName(String hashtagName, Pageable pageable, Long time);
 
     Hashtag createHashtag(HashtagCreateRequest dto);
+
+    Hashtag findOneByHashtagId(Long id);
+
+    boolean existsOneByHashtagId(Long hashtagId);
 }

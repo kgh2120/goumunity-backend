@@ -35,6 +35,15 @@ public class ChatRoomHashtagEntity {
                 .build();
     }
 
+    public static ChatRoomHashtagEntity create(
+            HashtagEntity hashtag, ChatRoomEntity chatRoomEntity, int sequence) {
+        return ChatRoomHashtagEntity.builder()
+                .sequence(sequence)
+                .chatRoom(chatRoomEntity)
+                .hashtag(hashtag)
+                .build();
+    }
+
     public ChatRoomHashtag to() {
         return ChatRoomHashtag.builder().id(this.id).sequence(this.sequence).build();
     }
