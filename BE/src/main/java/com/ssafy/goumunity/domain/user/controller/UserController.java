@@ -1,7 +1,5 @@
 package com.ssafy.goumunity.domain.user.controller;
 
-import com.ssafy.goumunity.domain.feed.controller.response.FeedResponse;
-import com.ssafy.goumunity.domain.feed.service.FeedService;
 import com.ssafy.goumunity.domain.user.domain.User;
 import com.ssafy.goumunity.domain.user.dto.*;
 import com.ssafy.goumunity.domain.user.service.UserService;
@@ -10,7 +8,6 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -25,7 +22,6 @@ import org.springframework.web.multipart.MultipartFile;
 public class UserController {
 
     private final UserService userService;
-    private final FeedService feedService;
     private final VerificationService verificationService;
 
     @Value("${session.key.user}")
@@ -102,10 +98,5 @@ public class UserController {
         User modifiedUser = userService.modifyUser(user, userUpdateDto);
         session.setAttribute(SESSION_LOGIN_USER_KEY, modifiedUser);
         return ResponseEntity.ok().build();
-    }
-
-    @GetMapping("/{userId}/feeds")
-    public ResponseEntity<List<FeedResponse>> findAllFeedsByUserId(@PathVariable Long userId) {
-        return ResponseEntity.ok(feedService.findAllByUserId(userId));
     }
 }

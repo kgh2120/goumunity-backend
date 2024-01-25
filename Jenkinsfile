@@ -1,47 +1,69 @@
 pipeline {
     agent any
 
-    tools{
-	jdk 'A408_BE_Build'
+    tools {
+        jdk 'A408_BE_Build'
     }
-
-    environment{
-        JSON_DATA=''
+    environment {
+        CONTAINER_NAME = "auto-dev-server"
+        SSH_CREDENTIALS = 'DevOps'
+        REMOTE_HOST = 'ssafyhelper.shop'
+        SCRIPT_PATH = '/temp/AutoDevServer.sh'
+        SSH_REMOTE_CONFIG = 'ubuntu'
     }
 
     stages {
+
         stage('Build BE') {
             steps {
                 script {
                     dir('BE') {
                         sh 'chmod +x gradlew'
                         sh 'ls -l'
-                        //secret.yml 가져오기
-                       def credentialId = 'secretbe'
-                    // withCredentials 블록을 사용하여 Secret 파일을 가져옴
-                    withCredentials([file(credentialsId: credentialId, variable: 'SECRET_FILE')]) {
-                        // SECRET_FILE 변수를 사용하여 작업 수행
-                        sh 'ls -l'
-                        sh 'echo "Secret File Content: ${SECRET_FILE}" >> src/main/resources/secret.yml'
-                        
-                    }
 
-
-
-                        sh './gradlew clean build'   
+                        sh './gradlew clean build'
                         sh 'jq --version'
+                        sh 'cd build/libs && ls -al'
 
-                        sh 'echo manual Auto CI Start'
-                        sh 'curl "https://ssafyhelper.shop/control/dev/be"'
-
+                        
                     }
                 }
             }
         }
+        stage('Send Artifact'){
+            steps{
+                script{
+                    sshPublisher(
+                            publishers: [
+                                sshPublisherDesc(
+                                    configName: 'ssafyhelper',
+                                    transfers: [
+                                        sshTransfer(
+                                            sourceFiles: '/BE/build/libs/goumunity-0.0.1-SNAPSHOT.jar',
+                                            removePrefix: '/build/libs',
+                                            remoteDirectory: '/sendData',
+                                            execCommand: 'sh temp/AutoDevServer.sh'
+                                        )
+                                    ]
+                                )
+                            ]
+                        )
+                }
+            }
+            
+        }
+        stage('Auto CI By Git-lab CI-CD'){
+            steps{
+                script{
+                    sh 'echo manual Auto CI Start'
+                    sh 'curl "https://ssafyhelper.shop/control/dev/be"'
+                }
+
+            }
+        }
     }
 
-	post {
-
+    post {
         success {
             echo 'Build successful!'
         }
@@ -50,4 +72,3 @@ pipeline {
         }
     }
 }
-
