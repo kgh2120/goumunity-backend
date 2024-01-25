@@ -1,5 +1,6 @@
 package com.ssafy.goumunity.domain.feed.controller;
 
+import static com.ssafy.goumunity.common.exception.CustomErrorCode.COMMENT_NOT_FOUND;
 import static com.ssafy.goumunity.common.exception.GlobalErrorCode.BIND_ERROR;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -9,6 +10,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ssafy.goumunity.common.exception.CustomException;
 import com.ssafy.goumunity.common.exception.GlobalExceptionHandler;
 import com.ssafy.goumunity.config.SecurityConfig;
 import com.ssafy.goumunity.config.security.CustomDetails;
@@ -174,6 +176,45 @@ class ReplyControllerTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.errorName").value(BIND_ERROR.getErrorName()))
                 .andExpect(jsonPath("$.errorMessage").value(BIND_ERROR.getErrorMessage()))
+                .andDo(print());
+    }
+
+    @DisplayName("답글 저장 실패_댓글 존재하지 않음")
+    @Test
+    void saveReplyFailWithCommentNotMatch() throws Exception {
+        ObjectMapper mapper = new ObjectMapper();
+        MockHttpSession session = new MockHttpSession();
+        User user =
+                User.builder()
+                        .id(1L)
+                        .email("gyu@naver.com")
+                        .password("AAbb11!!")
+                        .monthBudget(100000L)
+                        .age(20)
+                        .userCategory(UserCategory.JOB_SEEKER)
+                        .gender(1)
+                        .nickname("규준")
+                        .regionId(1)
+                        .build();
+
+        Long commentId = 1L;
+
+        Reply reply =
+                Reply.builder().replyId(1L).userId(1L).commentId(commentId).content("규준 거준 구준표").build();
+
+        given(replyService.saveReply(any(), any(), any()))
+                .willThrow(new CustomException(COMMENT_NOT_FOUND));
+
+        mockMvc
+                .perform(
+                        post("/api/comments/" + commentId + "/replies")
+                                .with(SecurityMockMvcRequestPostProcessors.user(new CustomDetails(user)))
+                                .content(mapper.writeValueAsString(reply))
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .session(session))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.errorName").value(COMMENT_NOT_FOUND.getErrorName()))
+                .andExpect(jsonPath("$.errorMessage").value(COMMENT_NOT_FOUND.getErrorMessage()))
                 .andDo(print());
     }
 }

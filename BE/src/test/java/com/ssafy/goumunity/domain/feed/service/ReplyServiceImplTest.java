@@ -1,9 +1,12 @@
 package com.ssafy.goumunity.domain.feed.service;
 
+import static com.ssafy.goumunity.common.exception.CustomErrorCode.COMMENT_NOT_FOUND;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
+import com.ssafy.goumunity.common.exception.CustomException;
 import com.ssafy.goumunity.domain.feed.controller.request.ReplyRequest;
 import com.ssafy.goumunity.domain.feed.domain.Reply;
 import com.ssafy.goumunity.domain.feed.service.post.ReplyRepository;
@@ -19,6 +22,8 @@ class ReplyServiceImplTest {
 
     @Mock ReplyRepository replyRepository;
 
+    @Mock CommentService commentService;
+
     @InjectMocks ReplyServiceImpl replyService;
 
     @DisplayName("답글 저장 성공")
@@ -32,11 +37,30 @@ class ReplyServiceImplTest {
         ReplyRequest.Create request = ReplyRequest.Create.builder().content(reply.getContent()).build();
 
         given(replyRepository.save(any())).willReturn(reply);
+        given(commentService.isExistComment(any())).willReturn(true);
 
         Reply result = replyService.saveReply(userId, commentId, request);
 
         assertThat(reply.getContent()).isEqualTo(result.getContent());
         assertThat(reply.getUserId()).isEqualTo(result.getUserId());
         assertThat(reply.getCommentId()).isEqualTo(result.getCommentId());
+    }
+
+    @DisplayName("답글 저장 실패 - 댓글 존재하지 않음")
+    @Test
+    void saveReplyFailWithCommentNotFound() {
+        Long userId = 1L;
+        Long commentId = -1L;
+
+        Reply reply =
+                Reply.builder().replyId(1L).userId(1L).commentId(commentId).content("규준 거준 구준표").build();
+
+        ReplyRequest.Create request = ReplyRequest.Create.builder().content(reply.getContent()).build();
+
+        assertThat(COMMENT_NOT_FOUND)
+                .isEqualTo(
+                        assertThrows(
+                                        CustomException.class, () -> replyService.saveReply(userId, commentId, request))
+                                .getErrorCode());
     }
 }
