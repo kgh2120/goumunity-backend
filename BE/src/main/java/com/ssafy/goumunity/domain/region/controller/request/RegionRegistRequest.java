@@ -1,5 +1,6 @@
 package com.ssafy.goumunity.domain.region.controller.request;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 @Builder
@@ -7,6 +8,6 @@ import lombok.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 public class RegionRegistRequest {
-    private String si;
-    private String gungu;
+    @NotBlank private String si;
+    @NotBlank private String gungu;
 }
