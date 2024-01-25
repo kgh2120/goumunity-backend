@@ -6,10 +6,10 @@ pipeline {
     }
     environment {
         CONTAINER_NAME = "auto-dev-server"
-        SSH_CREDENTIALS = 'ssafyhelperpem'
+        SSH_CREDENTIALS = 'DevOps'
         REMOTE_HOST = 'ssafyhelper.shop'
         SCRIPT_PATH = '/temp/AutoDevServer.sh'
-        SSH_REMOTE_CONFIG = 'ssafyhelper'
+        SSH_REMOTE_CONFIG = 'ubuntu'
     }
 
     stages {
@@ -55,7 +55,7 @@ pipeline {
                         
                         sshCommand remote: [
     host: 'ssafyhelper.shop',
-    credentialsId: 'ssafyhelperpem',
+    credentialsId: 'DevOps',
     user: 'ubuntu',
     allowAnyHosts: true,
     name: 'ubuntu'
