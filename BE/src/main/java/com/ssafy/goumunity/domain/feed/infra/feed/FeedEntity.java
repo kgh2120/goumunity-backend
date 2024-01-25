@@ -69,7 +69,7 @@ public class FeedEntity {
                 FeedEntity.builder()
                         .feedId(feed.getFeedId())
                         .content(feed.getContent())
-                        .type(feed.getType())
+                        .feedCategory(feed.getFeedCategory())
                         .price(feed.getPrice())
                         .afterPrice(feed.getAfterPrice())
                         .profit(feed.getProfit());
