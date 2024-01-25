@@ -1,6 +1,5 @@
 package com.ssafy.goumunity.domain.feed.domain;
 
-import com.ssafy.goumunity.domain.feed.controller.response.FeedResponse;
 import com.ssafy.goumunity.domain.region.domain.Region;
 import com.ssafy.goumunity.domain.user.domain.User;
 import java.time.Instant;
@@ -23,19 +22,4 @@ public class Feed {
 
     private Instant createdAt;
     private Instant updatedAt;
-
-    public FeedResponse to() {
-        return FeedResponse.builder()
-                .feedId(feedId)
-                .content(content)
-                .type(type)
-                .price(price)
-                .afterPrice(afterPrice)
-                .profit(profit)
-                .regionId(region.getRegionId())
-                .userId(user.getId())
-                .createdAt(createdAt.getEpochSecond())
-                .updatedAt(updatedAt.getEpochSecond())
-                .build();
-    }
 }
