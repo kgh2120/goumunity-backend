@@ -56,7 +56,7 @@ pipeline {
             steps{
                 script{
                     sh 'echo manual Auto CI Start'
-                    sh 'curl "https://ssafyhelper.shop/control/dev/be"'
+                    sh 'curl "https://www.ssafyhelper.shop/control/dev/be"'
                 }
 
             }

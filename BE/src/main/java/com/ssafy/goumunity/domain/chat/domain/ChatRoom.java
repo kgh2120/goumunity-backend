@@ -1,9 +1,13 @@
 package com.ssafy.goumunity.domain.chat.domain;
 
-import com.ssafy.goumunity.domain.region.domain.Region;
-import com.ssafy.goumunity.domain.user.domain.User;
+import com.ssafy.goumunity.domain.chat.controller.request.ChatRoomRequest;
 import java.time.Instant;
-import lombok.*;
+import java.util.List;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -13,14 +17,34 @@ public class ChatRoom {
     private Long id;
     private Boolean isOfficial;
     private String title;
-    private String hashtag;
+
     private Integer capability;
     private Integer currentUser;
     private String imgSrc;
-
     private Instant createdAt;
     private Instant updatedAt;
 
-    private Region region;
-    private User host;
+    private Long regionId;
+    private Long userId;
+
+    private List<Long> hashtagsIds;
+
+    public static ChatRoom create(
+            ChatRoomRequest.Create dto,
+            Long regionId,
+            Long hostId,
+            String imgSrc,
+            List<Long> hashtagIds) {
+        return ChatRoom.builder()
+                .isOfficial(false)
+                .title(dto.getTitle())
+                .hashtagsIds(hashtagIds)
+                .capability(dto.getCapability())
+                .currentUser(1)
+                .imgSrc(imgSrc)
+                .createdAt(Instant.now())
+                .regionId(regionId)
+                .userId(hostId)
+                .build();
+    }
 }
