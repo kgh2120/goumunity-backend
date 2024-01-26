@@ -2,12 +2,14 @@ package com.ssafy.goumunity.common.exception;
 
 import static com.ssafy.goumunity.common.exception.CustomErrorCode.INTERNAL_SERVER_ERROR_CODE;
 import static com.ssafy.goumunity.common.exception.GlobalErrorCode.BIND_ERROR;
+import static com.ssafy.goumunity.common.exception.GlobalErrorCode.REQUIRED_PARAM_NOT_FOUND;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -28,6 +30,13 @@ public class GlobalExceptionHandler {
             HttpServletRequest request) {
         return ResponseEntity.status(BIND_ERROR.getHttpStatus())
                 .body(ErrorResponse.createErrorResponse(BIND_ERROR, request.getRequestURI()));
+    }
+
+    @ExceptionHandler(MissingServletRequestParameterException.class)
+    public ResponseEntity<ErrorResponse> handleMissingServletRequestParameterException(
+            HttpServletRequest request) {
+        return ResponseEntity.status(REQUIRED_PARAM_NOT_FOUND.getHttpStatus())
+                .body(ErrorResponse.createErrorResponse(REQUIRED_PARAM_NOT_FOUND, request.getRequestURI()));
     }
 
     @ExceptionHandler(InternalServerException.class)
