@@ -2,8 +2,10 @@ package com.ssafy.goumunity.domain.feed.controller;
 
 import static com.ssafy.goumunity.common.exception.CustomErrorCode.COMMENT_NOT_FOUND;
 import static com.ssafy.goumunity.common.exception.GlobalErrorCode.BIND_ERROR;
+import static com.ssafy.goumunity.common.exception.GlobalErrorCode.REQUIRED_PARAM_NOT_FOUND;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -18,6 +20,7 @@ import com.ssafy.goumunity.domain.feed.domain.Reply;
 import com.ssafy.goumunity.domain.feed.service.ReplyService;
 import com.ssafy.goumunity.domain.user.domain.User;
 import com.ssafy.goumunity.domain.user.domain.UserCategory;
+import java.time.Instant;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -206,6 +209,74 @@ class ReplyControllerTest {
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.errorName").value(COMMENT_NOT_FOUND.getErrorName()))
                 .andExpect(jsonPath("$.errorMessage").value(COMMENT_NOT_FOUND.getErrorMessage()))
+                .andDo(print());
+    }
+
+    @DisplayName("답글 조회 성공")
+    @Test
+    void findALlReplyByCommentId() throws Exception {
+        MockHttpSession session = new MockHttpSession();
+        User user =
+                User.builder()
+                        .id(1L)
+                        .email("gyu@naver.com")
+                        .password("AAbb11!!")
+                        .monthBudget(100000L)
+                        .age(20)
+                        .userCategory(UserCategory.JOB_SEEKER)
+                        .gender(1)
+                        .nickname("규준")
+                        .regionId(1)
+                        .build();
+
+        long commentId = 1L;
+        int size = 3;
+        int page = 0;
+        Long time = Instant.now().toEpochMilli();
+
+        mockMvc
+                .perform(
+                        get("/api/comments/" + commentId + "/replies")
+                                .with(SecurityMockMvcRequestPostProcessors.user(new CustomDetails(user)))
+                                .param("size", String.valueOf(size))
+                                .param("page", String.valueOf(page))
+                                .param("time", String.valueOf(time))
+                                .session(session))
+                .andExpect(status().isOk())
+                .andDo(print());
+    }
+
+    @DisplayName("답글 조회 실패_시간 파라미터 없음")
+    @Test
+    void findALlReplyByCommentIdFailWithNoTimeParam() throws Exception {
+        MockHttpSession session = new MockHttpSession();
+        User user =
+                User.builder()
+                        .id(1L)
+                        .email("gyu@naver.com")
+                        .password("AAbb11!!")
+                        .monthBudget(100000L)
+                        .age(20)
+                        .userCategory(UserCategory.JOB_SEEKER)
+                        .gender(1)
+                        .nickname("규준")
+                        .regionId(1)
+                        .build();
+
+        long commentId = 1L;
+        int size = 3;
+        int page = 0;
+
+        mockMvc
+                .perform(
+                        get("/api/comments/" + commentId + "/replies")
+                                .with(SecurityMockMvcRequestPostProcessors.user(new CustomDetails(user)))
+                                .param("size", String.valueOf(size))
+                                .param("page", String.valueOf(page))
+                                .session(session))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.errorName").value(REQUIRED_PARAM_NOT_FOUND.getErrorName()))
+                .andExpect(jsonPath("$.errorMessage").value(REQUIRED_PARAM_NOT_FOUND.getErrorMessage()))
                 .andDo(print());
     }
 }
