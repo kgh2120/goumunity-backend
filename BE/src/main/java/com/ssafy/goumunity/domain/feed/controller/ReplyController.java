@@ -1,5 +1,6 @@
 package com.ssafy.goumunity.domain.feed.controller;
 
+import com.ssafy.goumunity.common.util.SliceResponse;
 import com.ssafy.goumunity.domain.feed.controller.request.ReplyRequest;
 import com.ssafy.goumunity.domain.feed.controller.response.ReplyResponse;
 import com.ssafy.goumunity.domain.feed.service.ReplyService;
@@ -30,10 +31,11 @@ public class ReplyController {
     }
 
     @GetMapping
-    public ResponseEntity<Slice<ReplyResponse>> findAllReplies(
+    public ResponseEntity<SliceResponse<ReplyResponse>> findAllReplies(
             @PathVariable("comment-id") Long commentId,
             @RequestParam("time") Long time,
             Pageable pageable) {
-        return ResponseEntity.ok(replyService.findAllByCommentId(commentId, time, pageable));
+        Slice<ReplyResponse> replies = replyService.findAllByCommentId(commentId, time, pageable);
+        return ResponseEntity.ok(SliceResponse.from(replies.getContent(), replies.hasNext()));
     }
 }

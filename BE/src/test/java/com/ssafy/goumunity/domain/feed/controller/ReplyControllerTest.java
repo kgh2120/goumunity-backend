@@ -4,6 +4,7 @@ import static com.ssafy.goumunity.common.exception.CustomErrorCode.COMMENT_NOT_F
 import static com.ssafy.goumunity.common.exception.GlobalErrorCode.BIND_ERROR;
 import static com.ssafy.goumunity.common.exception.GlobalErrorCode.REQUIRED_PARAM_NOT_FOUND;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doThrow;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -16,11 +17,15 @@ import com.ssafy.goumunity.common.exception.CustomException;
 import com.ssafy.goumunity.common.exception.GlobalExceptionHandler;
 import com.ssafy.goumunity.config.SecurityConfig;
 import com.ssafy.goumunity.config.security.CustomDetails;
+import com.ssafy.goumunity.domain.feed.controller.response.ReplyResponse;
 import com.ssafy.goumunity.domain.feed.domain.Reply;
 import com.ssafy.goumunity.domain.feed.service.ReplyService;
 import com.ssafy.goumunity.domain.user.domain.User;
 import com.ssafy.goumunity.domain.user.domain.UserCategory;
+import com.ssafy.goumunity.domain.user.dto.UserResponse;
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +35,9 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.SliceImpl;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
@@ -229,10 +237,24 @@ class ReplyControllerTest {
                         .regionId(1)
                         .build();
 
+        ReplyResponse reply =
+                ReplyResponse.builder()
+                        .replyId(1L)
+                        .commentId(1L)
+                        .content("규준 발표 파이팅")
+                        .user(UserResponse.from(user))
+                        .build();
+
         long commentId = 1L;
         int size = 3;
         int page = 0;
         Long time = Instant.now().toEpochMilli();
+        PageRequest pageRequest = PageRequest.of(page, size);
+        List<ReplyResponse> replies = new ArrayList<>();
+        replies.add(reply);
+        Slice<ReplyResponse> res = new SliceImpl<>(replies, pageRequest, true);
+
+        given(replyService.findAllByCommentId(commentId, time, pageRequest)).willReturn(res);
 
         mockMvc
                 .perform(
