@@ -1,5 +1,6 @@
 package com.ssafy.goumunity.domain.feed.infra.feed;
 
+import com.ssafy.goumunity.domain.feed.controller.request.FeedRegistRequest;
 import com.ssafy.goumunity.domain.feed.domain.Feed;
 import com.ssafy.goumunity.domain.feed.service.post.FeedRepository;
 import java.util.List;
@@ -21,5 +22,11 @@ public class FeedRepositoryImpl implements FeedRepository {
     @Override
     public List<Feed> findAllByUserId(Long userId) {
         return feedJpaRepository.findAllByUserId(userId).stream().map(FeedEntity::to).toList();
+    }
+
+    @Override
+    public Feed save(FeedRegistRequest feedRegistRequest) {
+        // TODO : feed save작성
+        return null;
     }
 }
