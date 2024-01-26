@@ -13,4 +13,6 @@ public interface RegionRepository {
     Optional<Region> findOneBySiGungu(String si, String gungu);
 
     RegionEntity save(RegionEntity regionEntity);
+
+    boolean isExistsRegion(Long id);
 }

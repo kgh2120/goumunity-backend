@@ -38,4 +38,9 @@ public class RegionServiceImpl implements RegionService {
 
         return regionRepository.save(RegionEntity.from(Region.from(regionRegistRequest))).to();
     }
+
+    @Override
+    public boolean isExistsRegion(Long id) {
+        return regionRepository.isExistsRegion(id);
+    }
 }

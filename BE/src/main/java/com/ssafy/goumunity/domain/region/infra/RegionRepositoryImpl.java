@@ -32,4 +32,9 @@ public class RegionRepositoryImpl implements RegionRepository {
     public RegionEntity save(RegionEntity regionEntity) {
         return regionRepository.save(regionEntity);
     }
+
+    @Override
+    public boolean isExistsRegion(Long id) {
+        return regionRepository.existsById(id);
+    }
 }
