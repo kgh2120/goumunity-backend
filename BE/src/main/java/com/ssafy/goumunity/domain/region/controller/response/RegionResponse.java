@@ -20,8 +20,8 @@ public class RegionResponse {
                 .regionId(region.getRegionId())
                 .si(region.getSi())
                 .gungu(region.getGungu())
-                .createdAt(region.getCreatedAt().getEpochSecond())
-                .updatedAt(region.getUpdatedAt().getEpochSecond())
+                .createdAt(region.getCreatedAt().toEpochMilli())
+                .updatedAt(region.getUpdatedAt().toEpochMilli())
                 .build();
     }
 }
