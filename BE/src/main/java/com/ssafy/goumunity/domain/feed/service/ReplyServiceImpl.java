@@ -3,9 +3,13 @@ package com.ssafy.goumunity.domain.feed.service;
 import com.ssafy.goumunity.common.exception.CustomErrorCode;
 import com.ssafy.goumunity.common.exception.CustomException;
 import com.ssafy.goumunity.domain.feed.controller.request.ReplyRequest;
+import com.ssafy.goumunity.domain.feed.controller.response.ReplyResponse;
 import com.ssafy.goumunity.domain.feed.domain.Reply;
 import com.ssafy.goumunity.domain.feed.service.post.ReplyRepository;
+import java.time.Instant;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,5 +28,10 @@ public class ReplyServiceImpl implements ReplyService {
         }
 
         replyRepository.save(Reply.from(userId, commentId, reply));
+    }
+
+    @Override
+    public Slice<ReplyResponse> findAllByCommentId(Long id, Long time, Pageable pageable) {
+        return replyRepository.findAllByCommentId(id, Instant.ofEpochMilli(time), pageable);
     }
 }

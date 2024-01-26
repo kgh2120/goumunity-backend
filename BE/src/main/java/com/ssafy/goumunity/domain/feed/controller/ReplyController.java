@@ -1,10 +1,13 @@
 package com.ssafy.goumunity.domain.feed.controller;
 
 import com.ssafy.goumunity.domain.feed.controller.request.ReplyRequest;
+import com.ssafy.goumunity.domain.feed.controller.response.ReplyResponse;
 import com.ssafy.goumunity.domain.feed.service.ReplyService;
 import com.ssafy.goumunity.domain.user.domain.User;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -24,5 +27,13 @@ public class ReplyController {
             @RequestBody @Valid ReplyRequest.Create reply) {
         replyService.saveReply(user.getId(), commentId, reply);
         return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @GetMapping
+    public ResponseEntity<Slice<ReplyResponse>> findAllReplies(
+            @PathVariable("comment-id") Long commentId,
+            @RequestParam("time") Long time,
+            Pageable pageable) {
+        return ResponseEntity.ok(replyService.findAllByCommentId(commentId, time, pageable));
     }
 }
