@@ -11,4 +11,6 @@ public interface RegionService {
     RegionResponse findOneByRegionId(Long regionId);
 
     Region save(RegionRegistRequest regionRegistRequest);
+
+    boolean isExistsRegion(Long id);
 }
