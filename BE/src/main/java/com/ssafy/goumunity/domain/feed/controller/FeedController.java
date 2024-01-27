@@ -41,7 +41,10 @@ public class FeedController {
 
     @DeleteMapping("/{feedId}")
     public ResponseEntity<Void> deleteOneByFeedId(@PathVariable Long feedId){
-        feedService.deleteOneByFeedId(feedId);
+        
+        // TODO : user통합시 현재유저 검증 과정 추가 필요
+        
+        feedService.deleteOneByFeedId(feedId, Long.valueOf(1));
         return  ResponseEntity.ok().build();
     }
 }

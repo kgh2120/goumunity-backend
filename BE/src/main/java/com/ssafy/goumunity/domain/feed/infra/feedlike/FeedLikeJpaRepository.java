@@ -14,4 +14,7 @@ public interface FeedLikeJpaRepository extends JpaRepository<FeedLikeEntity, Lon
     @Query("select count(fl) from FeedLikeEntity fl where fl.feedEntity.feedId=:feedId")
     Integer countFeedLikeByFeedId(@Param("feedId") Long feedId);
 
+    @Query("delete from FeedLikeEntity fl where fl.feedEntity.feedId=:feedId")
+    void deleteAllByFeedId(@Param("feedId") Long feedId);
+
 }

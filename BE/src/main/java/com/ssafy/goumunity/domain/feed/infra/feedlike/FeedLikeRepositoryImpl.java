@@ -34,4 +34,9 @@ public class FeedLikeRepositoryImpl implements FeedLikeRepository {
     public void delete(FeedLikeEntity feedLike) {
         feedLikeJpaRepository.delete(feedLike);
     }
+
+    @Override
+    public void deleteAllByFeedId(Long feedId) {
+        feedLikeJpaRepository.deleteAllByFeedId(feedId);
+    }
 }

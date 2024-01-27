@@ -13,5 +13,5 @@ public interface FeedService {
 
     Feed save(FeedRegistRequest feedRegistRequest);
 
-    void deleteOneByFeedId(Long feedId);
+    void deleteOneByFeedId(Long feedId, Long userId);
 }

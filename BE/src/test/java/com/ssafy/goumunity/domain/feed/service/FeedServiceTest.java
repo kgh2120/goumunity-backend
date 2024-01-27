@@ -5,6 +5,8 @@ import com.ssafy.goumunity.domain.feed.controller.request.FeedRegistRequest;
 import com.ssafy.goumunity.domain.feed.domain.Feed;
 import com.ssafy.goumunity.domain.feed.domain.FeedCategory;
 import com.ssafy.goumunity.domain.feed.infra.feed.FeedEntity;
+import com.ssafy.goumunity.domain.feed.service.post.CommentRepository;
+import com.ssafy.goumunity.domain.feed.service.post.FeedLikeRepository;
 import com.ssafy.goumunity.domain.feed.service.post.FeedRepository;
 import com.ssafy.goumunity.domain.region.domain.Region;
 import org.assertj.core.api.SoftAssertions;
@@ -28,6 +30,12 @@ class FeedServiceTest {
 
     @Mock
     FeedRepository feedRepository;
+
+    @Mock
+    CommentRepository commentRepository;
+
+    @Mock
+    FeedLikeRepository feedLikeRepository;
 
     @InjectMocks
     FeedServiceImpl feedService;
@@ -90,7 +98,7 @@ class FeedServiceTest {
                     feedRepository.findOneByFeedId(any())
             ).willReturn(Optional.of(feed));
 
-            assertDoesNotThrow(() -> feedService.deleteOneByFeedId(Long.valueOf(1)));
+            assertDoesNotThrow(() -> feedService.deleteOneByFeedId(Long.valueOf(1), Long.valueOf(1)));
 
         }
 
@@ -102,7 +110,7 @@ class FeedServiceTest {
                     feedRepository.findOneByFeedId(any())
             ).willReturn(Optional.empty());
 
-            assertThrows(ResourceNotFoundException.class, () -> feedService.deleteOneByFeedId(Long.valueOf(1)));
+            assertThrows(ResourceNotFoundException.class, () -> feedService.deleteOneByFeedId(Long.valueOf(1), Long.valueOf(1)));
 
         }
 

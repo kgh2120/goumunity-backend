@@ -6,6 +6,8 @@ import com.ssafy.goumunity.domain.user.infra.UserEntity;
 import jakarta.persistence.*;
 import java.time.Instant;
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @Builder
@@ -29,6 +31,7 @@ public class CommentEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "feed_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private FeedEntity feedEntity;
 
     @Column(name = "created_at", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")

@@ -16,4 +16,6 @@ public interface FeedLikeRepository {
 
     void delete(FeedLikeEntity feedLike);
 
+    void deleteAllByFeedId(Long feedId);
+
 }
