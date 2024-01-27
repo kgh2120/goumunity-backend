@@ -135,4 +135,20 @@ class RegionServiceImplTest {
                     ResourceNotFoundException.class, () -> regionService.findOneByRegionId(Long.valueOf(1)));
         }
     }
+
+    @Nested
+    class 삭제테스트{
+
+        @Test
+        @DisplayName("삭제불가테스트_성공")
+        void 삭제불가테스트(){
+
+            BDDMockito.given(
+                    regionRepository.findOneByRegionId(Long.valueOf(1))
+            ).willReturn(Optional.empty());
+
+            assertThrows(ResourceNotFoundException.class, () -> regionService.deleteOneByRegionId(Long.valueOf(1)));
+        }
+
+    }
 }

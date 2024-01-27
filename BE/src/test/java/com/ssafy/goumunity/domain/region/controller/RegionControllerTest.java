@@ -1,11 +1,11 @@
 package com.ssafy.goumunity.domain.region.controller;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ssafy.goumunity.common.exception.feed.ResourceNotFoundException;
 import com.ssafy.goumunity.config.SecurityConfig;
 import com.ssafy.goumunity.domain.region.controller.request.RegionRegistRequest;
 import com.ssafy.goumunity.domain.region.controller.response.RegionResponse;
@@ -15,7 +15,9 @@ import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
+import com.ssafy.goumunity.domain.region.service.port.RegionRepository;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -45,6 +47,8 @@ import org.springframework.test.web.servlet.ResultActions;
 class RegionControllerTest {
 
     @MockBean private RegionService regionService;
+
+    @MockBean private RegionRepository regionRepository;
 
     @Autowired private MockMvc mockMvc;
 
@@ -206,5 +210,20 @@ class RegionControllerTest {
 
             sa.assertAll();
         }
+    }
+
+    @Nested
+    class 삭제테스트{
+
+        @Test
+        @DisplayName("정상삭제테스트_성공")
+        void 정상삭제테스트() throws Exception {
+
+            mockMvc
+                    .perform(delete("/api/regions/1"))
+                    .andExpect(status().isOk());
+
+        }
+
     }
 }

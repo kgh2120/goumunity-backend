@@ -5,6 +5,7 @@ import com.ssafy.goumunity.domain.region.infra.RegionJpaRepository;
 import com.ssafy.goumunity.domain.region.infra.RegionRepositoryImpl;
 import java.time.Instant;
 import org.assertj.core.api.SoftAssertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
