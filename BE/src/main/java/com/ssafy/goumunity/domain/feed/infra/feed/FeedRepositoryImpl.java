@@ -25,8 +25,7 @@ public class FeedRepositoryImpl implements FeedRepository {
     }
 
     @Override
-    public Feed save(FeedRegistRequest feedRegistRequest) {
-        // TODO : feed save작성
-        return null;
+    public Feed save(FeedEntity feedEntity) {
+        return feedJpaRepository.save(feedEntity).to();
     }
 }
