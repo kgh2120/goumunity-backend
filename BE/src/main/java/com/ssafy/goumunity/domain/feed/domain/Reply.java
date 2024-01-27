@@ -1,8 +1,10 @@
 package com.ssafy.goumunity.domain.feed.domain;
 
-import com.ssafy.goumunity.common.exception.CustomErrorCode;
-import com.ssafy.goumunity.common.exception.CustomException;
 import com.ssafy.goumunity.domain.feed.controller.request.ReplyRequest;
+import com.ssafy.goumunity.domain.feed.exception.ReplyErrorCode;
+import com.ssafy.goumunity.domain.feed.exception.ReplyException;
+import com.ssafy.goumunity.domain.user.exception.UserErrorCode;
+import com.ssafy.goumunity.domain.user.exception.UserException;
 import java.time.Instant;
 import java.util.Objects;
 import lombok.*;
@@ -20,9 +22,17 @@ public class Reply {
     private Instant createdAt;
     private Instant updatedAt;
 
+    public void modifyContent(String content) {
+        this.content = content;
+    }
+
+    public void checkUser(Long userId) {
+        if (!this.getUserId().equals(userId)) throw new UserException(UserErrorCode.INVALID_USER);
+    }
+
     public void checkComment(Long commentId) {
         if (!this.getCommentId().equals(commentId))
-            throw new CustomException(CustomErrorCode.COMMENT_NOT_MATCH);
+            throw new ReplyException(ReplyErrorCode.COMMENT_NOT_MATCH);
     }
 
     public static Reply from(Long userId, Long commentId, ReplyRequest.Create reply) {

@@ -5,6 +5,7 @@ import com.ssafy.goumunity.domain.feed.controller.request.ReplyRequest;
 import com.ssafy.goumunity.domain.feed.controller.response.ReplyResponse;
 import com.ssafy.goumunity.domain.feed.service.ReplyService;
 import com.ssafy.goumunity.domain.user.domain.User;
+import com.ssafy.goumunity.domain.user.dto.UserResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -37,5 +38,18 @@ public class ReplyController {
             Pageable pageable) {
         Slice<ReplyResponse> replies = replyService.findAllByCommentId(commentId, time, pageable);
         return ResponseEntity.ok(SliceResponse.from(replies.getContent(), replies.hasNext()));
+    }
+
+    @PutMapping("/{reply-id}")
+    public ResponseEntity<ReplyResponse> modifyComment(
+            @AuthenticationPrincipal User user,
+            @PathVariable("comment-id") Long commentId,
+            @PathVariable("reply-id") Long replyId,
+            @RequestBody @Valid ReplyRequest.Modify reply) {
+        return ResponseEntity.ok()
+                .body(
+                        ReplyResponse.from(
+                                replyService.modifyReply(user.getId(), commentId, replyId, reply),
+                                UserResponse.from(user)));
     }
 }
