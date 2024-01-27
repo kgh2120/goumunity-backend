@@ -1,8 +1,8 @@
 package com.ssafy.goumunity.domain.feed.controller;
 
-import static com.ssafy.goumunity.common.exception.CustomErrorCode.COMMENT_NOT_FOUND;
 import static com.ssafy.goumunity.common.exception.GlobalErrorCode.BIND_ERROR;
 import static com.ssafy.goumunity.common.exception.GlobalErrorCode.REQUIRED_PARAM_NOT_FOUND;
+import static com.ssafy.goumunity.domain.feed.exception.CommentErrorCode.COMMENT_NOT_FOUND;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doThrow;
@@ -13,12 +13,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ssafy.goumunity.common.exception.CustomException;
 import com.ssafy.goumunity.common.exception.GlobalExceptionHandler;
 import com.ssafy.goumunity.config.SecurityConfig;
 import com.ssafy.goumunity.config.security.CustomDetails;
 import com.ssafy.goumunity.domain.feed.controller.response.ReplyResponse;
 import com.ssafy.goumunity.domain.feed.domain.Reply;
+import com.ssafy.goumunity.domain.feed.exception.CommentException;
 import com.ssafy.goumunity.domain.feed.service.ReplyService;
 import com.ssafy.goumunity.domain.user.domain.User;
 import com.ssafy.goumunity.domain.user.domain.UserCategory;
@@ -203,7 +203,7 @@ class ReplyControllerTest {
         Reply reply =
                 Reply.builder().replyId(1L).userId(1L).commentId(commentId).content("규준 거준 구준표").build();
 
-        doThrow(new CustomException(COMMENT_NOT_FOUND))
+        doThrow(new CommentException(COMMENT_NOT_FOUND))
                 .when(replyService)
                 .saveReply(any(), any(), any());
 
