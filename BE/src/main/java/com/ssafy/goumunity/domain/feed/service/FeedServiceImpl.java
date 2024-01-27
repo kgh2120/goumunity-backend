@@ -8,6 +8,8 @@ import com.ssafy.goumunity.domain.feed.infra.feed.FeedEntity;
 import com.ssafy.goumunity.domain.feed.service.post.FeedRepository;
 import com.ssafy.goumunity.domain.user.service.port.UserRepository;
 import java.util.List;
+import java.util.Optional;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -34,5 +36,12 @@ public class FeedServiceImpl implements FeedService {
     @Override
     public Feed save(FeedRegistRequest feedRegistRequest) {
         return feedRepository.save(FeedEntity.from(Feed.from(feedRegistRequest)));
+    }
+
+    @Override
+    public void deleteOneByFeedId(Long feedId) {
+        Optional<Feed> feed = feedRepository.findOneByFeedId(feedId);
+        if(feed.isEmpty()) throw new ResourceNotFoundException(feedId + " 번 피드를 찾을 수 없습니다.", this);
+        else feedRepository.delete(FeedEntity.from(feed.get()));
     }
 }

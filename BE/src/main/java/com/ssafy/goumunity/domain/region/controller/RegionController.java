@@ -36,4 +36,10 @@ public class RegionController {
         Region region = regionService.save(regionRegistRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(region);
     }
+
+    @DeleteMapping("/{regionId}")
+    public ResponseEntity<Void> deleteOneByRegionId(@PathVariable Long regionId){
+        regionService.deleteOneByRegionId(regionId);
+        return ResponseEntity.ok().build();
+    }
 }

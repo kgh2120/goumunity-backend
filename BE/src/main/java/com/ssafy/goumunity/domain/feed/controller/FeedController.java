@@ -38,4 +38,10 @@ public class FeedController {
         feedService.save(feedRegistRequest);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
+
+    @DeleteMapping("/{feedId}")
+    public ResponseEntity<Void> deleteOneByFeedId(@PathVariable Long feedId){
+        feedService.deleteOneByFeedId(feedId);
+        return  ResponseEntity.ok().build();
+    }
 }

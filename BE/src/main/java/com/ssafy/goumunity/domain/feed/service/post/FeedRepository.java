@@ -13,4 +13,6 @@ public interface FeedRepository {
     List<Feed> findAllByUserId(Long userId);
 
     Feed save(FeedEntity feedEntity);
+
+    void delete(FeedEntity feedEntity);
 }

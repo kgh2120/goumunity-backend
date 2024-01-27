@@ -28,4 +28,9 @@ public class FeedRepositoryImpl implements FeedRepository {
     public Feed save(FeedEntity feedEntity) {
         return feedJpaRepository.save(feedEntity).to();
     }
+
+    @Override
+    public void delete(FeedEntity feedEntity) {
+        feedJpaRepository.delete(feedEntity);
+    }
 }

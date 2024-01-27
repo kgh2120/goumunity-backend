@@ -12,5 +12,7 @@ public interface RegionService {
 
     Region save(RegionRegistRequest regionRegistRequest);
 
+    void deleteOneByRegionId(Long RegionId);
+
     boolean isExistsRegion(Long id);
 }
