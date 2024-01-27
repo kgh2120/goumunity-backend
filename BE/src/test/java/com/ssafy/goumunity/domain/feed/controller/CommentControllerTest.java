@@ -201,7 +201,7 @@ class CommentControllerTest {
 
         this.mockMvc
                 .perform(
-                        put("/api/feeds/" + feedId + "/comments/" + modifiedComment.getFeedId())
+                        put("/api/feeds/" + feedId + "/comments/" + modifiedComment.getCommentId())
                                 .with(SecurityMockMvcRequestPostProcessors.user(new CustomDetails(user)))
                                 .content(mapper.writeValueAsString(comment))
                                 .contentType(MediaType.APPLICATION_JSON)
