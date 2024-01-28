@@ -14,7 +14,7 @@ pipeline {
 
     stages {
 
-        stage('Build BE') {
+        stage('Build BE && Send Artifact') {
             steps {
                 script {
 
@@ -25,34 +25,27 @@ pipeline {
                         sh './gradlew clean build'
                         sh 'jq --version'
                         sh 'cd build/libs && ls -al'
-
+                        sh 'ls -al /BE/build/libs'
+                        sshPublisher(
+                                publishers: [
+                                    sshPublisherDesc(
+                                        configName: 'ssafyhelper',
+                                        transfers: [
+                                            sshTransfer(
+                                                sourceFiles: '/build/libs/goumunity-0.0.1-SNAPSHOT.jar',
+                                                removePrefix: '/build/libs',
+                                                remoteDirectory: '/sendData',
+                                                execCommand: 'sh temp/AutoDevServer.sh'
+                                            )
+                                        ]
+                                    )
+                                ]
+                            )
                         
                     }
                 }
             }
         }
-        stage('Send Artifact'){
-            steps{
-                script{
-                    sh 'ls -al /BE/build/libs'
-                    sshPublisher(
-                            publishers: [
-                                sshPublisherDesc(
-                                    configName: 'ssafyhelper',
-                                    transfers: [
-                                        sshTransfer(
-                                            sourceFiles: '/BE/build/libs/goumunity-0.0.1-SNAPSHOT.jar',
-                                            //removePrefix: '/build/libs',
-                                            remoteDirectory: '/sendData',
-                                            execCommand: 'sh temp/AutoDevServer.sh'
-                                        )
-                                    ]
-                                )
-                            ]
-                        )
-                }
-            }
-            
         }
         stage('Auto CI By Git-lab CI-CD'){
             steps{
