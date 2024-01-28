@@ -137,7 +137,6 @@ class ChatRoomControllerTest {
     @Test
     void 채팅방생성테스트_실패_존재하지_않는_해시태그가_담긴_경우() throws Exception {
         // given
-
         ChatRoomRequest.Create dto =
                 ChatRoomRequest.Create.builder()
                         .title("거지방")

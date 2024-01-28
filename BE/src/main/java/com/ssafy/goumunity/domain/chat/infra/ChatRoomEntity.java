@@ -102,4 +102,8 @@ public class ChatRoomEntity {
     public void associatedWithRegionEntity(RegionEntity region) {
         this.region = region;
     }
+
+    public static ChatRoomEntity chatRoomEntityOnlyWithId(Long chatRoomId) {
+        return ChatRoomEntity.builder().id(chatRoomId).build();
+    }
 }
