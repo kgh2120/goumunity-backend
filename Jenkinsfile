@@ -46,7 +46,7 @@ pipeline {
                 }
             }
         }
-        }
+        
         stage('Auto CI By Git-lab CI-CD'){
             steps{
                 script{
