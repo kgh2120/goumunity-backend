@@ -47,4 +47,8 @@ public class ChatRoom {
                 .userId(hostId)
                 .build();
     }
+
+    public boolean canConnect() {
+        return capability > currentUser;
+    }
 }
