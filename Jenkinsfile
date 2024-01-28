@@ -34,7 +34,7 @@ pipeline {
         stage('Send Artifact'){
             steps{
                 script{
-                    echo 'ls -al'
+                    sh 'ls -al'
                     sshPublisher(
                             publishers: [
                                 sshPublisherDesc(
