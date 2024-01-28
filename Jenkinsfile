@@ -25,7 +25,6 @@ pipeline {
                         sh './gradlew clean build'
                         sh 'jq --version'
                         sh 'cd build/libs && ls -al'
-                        sh 'ls -al /BE/build/libs'
                         sshPublisher(
                                 publishers: [
                                     sshPublisherDesc(
