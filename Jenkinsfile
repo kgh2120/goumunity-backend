@@ -17,6 +17,7 @@ pipeline {
         stage('Build BE') {
             steps {
                 script {
+
                     dir('BE') {
                         sh 'chmod +x gradlew'
                         sh 'ls -l'
@@ -33,6 +34,7 @@ pipeline {
         stage('Send Artifact'){
             steps{
                 script{
+                    echo 'ls -al'
                     sshPublisher(
                             publishers: [
                                 sshPublisherDesc(
