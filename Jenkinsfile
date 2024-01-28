@@ -34,7 +34,7 @@ pipeline {
         stage('Send Artifact'){
             steps{
                 script{
-                    sh 'ls -al'
+                    sh 'ls -al /BE/build/libs'
                     sshPublisher(
                             publishers: [
                                 sshPublisherDesc(
@@ -42,7 +42,7 @@ pipeline {
                                     transfers: [
                                         sshTransfer(
                                             sourceFiles: '/BE/build/libs/goumunity-0.0.1-SNAPSHOT.jar',
-                                            removePrefix: '/build/libs',
+                                            //removePrefix: '/build/libs',
                                             remoteDirectory: '/sendData',
                                             execCommand: 'sh temp/AutoDevServer.sh'
                                         )
