@@ -14,7 +14,7 @@ pipeline {
 
     stages {
 
-        stage('Build BE && Send Artifact') {
+        stage('Build BE && ') {
             steps {
                 script {
 
@@ -25,14 +25,26 @@ pipeline {
                         sh './gradlew clean build'
                         sh 'jq --version'
                         sh 'cd build/libs && ls -al'
-                        sshPublisher(
+                        
+                        
+                    }
+                }
+            }
+        }
+        stage('Send Artifact'){
+            steps{
+                script{
+                    sh 'ls -al'
+                    sh 'ls -al BE/build'
+                    sh 'cd BE/build/libs && ls -al'
+                    sshPublisher(
                                 publishers: [
                                     sshPublisherDesc(
                                         configName: 'ssafyhelper',
                                         transfers: [
                                             sshTransfer(
-                                                sourceFiles: '/build/libs/goumunity-0.0.1-SNAPSHOT.jar',
-                                                removePrefix: '/build/libs',
+                                                sourceFiles: 'BE/build/libs/goumunity-0.0.1-SNAPSHOT.jar',
+                                                removePrefix: 'BE/build/libs',
                                                 remoteDirectory: '/sendData',
                                                 execCommand: 'sh temp/AutoDevServer.sh'
                                             )
@@ -40,8 +52,6 @@ pipeline {
                                     )
                                 ]
                             )
-                        
-                    }
                 }
             }
         }
