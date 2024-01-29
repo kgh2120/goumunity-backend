@@ -11,4 +11,6 @@ public interface FeedRepository {
     List<Feed> findAllByUserId(Long userId);
 
     void save(FeedEntity feedEntity);
+
+    boolean existsByFeedId(Long feedId);
 }

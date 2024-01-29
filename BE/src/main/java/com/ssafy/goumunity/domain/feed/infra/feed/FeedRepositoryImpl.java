@@ -27,4 +27,9 @@ public class FeedRepositoryImpl implements FeedRepository {
     public void save(FeedEntity feedEntity) {
         feedJpaRepository.save(feedEntity).to();
     }
+
+    @Override
+    public boolean existsByFeedId(Long feedId) {
+        return feedJpaRepository.existsById(feedId);
+    }
 }
