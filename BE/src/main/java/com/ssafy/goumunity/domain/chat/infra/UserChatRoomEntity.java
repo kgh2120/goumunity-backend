@@ -19,13 +19,13 @@ public class UserChatRoomEntity {
 
     @JoinColumn(name = "user_id")
     @ManyToOne(fetch = FetchType.LAZY)
-    private UserEntity userEntity;
+    private UserEntity user;
 
     @JoinColumn(name = "chat_room_id")
     @ManyToOne(fetch = FetchType.LAZY)
-    private ChatRoomEntity chatRoomEntity;
+    private ChatRoomEntity chatRoom;
 
     public static UserChatRoomEntity create(UserEntity userEntity, ChatRoomEntity chatRoom) {
-        return UserChatRoomEntity.builder().chatRoomEntity(chatRoom).userEntity(userEntity).build();
+        return UserChatRoomEntity.builder().chatRoom(chatRoom).user(userEntity).build();
     }
 }

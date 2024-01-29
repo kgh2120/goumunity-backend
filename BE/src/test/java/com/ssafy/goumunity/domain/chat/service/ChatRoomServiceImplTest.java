@@ -131,7 +131,8 @@ class ChatRoomServiceImplTest {
     void 채팅방_추가_테스트_성공() throws Exception {
         // given
         given(chatRoomRepository.findOneByChatRoomId(any()))
-                .willReturn(Optional.ofNullable(ChatRoom.builder().capability(10).currentUser(2).build()));
+                .willReturn(
+                        Optional.ofNullable(ChatRoom.builder().capability(10).currentUserCount(2).build()));
 
         given(chatRoomRepository.isAlreadyJoinedUser(any(), anyLong())).willReturn(false);
 
@@ -145,7 +146,8 @@ class ChatRoomServiceImplTest {
     void 채팅방_추가_테스트_실패_채팅방이_가득_찬_경우() throws Exception {
         // given
         given(chatRoomRepository.findOneByChatRoomId(any()))
-                .willReturn(Optional.ofNullable(ChatRoom.builder().capability(10).currentUser(10).build()));
+                .willReturn(
+                        Optional.ofNullable(ChatRoom.builder().capability(10).currentUserCount(10).build()));
 
         Long chatRoomId = 1L;
         User user = User.builder().id(10L).build();
@@ -172,7 +174,8 @@ class ChatRoomServiceImplTest {
     void 채팅방_추가_테스트_실패_유저가_이미_가입한_경우() throws Exception {
         // given
         given(chatRoomRepository.findOneByChatRoomId(any()))
-                .willReturn(Optional.ofNullable(ChatRoom.builder().capability(10).currentUser(2).build()));
+                .willReturn(
+                        Optional.ofNullable(ChatRoom.builder().capability(10).currentUserCount(2).build()));
 
         given(chatRoomRepository.isAlreadyJoinedUser(any(), anyLong())).willReturn(true);
 
