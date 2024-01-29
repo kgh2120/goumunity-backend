@@ -1,12 +1,8 @@
 package com.ssafy.goumunity.domain.feed.service;
 
-import com.ssafy.goumunity.domain.feed.controller.request.FeedLikeCountRequest;
-import com.ssafy.goumunity.domain.feed.controller.request.FeedLikeRequest;
-import com.ssafy.goumunity.domain.feed.controller.response.FeedLikeCountResponse;
-
 public interface FeedLikeService {
 
-    boolean pushLikeButton(FeedLikeRequest feedLikeRequest, Long nowUserId);
+    void createFeedLike(Long userId, Long feedId);
 
-    FeedLikeCountResponse countFeedLikeByFeedId(FeedLikeCountRequest feedLikeCountRequest);
+    void deleteFeedLike(Long userId, Long feedId);
 }

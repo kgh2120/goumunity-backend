@@ -1,12 +1,10 @@
 package com.ssafy.goumunity.domain.feed.service;
 
-import com.ssafy.goumunity.domain.feed.controller.request.FeedLikeCountRequest;
-import com.ssafy.goumunity.domain.feed.controller.request.FeedLikeRequest;
-import com.ssafy.goumunity.domain.feed.controller.response.FeedLikeCountResponse;
 import com.ssafy.goumunity.domain.feed.domain.FeedLike;
-import com.ssafy.goumunity.domain.feed.infra.feedlike.FeedLikeEntity;
+import com.ssafy.goumunity.domain.feed.exception.FeedErrorCode;
+import com.ssafy.goumunity.domain.feed.exception.FeedException;
 import com.ssafy.goumunity.domain.feed.service.post.FeedLikeRepository;
-import java.util.Optional;
+import com.ssafy.goumunity.domain.feed.service.post.FeedRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -15,28 +13,35 @@ import org.springframework.stereotype.Service;
 public class FeedLikeServiceImpl implements FeedLikeService {
 
     private final FeedLikeRepository feedLikeRepository;
+    private final FeedRepository feedRepository;
 
     @Override
-    public boolean pushLikeButton(FeedLikeRequest feedLikeRequest, Long nowUserId) {
-
-        // TODO : user통합시 현재유저검증로직 추가
-
-        Optional<FeedLike> feedLike =
-                feedLikeRepository.findOneByFeedIdAndUserId(
-                        feedLikeRequest.getFeedId(), feedLikeRequest.getUserId());
-
-        if (feedLike.isEmpty()) {
-            feedLikeRepository.save(FeedLikeEntity.from(FeedLike.from(feedLikeRequest)));
-            return true;
-        } else {
-            feedLikeRepository.delete(FeedLikeEntity.from(feedLike.get()));
-            return false;
+    public void createFeedLike(Long userId, Long feedId) {
+        if (!feedRepository.existsByFeedId(feedId)) {
+            throw new FeedException(FeedErrorCode.FEED_NOT_FOUND);
         }
+
+        FeedLike feedLike = FeedLike.from(userId, feedId);
+
+        if (feedLikeRepository.existsByFeedLike(feedLike)) {
+            throw new FeedException(FeedErrorCode.ALREADY_LIKED);
+        }
+
+        feedLikeRepository.createFeedLike(feedLike);
     }
 
     @Override
-    public FeedLikeCountResponse countFeedLikeByFeedId(FeedLikeCountRequest feedLikeCountRequest) {
-        return FeedLikeCountResponse.from(
-                feedLikeRepository.countFeedLikeByFeedId(feedLikeCountRequest.getFeedId()));
+    public void deleteFeedLike(Long userId, Long feedId) {
+        if (!feedRepository.existsByFeedId(feedId)) {
+            throw new FeedException(FeedErrorCode.FEED_NOT_FOUND);
+        }
+
+        FeedLike feedLike = FeedLike.from(userId, feedId);
+
+        if (!feedLikeRepository.existsByFeedLike(feedLike)) {
+            throw new FeedException(FeedErrorCode.NO_LIKE_DATA);
+        }
+
+        feedLikeRepository.deleteFeedLike(feedLike);
     }
 }

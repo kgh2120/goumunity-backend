@@ -2,7 +2,6 @@ package com.ssafy.goumunity.domain.feed.infra.feedlike;
 
 import com.ssafy.goumunity.domain.feed.domain.FeedLike;
 import com.ssafy.goumunity.domain.feed.service.post.FeedLikeRepository;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -13,22 +12,18 @@ public class FeedLikeRepositoryImpl implements FeedLikeRepository {
     private final FeedLikeJpaRepository feedLikeJpaRepository;
 
     @Override
-    public Optional<FeedLike> findOneByFeedIdAndUserId(Long feedId, Long userId) {
-        return feedLikeJpaRepository.findOneByFeedIdAndUserId(feedId, userId).map(FeedLikeEntity::to);
+    public void createFeedLike(FeedLike feedLike) {
+        feedLikeJpaRepository.save(FeedLikeEntity.from(feedLike));
     }
 
     @Override
-    public Integer countFeedLikeByFeedId(Long feedId) {
-        return feedLikeJpaRepository.countFeedLikeByFeedId(feedId);
+    public void deleteFeedLike(FeedLike feedLike) {
+        feedLikeJpaRepository.delete(FeedLikeEntity.from(feedLike));
     }
 
     @Override
-    public void save(FeedLikeEntity feedLike) {
-        feedLikeJpaRepository.save(feedLike);
-    }
-
-    @Override
-    public void delete(FeedLikeEntity feedLike) {
-        feedLikeJpaRepository.delete(feedLike);
+    public boolean existsByFeedLike(FeedLike feedLike) {
+        return feedLikeJpaRepository.existsByUserEntity_IdAndFeedEntity_FeedId(
+                feedLike.getUserId(), feedLike.getFeedId());
     }
 }

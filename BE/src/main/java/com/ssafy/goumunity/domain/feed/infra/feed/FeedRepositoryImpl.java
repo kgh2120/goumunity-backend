@@ -32,4 +32,9 @@ public class FeedRepositoryImpl implements FeedRepository {
     public void delete(FeedEntity feedEntity) {
         feedJpaRepository.delete(feedEntity);
     }
+
+    @Override
+    public boolean existsByFeedId(Long feedId) {
+        return feedJpaRepository.existsById(feedId);
+    }
 }
