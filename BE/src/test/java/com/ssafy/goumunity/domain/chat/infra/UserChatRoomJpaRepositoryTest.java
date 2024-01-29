@@ -16,7 +16,7 @@ class UserChatRoomJpaRepositoryTest {
         long userId = 10L;
 
         // when
-        userChatRoomJpaRepository.existsByChatRoomEntity_IdAndUserEntity_Id(chatRoomId, userId);
+        userChatRoomJpaRepository.existsByChatRoom_IdAndUser_Id(chatRoomId, userId);
 
         // then
 
