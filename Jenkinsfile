@@ -60,7 +60,7 @@ pipeline {
             steps{
                 script{
                     sh 'echo manual Auto CI Start'
-                    sh 'curl "http://172.31.41.136/control/dev/be"'
+                    sh 'curl "http://ec2-3-36-165-200.ap-northeast-2.compute.amazonaws.com/control/dev/be"'
                 }
 
             }
