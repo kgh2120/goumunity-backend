@@ -7,7 +7,7 @@ pipeline {
     environment {
         CONTAINER_NAME = "auto-dev-server"
         SSH_CREDENTIALS = 'DevOps'
-        REMOTE_HOST = 'ssafyhelper.shop'
+        REMOTE_HOST = '172.31.41.136'
         SCRIPT_PATH = '/temp/AutoDevServer.sh'
         SSH_REMOTE_CONFIG = 'ubuntu'
     }
@@ -22,7 +22,7 @@ pipeline {
                         sh 'chmod +x gradlew'
                         sh 'ls -l'
 
-                        sh './gradlew clean build -Pprofile=dev spotlessApply'
+                        sh './gradlew clean build spotlessApply'
                         sh 'jq --version'
                         sh 'cd build/libs && ls -al'
                         
@@ -40,13 +40,13 @@ pipeline {
                     sshPublisher(
                                 publishers: [
                                     sshPublisherDesc(
-                                        configName: 'ssafyhelper',
+                                        configName: 'ssafycontrol',
                                         transfers: [
                                             sshTransfer(
                                                 sourceFiles: 'BE/build/libs/goumunity-0.0.1-SNAPSHOT.jar',
                                                 removePrefix: 'BE/build/libs',
                                                 remoteDirectory: '/sendData',
-                                                execCommand: 'sh temp/AutoDevServer.sh'
+                                                // execCommand: 'sh temp/AutoDevServer.sh'
                                             )
                                         ]
                                     )
@@ -60,7 +60,7 @@ pipeline {
             steps{
                 script{
                     sh 'echo manual Auto CI Start'
-                    sh 'curl "https://www.ssafyhelper.shop/control/dev/be"'
+                    sh 'curl "http://172.31.41.136/control/dev/be"'
                 }
 
             }
