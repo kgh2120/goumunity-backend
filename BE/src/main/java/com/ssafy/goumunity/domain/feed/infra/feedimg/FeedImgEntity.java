@@ -5,6 +5,8 @@ import com.ssafy.goumunity.domain.feed.infra.feed.FeedEntity;
 import jakarta.persistence.*;
 import java.time.Instant;
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @Builder
@@ -24,8 +26,12 @@ public class FeedImgEntity {
     @Column(name = "sequence")
     private Integer sequence;
 
+    @Column(name = "size")
+    private Long size;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "feed_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private FeedEntity feedEntity;
 
     @Column(name = "created_at", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")

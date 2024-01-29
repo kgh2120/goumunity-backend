@@ -1,12 +1,17 @@
 package com.ssafy.goumunity.domain.chat.infra;
 
+import com.ssafy.goumunity.domain.chat.controller.response.ChatRoomSearchResponse;
 import com.ssafy.goumunity.domain.chat.domain.ChatRoom;
 import com.ssafy.goumunity.domain.chat.service.port.ChatRoomRepository;
 import com.ssafy.goumunity.domain.region.infra.RegionEntity;
 import com.ssafy.goumunity.domain.user.infra.UserEntity;
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Repository;
 
 @RequiredArgsConstructor
@@ -62,5 +67,16 @@ public class ChatRoomRepositoryImpl implements ChatRoomRepository {
     @Override
     public void disconnectChatRoom(Long chatRoomId, Long userId) {
         userChatRoomJpaRepository.deleteOneByChatRoom_IdAndUser_Id(chatRoomId, userId);
+    }
+
+    @Override
+    public Slice<ChatRoomSearchResponse> searchChatRoom(
+            String keyword, Long time, Pageable pageable) {
+        Slice<ChatRoomEntity> slice =
+                chatRoomJpaRepository.searchChatRoom(keyword, Instant.ofEpochMilli(time), pageable);
+        return new SliceImpl<>(
+                slice.getContent().stream().map(ChatRoomSearchResponse::from).toList(),
+                pageable,
+                slice.hasNext());
     }
 }

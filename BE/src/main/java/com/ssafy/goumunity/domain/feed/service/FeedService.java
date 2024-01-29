@@ -11,4 +11,6 @@ public interface FeedService {
     List<FeedResponse> findAllByUserId(Long userId);
 
     void save(FeedRegistRequest feedRegistRequest, User user);
+
+    void deleteOneByFeedId(Long feedId, User user);
 }

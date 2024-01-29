@@ -30,8 +30,8 @@ public class RegionRepositoryImpl implements RegionRepository {
     }
 
     @Override
-    public RegionEntity save(RegionEntity regionEntity) {
-        return regionRepository.save(regionEntity);
+    public void save(RegionEntity regionEntity) {
+        regionRepository.save(regionEntity);
     }
 
     @Override

@@ -2,6 +2,7 @@ package com.ssafy.goumunity.domain.feed.controller;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -41,7 +42,6 @@ import org.springframework.test.web.servlet.MockMvc;
 class FeedControllerTest {
 
     @MockBean private FeedService feedService;
-
     @MockBean private FeedImgService feedImgService;
 
     @Autowired private MockMvc mockMvc;
@@ -110,6 +110,17 @@ class FeedControllerTest {
                                     .content(mapper.writeValueAsString(feedRegistRequest))
                                     .accept(MediaType.APPLICATION_JSON))
                     .andExpect(status().isBadRequest());
+        }
+    }
+
+    @Nested
+    class 삭제테스트 {
+
+        @Test
+        @DisplayName("정상삭제테스트")
+        void 정삭삭제테스트() throws Exception {
+
+            mockMvc.perform(delete("/api/feeds/11")).andExpect(status().isOk());
         }
     }
 }

@@ -4,7 +4,7 @@ import static com.ssafy.goumunity.common.exception.CustomErrorCode.*;
 import static com.ssafy.goumunity.common.exception.GlobalErrorCode.FORBIDDEN;
 import static com.ssafy.goumunity.domain.chat.exception.ChatErrorCode.*;
 import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.BDDMockito.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
@@ -14,14 +14,19 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.goumunity.common.exception.CustomException;
 import com.ssafy.goumunity.common.exception.GlobalExceptionHandler;
 import com.ssafy.goumunity.domain.chat.controller.request.ChatRoomRequest;
+import com.ssafy.goumunity.domain.chat.controller.response.ChatRoomHashtagResponse;
+import com.ssafy.goumunity.domain.chat.controller.response.ChatRoomSearchResponse;
 import com.ssafy.goumunity.domain.chat.exception.ChatException;
 import com.ssafy.goumunity.domain.chat.service.ChatRoomService;
+import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.SliceImpl;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.mock.web.MockPart;
@@ -239,6 +244,49 @@ class ChatRoomControllerTest {
                         status().isConflict(),
                         jsonPath("$.errorName").value(HOST_CANT_OUT.getErrorName()),
                         jsonPath("$.errorMessage").value(HOST_CANT_OUT.getErrorMessage()))
+                .andDo(print());
+    }
+
+    @WithMockUser
+    @Test
+    void 채팅방_검색_테스트() throws Exception {
+        // given
+        String keyword = "거지방";
+        Long time = 10000L;
+        int page = 0;
+        int size = 12;
+
+        List<ChatRoomSearchResponse> contents = new ArrayList<>();
+        for (int i = 1; i < 3; i++) {
+            contents.add(
+                    ChatRoomSearchResponse.builder()
+                            .title("거거지방")
+                            .chatRoomId((long) i)
+                            .imgSrc("/img.jpg")
+                            .capability(10)
+                            .currentUserCount(5)
+                            .hashtags(
+                                    List.of(
+                                            ChatRoomHashtagResponse.builder().name("20대").build(),
+                                            ChatRoomHashtagResponse.builder().name("거지방").build(),
+                                            ChatRoomHashtagResponse.builder().name("관악구").build()))
+                            .build());
+        }
+        given(chatRoomService.searchChatRoom(keyword, time, PageRequest.of(page, size)))
+                .willReturn(new SliceImpl<>(contents, PageRequest.of(page, size), false));
+        // when
+        mockMvc
+                .perform(
+                        get(CHAT_ROOM_API_PREFIX + "/search")
+                                .queryParam("keyword", keyword)
+                                .queryParam("time", Long.toString(time))
+                                .queryParam("page", String.valueOf(page))
+                                .queryParam("size", String.valueOf(size)))
+                // then
+                .andExpectAll(
+                        status().isOk(),
+                        jsonPath("$.hasNext").value(false),
+                        jsonPath("$.contents.length()").value(2))
                 .andDo(print());
     }
 }

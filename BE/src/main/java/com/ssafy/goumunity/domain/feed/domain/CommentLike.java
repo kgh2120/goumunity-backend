@@ -1,8 +1,6 @@
 package com.ssafy.goumunity.domain.feed.domain;
 
 import java.time.Instant;
-
-import com.ssafy.goumunity.domain.feed.controller.request.CommentLikeRequest;
 import lombok.*;
 
 @Builder
@@ -17,13 +15,4 @@ public class CommentLike {
 
     private Instant createdAt;
     private Instant updatedAt;
-
-    public static CommentLike from(CommentLikeRequest commentLikeRequest){
-        return CommentLike.builder()
-                .commentId(commentLikeRequest.getCommentId())
-                .userId(commentLikeRequest.getUserId())
-                .createdAt(Instant.now())
-                .updatedAt(Instant.now())
-                .build();
-    }
 }

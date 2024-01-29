@@ -10,19 +10,19 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/comments/{comment-id}/commentlikes")
+@RequestMapping("/api/comments/{comment-id}")
 public class CommentLikeController {
 
     private final CommentLikeService commentLikeService;
 
-    @PostMapping
+    @PostMapping("/like")
     public ResponseEntity<Void> likeButton(
             @PathVariable("comment-id") Long commentId, @AuthenticationPrincipal User user) {
         commentLikeService.likeButton(commentId, user.getId());
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @DeleteMapping
+    @DeleteMapping("/unlike")
     public ResponseEntity<Void> unLikeButton(
             @PathVariable("comment-id") Long commentId, @AuthenticationPrincipal User user) {
         commentLikeService.unLikeButton(commentId, user.getId());

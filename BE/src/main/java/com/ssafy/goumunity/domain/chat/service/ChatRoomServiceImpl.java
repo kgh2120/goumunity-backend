@@ -5,6 +5,7 @@ import static com.ssafy.goumunity.domain.chat.exception.ChatErrorCode.*;
 import com.ssafy.goumunity.common.exception.CustomException;
 import com.ssafy.goumunity.common.exception.GlobalErrorCode;
 import com.ssafy.goumunity.domain.chat.controller.request.ChatRoomRequest;
+import com.ssafy.goumunity.domain.chat.controller.response.ChatRoomSearchResponse;
 import com.ssafy.goumunity.domain.chat.domain.ChatRoom;
 import com.ssafy.goumunity.domain.chat.exception.ChatErrorCode;
 import com.ssafy.goumunity.domain.chat.exception.ChatException;
@@ -14,6 +15,8 @@ import com.ssafy.goumunity.domain.chat.service.port.RegionFindService;
 import com.ssafy.goumunity.domain.user.domain.User;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -83,6 +86,12 @@ public class ChatRoomServiceImpl implements ChatRoomService {
             throw new CustomException(GlobalErrorCode.FORBIDDEN);
         }
         return chatRoom;
+    }
+
+    @Override
+    public Slice<ChatRoomSearchResponse> searchChatRoom(
+            String keyword, Long time, Pageable pageable) {
+        return chatRoomRepository.searchChatRoom(keyword, time, pageable);
     }
 
     private void verifyConnectChatRoom(Long chatRoomId, User user) {

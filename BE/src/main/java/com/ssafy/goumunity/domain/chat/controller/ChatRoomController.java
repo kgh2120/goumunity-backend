@@ -1,10 +1,14 @@
 package com.ssafy.goumunity.domain.chat.controller;
 
+import com.ssafy.goumunity.common.util.SliceResponse;
 import com.ssafy.goumunity.domain.chat.controller.request.ChatRoomRequest;
+import com.ssafy.goumunity.domain.chat.controller.response.ChatRoomSearchResponse;
 import com.ssafy.goumunity.domain.chat.service.ChatRoomService;
 import com.ssafy.goumunity.domain.user.domain.User;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -39,5 +43,13 @@ public class ChatRoomController {
             @PathVariable Long chatRoomId, @AuthenticationPrincipal User user) {
         chatRoomService.disconnectChatRoom(chatRoomId, user);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<SliceResponse<ChatRoomSearchResponse>> searchChatRoom(
+            @RequestParam String keyword, @RequestParam Long time, Pageable pageable) {
+        Slice<ChatRoomSearchResponse> response =
+                chatRoomService.searchChatRoom(keyword, time, pageable);
+        return ResponseEntity.ok(SliceResponse.from(response.getContent(), response.hasNext()));
     }
 }
