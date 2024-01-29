@@ -7,9 +7,11 @@ import com.ssafy.goumunity.domain.feed.service.post.FeedLikeRepository;
 import com.ssafy.goumunity.domain.feed.service.post.FeedRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class FeedLikeServiceImpl implements FeedLikeService {
 
     private final FeedLikeRepository feedLikeRepository;
