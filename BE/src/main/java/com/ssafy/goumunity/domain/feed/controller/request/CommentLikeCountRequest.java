@@ -4,10 +4,9 @@ import lombok.*;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
-@Builder
 @Getter
-public class CommentLikeRequest {
+@Builder
+public class CommentLikeCountRequest {
 
     private Long commentId;
-    private Long userId;
 }

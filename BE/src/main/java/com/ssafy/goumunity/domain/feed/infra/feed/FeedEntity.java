@@ -67,7 +67,7 @@ public class FeedEntity {
                 .build();
     }
 
-    public FeedEntity from(Feed feed) {
+    public static FeedEntity from(Feed feed) {
         FeedEntityBuilder feedEntityBuilder =
                 FeedEntity.builder()
                         .feedId(feed.getFeedId())

@@ -14,4 +14,6 @@ public interface RegionJpaRepository extends JpaRepository<RegionEntity, Long> {
 
     @Query("select r from RegionEntity r where r.si=:si and r.gungu=:gungu")
     Optional<RegionEntity> findOneBySiGungu(@Param("si") String si, @Param("gungu") String gungu);
+
+    boolean existsBySiAndGungu(@Param("si") String si, @Param("gungu") String gungu);
 }

@@ -1,5 +1,6 @@
 package com.ssafy.goumunity.domain.region.infra;
 
+import com.ssafy.goumunity.domain.region.controller.request.RegionRegistRequest;
 import com.ssafy.goumunity.domain.region.domain.Region;
 import com.ssafy.goumunity.domain.region.service.port.RegionRepository;
 import java.util.List;
@@ -36,5 +37,11 @@ public class RegionRepositoryImpl implements RegionRepository {
     @Override
     public boolean isExistsRegion(Long id) {
         return regionRepository.existsById(id);
+    }
+
+    @Override
+    public boolean isExistsRegion(RegionRegistRequest regionRegistRequest) {
+        return regionRepository.existsBySiAndGungu(
+                regionRegistRequest.getSi(), regionRegistRequest.getGungu());
     }
 }

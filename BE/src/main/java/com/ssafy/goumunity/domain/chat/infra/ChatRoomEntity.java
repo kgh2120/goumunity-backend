@@ -3,15 +3,7 @@ package com.ssafy.goumunity.domain.chat.infra;
 import com.ssafy.goumunity.domain.chat.domain.ChatRoom;
 import com.ssafy.goumunity.domain.region.infra.RegionEntity;
 import com.ssafy.goumunity.domain.user.infra.UserEntity;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,9 +31,6 @@ public class ChatRoomEntity {
     @Column(name = "capability")
     private Integer capability;
 
-    @Column(name = "current_users")
-    private Integer currentUser;
-
     @Column(name = "img_src")
     private String imgSrc;
 
@@ -64,6 +53,9 @@ public class ChatRoomEntity {
     @OneToMany(mappedBy = "chatRoom")
     private List<ChatRoomHashtagEntity> chatRoomHashtags = new ArrayList<>();
 
+    @OneToMany(mappedBy = "chatRoom")
+    private List<UserChatRoomEntity> userChatRooms = new ArrayList<>();
+
     public static ChatRoomEntity from(ChatRoom chatRoom) {
         ChatRoomEntityBuilder chatRoomEntityBuilder =
                 ChatRoomEntity.builder()
@@ -71,7 +63,6 @@ public class ChatRoomEntity {
                         .isOfficial(chatRoom.getIsOfficial())
                         .title(chatRoom.getTitle())
                         .capability(chatRoom.getCapability())
-                        .currentUser(chatRoom.getCurrentUser())
                         .imgSrc(chatRoom.getImgSrc());
         // TODO UserEntity, ReginEntity 추가 필요
 
@@ -87,10 +78,10 @@ public class ChatRoomEntity {
                 .isOfficial(this.isOfficial)
                 .title(this.title)
                 .capability(this.capability)
-                .currentUser(this.currentUser)
                 .imgSrc(this.imgSrc)
                 .createdAt(this.createdAt)
                 .updatedAt(this.updatedAt)
+                .currentUserCount(userChatRooms.size())
                 // TODO 이후 추가 필요
                 //                .region()
                 //                .host()
@@ -121,8 +112,6 @@ public class ChatRoomEntity {
                 + '\''
                 + ", capability="
                 + capability
-                + ", currentUser="
-                + currentUser
                 + ", imgSrc='"
                 + imgSrc
                 + '\''

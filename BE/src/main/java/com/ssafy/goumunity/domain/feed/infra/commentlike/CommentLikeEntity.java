@@ -38,6 +38,8 @@ public class CommentLikeEntity {
     public CommentLike to() {
         return CommentLike.builder()
                 .commentLikeId(commentLikeId)
+                .commentId(commentEntity.getCommentId())
+                .userId(userEntity.getId())
                 .createdAt(createdAt)
                 .updatedAt(updatedAt)
                 .build();
@@ -51,6 +53,10 @@ public class CommentLikeEntity {
             commentLikeEntityBuilder.createdAt(commentLike.getCreatedAt());
         if (commentLike.getUpdatedAt() != null)
             commentLikeEntityBuilder.updatedAt(commentLike.getUpdatedAt());
+
+        commentLikeEntityBuilder
+                .userEntity(UserEntity.userEntityOnlyWithId(commentLike.getUserId()))
+                .commentEntity(CommentEntity.commentEntityOnlyWithId(commentLike.getCommentId()));
 
         return commentLikeEntityBuilder.build();
     }

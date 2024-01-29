@@ -22,4 +22,9 @@ public class FeedRepositoryImpl implements FeedRepository {
     public List<Feed> findAllByUserId(Long userId) {
         return feedJpaRepository.findAllByUserId(userId).stream().map(FeedEntity::to).toList();
     }
+
+    @Override
+    public void save(FeedEntity feedEntity) {
+        feedJpaRepository.save(feedEntity).to();
+    }
 }

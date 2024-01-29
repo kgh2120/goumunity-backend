@@ -4,6 +4,7 @@ import com.ssafy.goumunity.domain.region.controller.request.RegionRegistRequest;
 import com.ssafy.goumunity.domain.region.controller.response.RegionResponse;
 import com.ssafy.goumunity.domain.region.domain.Region;
 import com.ssafy.goumunity.domain.region.service.RegionService;
+import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,7 +31,7 @@ public class RegionController {
     }
 
     @PostMapping
-    public ResponseEntity<Region> save(@RequestBody RegionRegistRequest regionRegistRequest) {
+    public ResponseEntity<Region> save(@RequestBody @Valid RegionRegistRequest regionRegistRequest) {
         Region region = regionService.save(regionRegistRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(region);
     }

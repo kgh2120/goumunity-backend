@@ -1,5 +1,6 @@
 package com.ssafy.goumunity.domain.region.service.port;
 
+import com.ssafy.goumunity.domain.region.controller.request.RegionRegistRequest;
 import com.ssafy.goumunity.domain.region.domain.Region;
 import com.ssafy.goumunity.domain.region.infra.RegionEntity;
 import java.util.List;
@@ -15,4 +16,6 @@ public interface RegionRepository {
     RegionEntity save(RegionEntity regionEntity);
 
     boolean isExistsRegion(Long id);
+
+    boolean isExistsRegion(RegionRegistRequest regionRegistRequest);
 }

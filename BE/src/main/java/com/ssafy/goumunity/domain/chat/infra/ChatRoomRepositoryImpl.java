@@ -48,7 +48,7 @@ public class ChatRoomRepositoryImpl implements ChatRoomRepository {
 
     @Override
     public boolean isAlreadyJoinedUser(Long chatRoomId, Long userId) {
-        return userChatRoomJpaRepository.existsByChatRoomEntity_IdAndUserEntity_Id(chatRoomId, userId);
+        return userChatRoomJpaRepository.existsByChatRoom_IdAndUser_Id(chatRoomId, userId);
     }
 
     @Override

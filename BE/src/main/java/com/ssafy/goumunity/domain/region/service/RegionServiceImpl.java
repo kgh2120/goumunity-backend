@@ -32,11 +32,11 @@ public class RegionServiceImpl implements RegionService {
 
     @Override
     public Region save(RegionRegistRequest regionRegistRequest) {
-        regionRepository
-                .findOneBySiGungu(regionRegistRequest.getSi(), regionRegistRequest.getGungu())
-                .orElseThrow(() -> new DataExistException(this));
-
-        return regionRepository.save(RegionEntity.from(Region.from(regionRegistRequest))).to();
+        if (regionRepository.isExistsRegion(regionRegistRequest)) {
+            throw new DataExistException(this);
+        } else {
+            return regionRepository.save(RegionEntity.from(Region.from(regionRegistRequest))).to();
+        }
     }
 
     @Override

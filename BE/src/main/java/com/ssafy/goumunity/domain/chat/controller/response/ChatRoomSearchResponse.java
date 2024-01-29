@@ -28,7 +28,7 @@ public class ChatRoomSearchResponse {
                 .chatRoomId(chatRoom.getId())
                 .imgSrc(chatRoom.getImgSrc())
                 .capability(chatRoom.getCapability())
-                .currentUserCount(chatRoom.getCurrentUser())
+                .currentUserCount(chatRoom.getUserChatRooms().size())
                 .hashtags(
                         chatRoom.getChatRoomHashtags().stream().map(ChatRoomHashtagResponse::from).toList())
                 .build();
