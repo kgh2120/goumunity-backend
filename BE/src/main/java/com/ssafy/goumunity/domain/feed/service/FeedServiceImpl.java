@@ -32,7 +32,7 @@ public class FeedServiceImpl implements FeedService {
     }
 
     @Override
-    public Feed save(FeedRegistRequest feedRegistRequest) {
-        return feedRepository.save(FeedEntity.from(Feed.from(feedRegistRequest)));
+    public void save(FeedRegistRequest feedRegistRequest) {
+        feedRepository.save(FeedEntity.from(Feed.from(feedRegistRequest)));
     }
 }
