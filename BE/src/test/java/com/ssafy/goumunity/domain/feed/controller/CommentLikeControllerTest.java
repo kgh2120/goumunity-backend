@@ -5,7 +5,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.goumunity.config.SecurityConfig;
-import com.ssafy.goumunity.domain.feed.controller.request.CommentLikeRequest;
 import com.ssafy.goumunity.domain.feed.service.CommentLikeService;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,14 +36,6 @@ class CommentLikeControllerTest {
     @Nested
     @TestInstance(TestInstance.Lifecycle.PER_CLASS)
     class 좋아요클릭 {
-        CommentLikeRequest commentLikeRequest;
-
-        @BeforeAll
-        void 요청DTO장전() {
-            commentLikeRequest =
-                    CommentLikeRequest.builder().userId(Long.valueOf(1)).commentId(Long.valueOf(1)).build();
-        }
-
         @Test
         @DisplayName("좋아요UP_성공")
         void 좋아요UP테스트() throws Exception {
