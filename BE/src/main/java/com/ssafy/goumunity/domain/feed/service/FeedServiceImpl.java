@@ -1,10 +1,13 @@
 package com.ssafy.goumunity.domain.feed.service;
 
 import com.ssafy.goumunity.common.exception.feed.ResourceNotFoundException;
-import com.ssafy.goumunity.domain.feed.controller.request.FeedRegistRequest;
+import com.ssafy.goumunity.domain.feed.controller.request.FeedRequest;
 import com.ssafy.goumunity.domain.feed.controller.response.FeedResponse;
 import com.ssafy.goumunity.domain.feed.domain.Feed;
+import com.ssafy.goumunity.domain.feed.domain.FeedImg;
 import com.ssafy.goumunity.domain.feed.infra.feed.FeedEntity;
+import com.ssafy.goumunity.domain.feed.service.post.FeedImageUploader;
+import com.ssafy.goumunity.domain.feed.service.post.FeedImgRepository;
 import com.ssafy.goumunity.domain.feed.service.post.FeedRepository;
 import com.ssafy.goumunity.domain.user.domain.User;
 import com.ssafy.goumunity.domain.user.exception.UserErrorCode;
@@ -13,14 +16,32 @@ import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class FeedServiceImpl implements FeedService {
 
     private final FeedRepository feedRepository;
+    private final FeedImgRepository feedImgRepository;
+    private final FeedImageUploader feedImageUploader;
 
     @Override
+    public void createFeed(Long userId, FeedRequest.Create feedRequest, List<MultipartFile> images) {
+        Feed createdFeed = feedRepository.save(Feed.from(feedRequest, userId));
+
+        if (!images.isEmpty()) {
+            for (int seq = 1; seq <= images.size(); seq++) {
+                String savedUrl = feedImageUploader.uploadFeedImage(images.get(seq - 1));
+                feedImgRepository.save(FeedImg.from(createdFeed.getFeedId(), savedUrl, seq));
+            }
+        }
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public FeedResponse findOneByFeedId(Long feedId) {
         return FeedResponse.from(
                 feedRepository
@@ -29,13 +50,9 @@ public class FeedServiceImpl implements FeedService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<FeedResponse> findAllByUserId(Long userId) {
         return feedRepository.findAllByUserId(userId).stream().map(FeedResponse::from).toList();
-    }
-
-    @Override
-    public void save(FeedRegistRequest feedRegistRequest, User user) {
-        feedRepository.save(FeedEntity.from(Feed.from(feedRegistRequest, user)));
     }
 
     @Override

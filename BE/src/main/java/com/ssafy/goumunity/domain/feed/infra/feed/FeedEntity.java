@@ -33,9 +33,6 @@ public class FeedEntity {
     @Column(name = "after_price")
     private Integer afterPrice;
 
-    @Column(name = "profit")
-    private Integer profit;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private UserEntity userEntity;
@@ -59,7 +56,6 @@ public class FeedEntity {
                 .feedCategory(feedCategory)
                 .price(price)
                 .afterPrice(afterPrice)
-                .profit(profit)
                 .regionId(regionEntity.getRegionId())
                 .userId(userEntity.getId())
                 .createdAt(createdAt)
@@ -75,7 +71,8 @@ public class FeedEntity {
                         .feedCategory(feed.getFeedCategory())
                         .price(feed.getPrice())
                         .afterPrice(feed.getAfterPrice())
-                        .profit(feed.getProfit());
+                        .regionEntity(RegionEntity.regionEntityOnlyWithId(feed.getRegionId()))
+                        .userEntity(UserEntity.userEntityOnlyWithId(feed.getUserId()));
 
         if (feed.getCreatedAt() != null) feedEntityBuilder.createdAt(feed.getCreatedAt());
         if (feed.getUpdatedAt() != null) feedEntityBuilder.updatedAt(feed.getUpdatedAt());

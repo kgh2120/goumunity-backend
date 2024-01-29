@@ -3,6 +3,7 @@ package com.ssafy.goumunity.domain.feed.infra.feedimg;
 import com.ssafy.goumunity.domain.feed.domain.FeedImg;
 import com.ssafy.goumunity.domain.feed.infra.feed.FeedEntity;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import java.time.Instant;
 import lombok.*;
 import org.hibernate.annotations.OnDelete;
@@ -23,11 +24,9 @@ public class FeedImgEntity {
     @Column(name = "img_src")
     private String imgSrc;
 
+    @NotNull
     @Column(name = "sequence")
     private Integer sequence;
-
-    @Column(name = "size")
-    private Long size;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "feed_id")
@@ -55,7 +54,7 @@ public class FeedImgEntity {
     public static FeedImgEntity from(FeedImg feedImg) {
         FeedImgEntityBuilder feedImgEntityBuilder =
                 FeedImgEntity.builder()
-                        .feedImgId(feedImg.getFeedImgId())
+                        .feedEntity(FeedEntity.feedEntityOnlyWithId(feedImg.getFeedId()))
                         .imgSrc(feedImg.getImgSrc())
                         .sequence(feedImg.getSequence());
 

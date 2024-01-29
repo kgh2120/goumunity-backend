@@ -14,7 +14,6 @@ public class FeedResponse {
     private FeedCategory feedCategory;
     private Integer price;
     private Integer afterPrice;
-    private Integer profit;
 
     private Long regionId;
     private Long userId;
@@ -29,7 +28,6 @@ public class FeedResponse {
                 .feedCategory(feed.getFeedCategory())
                 .price(feed.getPrice())
                 .afterPrice(feed.getAfterPrice())
-                .profit(feed.getProfit())
                 .regionId(feed.getRegionId())
                 .userId(feed.getUserId())
                 .createdAt(feed.getCreatedAt().toEpochMilli())

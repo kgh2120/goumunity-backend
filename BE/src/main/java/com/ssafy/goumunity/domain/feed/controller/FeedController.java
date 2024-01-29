@@ -1,19 +1,20 @@
 package com.ssafy.goumunity.domain.feed.controller;
 
-import com.ssafy.goumunity.domain.feed.controller.request.FeedRegistRequest;
+import com.ssafy.goumunity.domain.feed.controller.request.FeedRequest;
 import com.ssafy.goumunity.domain.feed.controller.response.FeedImgResponse;
 import com.ssafy.goumunity.domain.feed.controller.response.FeedResponse;
 import com.ssafy.goumunity.domain.feed.service.FeedImgService;
 import com.ssafy.goumunity.domain.feed.service.FeedService;
 import com.ssafy.goumunity.domain.user.domain.User;
+import jakarta.annotation.Nullable;
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequiredArgsConstructor
@@ -35,10 +36,12 @@ public class FeedController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> save(
-            @RequestBody @Valid FeedRegistRequest feedRegistRequest, @AuthenticationPrincipal User user) {
-        feedService.save(feedRegistRequest, user);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+    public ResponseEntity<Void> createFeed(
+            @AuthenticationPrincipal User user,
+            @RequestPart("data") @Valid FeedRequest.Create feedRequest,
+            @RequestPart("images") @Nullable List<MultipartFile> images) {
+        feedService.createFeed(user.getId(), feedRequest, images);
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{feedId}")
