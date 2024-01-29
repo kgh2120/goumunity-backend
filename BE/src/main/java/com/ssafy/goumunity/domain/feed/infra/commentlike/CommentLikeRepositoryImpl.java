@@ -2,10 +2,9 @@ package com.ssafy.goumunity.domain.feed.infra.commentlike;
 
 import com.ssafy.goumunity.domain.feed.domain.CommentLike;
 import com.ssafy.goumunity.domain.feed.service.post.CommentLikeRepository;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
-
-import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -15,12 +14,9 @@ public class CommentLikeRepositoryImpl implements CommentLikeRepository {
 
     @Override
     public Optional<CommentLike> findOneByCommentIdAndUserId(Long commentId, Long userId) {
-        return commentLikeJpaRepository.findOneByCommentIdAndUserId(commentId, userId).map(CommentLikeEntity::to);
-    }
-
-    @Override
-    public Integer countCommentLikeByCommentId(Long commentId) {
-        return commentLikeJpaRepository.countCommentLikeByCommentId(commentId);
+        return commentLikeJpaRepository
+                .findOneByCommentIdAndUserId(commentId, userId)
+                .map(CommentLikeEntity::to);
     }
 
     @Override

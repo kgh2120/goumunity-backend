@@ -1,6 +1,5 @@
 package com.ssafy.goumunity.domain.feed.service;
 
-import com.ssafy.goumunity.domain.feed.controller.response.CommentLikeCountResponse;
 import com.ssafy.goumunity.domain.feed.domain.CommentLike;
 import com.ssafy.goumunity.domain.feed.infra.commentlike.CommentLikeEntity;
 import com.ssafy.goumunity.domain.feed.service.post.CommentLikeRepository;
@@ -23,11 +22,5 @@ public class CommentLikeServiceImpl implements CommentLikeService {
     public void unLikeButton(Long commentId, Long userId) {
         commentLikeRepository.delete(
                 CommentLikeEntity.from(CommentLike.builder().commentId(commentId).userId(userId).build()));
-    }
-
-    @Override
-    public CommentLikeCountResponse countCommentLikeByCommentId(Long commentId) {
-        return CommentLikeCountResponse.from(
-                commentLikeRepository.countCommentLikeByCommentId(commentId));
     }
 }
