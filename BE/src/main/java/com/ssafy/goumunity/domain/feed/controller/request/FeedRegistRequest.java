@@ -22,7 +22,4 @@ public class FeedRegistRequest {
 
     @NotNull(message = "지역을 선택해야 합니다.")
     private Long regionId;
-
-    @NotNull(message = "작성자 정보가 없습니다.")
-    private Long userId;
 }
