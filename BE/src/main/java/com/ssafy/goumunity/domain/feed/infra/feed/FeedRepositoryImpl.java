@@ -25,7 +25,7 @@ public class FeedRepositoryImpl implements FeedRepository {
 
     @Override
     public void save(FeedEntity feedEntity) {
-        feedJpaRepository.save(feedEntity).to();
+        feedJpaRepository.save(feedEntity);
     }
 
     @Override

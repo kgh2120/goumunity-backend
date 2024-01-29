@@ -6,14 +6,13 @@ import com.ssafy.goumunity.domain.feed.controller.response.FeedLikeCountResponse
 import com.ssafy.goumunity.domain.feed.domain.FeedLike;
 import com.ssafy.goumunity.domain.feed.infra.feedlike.FeedLikeEntity;
 import com.ssafy.goumunity.domain.feed.service.post.FeedLikeRepository;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
 @Service
 @RequiredArgsConstructor
-public class FeedLikeServiceImpl implements FeedLikeService{
+public class FeedLikeServiceImpl implements FeedLikeService {
 
     private final FeedLikeRepository feedLikeRepository;
 
@@ -22,9 +21,11 @@ public class FeedLikeServiceImpl implements FeedLikeService{
 
         // TODO : user통합시 현재유저검증로직 추가
 
-        Optional<FeedLike> feedLike = feedLikeRepository.findOneByFeedIdAndUserId(feedLikeRequest.getFeedId(), feedLikeRequest.getUserId());
+        Optional<FeedLike> feedLike =
+                feedLikeRepository.findOneByFeedIdAndUserId(
+                        feedLikeRequest.getFeedId(), feedLikeRequest.getUserId());
 
-        if(feedLike.isEmpty()){
+        if (feedLike.isEmpty()) {
             feedLikeRepository.save(FeedLikeEntity.from(FeedLike.from(feedLikeRequest)));
             return true;
         } else {
@@ -35,6 +36,7 @@ public class FeedLikeServiceImpl implements FeedLikeService{
 
     @Override
     public FeedLikeCountResponse countFeedLikeByFeedId(FeedLikeCountRequest feedLikeCountRequest) {
-        return FeedLikeCountResponse.from(feedLikeRepository.countFeedLikeByFeedId(feedLikeCountRequest.getFeedId()));
+        return FeedLikeCountResponse.from(
+                feedLikeRepository.countFeedLikeByFeedId(feedLikeCountRequest.getFeedId()));
     }
 }

@@ -1,5 +1,11 @@
 package com.ssafy.goumunity.domain.feed.controller;
 
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.goumunity.config.SecurityConfig;
 import com.ssafy.goumunity.domain.feed.controller.request.FeedLikeCountRequest;
@@ -19,118 +25,98 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 @WebMvcTest(
         controllers = {FeedLikeController.class},
         excludeFilters = {
-                @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, value = SecurityConfig.class)
+            @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, value = SecurityConfig.class)
         },
         excludeAutoConfiguration = {
-                SecurityAutoConfiguration.class,
-                SecurityFilterAutoConfiguration.class
+            SecurityAutoConfiguration.class,
+            SecurityFilterAutoConfiguration.class
         })
 class FeedLikeControllerTest {
 
-    @MockBean
-    private FeedLikeService feedLikeService;
+    @MockBean private FeedLikeService feedLikeService;
 
-    @Autowired
-    private MockMvc mockMvc;
+    @Autowired private MockMvc mockMvc;
 
     private ObjectMapper mapper = new ObjectMapper();
 
     @Nested
     @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-    class 좋아요클릭{
+    class 좋아요클릭 {
 
         FeedLikeRequest feedLikeRequest;
 
         @BeforeAll
-        void 요청DTO장전(){
+        void 요청DTO장전() {
 
-            feedLikeRequest = FeedLikeRequest.builder()
-                    .userId(Long.valueOf(1))
-                    .feedId(Long.valueOf(1))
-                    .build();
-
+            feedLikeRequest =
+                    FeedLikeRequest.builder().userId(Long.valueOf(1)).feedId(Long.valueOf(1)).build();
         }
 
         @Test
         @DisplayName("좋아요UP_성공")
-        void 좋아요UP테스트() throws Exception{
+        void 좋아요UP테스트() throws Exception {
 
-            BDDMockito.given(feedLikeService.pushLikeButton(any(), any()))
-                    .willReturn(true);
+            BDDMockito.given(feedLikeService.pushLikeButton(any(), any())).willReturn(true);
 
-            mockMvc.perform(
-                    post("/api/feeds/1/feedlikes")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(mapper.writeValueAsString(feedLikeRequest))
-            ).andExpect(status().isCreated());
-
+            mockMvc
+                    .perform(
+                            post("/api/feeds/1/feedlikes")
+                                    .contentType(MediaType.APPLICATION_JSON)
+                                    .content(mapper.writeValueAsString(feedLikeRequest)))
+                    .andExpect(status().isCreated());
         }
 
         @Test
         @DisplayName("좋아요DOWN성공")
-        void 좋아요DOWN테스트() throws Exception{
+        void 좋아요DOWN테스트() throws Exception {
 
-            BDDMockito.given(feedLikeService.pushLikeButton(any(), any()))
-                    .willReturn(false);
+            BDDMockito.given(feedLikeService.pushLikeButton(any(), any())).willReturn(false);
 
-            mockMvc.perform(
-                    post("/api/feeds/1/feedlikes")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(mapper.writeValueAsString(feedLikeRequest))
-            ).andExpect(status().isOk());
-
+            mockMvc
+                    .perform(
+                            post("/api/feeds/1/feedlikes")
+                                    .contentType(MediaType.APPLICATION_JSON)
+                                    .content(mapper.writeValueAsString(feedLikeRequest)))
+                    .andExpect(status().isOk());
         }
-
     }
 
     @Nested
     @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-    class 좋아요개수확인{
+    class 좋아요개수확인 {
 
         FeedLikeCountRequest feedLikeCountRequest;
         FeedLikeCountResponse feedLikeCountResponse;
 
         @BeforeAll
-        void 좋아요개수요청응답장전(){
+        void 좋아요개수요청응답장전() {
 
-            feedLikeCountRequest = FeedLikeCountRequest.builder()
-                    .feedId(Long.valueOf(1))
-                    .build();
+            feedLikeCountRequest = FeedLikeCountRequest.builder().feedId(Long.valueOf(1)).build();
 
-            feedLikeCountResponse = FeedLikeCountResponse.builder()
-                    .likeCount(30)
-                    .build();
-
+            feedLikeCountResponse = FeedLikeCountResponse.builder().likeCount(30).build();
         }
 
         @Test
         @DisplayName("좋아요갯수확인_성공")
-        void 좋아요갯수확인테스트() throws Exception{
+        void 좋아요갯수확인테스트() throws Exception {
 
-            BDDMockito.given(
-                    feedLikeService.countFeedLikeByFeedId(any())
-            ).willReturn(feedLikeCountResponse);
+            BDDMockito.given(feedLikeService.countFeedLikeByFeedId(any()))
+                    .willReturn(feedLikeCountResponse);
 
-            ResultActions resultActions = mockMvc.perform(
-                    get("/api/feeds/35/feedlikes")
-                            .contentType(MediaType.APPLICATION_JSON)
-            ).andExpect(status().isOk());
+            ResultActions resultActions =
+                    mockMvc
+                            .perform(get("/api/feeds/35/feedlikes").contentType(MediaType.APPLICATION_JSON))
+                            .andExpect(status().isOk());
 
-            FeedLikeCountResponse result = mapper.readValue(resultActions.andReturn().getResponse().getContentAsString(), FeedLikeCountResponse.class);
+            FeedLikeCountResponse result =
+                    mapper.readValue(
+                            resultActions.andReturn().getResponse().getContentAsString(),
+                            FeedLikeCountResponse.class);
 
             assertEquals(result.getLikeCount(), 30);
-
         }
-
     }
-
 }

@@ -1,13 +1,10 @@
 package com.ssafy.goumunity.domain.feed.infra.feedlike;
 
 import com.ssafy.goumunity.domain.feed.domain.FeedLike;
-import com.ssafy.goumunity.domain.feed.infra.commentlike.CommentLikeEntity;
-import com.ssafy.goumunity.domain.feed.infra.feed.FeedJpaRepository;
 import com.ssafy.goumunity.domain.feed.service.post.FeedLikeRepository;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
-
-import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -33,10 +30,5 @@ public class FeedLikeRepositoryImpl implements FeedLikeRepository {
     @Override
     public void delete(FeedLikeEntity feedLike) {
         feedLikeJpaRepository.delete(feedLike);
-    }
-
-    @Override
-    public void deleteAllByFeedId(Long feedId) {
-        feedLikeJpaRepository.deleteAllByFeedId(feedId);
     }
 }

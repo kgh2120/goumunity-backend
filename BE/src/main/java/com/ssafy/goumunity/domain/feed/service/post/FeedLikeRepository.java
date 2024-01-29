@@ -1,9 +1,7 @@
 package com.ssafy.goumunity.domain.feed.service.post;
 
 import com.ssafy.goumunity.domain.feed.domain.FeedLike;
-import com.ssafy.goumunity.domain.feed.infra.commentlike.CommentLikeEntity;
 import com.ssafy.goumunity.domain.feed.infra.feedlike.FeedLikeEntity;
-
 import java.util.Optional;
 
 public interface FeedLikeRepository {
@@ -15,7 +13,4 @@ public interface FeedLikeRepository {
     void save(FeedLikeEntity feedLike);
 
     void delete(FeedLikeEntity feedLike);
-
-    void deleteAllByFeedId(Long feedId);
-
 }

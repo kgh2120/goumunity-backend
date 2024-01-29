@@ -9,5 +9,4 @@ public interface FeedLikeService {
     boolean pushLikeButton(FeedLikeRequest feedLikeRequest, Long nowUserId);
 
     FeedLikeCountResponse countFeedLikeByFeedId(FeedLikeCountRequest feedLikeCountRequest);
-
 }

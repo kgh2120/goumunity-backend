@@ -1,8 +1,7 @@
 package com.ssafy.goumunity.domain.feed.domain;
 
-import java.time.Instant;
-
 import com.ssafy.goumunity.domain.feed.controller.request.FeedLikeRequest;
+import java.time.Instant;
 import lombok.*;
 
 @Builder
@@ -18,7 +17,7 @@ public class FeedLike {
     private Instant createdAt;
     private Instant updatedAt;
 
-    public static FeedLike from(FeedLikeRequest feedLikeRequest){
+    public static FeedLike from(FeedLikeRequest feedLikeRequest) {
         return FeedLike.builder()
                 .feedId(feedLikeRequest.getFeedId())
                 .userId(feedLikeRequest.getUserId())

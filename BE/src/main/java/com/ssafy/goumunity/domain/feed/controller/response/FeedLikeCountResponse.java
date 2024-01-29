@@ -10,10 +10,7 @@ public class FeedLikeCountResponse {
 
     private Integer likeCount;
 
-    public static FeedLikeCountResponse from(Integer likeCount){
-        return FeedLikeCountResponse.builder()
-                .likeCount(likeCount)
-                .build();
+    public static FeedLikeCountResponse from(Integer likeCount) {
+        return FeedLikeCountResponse.builder().likeCount(likeCount).build();
     }
-
 }

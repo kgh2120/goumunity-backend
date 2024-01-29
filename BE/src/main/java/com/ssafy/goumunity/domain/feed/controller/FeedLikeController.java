@@ -14,13 +14,13 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RequestMapping("/api/feeds/{feed-id}/feedlikes")
 public class FeedLikeController {
-    
+
     private final FeedLikeService feedLikeService;
-    
+
     @PostMapping
-    public ResponseEntity<Void> pushLikeButton(@RequestBody @Valid FeedLikeRequest feedLikeRequest){
+    public ResponseEntity<Void> pushLikeButton(@RequestBody @Valid FeedLikeRequest feedLikeRequest) {
         // TODO : user통합시 받아오는과정 추가 필요
-        if(feedLikeService.pushLikeButton(feedLikeRequest, Long.valueOf(1))){
+        if (feedLikeService.pushLikeButton(feedLikeRequest, Long.valueOf(1))) {
             return ResponseEntity.status(HttpStatus.CREATED).build();
         } else {
             return ResponseEntity.ok().build();
@@ -28,8 +28,8 @@ public class FeedLikeController {
     }
 
     @GetMapping
-    public ResponseEntity<FeedLikeCountResponse> getLikeCount(FeedLikeCountRequest feedLikeCountRequest){
+    public ResponseEntity<FeedLikeCountResponse> getLikeCount(
+            FeedLikeCountRequest feedLikeCountRequest) {
         return ResponseEntity.ok(feedLikeService.countFeedLikeByFeedId(feedLikeCountRequest));
     }
-    
 }
