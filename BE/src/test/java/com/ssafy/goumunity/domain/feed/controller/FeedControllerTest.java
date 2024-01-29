@@ -12,6 +12,7 @@ import com.ssafy.goumunity.domain.feed.controller.request.FeedRegistRequest;
 import com.ssafy.goumunity.domain.feed.controller.response.FeedResponse;
 import com.ssafy.goumunity.domain.feed.domain.Feed;
 import com.ssafy.goumunity.domain.feed.domain.FeedCategory;
+import com.ssafy.goumunity.domain.feed.service.FeedImgService;
 import com.ssafy.goumunity.domain.feed.service.FeedService;
 import com.ssafy.goumunity.domain.user.domain.User;
 import org.junit.jupiter.api.BeforeEach;
@@ -41,6 +42,7 @@ import org.springframework.test.web.servlet.MockMvc;
 class FeedControllerTest {
 
     @MockBean private FeedService feedService;
+    @MockBean private FeedImgService feedImgService;
 
     @Autowired private MockMvc mockMvc;
 

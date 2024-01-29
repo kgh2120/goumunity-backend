@@ -5,6 +5,7 @@ import com.ssafy.goumunity.domain.region.infra.RegionEntity;
 import com.ssafy.goumunity.domain.user.infra.UserEntity;
 import jakarta.persistence.*;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.*;
 
@@ -49,10 +50,11 @@ public class ChatRoomEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     private UserEntity host;
 
-    // private List<ChatRoomHashtag> chatRoomHashtags;
+    @OneToMany(mappedBy = "chatRoom")
+    private List<ChatRoomHashtagEntity> chatRoomHashtags = new ArrayList<>();
 
     @OneToMany(mappedBy = "chatRoom")
-    private List<UserChatRoomEntity> userChatRooms;
+    private List<UserChatRoomEntity> userChatRooms = new ArrayList<>();
 
     public static ChatRoomEntity from(ChatRoom chatRoom) {
         ChatRoomEntityBuilder chatRoomEntityBuilder =
@@ -96,5 +98,33 @@ public class ChatRoomEntity {
 
     public static ChatRoomEntity chatRoomEntityOnlyWithId(Long chatRoomId) {
         return ChatRoomEntity.builder().id(chatRoomId).build();
+    }
+
+    @Override
+    public String toString() {
+        return "ChatRoomEntity{"
+                + "id="
+                + id
+                + ", isOfficial="
+                + isOfficial
+                + ", title='"
+                + title
+                + '\''
+                + ", capability="
+                + capability
+                + ", imgSrc='"
+                + imgSrc
+                + '\''
+                + ", createdAt="
+                + createdAt
+                + ", updatedAt="
+                + updatedAt
+                + ", region="
+                + region
+                + ", host="
+                + host.getNickname()
+                + ", chatRoomHashtags="
+                + chatRoomHashtags
+                + '}';
     }
 }

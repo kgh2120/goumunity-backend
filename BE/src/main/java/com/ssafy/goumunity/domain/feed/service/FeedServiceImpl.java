@@ -1,7 +1,5 @@
 package com.ssafy.goumunity.domain.feed.service;
 
-import com.ssafy.goumunity.common.exception.CustomErrorCode;
-import com.ssafy.goumunity.common.exception.CustomException;
 import com.ssafy.goumunity.common.exception.feed.ResourceNotFoundException;
 import com.ssafy.goumunity.domain.feed.controller.request.FeedRegistRequest;
 import com.ssafy.goumunity.domain.feed.controller.response.FeedResponse;
@@ -9,6 +7,8 @@ import com.ssafy.goumunity.domain.feed.domain.Feed;
 import com.ssafy.goumunity.domain.feed.infra.feed.FeedEntity;
 import com.ssafy.goumunity.domain.feed.service.post.FeedRepository;
 import com.ssafy.goumunity.domain.user.domain.User;
+import com.ssafy.goumunity.domain.user.exception.UserErrorCode;
+import com.ssafy.goumunity.domain.user.exception.UserException;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -34,16 +34,16 @@ public class FeedServiceImpl implements FeedService {
     }
 
     @Override
-    public Feed save(FeedRegistRequest feedRegistRequest) {
-        return feedRepository.save(FeedEntity.from(Feed.from(feedRegistRequest)));
+    public void save(FeedRegistRequest feedRegistRequest, User user) {
+        feedRepository.save(FeedEntity.from(Feed.from(feedRegistRequest, user)));
     }
 
     @Override
     public void deleteOneByFeedId(Long feedId, User user) {
         Optional<Feed> feed = feedRepository.findOneByFeedId(feedId);
         if (feed.isEmpty()) throw new ResourceNotFoundException(feedId + " 번 피드를 찾을 수 없습니다.", this);
-        else if (feed.get().getUserId() != user.getId())
-            throw new CustomException(CustomErrorCode.INVALID_USER);
+        else if (!feed.get().getUserId().equals(user.getId()))
+            throw new UserException(UserErrorCode.INVALID_USER);
         else {
             // 1. 피드 삭제
             feedRepository.delete(FeedEntity.from(feed.get()));

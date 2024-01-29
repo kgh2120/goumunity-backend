@@ -35,8 +35,9 @@ public class FeedController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> save(@RequestBody @Valid FeedRegistRequest feedRegistRequest) {
-        feedService.save(feedRegistRequest);
+    public ResponseEntity<Void> save(
+            @RequestBody @Valid FeedRegistRequest feedRegistRequest, @AuthenticationPrincipal User user) {
+        feedService.save(feedRegistRequest, user);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
