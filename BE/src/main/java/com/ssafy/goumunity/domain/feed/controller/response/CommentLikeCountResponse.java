@@ -9,9 +9,7 @@ import lombok.*;
 public class CommentLikeCountResponse {
     private Integer likeCount;
 
-    public static CommentLikeCountResponse from(Integer likeCount){
-        return CommentLikeCountResponse.builder()
-                .likeCount(likeCount)
-                .build();
+    public static CommentLikeCountResponse from(Integer likeCount) {
+        return CommentLikeCountResponse.builder().likeCount(likeCount).build();
     }
 }

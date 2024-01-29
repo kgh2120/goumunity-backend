@@ -10,5 +10,4 @@ public class CommentLikeRequest {
 
     private Long commentId;
     private Long userId;
-
 }
