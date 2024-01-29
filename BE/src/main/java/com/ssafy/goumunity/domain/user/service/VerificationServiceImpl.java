@@ -1,8 +1,8 @@
 package com.ssafy.goumunity.domain.user.service;
 
-import com.ssafy.goumunity.common.exception.CustomErrorCode;
-import com.ssafy.goumunity.common.exception.CustomException;
 import com.ssafy.goumunity.domain.user.dto.VerificationCodeDto;
+import com.ssafy.goumunity.domain.user.exception.UserErrorCode;
+import com.ssafy.goumunity.domain.user.exception.UserException;
 import com.ssafy.goumunity.domain.user.service.port.MailSender;
 import com.ssafy.goumunity.domain.user.service.port.UserRepository;
 import java.security.NoSuchAlgorithmException;
@@ -28,7 +28,7 @@ public class VerificationServiceImpl implements VerificationService {
         try {
             // 이메일 중복 검사
             if (userRepository.existsByEmail(email)) {
-                throw new CustomException(CustomErrorCode.EXIST_EMAIL);
+                throw new UserException(UserErrorCode.EXIST_EMAIL);
             }
 
             String title = "거뮤니티 이메일 인증 번호";
@@ -40,7 +40,7 @@ public class VerificationServiceImpl implements VerificationService {
 
             mailSender.send(email, title, authCode);
         } catch (NoSuchAlgorithmException e) {
-            throw new CustomException(CustomErrorCode.EMAIL_NOT_FOUND);
+            throw new UserException(UserErrorCode.EMAIL_NOT_FOUND);
         }
     }
 

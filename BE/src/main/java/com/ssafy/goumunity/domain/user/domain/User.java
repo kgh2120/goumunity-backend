@@ -1,9 +1,10 @@
 package com.ssafy.goumunity.domain.user.domain;
 
-import com.ssafy.goumunity.common.exception.CustomErrorCode;
 import com.ssafy.goumunity.common.exception.CustomException;
 import com.ssafy.goumunity.domain.user.dto.UserCreateDto;
 import com.ssafy.goumunity.domain.user.dto.UserUpdateDto;
+import com.ssafy.goumunity.domain.user.exception.UserErrorCode;
+import com.ssafy.goumunity.domain.user.exception.UserException;
 import java.time.Instant;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -83,7 +84,7 @@ public class User {
         }
 
         if (emptyCheckFlag) {
-            throw new CustomException(CustomErrorCode.NO_INPUT_FOR_MODIFY_USER_INFO);
+            throw new UserException(UserErrorCode.NO_INPUT_FOR_MODIFY_USER_INFO);
         }
     }
 

@@ -1,11 +1,11 @@
 package com.ssafy.goumunity.domain.user.service;
 
-import com.ssafy.goumunity.common.exception.CustomErrorCode;
-import com.ssafy.goumunity.common.exception.CustomException;
 import com.ssafy.goumunity.domain.user.domain.User;
 import com.ssafy.goumunity.domain.user.domain.UserStatus;
 import com.ssafy.goumunity.domain.user.dto.UserCreateDto;
 import com.ssafy.goumunity.domain.user.dto.UserUpdateDto;
+import com.ssafy.goumunity.domain.user.exception.UserErrorCode;
+import com.ssafy.goumunity.domain.user.exception.UserException;
 import com.ssafy.goumunity.domain.user.service.port.ProfileImageUploader;
 import com.ssafy.goumunity.domain.user.service.port.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +30,7 @@ public class UserServiceImpl implements UserService {
     public User saveUser(UserCreateDto userCreateDto, MultipartFile profileImage) {
         // 이메일 중복 검사
         if (userRepository.existsByEmail(userCreateDto.getEmail())) {
-            throw new CustomException(CustomErrorCode.EXIST_EMAIL);
+            throw new UserException(UserErrorCode.EXIST_EMAIL);
         }
 
         String imgPath = profileImageUploader.uploadProfileImage(profileImage);
@@ -42,7 +42,7 @@ public class UserServiceImpl implements UserService {
     public User findUserByEmail(String email) {
         return userRepository
                 .findByEmailAndStatus(email, UserStatus.ACTIVE)
-                .orElseThrow(() -> new CustomException(CustomErrorCode.EMAIL_NOT_FOUND));
+                .orElseThrow(() -> new UserException(UserErrorCode.EMAIL_NOT_FOUND));
     }
 
     @Override

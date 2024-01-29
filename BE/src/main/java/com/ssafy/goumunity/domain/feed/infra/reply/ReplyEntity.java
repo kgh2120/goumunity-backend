@@ -19,8 +19,8 @@ public class ReplyEntity {
     @Column(name = "reply_id")
     private Long replyId;
 
-    @Column(name = "comment")
-    private String comment;
+    @Column(name = "content")
+    private String content;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "comment_id")
@@ -41,7 +41,9 @@ public class ReplyEntity {
     public Reply to() {
         return Reply.builder()
                 .replyId(replyId)
-                .comment(comment)
+                .content(content)
+                .commentId(commentEntity.getCommentId())
+                .userId(userEntity.getId())
                 .createdAt(createdAt)
                 .updatedAt(updatedAt)
                 .build();
@@ -50,8 +52,12 @@ public class ReplyEntity {
     public static ReplyEntity from(Reply reply) {
 
         ReplyEntityBuilder replyEntityBuilder =
-                ReplyEntity.builder().replyId(reply.getReplyId()).comment(reply.getComment());
+                ReplyEntity.builder()
+                        .content(reply.getContent())
+                        .commentEntity(CommentEntity.commentEntityOnlyWithId(reply.getCommentId()))
+                        .userEntity(UserEntity.userEntityOnlyWithId(reply.getUserId()));
 
+        if (reply.getReplyId() != null) replyEntityBuilder.replyId(reply.getReplyId());
         if (reply.getCreatedAt() != null) replyEntityBuilder.createdAt(reply.getCreatedAt());
         if (reply.getUpdatedAt() != null) replyEntityBuilder.updatedAt(reply.getUpdatedAt());
 
