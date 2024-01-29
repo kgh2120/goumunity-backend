@@ -13,6 +13,7 @@ import com.ssafy.goumunity.domain.feed.domain.Feed;
 import com.ssafy.goumunity.domain.feed.domain.FeedCategory;
 import com.ssafy.goumunity.domain.feed.service.FeedImgService;
 import com.ssafy.goumunity.domain.feed.service.FeedService;
+import com.ssafy.goumunity.domain.user.domain.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -69,10 +70,11 @@ class FeedControllerTest {
                             .afterPrice(5000)
                             .profit(5000)
                             .regionId(Long.valueOf(1))
-                            .userId(Long.valueOf(1))
                             .build();
 
-            Feed feed = Feed.from(feedRegistRequest);
+            User user = User.builder().id(Long.valueOf(1)).build();
+
+            Feed feed = Feed.from(feedRegistRequest, user);
 
             FeedResponse feedResponse = FeedResponse.from(feed);
 
@@ -93,7 +95,9 @@ class FeedControllerTest {
 
             feedRegistRequest = FeedRegistRequest.builder().build();
 
-            Feed feed = Feed.from(feedRegistRequest);
+            User user = User.builder().id(Long.valueOf(1)).build();
+
+            Feed feed = Feed.from(feedRegistRequest, user);
 
             FeedResponse feedResponse = FeedResponse.from(feed);
 
