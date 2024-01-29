@@ -3,6 +3,7 @@ package com.ssafy.goumunity.domain.chat.service;
 import static com.ssafy.goumunity.domain.chat.exception.ChatErrorCode.*;
 
 import com.ssafy.goumunity.domain.chat.controller.request.ChatRoomRequest;
+import com.ssafy.goumunity.domain.chat.controller.response.ChatRoomSearchResponse;
 import com.ssafy.goumunity.domain.chat.domain.ChatRoom;
 import com.ssafy.goumunity.domain.chat.exception.ChatErrorCode;
 import com.ssafy.goumunity.domain.chat.exception.ChatException;
@@ -12,6 +13,8 @@ import com.ssafy.goumunity.domain.chat.service.port.RegionFindService;
 import com.ssafy.goumunity.domain.user.domain.User;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -47,6 +50,12 @@ public class ChatRoomServiceImpl implements ChatRoomService {
         // 유저가 이미 가입했는지 체크
         verifyConnectChatRoom(chatRoomId, user);
         chatRoomRepository.connectChatRoom(chatRoomId, user.getId());
+    }
+
+    @Override
+    public Slice<ChatRoomSearchResponse> searchChatRoom(
+            String keyword, Long time, Pageable pageable) {
+        return chatRoomRepository.searchChatRoom(keyword, time, pageable);
     }
 
     private void verifyConnectChatRoom(Long chatRoomId, User user) {

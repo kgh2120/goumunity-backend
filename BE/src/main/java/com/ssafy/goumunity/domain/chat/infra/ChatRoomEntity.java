@@ -10,13 +10,15 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.time.Instant;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
+import java.util.ArrayList;
+import java.util.List;
+import lombok.*;
+import org.hibernate.annotations.BatchSize;
 
+@Getter
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Builder
@@ -38,7 +40,7 @@ public class ChatRoomEntity {
     @Column(name = "capability")
     private Integer capability;
 
-    @Column(name = "current_user")
+    @Column(name = "current_users")
     private Integer currentUser;
 
     @Column(name = "img_src")
@@ -60,7 +62,9 @@ public class ChatRoomEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     private UserEntity host;
 
-    // private List<ChatRoomHashtag> chatRoomHashtags;
+    @BatchSize(size = 5)
+    @OneToMany(mappedBy = "chatRoom")
+    private List<ChatRoomHashtagEntity> chatRoomHashtags = new ArrayList<>();
 
     public static ChatRoomEntity from(ChatRoom chatRoom) {
         ChatRoomEntityBuilder chatRoomEntityBuilder =
@@ -105,5 +109,35 @@ public class ChatRoomEntity {
 
     public static ChatRoomEntity chatRoomEntityOnlyWithId(Long chatRoomId) {
         return ChatRoomEntity.builder().id(chatRoomId).build();
+    }
+
+    @Override
+    public String toString() {
+        return "ChatRoomEntity{"
+                + "id="
+                + id
+                + ", isOfficial="
+                + isOfficial
+                + ", title='"
+                + title
+                + '\''
+                + ", capability="
+                + capability
+                + ", currentUser="
+                + currentUser
+                + ", imgSrc='"
+                + imgSrc
+                + '\''
+                + ", createdAt="
+                + createdAt
+                + ", updatedAt="
+                + updatedAt
+                + ", region="
+                + region
+                + ", host="
+                + host.getNickname()
+                + ", chatRoomHashtags="
+                + chatRoomHashtags
+                + '}';
     }
 }

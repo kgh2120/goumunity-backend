@@ -47,4 +47,16 @@ public class ChatRoomHashtagEntity {
     public ChatRoomHashtag to() {
         return ChatRoomHashtag.builder().id(this.id).sequence(this.sequence).build();
     }
+
+    @Override
+    public String toString() {
+        return "ChatRoomHashtagEntity{"
+                + "id="
+                + id
+                + ", sequence="
+                + sequence
+                + ", hashtag="
+                + hashtag.getName()
+                + '}';
+    }
 }
