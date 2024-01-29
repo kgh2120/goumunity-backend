@@ -4,9 +4,8 @@ import com.ssafy.goumunity.domain.region.controller.request.RegionRegistRequest;
 import com.ssafy.goumunity.domain.region.controller.response.RegionResponse;
 import com.ssafy.goumunity.domain.region.domain.Region;
 import com.ssafy.goumunity.domain.region.service.RegionService;
-import java.util.List;
-
 import jakarta.validation.Valid;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -35,11 +34,5 @@ public class RegionController {
     public ResponseEntity<Region> save(@RequestBody @Valid RegionRegistRequest regionRegistRequest) {
         Region region = regionService.save(regionRegistRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(region);
-    }
-
-    @DeleteMapping("/{regionId}")
-    public ResponseEntity<Void> deleteOneByRegionId(@PathVariable Long regionId){
-        regionService.deleteOneByRegionId(regionId);
-        return ResponseEntity.ok().build();
     }
 }

@@ -5,13 +5,14 @@ import com.ssafy.goumunity.domain.feed.controller.response.FeedImgResponse;
 import com.ssafy.goumunity.domain.feed.controller.response.FeedResponse;
 import com.ssafy.goumunity.domain.feed.service.FeedImgService;
 import com.ssafy.goumunity.domain.feed.service.FeedService;
-import java.util.List;
-
+import com.ssafy.goumunity.domain.user.domain.User;
 import jakarta.validation.Valid;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -34,17 +35,15 @@ public class FeedController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> save(@RequestBody @Valid FeedRegistRequest feedRegistRequest){
+    public ResponseEntity<Void> save(@RequestBody @Valid FeedRegistRequest feedRegistRequest) {
         feedService.save(feedRegistRequest);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @DeleteMapping("/{feedId}")
-    public ResponseEntity<Void> deleteOneByFeedId(@PathVariable Long feedId){
-        
-        // TODO : user통합시 현재유저 검증 과정 추가 필요
-        
-        feedService.deleteOneByFeedId(feedId, Long.valueOf(1));
-        return  ResponseEntity.ok().build();
+    public ResponseEntity<Void> deleteOneByFeedId(
+            @PathVariable Long feedId, @AuthenticationPrincipal User user) {
+        feedService.deleteOneByFeedId(feedId, user);
+        return ResponseEntity.ok().build();
     }
 }

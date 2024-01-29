@@ -35,11 +35,6 @@ public class RegionRepositoryImpl implements RegionRepository {
     }
 
     @Override
-    public void delete(RegionEntity regionEntity) {
-        regionRepository.delete(regionEntity);
-    }
-
-    @Override
     public boolean isExistsRegion(Long id) {
         return regionRepository.existsById(id);
     }

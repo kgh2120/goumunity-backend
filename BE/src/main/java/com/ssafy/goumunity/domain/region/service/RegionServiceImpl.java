@@ -8,8 +8,6 @@ import com.ssafy.goumunity.domain.region.domain.Region;
 import com.ssafy.goumunity.domain.region.infra.RegionEntity;
 import com.ssafy.goumunity.domain.region.service.port.RegionRepository;
 import java.util.List;
-import java.util.Optional;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -39,13 +37,6 @@ public class RegionServiceImpl implements RegionService {
         } else {
             return regionRepository.save(RegionEntity.from(Region.from(regionRegistRequest))).to();
         }
-    }
-
-    @Override
-    public void deleteOneByRegionId(Long regionId) {
-       Optional<Region> region = regionRepository.findOneByRegionId(regionId);
-       if(region.isEmpty()) throw new ResourceNotFoundException("해당 지역을 찾을 수 없습니다.", this);
-       else regionRepository.delete(RegionEntity.from(region.get()));
     }
 
     @Override

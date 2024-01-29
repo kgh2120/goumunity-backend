@@ -3,7 +3,7 @@ package com.ssafy.goumunity.domain.feed.service;
 import com.ssafy.goumunity.domain.feed.controller.request.FeedRegistRequest;
 import com.ssafy.goumunity.domain.feed.controller.response.FeedResponse;
 import com.ssafy.goumunity.domain.feed.domain.Feed;
-
+import com.ssafy.goumunity.domain.user.domain.User;
 import java.util.List;
 
 public interface FeedService {
@@ -13,5 +13,5 @@ public interface FeedService {
 
     Feed save(FeedRegistRequest feedRegistRequest);
 
-    void deleteOneByFeedId(Long feedId, Long userId);
+    void deleteOneByFeedId(Long feedId, User user);
 }

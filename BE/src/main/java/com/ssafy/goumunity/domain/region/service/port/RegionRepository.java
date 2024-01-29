@@ -15,8 +15,6 @@ public interface RegionRepository {
 
     RegionEntity save(RegionEntity regionEntity);
 
-    void delete(RegionEntity regionEntity);
-
     boolean isExistsRegion(Long id);
 
     boolean isExistsRegion(RegionRegistRequest regionRegistRequest);
