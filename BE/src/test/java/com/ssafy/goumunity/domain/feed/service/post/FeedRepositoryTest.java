@@ -1,6 +1,7 @@
 package com.ssafy.goumunity.domain.feed.service.post;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 
 import com.ssafy.goumunity.domain.feed.domain.FeedCategory;
 import com.ssafy.goumunity.domain.feed.infra.feed.FeedEntity;
@@ -12,6 +13,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.BDDMockito;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -40,6 +42,8 @@ class FeedRepositoryTest {
                             .userEntity(UserEntity.builder().build())
                             .regionEntity(RegionEntity.builder().build())
                             .build();
+
+            BDDMockito.given(feedJpaRepository.save(any())).willReturn(feedEntity);
 
             assertDoesNotThrow(() -> feedRepository.save(feedEntity));
         }
