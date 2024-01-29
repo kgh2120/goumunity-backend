@@ -9,18 +9,19 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ssafy.goumunity.common.exception.CustomErrorCode;
-import com.ssafy.goumunity.common.exception.CustomException;
 import com.ssafy.goumunity.common.exception.GlobalErrorCode;
 import com.ssafy.goumunity.common.exception.GlobalExceptionHandler;
 import com.ssafy.goumunity.config.SecurityConfig;
 import com.ssafy.goumunity.config.security.CustomDetails;
+import com.ssafy.goumunity.domain.feed.service.FeedService;
 import com.ssafy.goumunity.domain.user.controller.UserController;
 import com.ssafy.goumunity.domain.user.domain.User;
 import com.ssafy.goumunity.domain.user.domain.UserCategory;
 import com.ssafy.goumunity.domain.user.dto.PasswordDto;
 import com.ssafy.goumunity.domain.user.dto.UserCreateDto;
 import com.ssafy.goumunity.domain.user.dto.UserUpdateDto;
+import com.ssafy.goumunity.domain.user.exception.UserErrorCode;
+import com.ssafy.goumunity.domain.user.exception.UserException;
 import com.ssafy.goumunity.domain.user.service.UserService;
 import com.ssafy.goumunity.domain.user.service.VerificationService;
 import org.junit.jupiter.api.DisplayName;
@@ -53,6 +54,7 @@ class UserControllerTest {
     @MockBean private UserService userService;
 
     @MockBean private VerificationService verificationService;
+    @MockBean private FeedService feedService;
 
     @Autowired private MockMvc mockMvc;
 
@@ -88,7 +90,7 @@ class UserControllerTest {
         MockMultipartFile image = new MockMultipartFile("image", "test.jpg".getBytes());
 
         given(userService.saveUser(any(), any()))
-                .willThrow(new CustomException(CustomErrorCode.EXIST_EMAIL));
+                .willThrow(new UserException(UserErrorCode.EXIST_EMAIL));
 
         this.mockMvc
                 .perform(
@@ -127,7 +129,7 @@ class UserControllerTest {
         UserCreateDto user = userCreateDto();
 
         given(userService.findUserByEmail(any()))
-                .willThrow(new CustomException(CustomErrorCode.EMAIL_NOT_FOUND));
+                .willThrow(new UserException(UserErrorCode.EMAIL_NOT_FOUND));
 
         this.mockMvc
                 .perform(get("/api/users/" + user.getEmail()))
@@ -245,7 +247,7 @@ class UserControllerTest {
         MockHttpSession session = new MockHttpSession();
 
         given(userService.modifyUser(any(), any()))
-                .willThrow(new CustomException(CustomErrorCode.NO_INPUT_FOR_MODIFY_USER_INFO));
+                .willThrow(new UserException(UserErrorCode.NO_INPUT_FOR_MODIFY_USER_INFO));
 
         this.mockMvc
                 .perform(
@@ -256,10 +258,10 @@ class UserControllerTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(
                         jsonPath("$.errorName")
-                                .value(CustomErrorCode.NO_INPUT_FOR_MODIFY_USER_INFO.getErrorName()))
+                                .value(UserErrorCode.NO_INPUT_FOR_MODIFY_USER_INFO.getErrorName()))
                 .andExpect(
                         jsonPath("$.errorMessage")
-                                .value(CustomErrorCode.NO_INPUT_FOR_MODIFY_USER_INFO.getErrorMessage()))
+                                .value(UserErrorCode.NO_INPUT_FOR_MODIFY_USER_INFO.getErrorMessage()))
                 .andDo(print());
     }
 

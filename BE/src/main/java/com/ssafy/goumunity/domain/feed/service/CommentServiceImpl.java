@@ -1,10 +1,10 @@
 package com.ssafy.goumunity.domain.feed.service;
 
-import com.ssafy.goumunity.common.exception.CustomErrorCode;
-import com.ssafy.goumunity.common.exception.CustomException;
 import com.ssafy.goumunity.domain.feed.controller.request.CommentRequest;
 import com.ssafy.goumunity.domain.feed.controller.response.CommentResponse;
 import com.ssafy.goumunity.domain.feed.domain.Comment;
+import com.ssafy.goumunity.domain.feed.exception.CommentErrorCode;
+import com.ssafy.goumunity.domain.feed.exception.CommentException;
 import com.ssafy.goumunity.domain.feed.service.post.CommentRepository;
 import java.time.Instant;
 import lombok.RequiredArgsConstructor;
@@ -38,7 +38,7 @@ public class CommentServiceImpl implements CommentService {
         Comment originalComment =
                 commentRepository
                         .findOneById(commentId)
-                        .orElseThrow(() -> new CustomException(CustomErrorCode.COMMENT_NOT_FOUND));
+                        .orElseThrow(() -> new CommentException(CommentErrorCode.COMMENT_NOT_FOUND));
 
         // 조회해온 comment의 작성자와 세션에 로그인 되어 있는 유저가 다르면 exception 발생
         originalComment.checkUser(userId);
@@ -56,7 +56,7 @@ public class CommentServiceImpl implements CommentService {
         Comment originalComment =
                 commentRepository
                         .findOneById(commentId)
-                        .orElseThrow(() -> new CustomException(CustomErrorCode.COMMENT_NOT_FOUND));
+                        .orElseThrow(() -> new CommentException(CommentErrorCode.COMMENT_NOT_FOUND));
 
         // 조회해온 comment의 작성자와 세션에 로그인 되어 있는 유저가 다르면 exception 발생
         originalComment.checkUser(userId);
@@ -68,5 +68,10 @@ public class CommentServiceImpl implements CommentService {
         // TODO: 댓글을 참조하는 답글(Reply) 모두 삭제하기
 
         commentRepository.delete(originalComment);
+    }
+
+    @Override
+    public boolean isExistComment(Long commentId) {
+        return commentRepository.existsById(commentId);
     }
 }

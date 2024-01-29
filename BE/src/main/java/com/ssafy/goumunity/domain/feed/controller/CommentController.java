@@ -1,5 +1,6 @@
 package com.ssafy.goumunity.domain.feed.controller;
 
+import com.ssafy.goumunity.common.util.SliceResponse;
 import com.ssafy.goumunity.domain.feed.controller.request.CommentRequest;
 import com.ssafy.goumunity.domain.feed.controller.response.CommentResponse;
 import com.ssafy.goumunity.domain.feed.domain.Comment;
@@ -31,9 +32,10 @@ public class CommentController {
     }
 
     @GetMapping
-    public ResponseEntity<Slice<CommentResponse>> findAllComments(
+    public ResponseEntity<SliceResponse<CommentResponse>> findAllComments(
             @PathVariable("feed-id") Long id, @RequestParam("time") Long time, Pageable pageable) {
-        return ResponseEntity.ok(commentService.findAllByFeedId(id, time, pageable));
+        Slice<CommentResponse> comments = commentService.findAllByFeedId(id, time, pageable);
+        return ResponseEntity.ok(SliceResponse.from(comments.getContent(), comments.hasNext()));
     }
 
     @PutMapping("/{comment-id}")

@@ -14,4 +14,6 @@ public interface CommentService {
     Comment modifyComment(Long userId, Long feedId, Long commentId, CommentRequest.Modify comment);
 
     void deleteComment(Long userId, Long feedId, Long commentId);
+
+    boolean isExistComment(Long commentId);
 }

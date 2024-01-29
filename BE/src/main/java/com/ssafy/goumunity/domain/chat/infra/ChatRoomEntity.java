@@ -5,11 +5,10 @@ import com.ssafy.goumunity.domain.region.infra.RegionEntity;
 import com.ssafy.goumunity.domain.user.infra.UserEntity;
 import jakarta.persistence.*;
 import java.time.Instant;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
+import java.util.List;
+import lombok.*;
 
+@Getter
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Builder
@@ -28,14 +27,8 @@ public class ChatRoomEntity {
     @Column(name = "title", length = 20)
     private String title;
 
-    @Column(name = "hashtag", columnDefinition = "TEXT")
-    private String hashtag;
-
     @Column(name = "capability")
     private Integer capability;
-
-    @Column(name = "current_user")
-    private Integer currentUser;
 
     @Column(name = "img_src")
     private String imgSrc;
@@ -56,15 +49,18 @@ public class ChatRoomEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     private UserEntity host;
 
+    // private List<ChatRoomHashtag> chatRoomHashtags;
+
+    @OneToMany(mappedBy = "chatRoom")
+    private List<UserChatRoomEntity> userChatRooms;
+
     public static ChatRoomEntity from(ChatRoom chatRoom) {
         ChatRoomEntityBuilder chatRoomEntityBuilder =
                 ChatRoomEntity.builder()
                         .id(chatRoom.getId())
                         .isOfficial(chatRoom.getIsOfficial())
                         .title(chatRoom.getTitle())
-                        .hashtag(chatRoom.getHashtag())
                         .capability(chatRoom.getCapability())
-                        .currentUser(chatRoom.getCurrentUser())
                         .imgSrc(chatRoom.getImgSrc());
         // TODO UserEntity, ReginEntity 추가 필요
 
@@ -79,15 +75,26 @@ public class ChatRoomEntity {
                 .id(this.id)
                 .isOfficial(this.isOfficial)
                 .title(this.title)
-                .hashtag(this.hashtag)
                 .capability(this.capability)
-                .currentUser(this.currentUser)
                 .imgSrc(this.imgSrc)
                 .createdAt(this.createdAt)
                 .updatedAt(this.updatedAt)
+                .currentUserCount(userChatRooms.size())
                 // TODO 이후 추가 필요
                 //                .region()
                 //                .host()
                 .build();
+    }
+
+    public void associatedWithUserEntity(UserEntity userEntity) {
+        this.host = userEntity;
+    }
+
+    public void associatedWithRegionEntity(RegionEntity region) {
+        this.region = region;
+    }
+
+    public static ChatRoomEntity chatRoomEntityOnlyWithId(Long chatRoomId) {
+        return ChatRoomEntity.builder().id(chatRoomId).build();
     }
 }

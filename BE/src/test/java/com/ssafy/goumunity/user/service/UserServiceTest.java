@@ -33,14 +33,13 @@ public class UserServiceTest {
 
     @Test
     void 유저_생성_테스트() throws Exception {
-
         Clock fixed = Clock.fixed(Instant.now(), ZoneId.of(ZoneId.systemDefault().getId()));
         // given
         UserCreateDto userCreateDto =
                 UserCreateDto.builder()
                         .email("ssafy@naver.com")
                         .password("1q2w3e4r!@Q")
-                        .monthBudget(30_0000L)
+                        .monthBudget(30_0000_0000L)
                         .age(27)
                         .userCategory(UserCategory.JOB_SEEKER)
                         .gender(1)

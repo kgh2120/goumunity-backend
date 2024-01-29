@@ -8,19 +8,21 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ssafy.goumunity.common.exception.CustomErrorCode;
-import com.ssafy.goumunity.common.exception.CustomException;
 import com.ssafy.goumunity.common.exception.GlobalExceptionHandler;
 import com.ssafy.goumunity.config.SecurityConfig;
 import com.ssafy.goumunity.config.security.CustomDetails;
 import com.ssafy.goumunity.domain.feed.controller.request.CommentRequest;
 import com.ssafy.goumunity.domain.feed.controller.response.CommentResponse;
 import com.ssafy.goumunity.domain.feed.domain.Comment;
+import com.ssafy.goumunity.domain.feed.exception.CommentErrorCode;
+import com.ssafy.goumunity.domain.feed.exception.CommentException;
 import com.ssafy.goumunity.domain.feed.service.CommentService;
 import com.ssafy.goumunity.domain.user.domain.User;
 import com.ssafy.goumunity.domain.user.domain.UserCategory;
 import com.ssafy.goumunity.domain.user.dto.UserCreateDto;
 import com.ssafy.goumunity.domain.user.dto.UserResponse;
+import com.ssafy.goumunity.domain.user.exception.UserErrorCode;
+import com.ssafy.goumunity.domain.user.exception.UserException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.MissingFormatArgumentException;
@@ -199,7 +201,7 @@ class CommentControllerTest {
 
         this.mockMvc
                 .perform(
-                        put("/api/feeds/" + feedId + "/comments/" + modifiedComment.getFeedId())
+                        put("/api/feeds/" + feedId + "/comments/" + modifiedComment.getCommentId())
                                 .with(SecurityMockMvcRequestPostProcessors.user(new CustomDetails(user)))
                                 .content(mapper.writeValueAsString(comment))
                                 .contentType(MediaType.APPLICATION_JSON)
@@ -249,7 +251,7 @@ class CommentControllerTest {
         Comment modifiedComment = Comment.builder().commentId(1L).userId(3L).feedId(1L).build();
 
         given(commentService.modifyComment(any(), any(), any(), any()))
-                .willThrow(new CustomException(CustomErrorCode.INVALID_USER));
+                .willThrow(new UserException(UserErrorCode.INVALID_USER));
 
         this.mockMvc
                 .perform(
@@ -259,8 +261,8 @@ class CommentControllerTest {
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .session(session))
                 .andExpect(status().isForbidden())
-                .andExpect(jsonPath("$.errorName").value(CustomErrorCode.INVALID_USER.getErrorName()))
-                .andExpect(jsonPath("$.errorMessage").value(CustomErrorCode.INVALID_USER.getErrorMessage()))
+                .andExpect(jsonPath("$.errorName").value(UserErrorCode.INVALID_USER.getErrorName()))
+                .andExpect(jsonPath("$.errorMessage").value(UserErrorCode.INVALID_USER.getErrorMessage()))
                 .andDo(print());
     }
 
@@ -277,7 +279,7 @@ class CommentControllerTest {
         Comment modifiedComment = Comment.builder().commentId(1L).userId(3L).feedId(1L).build();
 
         given(commentService.modifyComment(any(), any(), any(), any()))
-                .willThrow(new CustomException(CustomErrorCode.FEED_NOT_MATCH));
+                .willThrow(new CommentException(CommentErrorCode.FEED_NOT_MATCH));
 
         this.mockMvc
                 .perform(
@@ -287,9 +289,9 @@ class CommentControllerTest {
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .session(session))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.errorName").value(CustomErrorCode.FEED_NOT_MATCH.getErrorName()))
+                .andExpect(jsonPath("$.errorName").value(CommentErrorCode.FEED_NOT_MATCH.getErrorName()))
                 .andExpect(
-                        jsonPath("$.errorMessage").value(CustomErrorCode.FEED_NOT_MATCH.getErrorMessage()))
+                        jsonPath("$.errorMessage").value(CommentErrorCode.FEED_NOT_MATCH.getErrorMessage()))
                 .andDo(print());
     }
 
