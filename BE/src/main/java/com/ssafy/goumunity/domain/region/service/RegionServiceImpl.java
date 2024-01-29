@@ -31,11 +31,11 @@ public class RegionServiceImpl implements RegionService {
     }
 
     @Override
-    public Region save(RegionRegistRequest regionRegistRequest) {
+    public void save(RegionRegistRequest regionRegistRequest) {
         if (regionRepository.isExistsRegion(regionRegistRequest)) {
             throw new DataExistException(this);
         } else {
-            return regionRepository.save(RegionEntity.from(Region.from(regionRegistRequest))).to();
+            regionRepository.save(RegionEntity.from(Region.from(regionRegistRequest)));
         }
     }
 

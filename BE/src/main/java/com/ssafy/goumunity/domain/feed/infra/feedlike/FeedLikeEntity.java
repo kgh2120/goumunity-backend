@@ -6,6 +6,8 @@ import com.ssafy.goumunity.domain.user.infra.UserEntity;
 import jakarta.persistence.*;
 import java.time.Instant;
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @Builder
@@ -26,6 +28,7 @@ public class FeedLikeEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "feed_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private FeedEntity feedEntity;
 
     @Column(name = "created_at", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
@@ -39,6 +42,8 @@ public class FeedLikeEntity {
     public FeedLike to() {
         return FeedLike.builder()
                 .feedLikeId(feedLikeId)
+                .userId(userEntity.getId())
+                .feedId(feedEntity.getFeedId())
                 .createdAt(createdAt)
                 .updatedAt(updatedAt)
                 .build();
@@ -46,7 +51,10 @@ public class FeedLikeEntity {
 
     public static FeedLikeEntity from(FeedLike feedLike) {
         FeedLikeEntityBuilder feedLikeEntityBuilder =
-                FeedLikeEntity.builder().feedLikeId(feedLike.getFeedLikeId());
+                FeedLikeEntity.builder()
+                        .feedLikeId(feedLike.getFeedLikeId())
+                        .userEntity(UserEntity.userEntityOnlyWithId(feedLike.getUserId()))
+                        .feedEntity(FeedEntity.feedEntityOnlyWithId(feedLike.getFeedId()));
 
         if (feedLike.getCreatedAt() != null) feedLikeEntityBuilder.createdAt(feedLike.getCreatedAt());
         if (feedLike.getUpdatedAt() != null) feedLikeEntityBuilder.updatedAt(feedLike.getUpdatedAt());

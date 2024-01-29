@@ -8,13 +8,11 @@ import com.ssafy.goumunity.common.exception.feed.ResourceNotFoundException;
 import com.ssafy.goumunity.domain.region.controller.request.RegionRegistRequest;
 import com.ssafy.goumunity.domain.region.controller.response.RegionResponse;
 import com.ssafy.goumunity.domain.region.domain.Region;
-import com.ssafy.goumunity.domain.region.infra.RegionEntity;
 import com.ssafy.goumunity.domain.region.service.port.RegionRepository;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -31,50 +29,17 @@ class RegionServiceImplTest {
 
     @InjectMocks RegionServiceImpl regionService;
 
-    @Nested
-    class 입력테스트 {
-        @Test
-        @DisplayName("단건입력테스트_성공")
-        void 정상입력테스트() {
+    @Test
+    @DisplayName("중복입력테스트_성공")
+    void 중복입력테스트() {
 
-            RegionRegistRequest regionRegistRequest =
-                    RegionRegistRequest.builder().si("서울시").gungu("중구").build();
+        RegionRegistRequest regionRegistRequest =
+                RegionRegistRequest.builder().si("서울시").gungu("중구").build();
 
-            RegionEntity savedRegionEntity =
-                    RegionEntity.builder()
-                            .regionId(Long.valueOf(1))
-                            .si("서울시")
-                            .gungu("중구")
-                            .createdAt(Instant.now())
-                            .updatedAt(Instant.now())
-                            .build();
+        BDDMockito.given(regionRepository.isExistsRegion(any(RegionRegistRequest.class)))
+                .willReturn(true);
 
-            BDDMockito.given(regionRepository.save(any())).willReturn(savedRegionEntity);
-
-            BDDMockito.given(regionRepository.isExistsRegion(regionRegistRequest)).willReturn(false);
-
-            Region result = regionService.save(regionRegistRequest);
-
-            SoftAssertions sa = new SoftAssertions();
-
-            sa.assertThat(result.getSi()).isSameAs("서울시");
-            sa.assertThat(result.getGungu()).isSameAs("중구");
-
-            sa.assertAll();
-        }
-
-        @Test
-        @DisplayName("중복입력테스트_성공")
-        void 중복입력테스트() {
-
-            RegionRegistRequest regionRegistRequest =
-                    RegionRegistRequest.builder().si("서울시").gungu("중구").build();
-
-            BDDMockito.given(regionRepository.isExistsRegion(any(RegionRegistRequest.class)))
-                    .willReturn(true);
-
-            assertThrows(DataExistException.class, () -> regionService.save(regionRegistRequest));
-        }
+        assertThrows(DataExistException.class, () -> regionService.save(regionRegistRequest));
     }
 
     @Nested

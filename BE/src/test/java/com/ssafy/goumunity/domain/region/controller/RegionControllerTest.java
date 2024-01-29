@@ -1,7 +1,6 @@
 package com.ssafy.goumunity.domain.region.controller;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -9,6 +8,7 @@ import com.ssafy.goumunity.config.SecurityConfig;
 import com.ssafy.goumunity.domain.region.controller.request.RegionRegistRequest;
 import com.ssafy.goumunity.domain.region.controller.response.RegionResponse;
 import com.ssafy.goumunity.domain.region.service.RegionService;
+import com.ssafy.goumunity.domain.region.service.port.RegionRepository;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -42,6 +42,8 @@ import org.springframework.test.web.servlet.ResultActions;
 class RegionControllerTest {
 
     @MockBean private RegionService regionService;
+
+    @MockBean private RegionRepository regionRepository;
 
     @Autowired private MockMvc mockMvc;
 

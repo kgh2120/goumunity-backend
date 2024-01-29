@@ -1,10 +1,11 @@
 package com.ssafy.goumunity.domain.region.service.port;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+
 import com.ssafy.goumunity.domain.region.infra.RegionEntity;
 import com.ssafy.goumunity.domain.region.infra.RegionJpaRepository;
 import com.ssafy.goumunity.domain.region.infra.RegionRepositoryImpl;
 import java.time.Instant;
-import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -39,15 +40,7 @@ class RegionRepositoryTest {
 
             BDDMockito.given(regionJpaRepository.save(regionEntity)).willReturn(regionEntity);
 
-            RegionEntity result = regionRepository.save(regionEntity);
-
-            SoftAssertions sa = new SoftAssertions();
-
-            sa.assertThat(result.getRegionId()).isEqualTo(100);
-            sa.assertThat(result.getSi()).isSameAs("서울시");
-            sa.assertThat(result.getGungu()).isSameAs("중구");
-
-            sa.assertAll();
+            assertDoesNotThrow(() -> regionRepository.save(regionEntity));
         }
     }
 }
