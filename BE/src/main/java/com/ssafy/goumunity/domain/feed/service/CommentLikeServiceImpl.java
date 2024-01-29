@@ -14,22 +14,19 @@ public class CommentLikeServiceImpl implements CommentLikeService {
 
     @Override
     public void likeButton(Long commentId, Long userId) {
-        commentLikeRepository
-                .findOneByCommentIdAndUserId(commentId, userId)
-                .orElseThrow(
-                        () -> {
-                            commentLikeRepository.save(
-                                    CommentLikeEntity.from(
-                                            CommentLike.builder().commentId(commentId).userId(userId).build()));
-                            return null;
-                        });
+        if (!commentLikeRepository.existByCommentIdandUserId(commentId, userId)) {
+            commentLikeRepository.save(
+                    CommentLikeEntity.from(
+                            CommentLike.builder().commentId(commentId).userId(userId).build()));
+        }
     }
 
     @Override
     public void unLikeButton(Long commentId, Long userId) {
-        commentLikeRepository
-                .findOneByCommentIdAndUserId(commentId, userId)
-                .ifPresent(
-                        commentLike -> commentLikeRepository.delete(CommentLikeEntity.from(commentLike)));
+        if (commentLikeRepository.existByCommentIdandUserId(commentId, userId)) {
+            commentLikeRepository.delete(
+                    CommentLikeEntity.from(
+                            CommentLike.builder().commentId(commentId).userId(userId).build()));
+        }
     }
 }
