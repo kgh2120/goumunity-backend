@@ -14,12 +14,19 @@ public class FeedImgRepositoryImpl implements FeedImgRepository {
     private final FeedImgJpaRepository feedImgJpaRepository;
 
     @Override
+    public void save(FeedImg feedImg) {
+        feedImgJpaRepository.save(FeedImgEntity.from(feedImg));
+    }
+
+    @Override
     public Optional<FeedImg> findOneByFeedImgId(Long feedImgId) {
         return feedImgJpaRepository.findOneByFeedImgId(feedImgId).map(FeedImgEntity::to);
     }
 
     @Override
     public List<FeedImg> findAllByFeedId(Long feedId) {
-        return feedImgJpaRepository.findAllByFeedId(feedId).stream().map(FeedImgEntity::to).toList();
+        return feedImgJpaRepository.findAllByFeedEntity_FeedIdOrderBySequenceAsc(feedId).stream()
+                .map(FeedImgEntity::to)
+                .toList();
     }
 }

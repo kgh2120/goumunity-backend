@@ -1,7 +1,6 @@
 package com.ssafy.goumunity.domain.feed.domain;
 
-import com.ssafy.goumunity.domain.feed.controller.request.FeedRegistRequest;
-import com.ssafy.goumunity.domain.user.domain.User;
+import com.ssafy.goumunity.domain.feed.controller.request.FeedRequest;
 import java.time.Instant;
 import lombok.*;
 
@@ -15,7 +14,6 @@ public class Feed {
     private FeedCategory feedCategory;
     private Integer price;
     private Integer afterPrice;
-    private Integer profit;
 
     private Long regionId;
     private Long userId;
@@ -23,15 +21,14 @@ public class Feed {
     private Instant createdAt;
     private Instant updatedAt;
 
-    public static Feed from(FeedRegistRequest feedRegistRequest, User user) {
+    public static Feed from(FeedRequest.Create feedRequest, Long userId) {
         return Feed.builder()
-                .content(feedRegistRequest.getContent())
-                .feedCategory(feedRegistRequest.getFeedCategory())
-                .price(feedRegistRequest.getPrice())
-                .afterPrice(feedRegistRequest.getAfterPrice())
-                .profit(feedRegistRequest.getProfit())
-                .regionId(feedRegistRequest.getRegionId())
-                .userId(user.getId())
+                .content(feedRequest.getContent())
+                .feedCategory(feedRequest.getFeedCategory())
+                .price(feedRequest.getPrice())
+                .afterPrice(feedRequest.getAfterPrice())
+                .regionId(feedRequest.getRegionId())
+                .userId(userId)
                 .createdAt(Instant.now())
                 .updatedAt(Instant.now())
                 .build();

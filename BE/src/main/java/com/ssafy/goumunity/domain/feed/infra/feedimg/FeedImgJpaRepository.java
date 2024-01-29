@@ -13,4 +13,6 @@ public interface FeedImgJpaRepository extends JpaRepository<FeedImgEntity, Long>
 
     @Query("select fi from FeedImgEntity fi where fi.feedEntity.feedId=:feedId")
     List<FeedImgEntity> findAllByFeedId(@Param("feedId") Long feedId);
+
+    List<FeedImgEntity> findAllByFeedEntity_FeedIdOrderBySequenceAsc(Long feedId);
 }

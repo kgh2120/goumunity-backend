@@ -6,11 +6,12 @@ import java.util.List;
 import java.util.Optional;
 
 public interface FeedRepository {
+
+    Feed save(Feed feed);
+
     Optional<Feed> findOneByFeedId(Long feedId);
 
     List<Feed> findAllByUserId(Long userId);
-
-    void save(FeedEntity feedEntity);
 
     void delete(FeedEntity feedEntity);
 

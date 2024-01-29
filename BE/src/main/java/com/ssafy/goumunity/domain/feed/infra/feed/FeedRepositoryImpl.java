@@ -14,6 +14,11 @@ public class FeedRepositoryImpl implements FeedRepository {
     private final FeedJpaRepository feedJpaRepository;
 
     @Override
+    public Feed save(Feed feed) {
+        return feedJpaRepository.save(FeedEntity.from(feed)).to();
+    }
+
+    @Override
     public Optional<Feed> findOneByFeedId(Long feedId) {
         return feedJpaRepository.findOneByFeedId(feedId).map(FeedEntity::to);
     }
@@ -21,11 +26,6 @@ public class FeedRepositoryImpl implements FeedRepository {
     @Override
     public List<Feed> findAllByUserId(Long userId) {
         return feedJpaRepository.findAllByUserId(userId).stream().map(FeedEntity::to).toList();
-    }
-
-    @Override
-    public void save(FeedEntity feedEntity) {
-        feedJpaRepository.save(feedEntity);
     }
 
     @Override
