@@ -8,7 +8,8 @@ import org.springframework.http.HttpStatus;
 @Getter
 public enum GlobalErrorCode implements ErrorCode {
     BIND_ERROR(HttpStatus.BAD_REQUEST, "입력 값이 올바른 형식을 따르지 않았습니다."),
-    REQUIRED_PARAM_NOT_FOUND(HttpStatus.BAD_REQUEST, "필요한 값이 주어지지 않았습니다");
+    REQUIRED_PARAM_NOT_FOUND(HttpStatus.BAD_REQUEST, "필요한 값이 주어지지 않았습니다"),
+    FORBIDDEN(HttpStatus.FORBIDDEN, "권한이 없습니다.");
 
     private final HttpStatus httpStatus;
     private final String errorMessage;

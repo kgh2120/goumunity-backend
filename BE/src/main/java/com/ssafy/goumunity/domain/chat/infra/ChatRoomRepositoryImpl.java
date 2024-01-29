@@ -60,6 +60,16 @@ public class ChatRoomRepositoryImpl implements ChatRoomRepository {
     }
 
     @Override
+    public void deleteChatRoom(ChatRoom chatRoom) {
+        chatRoomJpaRepository.deleteById(chatRoom.getId());
+    }
+
+    @Override
+    public void disconnectChatRoom(Long chatRoomId, Long userId) {
+        userChatRoomJpaRepository.deleteOneByChatRoom_IdAndUser_Id(chatRoomId, userId);
+    }
+
+    @Override
     public Slice<ChatRoomSearchResponse> searchChatRoom(
             String keyword, Long time, Pageable pageable) {
         Slice<ChatRoomEntity> slice =

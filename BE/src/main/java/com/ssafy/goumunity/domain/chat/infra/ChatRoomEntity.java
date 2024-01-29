@@ -50,11 +50,11 @@ public class ChatRoomEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     private UserEntity host;
 
-    @OneToMany(mappedBy = "chatRoom")
+    @OneToMany(mappedBy = "chatRoom", orphanRemoval = true)
     private List<ChatRoomHashtagEntity> chatRoomHashtags = new ArrayList<>();
 
-    @OneToMany(mappedBy = "chatRoom")
-    private List<UserChatRoomEntity> userChatRooms = new ArrayList<>();
+    @OneToMany(mappedBy = "chatRoom", orphanRemoval = true)
+    private List<UserChatRoomEntity> userChatRooms;
 
     public static ChatRoomEntity from(ChatRoom chatRoom) {
         ChatRoomEntityBuilder chatRoomEntityBuilder =
@@ -83,8 +83,8 @@ public class ChatRoomEntity {
                 .updatedAt(this.updatedAt)
                 .currentUserCount(userChatRooms.size())
                 // TODO 이후 추가 필요
-                //                .region()
-                //                .host()
+                //                                .region()
+                .userId(host == null ? null : this.host.getId())
                 .build();
     }
 

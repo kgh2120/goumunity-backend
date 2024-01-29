@@ -15,5 +15,9 @@ public interface ChatRoomRepository {
 
     void connectChatRoom(Long chatRoomId, Long userId);
 
+    void deleteChatRoom(ChatRoom chatRoom);
+
+    void disconnectChatRoom(Long chatRoomId, Long userId);
+
     Slice<ChatRoomSearchResponse> searchChatRoom(String keyword, Long time, Pageable pageable);
 }

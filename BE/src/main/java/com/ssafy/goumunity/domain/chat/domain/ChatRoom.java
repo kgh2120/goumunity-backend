@@ -1,18 +1,16 @@
 package com.ssafy.goumunity.domain.chat.domain;
 
 import com.ssafy.goumunity.domain.chat.controller.request.ChatRoomRequest;
+import com.ssafy.goumunity.domain.user.domain.User;
 import java.time.Instant;
 import java.util.List;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Builder
 @Getter
+@EqualsAndHashCode
 public class ChatRoom {
     private Long id;
     private Boolean isOfficial;
@@ -50,5 +48,13 @@ public class ChatRoom {
 
     public boolean canConnect() {
         return capability > currentUserCount;
+    }
+
+    public boolean isHost(User user) {
+        return userId.equals(user.getId());
+    }
+
+    public boolean isHostAlone() {
+        return currentUserCount.equals(1);
     }
 }
