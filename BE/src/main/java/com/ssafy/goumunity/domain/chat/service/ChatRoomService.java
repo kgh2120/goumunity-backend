@@ -12,5 +12,5 @@ public interface ChatRoomService {
 
     void connectChatRoom(Long chatRoomId, User user);
 
-    Slice<ChatRoomSearchResponse> searchChatRoom(String keyword, Long time, Pageable of);
+    Slice<ChatRoomSearchResponse> searchChatRoom(String keyword, Long time, Pageable pageable);
 }
