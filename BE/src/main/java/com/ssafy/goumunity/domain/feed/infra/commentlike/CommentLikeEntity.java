@@ -54,7 +54,10 @@ public class CommentLikeEntity {
         if (commentLike.getUpdatedAt() != null)
             commentLikeEntityBuilder.updatedAt(commentLike.getUpdatedAt());
 
+        commentLikeEntityBuilder
+                .userEntity(UserEntity.userEntityOnlyWithId(commentLike.getUserId()))
+                .commentEntity(CommentEntity.commentEntityOnlyWithId(commentLike.getCommentId()));
+
         return commentLikeEntityBuilder.build();
     }
 }
-

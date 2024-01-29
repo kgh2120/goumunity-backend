@@ -76,4 +76,8 @@ public class CommentEntity {
 
         return commentEntityBuilder.build();
     }
+
+    public static CommentEntity commentEntityOnlyWithId(Long id) {
+        return CommentEntity.builder().commentId(id).build();
+    }
 }
