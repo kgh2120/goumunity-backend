@@ -10,5 +10,5 @@ public interface CommentLikeJpaRepository extends JpaRepository<CommentLikeEntit
     @Query(
             "select cl from CommentLikeEntity cl where cl.commentEntity.commentId=:commentId and cl.userEntity.id=:userId")
     Optional<CommentLikeEntity> findOneByCommentIdAndUserId(
-            @Param("commentId") Long commendId, @Param("userId") Long userId);
+            @Param("commentId") Long commentId, @Param("userId") Long userId);
 }
