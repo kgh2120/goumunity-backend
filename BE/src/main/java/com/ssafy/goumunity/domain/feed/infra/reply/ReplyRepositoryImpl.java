@@ -37,4 +37,9 @@ public class ReplyRepositoryImpl implements ReplyRepository {
     public Reply modify(Reply reply) {
         return replyJpaRepository.save(ReplyEntity.from(reply)).to();
     }
+
+    @Override
+    public boolean existsByReplyId(Long replyId) {
+        return replyJpaRepository.existsById(replyId);
+    }
 }
