@@ -50,10 +50,10 @@ public class ChatRoomEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     private UserEntity host;
 
-    @OneToMany(mappedBy = "chatRoom")
+    @OneToMany(mappedBy = "chatRoom", orphanRemoval = true)
     private List<ChatRoomHashtagEntity> chatRoomHashtags = new ArrayList<>();
 
-    @OneToMany(mappedBy = "chatRoom", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "chatRoom", orphanRemoval = true)
     private List<UserChatRoomEntity> userChatRooms;
 
     public static ChatRoomEntity from(ChatRoom chatRoom) {
