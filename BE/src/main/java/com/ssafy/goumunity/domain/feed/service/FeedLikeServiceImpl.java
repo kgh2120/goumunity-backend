@@ -24,7 +24,7 @@ public class FeedLikeServiceImpl implements FeedLikeService {
         FeedLike feedLike = FeedLike.from(userId, feedId);
 
         if (feedLikeRepository.existsByFeedLike(feedLike)) {
-            throw new FeedException(FeedErrorCode.ALREADY_LIKE);
+            throw new FeedException(FeedErrorCode.ALREADY_LIKED);
         }
 
         feedLikeRepository.createFeedLike(feedLike);
