@@ -1,5 +1,7 @@
 package com.ssafy.goumunity.domain.chat.service;
 
+import static com.ssafy.goumunity.domain.chat.exception.ChatErrorCode.*;
+
 import com.ssafy.goumunity.domain.chat.controller.request.ChatRoomRequest;
 import com.ssafy.goumunity.domain.chat.domain.ChatRoom;
 import com.ssafy.goumunity.domain.chat.exception.ChatErrorCode;
@@ -36,6 +38,29 @@ public class ChatRoomServiceImpl implements ChatRoomService {
                         user.getId(),
                         imageUploadService.uploadImage(multipartFile),
                         convertHashtagIds(dto)));
+    }
+
+    @Override
+    public void connectChatRoom(Long chatRoomId, User user) {
+        // 채팅방이 있는지 체크
+        // 채팅방 유저 수 체크
+        // 유저가 이미 가입했는지 체크
+        verifyConnectChatRoom(chatRoomId, user);
+        chatRoomRepository.connectChatRoom(chatRoomId, user.getId());
+    }
+
+    private void verifyConnectChatRoom(Long chatRoomId, User user) {
+        ChatRoom chatRoom =
+                chatRoomRepository
+                        .findOneByChatRoomId(chatRoomId)
+                        .orElseThrow(() -> new ChatException(CHAT_ROOM_NOT_FOUND));
+        if (!chatRoom.canConnect()) {
+            throw new ChatException(CHAT_ROOM_FULL);
+        }
+
+        if (chatRoomRepository.isAlreadyJoinedUser(chatRoomId, user.getId())) {
+            throw new ChatException(ALREADY_JOINED_CHAT_ROOM);
+        }
     }
 
     private void verifyCreateChatRoom(ChatRoomRequest.Create dto) {

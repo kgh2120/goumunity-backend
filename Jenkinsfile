@@ -14,17 +14,18 @@ pipeline {
 
     stages {
 
-        stage('Build BE') {
+        stage('Build BE && ') {
             steps {
                 script {
+
                     dir('BE') {
                         sh 'chmod +x gradlew'
                         sh 'ls -l'
 
-                        sh './gradlew clean build'
+                        sh './gradlew clean build -Pprofile=dev spotlessApply'
                         sh 'jq --version'
                         sh 'cd build/libs && ls -al'
-
+                        
                         
                     }
                 }
@@ -33,25 +34,28 @@ pipeline {
         stage('Send Artifact'){
             steps{
                 script{
+                    sh 'ls -al'
+                    sh 'ls -al BE/build'
+                    sh 'cd BE/build/libs && ls -al'
                     sshPublisher(
-                            publishers: [
-                                sshPublisherDesc(
-                                    configName: 'ssafyhelper',
-                                    transfers: [
-                                        sshTransfer(
-                                            sourceFiles: '/BE/build/libs/goumunity-0.0.1-SNAPSHOT.jar',
-                                            removePrefix: '/build/libs',
-                                            remoteDirectory: '/sendData',
-                                            execCommand: 'sh temp/AutoDevServer.sh'
-                                        )
-                                    ]
-                                )
-                            ]
-                        )
+                                publishers: [
+                                    sshPublisherDesc(
+                                        configName: 'ssafyhelper',
+                                        transfers: [
+                                            sshTransfer(
+                                                sourceFiles: 'BE/build/libs/goumunity-0.0.1-SNAPSHOT.jar',
+                                                removePrefix: 'BE/build/libs',
+                                                remoteDirectory: '/sendData',
+                                                execCommand: 'sh temp/AutoDevServer.sh'
+                                            )
+                                        ]
+                                    )
+                                ]
+                            )
                 }
             }
-            
         }
+        
         stage('Auto CI By Git-lab CI-CD'){
             steps{
                 script{

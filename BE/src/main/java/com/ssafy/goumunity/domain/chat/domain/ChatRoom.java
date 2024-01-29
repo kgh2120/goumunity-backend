@@ -19,7 +19,7 @@ public class ChatRoom {
     private String title;
 
     private Integer capability;
-    private Integer currentUser;
+    private Integer currentUserCount;
     private String imgSrc;
     private Instant createdAt;
     private Instant updatedAt;
@@ -40,11 +40,15 @@ public class ChatRoom {
                 .title(dto.getTitle())
                 .hashtagsIds(hashtagIds)
                 .capability(dto.getCapability())
-                .currentUser(1)
+                .currentUserCount(1)
                 .imgSrc(imgSrc)
                 .createdAt(Instant.now())
                 .regionId(regionId)
                 .userId(hostId)
                 .build();
+    }
+
+    public boolean canConnect() {
+        return capability > currentUserCount;
     }
 }

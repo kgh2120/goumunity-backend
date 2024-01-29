@@ -5,6 +5,7 @@ import com.ssafy.goumunity.domain.chat.service.port.ChatRoomRepository;
 import com.ssafy.goumunity.domain.region.infra.RegionEntity;
 import com.ssafy.goumunity.domain.user.infra.UserEntity;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -33,5 +34,23 @@ public class ChatRoomRepositoryImpl implements ChatRoomRepository {
                     ChatRoomHashtagEntity.create(hashtagEntities.get(i), chatRoomEntity, i + 1));
         }
         userChatRoomJpaRepository.save(UserChatRoomEntity.create(userEntity, chatRoomEntity));
+    }
+
+    @Override
+    public Optional<ChatRoom> findOneByChatRoomId(Long chatRoomId) {
+        return chatRoomJpaRepository.findById(chatRoomId).map(ChatRoomEntity::to);
+    }
+
+    @Override
+    public boolean isAlreadyJoinedUser(Long chatRoomId, Long userId) {
+        return userChatRoomJpaRepository.existsByChatRoom_IdAndUser_Id(chatRoomId, userId);
+    }
+
+    @Override
+    public void connectChatRoom(Long chatRoomId, Long userId) {
+        userChatRoomJpaRepository.save(
+                UserChatRoomEntity.create(
+                        UserEntity.userEntityOnlyWithId(userId),
+                        ChatRoomEntity.chatRoomEntityOnlyWithId(chatRoomId)));
     }
 }

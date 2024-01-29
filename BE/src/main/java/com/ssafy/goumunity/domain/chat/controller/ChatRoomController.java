@@ -8,10 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @RequiredArgsConstructor
@@ -27,6 +24,13 @@ public class ChatRoomController {
             @RequestPart("image") MultipartFile multipartFile,
             @AuthenticationPrincipal User user) {
         chatRoomService.createChatRoom(dto, multipartFile, user);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @PostMapping("/{chatRoomId}")
+    public ResponseEntity<Void> connectChatRoom(
+            @PathVariable Long chatRoomId, @AuthenticationPrincipal User user) {
+        chatRoomService.connectChatRoom(chatRoomId, user);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 }

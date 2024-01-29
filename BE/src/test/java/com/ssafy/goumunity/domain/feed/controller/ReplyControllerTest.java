@@ -1,23 +1,31 @@
 package com.ssafy.goumunity.domain.feed.controller;
 
-import static com.ssafy.goumunity.common.exception.CustomErrorCode.COMMENT_NOT_FOUND;
 import static com.ssafy.goumunity.common.exception.GlobalErrorCode.BIND_ERROR;
+import static com.ssafy.goumunity.common.exception.GlobalErrorCode.REQUIRED_PARAM_NOT_FOUND;
+import static com.ssafy.goumunity.domain.feed.exception.CommentErrorCode.COMMENT_NOT_FOUND;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doThrow;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ssafy.goumunity.common.exception.CustomException;
 import com.ssafy.goumunity.common.exception.GlobalExceptionHandler;
 import com.ssafy.goumunity.config.SecurityConfig;
 import com.ssafy.goumunity.config.security.CustomDetails;
+import com.ssafy.goumunity.domain.feed.controller.request.ReplyRequest;
+import com.ssafy.goumunity.domain.feed.controller.response.ReplyResponse;
 import com.ssafy.goumunity.domain.feed.domain.Reply;
+import com.ssafy.goumunity.domain.feed.exception.CommentException;
 import com.ssafy.goumunity.domain.feed.service.ReplyService;
 import com.ssafy.goumunity.domain.user.domain.User;
 import com.ssafy.goumunity.domain.user.domain.UserCategory;
+import com.ssafy.goumunity.domain.user.dto.UserResponse;
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +35,9 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.SliceImpl;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
@@ -192,7 +203,7 @@ class ReplyControllerTest {
         Reply reply =
                 Reply.builder().replyId(1L).userId(1L).commentId(commentId).content("규준 거준 구준표").build();
 
-        doThrow(new CustomException(COMMENT_NOT_FOUND))
+        doThrow(new CommentException(COMMENT_NOT_FOUND))
                 .when(replyService)
                 .saveReply(any(), any(), any());
 
@@ -206,6 +217,133 @@ class ReplyControllerTest {
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.errorName").value(COMMENT_NOT_FOUND.getErrorName()))
                 .andExpect(jsonPath("$.errorMessage").value(COMMENT_NOT_FOUND.getErrorMessage()))
+                .andDo(print());
+    }
+
+    @DisplayName("답글 조회 성공")
+    @Test
+    void findALlReplyByCommentId() throws Exception {
+        MockHttpSession session = new MockHttpSession();
+        User user =
+                User.builder()
+                        .id(1L)
+                        .email("gyu@naver.com")
+                        .password("AAbb11!!")
+                        .monthBudget(100000L)
+                        .age(20)
+                        .userCategory(UserCategory.JOB_SEEKER)
+                        .gender(1)
+                        .nickname("규준")
+                        .regionId(1)
+                        .build();
+
+        ReplyResponse reply =
+                ReplyResponse.builder()
+                        .replyId(1L)
+                        .commentId(1L)
+                        .content("규준 발표 파이팅")
+                        .user(UserResponse.from(user))
+                        .build();
+
+        long commentId = 1L;
+        int size = 3;
+        int page = 0;
+        Long time = Instant.now().toEpochMilli();
+        PageRequest pageRequest = PageRequest.of(page, size);
+        List<ReplyResponse> replies = new ArrayList<>();
+        replies.add(reply);
+        Slice<ReplyResponse> res = new SliceImpl<>(replies, pageRequest, true);
+
+        given(replyService.findAllByCommentId(commentId, time, pageRequest)).willReturn(res);
+
+        mockMvc
+                .perform(
+                        get("/api/comments/" + commentId + "/replies")
+                                .with(SecurityMockMvcRequestPostProcessors.user(new CustomDetails(user)))
+                                .param("size", String.valueOf(size))
+                                .param("page", String.valueOf(page))
+                                .param("time", String.valueOf(time))
+                                .session(session))
+                .andExpect(status().isOk())
+                .andDo(print());
+    }
+
+    @DisplayName("답글 조회 실패_시간 파라미터 없음")
+    @Test
+    void findALlReplyByCommentIdFailWithNoTimeParam() throws Exception {
+        MockHttpSession session = new MockHttpSession();
+        User user =
+                User.builder()
+                        .id(1L)
+                        .email("gyu@naver.com")
+                        .password("AAbb11!!")
+                        .monthBudget(100000L)
+                        .age(20)
+                        .userCategory(UserCategory.JOB_SEEKER)
+                        .gender(1)
+                        .nickname("규준")
+                        .regionId(1)
+                        .build();
+
+        long commentId = 1L;
+        int size = 3;
+        int page = 0;
+
+        mockMvc
+                .perform(
+                        get("/api/comments/" + commentId + "/replies")
+                                .with(SecurityMockMvcRequestPostProcessors.user(new CustomDetails(user)))
+                                .param("size", String.valueOf(size))
+                                .param("page", String.valueOf(page))
+                                .session(session))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.errorName").value(REQUIRED_PARAM_NOT_FOUND.getErrorName()))
+                .andExpect(jsonPath("$.errorMessage").value(REQUIRED_PARAM_NOT_FOUND.getErrorMessage()))
+                .andDo(print());
+    }
+
+    @DisplayName("답글 수정 성공")
+    @Test
+    void modifyReply() throws Exception {
+        ObjectMapper mapper = new ObjectMapper();
+        MockHttpSession session = new MockHttpSession();
+        User user =
+                User.builder()
+                        .id(1L)
+                        .email("gyu@naver.com")
+                        .password("AAbb11!!")
+                        .monthBudget(100000L)
+                        .age(20)
+                        .userCategory(UserCategory.JOB_SEEKER)
+                        .gender(1)
+                        .nickname("규준")
+                        .regionId(1)
+                        .build();
+        long commentId = 1L;
+
+        ReplyRequest.Modify reply = ReplyRequest.Modify.builder().content("답글을 수정해볼거야").build();
+
+        Reply modifiedReply =
+                Reply.builder()
+                        .replyId(1L)
+                        .userId(user.getId())
+                        .commentId(1L)
+                        .content(reply.getContent())
+                        .createdAt(Instant.now())
+                        .updatedAt(Instant.now())
+                        .build();
+
+        given(replyService.modifyReply(any(), any(), any(), any())).willReturn(modifiedReply);
+
+        this.mockMvc
+                .perform(
+                        put("/api/comments/" + commentId + "/replies/" + modifiedReply.getReplyId())
+                                .with(SecurityMockMvcRequestPostProcessors.user(new CustomDetails(user)))
+                                .content(mapper.writeValueAsString(reply))
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .session(session))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content").value(reply.getContent()))
                 .andDo(print());
     }
 }

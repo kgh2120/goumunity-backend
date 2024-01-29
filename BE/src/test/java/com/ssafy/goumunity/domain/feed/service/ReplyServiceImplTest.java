@@ -1,6 +1,6 @@
 package com.ssafy.goumunity.domain.feed.service;
 
-import static com.ssafy.goumunity.common.exception.CustomErrorCode.COMMENT_NOT_FOUND;
+import static com.ssafy.goumunity.domain.feed.exception.CommentErrorCode.COMMENT_NOT_FOUND;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
@@ -11,6 +11,7 @@ import com.ssafy.goumunity.common.exception.CustomException;
 import com.ssafy.goumunity.domain.feed.controller.request.ReplyRequest;
 import com.ssafy.goumunity.domain.feed.domain.Reply;
 import com.ssafy.goumunity.domain.feed.service.post.ReplyRepository;
+import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -59,5 +60,20 @@ class ReplyServiceImplTest {
                         assertThrows(
                                         CustomException.class, () -> replyService.saveReply(userId, commentId, request))
                                 .getErrorCode());
+    }
+
+    @DisplayName("답글 수정 성공")
+    @Test
+    void modifyReply() {
+        Reply reply = Reply.builder().replyId(1L).userId(1L).commentId(1L).content("규준 거준 구준표").build();
+        ReplyRequest.Modify request = ReplyRequest.Modify.builder().content("수정수정").build();
+
+        given(replyRepository.findOneById(any())).willReturn(Optional.of(reply));
+        given(replyRepository.modify(any())).willReturn(reply);
+        Reply res =
+                replyService.modifyReply(
+                        reply.getUserId(), reply.getCommentId(), reply.getReplyId(), request);
+
+        assertThat(request.getContent()).isEqualTo(res.getContent());
     }
 }
