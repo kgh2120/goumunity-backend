@@ -16,7 +16,6 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.*;
-import org.hibernate.annotations.BatchSize;
 
 @Getter
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
@@ -62,7 +61,6 @@ public class ChatRoomEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     private UserEntity host;
 
-    @BatchSize(size = 5)
     @OneToMany(mappedBy = "chatRoom")
     private List<ChatRoomHashtagEntity> chatRoomHashtags = new ArrayList<>();
 
