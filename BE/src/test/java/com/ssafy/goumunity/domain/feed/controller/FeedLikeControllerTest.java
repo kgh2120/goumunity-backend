@@ -1,13 +1,18 @@
 package com.ssafy.goumunity.domain.feed.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import com.ssafy.goumunity.common.exception.GlobalExceptionHandler;
 import com.ssafy.goumunity.config.SecurityConfig;
-import com.ssafy.goumunity.domain.feed.controller.request.FeedLikeCountRequest;
-import com.ssafy.goumunity.domain.feed.controller.request.FeedLikeRequest;
-import com.ssafy.goumunity.domain.feed.controller.response.FeedLikeCountResponse;
+import com.ssafy.goumunity.config.security.CustomDetails;
 import com.ssafy.goumunity.domain.feed.service.FeedLikeService;
-import org.junit.jupiter.api.*;
-import org.mockito.BDDMockito;
+import com.ssafy.goumunity.domain.user.domain.User;
+import com.ssafy.goumunity.domain.user.domain.UserCategory;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityFilterAutoConfiguration;
@@ -15,122 +20,76 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
-import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpSession;
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultActions;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(
-        controllers = {FeedLikeController.class},
+        controllers = {FeedLikeController.class, GlobalExceptionHandler.class},
         excludeFilters = {
-                @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, value = SecurityConfig.class)
+            @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, value = SecurityConfig.class)
         },
         excludeAutoConfiguration = {
-                SecurityAutoConfiguration.class,
-                SecurityFilterAutoConfiguration.class
+            SecurityAutoConfiguration.class,
+            SecurityFilterAutoConfiguration.class
         })
 class FeedLikeControllerTest {
 
-    @MockBean
-    private FeedLikeService feedLikeService;
+    @MockBean private FeedLikeService feedLikeService;
 
-    @Autowired
-    private MockMvc mockMvc;
+    @Autowired private MockMvc mockMvc;
 
-    private ObjectMapper mapper = new ObjectMapper();
+    @DisplayName("피드 좋아요 성공")
+    @Test
+    void feedLike() throws Exception {
+        MockHttpSession session = new MockHttpSession();
+        long feedId = 1L;
+        User user =
+                User.builder()
+                        .id(1L)
+                        .email("gyu@naver.com")
+                        .password("AAbb11!!")
+                        .monthBudget(100000L)
+                        .age(20)
+                        .userCategory(UserCategory.JOB_SEEKER)
+                        .gender(1)
+                        .nickname("규준")
+                        .regionId(1)
+                        .build();
 
-    @Nested
-    @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-    class 좋아요클릭{
-
-        FeedLikeRequest feedLikeRequest;
-
-        @BeforeAll
-        void 요청DTO장전(){
-
-            feedLikeRequest = FeedLikeRequest.builder()
-                    .userId(Long.valueOf(1))
-                    .feedId(Long.valueOf(1))
-                    .build();
-
-        }
-
-        @Test
-        @DisplayName("좋아요UP_성공")
-        void 좋아요UP테스트() throws Exception{
-
-            BDDMockito.given(feedLikeService.pushLikeButton(any(), any()))
-                    .willReturn(true);
-
-            mockMvc.perform(
-                    post("/api/feeds/1/feedlikes")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(mapper.writeValueAsString(feedLikeRequest))
-            ).andExpect(status().isCreated());
-
-        }
-
-        @Test
-        @DisplayName("좋아요DOWN성공")
-        void 좋아요DOWN테스트() throws Exception{
-
-            BDDMockito.given(feedLikeService.pushLikeButton(any(), any()))
-                    .willReturn(false);
-
-            mockMvc.perform(
-                    post("/api/feeds/1/feedlikes")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(mapper.writeValueAsString(feedLikeRequest))
-            ).andExpect(status().isOk());
-
-        }
-
+        mockMvc
+                .perform(
+                        post("/api/feeds/" + feedId + "/like")
+                                .with(SecurityMockMvcRequestPostProcessors.user(new CustomDetails(user)))
+                                .session(session))
+                .andExpect(status().isCreated())
+                .andDo(print());
     }
 
-    @Nested
-    @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-    class 좋아요개수확인{
+    @DisplayName("피드 좋아요 취소 성공")
+    @Test
+    void feedUnlike() throws Exception {
+        MockHttpSession session = new MockHttpSession();
+        long feedId = 1L;
+        User user =
+                User.builder()
+                        .id(1L)
+                        .email("gyu@naver.com")
+                        .password("AAbb11!!")
+                        .monthBudget(100000L)
+                        .age(20)
+                        .userCategory(UserCategory.JOB_SEEKER)
+                        .gender(1)
+                        .nickname("규준")
+                        .regionId(1)
+                        .build();
 
-        FeedLikeCountRequest feedLikeCountRequest;
-        FeedLikeCountResponse feedLikeCountResponse;
-
-        @BeforeAll
-        void 좋아요개수요청응답장전(){
-
-            feedLikeCountRequest = FeedLikeCountRequest.builder()
-                    .feedId(Long.valueOf(1))
-                    .build();
-
-            feedLikeCountResponse = FeedLikeCountResponse.builder()
-                    .likeCount(30)
-                    .build();
-
-        }
-
-        @Test
-        @DisplayName("좋아요갯수확인_성공")
-        void 좋아요갯수확인테스트() throws Exception{
-
-            BDDMockito.given(
-                    feedLikeService.countFeedLikeByFeedId(any())
-            ).willReturn(feedLikeCountResponse);
-
-            ResultActions resultActions = mockMvc.perform(
-                    get("/api/feeds/35/feedlikes")
-                            .contentType(MediaType.APPLICATION_JSON)
-            ).andExpect(status().isOk());
-
-            FeedLikeCountResponse result = mapper.readValue(resultActions.andReturn().getResponse().getContentAsString(), FeedLikeCountResponse.class);
-
-            assertEquals(result.getLikeCount(), 30);
-
-        }
-
+        mockMvc
+                .perform(
+                        delete("/api/feeds/" + feedId + "/unlike")
+                                .with(SecurityMockMvcRequestPostProcessors.user(new CustomDetails(user)))
+                                .session(session))
+                .andExpect(status().isOk())
+                .andDo(print());
     }
-
 }
