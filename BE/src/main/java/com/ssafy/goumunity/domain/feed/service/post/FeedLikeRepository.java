@@ -1,3 +1,12 @@
 package com.ssafy.goumunity.domain.feed.service.post;
 
-public interface FeedLikeRepository {}
+import com.ssafy.goumunity.domain.feed.domain.FeedLike;
+
+public interface FeedLikeRepository {
+
+    void createFeedLike(FeedLike feedLike);
+
+    void deleteFeedLike(FeedLike feedLike);
+
+    boolean existsByFeedLike(FeedLike feedLike);
+}

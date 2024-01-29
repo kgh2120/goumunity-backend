@@ -4,7 +4,7 @@ import com.ssafy.goumunity.domain.feed.infra.commentlike.CommentLikeEntity;
 
 public interface CommentLikeRepository {
 
-    boolean existByCommentIdandUserId(Long commentId, Long userId);
+    boolean existByCommentIdAndUserId(Long commentId, Long userId);
 
     void save(CommentLikeEntity commentLikeEntity);
 

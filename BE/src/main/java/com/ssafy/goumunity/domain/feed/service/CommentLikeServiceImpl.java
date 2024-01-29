@@ -14,7 +14,7 @@ public class CommentLikeServiceImpl implements CommentLikeService {
 
     @Override
     public void likeButton(Long commentId, Long userId) {
-        if (!commentLikeRepository.existByCommentIdandUserId(commentId, userId)) {
+        if (!commentLikeRepository.existByCommentIdAndUserId(commentId, userId)) {
             commentLikeRepository.save(
                     CommentLikeEntity.from(
                             CommentLike.builder().commentId(commentId).userId(userId).build()));
@@ -23,7 +23,7 @@ public class CommentLikeServiceImpl implements CommentLikeService {
 
     @Override
     public void unLikeButton(Long commentId, Long userId) {
-        if (commentLikeRepository.existByCommentIdandUserId(commentId, userId)) {
+        if (commentLikeRepository.existByCommentIdAndUserId(commentId, userId)) {
             commentLikeRepository.delete(
                     CommentLikeEntity.from(
                             CommentLike.builder().commentId(commentId).userId(userId).build()));

@@ -11,7 +11,7 @@ public class CommentLikeRepositoryImpl implements CommentLikeRepository {
     private final CommentLikeJpaRepository commentLikeJpaRepository;
 
     @Override
-    public boolean existByCommentIdandUserId(Long commentId, Long userId) {
+    public boolean existByCommentIdAndUserId(Long commentId, Long userId) {
         return commentLikeJpaRepository.existsByCommentIdAndUserId(commentId, userId);
     }
 
