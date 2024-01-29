@@ -1,13 +1,10 @@
 package com.ssafy.goumunity.domain.chat.infra;
 
 import static com.ssafy.goumunity.domain.chat.infra.QChatRoomEntity.chatRoomEntity;
-import static com.ssafy.goumunity.domain.chat.infra.QChatRoomHashtagEntity.chatRoomHashtagEntity;
-import static com.ssafy.goumunity.domain.chat.infra.QHashtagEntity.hashtagEntity;
-import static com.ssafy.goumunity.domain.chat.infra.QUserChatRoomEntity.userChatRoomEntity;
-import static com.ssafy.goumunity.domain.user.infra.QUserEntity.userEntity;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.ssafy.goumunity.domain.chat.controller.response.MyChatRoomResponse;
 import com.ssafy.goumunity.domain.user.infra.UserEntity;
 import jakarta.persistence.EntityManager;
 import java.time.Instant;
@@ -28,6 +25,7 @@ class ChatRoomSearchQueryTest {
 
     @Autowired ChatRoomJpaRepository chatRoomJpaRepository;
     @Autowired JPAQueryFactory jpaQueryFactory;
+    @Autowired ChatRoomQueryDslRepository chatRoomQueryDslRepository;
 
     @Test
     void 거지방_검색_아이디로_검색() throws Exception {
@@ -165,24 +163,14 @@ class ChatRoomSearchQueryTest {
 
         Pageable pageable = PageRequest.of(0, 10);
 
-        List<ChatRoomEntity> res =
-                jpaQueryFactory
-                        .select(chatRoomEntity)
-                        .distinct()
-                        .from(chatRoomEntity)
-                        .leftJoin(chatRoomEntity.chatRoomHashtags, chatRoomHashtagEntity)
-                        .leftJoin(chatRoomHashtagEntity.hashtag, hashtagEntity)
-                        .leftJoin(chatRoomEntity.userChatRooms, userChatRoomEntity)
-                        .leftJoin(userChatRoomEntity.user, userEntity)
-                        .where(
-                                userChatRoomEntity
-                                        .user
-                                        .id
-                                        .eq(users.getId())
-                                        .and(chatRoomEntity.createdAt.before(Instant.ofEpochMilli(10000000000000L))))
-                        .offset(pageable.getOffset())
-                        .limit(pageable.getPageSize() + 1)
-                        .fetch();
-        assertThat(res.size()).isEqualTo(10);
+        Slice<MyChatRoomResponse> res =
+                chatRoomQueryDslRepository.findMyChatRoom(users.toModel(), 100000L, pageable);
+
+        List<MyChatRoomResponse> content = res.getContent();
+        for (MyChatRoomResponse myChatRoomResponse : content) {
+            System.out.println(myChatRoomResponse);
+        }
+        assertThat(content.size()).isSameAs(10);
+        assertThat(res.hasNext()).isFalse();
     }
 }

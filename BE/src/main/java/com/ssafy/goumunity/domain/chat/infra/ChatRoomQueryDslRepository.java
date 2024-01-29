@@ -30,6 +30,7 @@ public class ChatRoomQueryDslRepository {
         List<MyChatRoomResponse> res =
                 jpaQueryFactory
                         .select(Projections.constructor(MyChatRoomResponse.class, chatRoomEntity))
+                        .distinct()
                         .from(chatRoomEntity)
                         .leftJoin(chatRoomEntity.chatRoomHashtags, chatRoomHashtagEntity)
                         .leftJoin(chatRoomHashtagEntity.hashtag, hashtagEntity)
