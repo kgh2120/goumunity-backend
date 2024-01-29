@@ -8,4 +8,6 @@ public interface ChatRoomService {
     void createChatRoom(ChatRoomRequest.Create dto, MultipartFile multipartFile, User user);
 
     void connectChatRoom(Long chatRoomId, User user);
+
+    void disconnectChatRoom(Long chatRoomId, User user);
 }

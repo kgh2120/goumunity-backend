@@ -4,6 +4,8 @@ import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.*;
 
+import com.ssafy.goumunity.common.exception.CustomException;
+import com.ssafy.goumunity.common.exception.GlobalErrorCode;
 import com.ssafy.goumunity.domain.chat.controller.request.ChatRoomRequest;
 import com.ssafy.goumunity.domain.chat.domain.ChatRoom;
 import com.ssafy.goumunity.domain.chat.exception.ChatErrorCode;
@@ -185,5 +187,77 @@ class ChatRoomServiceImplTest {
         assertThatThrownBy(() -> chatRoomService.connectChatRoom(chatRoomId, user))
                 .isInstanceOf(ChatException.class)
                 .hasFieldOrPropertyWithValue("errorCode", ChatErrorCode.ALREADY_JOINED_CHAT_ROOM);
+    }
+
+    @Test
+    void 거지방_나가기_테스트_성공_일반_유저_케이스() throws Exception {
+        // given
+
+        Long chatRoomId = 1L;
+        User user = User.builder().id(2L).build();
+        given(chatRoomRepository.findOneByChatRoomId(any()))
+                .willReturn(
+                        Optional.ofNullable(ChatRoom.builder().id(1L).currentUserCount(5).userId(5L).build()));
+        given(chatRoomRepository.isAlreadyJoinedUser(any(), anyLong())).willReturn(true);
+        // when
+        chatRoomService.disconnectChatRoom(chatRoomId, user);
+        // then
+        verify(chatRoomRepository).disconnectChatRoom(chatRoomId, user.getId());
+    }
+
+    @Test
+    void 거지방_나가기_테스트_성공_방장_케이스() throws Exception {
+        // given
+
+        Long chatRoomId = 1L;
+        User user = User.builder().id(2L).build();
+        ChatRoom chatRoom = ChatRoom.builder().id(1L).currentUserCount(1).userId(2L).build();
+        given(chatRoomRepository.findOneByChatRoomId(any())).willReturn(Optional.ofNullable(chatRoom));
+        given(chatRoomRepository.isAlreadyJoinedUser(any(), anyLong())).willReturn(true);
+        // when
+        chatRoomService.disconnectChatRoom(chatRoomId, user);
+        // then
+        verify(chatRoomRepository).deleteChatRoom(chatRoom);
+    }
+
+    @Test
+    void 거지방_나가기_테스트_실패_채팅방이_존재하지_않는_케이스() throws Exception {
+        // given
+
+        Long chatRoomId = 1L;
+        User user = User.builder().id(2L).build();
+        given(chatRoomRepository.findOneByChatRoomId(any())).willReturn(Optional.empty());
+        // when // then
+        assertThatThrownBy(() -> chatRoomService.disconnectChatRoom(chatRoomId, user))
+                .isInstanceOf(ChatException.class)
+                .hasFieldOrPropertyWithValue("errorCode", ChatErrorCode.CHAT_ROOM_NOT_FOUND);
+    }
+
+    @Test
+    void 거지방_나가기_테스트_실패_채팅방에_속하지_않는_경우() throws Exception {
+        // given
+        Long chatRoomId = 1L;
+        User user = User.builder().id(2L).build();
+        ChatRoom chatRoom = ChatRoom.builder().id(1L).currentUserCount(1).userId(2L).build();
+        given(chatRoomRepository.findOneByChatRoomId(any())).willReturn(Optional.ofNullable(chatRoom));
+        given(chatRoomRepository.isAlreadyJoinedUser(any(), anyLong())).willReturn(false);
+        // when // then
+        assertThatThrownBy(() -> chatRoomService.disconnectChatRoom(chatRoomId, user))
+                .isInstanceOf(CustomException.class)
+                .hasFieldOrPropertyWithValue("errorCode", GlobalErrorCode.FORBIDDEN);
+    }
+
+    @Test
+    void 거지방_나가기_테스트_실패_회원이_방장인데_사람이_남아있는_경우() throws Exception {
+        // given
+        Long chatRoomId = 1L;
+        User user = User.builder().id(2L).build();
+        ChatRoom chatRoom = ChatRoom.builder().id(1L).currentUserCount(5).userId(2L).build();
+        given(chatRoomRepository.findOneByChatRoomId(any())).willReturn(Optional.ofNullable(chatRoom));
+        given(chatRoomRepository.isAlreadyJoinedUser(any(), anyLong())).willReturn(true);
+        // when // then
+        assertThatThrownBy(() -> chatRoomService.disconnectChatRoom(chatRoomId, user))
+                .isInstanceOf(ChatException.class)
+                .hasFieldOrPropertyWithValue("errorCode", ChatErrorCode.HOST_CANT_OUT);
     }
 }

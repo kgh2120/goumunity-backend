@@ -53,4 +53,14 @@ public class ChatRoomRepositoryImpl implements ChatRoomRepository {
                         UserEntity.userEntityOnlyWithId(userId),
                         ChatRoomEntity.chatRoomEntityOnlyWithId(chatRoomId)));
     }
+
+    @Override
+    public void deleteChatRoom(ChatRoom chatRoom) {
+        chatRoomJpaRepository.deleteById(chatRoom.getId());
+    }
+
+    @Override
+    public void disconnectChatRoom(Long chatRoomId, Long userId) {
+        userChatRoomJpaRepository.deleteOneByChatRoom_IdAndUser_Id(chatRoomId, userId);
+    }
 }

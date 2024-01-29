@@ -11,4 +11,8 @@ public interface ChatRoomRepository {
     boolean isAlreadyJoinedUser(Long chatRoomId, Long userId);
 
     void connectChatRoom(Long chatRoomId, Long userId);
+
+    void deleteChatRoom(ChatRoom chatRoom);
+
+    void disconnectChatRoom(Long chatRoomId, Long userId);
 }

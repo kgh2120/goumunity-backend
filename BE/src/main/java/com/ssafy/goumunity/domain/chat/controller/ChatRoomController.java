@@ -33,4 +33,11 @@ public class ChatRoomController {
         chatRoomService.connectChatRoom(chatRoomId, user);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
+
+    @DeleteMapping("/{chatRoomId}")
+    public ResponseEntity<Void> disconnectChatRoom(
+            @PathVariable Long chatRoomId, @AuthenticationPrincipal User user) {
+        chatRoomService.disconnectChatRoom(chatRoomId, user);
+        return ResponseEntity.ok().build();
+    }
 }

@@ -2,6 +2,8 @@ package com.ssafy.goumunity.domain.chat.service;
 
 import static com.ssafy.goumunity.domain.chat.exception.ChatErrorCode.*;
 
+import com.ssafy.goumunity.common.exception.CustomException;
+import com.ssafy.goumunity.common.exception.GlobalErrorCode;
 import com.ssafy.goumunity.domain.chat.controller.request.ChatRoomRequest;
 import com.ssafy.goumunity.domain.chat.domain.ChatRoom;
 import com.ssafy.goumunity.domain.chat.exception.ChatErrorCode;
@@ -47,6 +49,40 @@ public class ChatRoomServiceImpl implements ChatRoomService {
         // 유저가 이미 가입했는지 체크
         verifyConnectChatRoom(chatRoomId, user);
         chatRoomRepository.connectChatRoom(chatRoomId, user.getId());
+    }
+
+    @Override
+    public void disconnectChatRoom(Long chatRoomId, User user) {
+        ChatRoom chatRoom = verifyDisconnectChatRoom(chatRoomId, user);
+        disconnect(chatRoomId, user, chatRoom);
+    }
+
+    private void disconnect(Long chatRoomId, User user, ChatRoom chatRoom) {
+        if (chatRoom.isHost(user)) {
+            disconnectByHost(chatRoom);
+        } else {
+            chatRoomRepository.disconnectChatRoom(chatRoomId, user.getId());
+        }
+    }
+
+    private void disconnectByHost(ChatRoom chatRoom) {
+        if (chatRoom.isHostAlone()) {
+            chatRoomRepository.deleteChatRoom(chatRoom);
+        } else {
+            throw new ChatException(HOST_CANT_OUT);
+        }
+    }
+
+    private ChatRoom verifyDisconnectChatRoom(Long chatRoomId, User user) {
+        ChatRoom chatRoom =
+                chatRoomRepository
+                        .findOneByChatRoomId(chatRoomId)
+                        .orElseThrow(() -> new ChatException(CHAT_ROOM_NOT_FOUND));
+        // user가 채팅방에 속해있는지
+        if (!chatRoomRepository.isAlreadyJoinedUser(chatRoomId, user.getId())) {
+            throw new CustomException(GlobalErrorCode.FORBIDDEN);
+        }
+        return chatRoom;
     }
 
     private void verifyConnectChatRoom(Long chatRoomId, User user) {
