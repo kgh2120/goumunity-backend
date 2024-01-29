@@ -12,5 +12,7 @@ public interface FeedRepository {
 
     void save(FeedEntity feedEntity);
 
+    void delete(FeedEntity feedEntity);
+
     boolean existsByFeedId(Long feedId);
 }

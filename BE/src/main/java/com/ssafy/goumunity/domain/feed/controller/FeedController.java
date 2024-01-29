@@ -35,9 +35,15 @@ public class FeedController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> save(
-            @RequestBody @Valid FeedRegistRequest feedRegistRequest, @AuthenticationPrincipal User user) {
-        feedService.save(feedRegistRequest, user);
+    public ResponseEntity<Void> save(@RequestBody @Valid FeedRegistRequest feedRegistRequest) {
+        feedService.save(feedRegistRequest);
         return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @DeleteMapping("/{feedId}")
+    public ResponseEntity<Void> deleteOneByFeedId(
+            @PathVariable Long feedId, @AuthenticationPrincipal User user) {
+        feedService.deleteOneByFeedId(feedId, user);
+        return ResponseEntity.ok().build();
     }
 }
