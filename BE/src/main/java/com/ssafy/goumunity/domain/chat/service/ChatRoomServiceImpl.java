@@ -6,6 +6,7 @@ import com.ssafy.goumunity.common.exception.CustomException;
 import com.ssafy.goumunity.common.exception.GlobalErrorCode;
 import com.ssafy.goumunity.domain.chat.controller.request.ChatRoomRequest;
 import com.ssafy.goumunity.domain.chat.controller.response.ChatRoomSearchResponse;
+import com.ssafy.goumunity.domain.chat.controller.response.MyChatRoomResponse;
 import com.ssafy.goumunity.domain.chat.domain.ChatRoom;
 import com.ssafy.goumunity.domain.chat.exception.ChatErrorCode;
 import com.ssafy.goumunity.domain.chat.exception.ChatException;
@@ -92,6 +93,11 @@ public class ChatRoomServiceImpl implements ChatRoomService {
     public Slice<ChatRoomSearchResponse> searchChatRoom(
             String keyword, Long time, Pageable pageable) {
         return chatRoomRepository.searchChatRoom(keyword, time, pageable);
+    }
+
+    @Override
+    public Slice<MyChatRoomResponse> findMyChatRoom(User user, Long time, Pageable pageable) {
+        return chatRoomRepository.findMyChatRoom(user, time, pageable);
     }
 
     private void verifyConnectChatRoom(Long chatRoomId, User user) {

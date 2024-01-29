@@ -1,5 +1,7 @@
 package com.ssafy.goumunity.domain.user.controller;
 
+import com.ssafy.goumunity.common.util.SliceResponse;
+import com.ssafy.goumunity.domain.chat.controller.response.MyChatRoomResponse;
 import com.ssafy.goumunity.domain.feed.controller.response.FeedResponse;
 import com.ssafy.goumunity.domain.feed.service.FeedService;
 import com.ssafy.goumunity.domain.user.domain.User;
@@ -13,6 +15,8 @@ import jakarta.validation.constraints.NotBlank;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -107,5 +111,12 @@ public class UserController {
     @GetMapping("/{userId}/feeds")
     public ResponseEntity<List<FeedResponse>> findAllFeedsByUserId(@PathVariable Long userId) {
         return ResponseEntity.ok(feedService.findAllByUserId(userId));
+    }
+
+    @GetMapping("/my/chat-rooms")
+    public ResponseEntity<SliceResponse<MyChatRoomResponse>> findMyChatRoom(
+            @AuthenticationPrincipal User user, Long time, Pageable pageable) {
+        Slice<MyChatRoomResponse> res = userService.findMyChatRoom(user, time, pageable);
+        return ResponseEntity.ok(SliceResponse.from(res.getContent(), res.hasNext()));
     }
 }

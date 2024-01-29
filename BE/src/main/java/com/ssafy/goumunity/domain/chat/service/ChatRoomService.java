@@ -2,6 +2,7 @@ package com.ssafy.goumunity.domain.chat.service;
 
 import com.ssafy.goumunity.domain.chat.controller.request.ChatRoomRequest;
 import com.ssafy.goumunity.domain.chat.controller.response.ChatRoomSearchResponse;
+import com.ssafy.goumunity.domain.chat.controller.response.MyChatRoomResponse;
 import com.ssafy.goumunity.domain.user.domain.User;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -15,4 +16,6 @@ public interface ChatRoomService {
     void disconnectChatRoom(Long chatRoomId, User user);
 
     Slice<ChatRoomSearchResponse> searchChatRoom(String keyword, Long time, Pageable pageable);
+
+    Slice<MyChatRoomResponse> findMyChatRoom(User user, Long time, Pageable pageable);
 }
