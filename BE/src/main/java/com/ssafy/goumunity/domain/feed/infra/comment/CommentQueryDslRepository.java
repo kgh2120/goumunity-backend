@@ -1,6 +1,7 @@
 package com.ssafy.goumunity.domain.feed.infra.comment;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.ssafy.goumunity.common.util.SliceUtils;
 import com.ssafy.goumunity.domain.feed.controller.response.CommentResponse;
 import com.ssafy.goumunity.domain.feed.controller.response.QCommentResponse;
 import com.ssafy.goumunity.domain.user.infra.QUserEntity;
@@ -36,12 +37,6 @@ public class CommentQueryDslRepository {
                         .limit(pageable.getPageSize() + 1)
                         .fetch();
 
-        boolean hasNext = false;
-        if (result.size() > pageable.getPageSize()) {
-            result.remove(pageable.getPageSize());
-            hasNext = true;
-        }
-
-        return new SliceImpl<>(result, pageable, hasNext);
+        return new SliceImpl<>(result, pageable, SliceUtils.hasNext(result, pageable));
     }
 }
