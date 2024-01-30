@@ -35,7 +35,7 @@ public class FeedServiceImpl implements FeedService {
     public void createFeed(Long userId, FeedRequest.Create feedRequest, List<MultipartFile> images) {
         Feed createdFeed = feedRepository.save(Feed.from(feedRequest, userId));
 
-        if (!images.isEmpty()) {
+        if (images != null && !images.isEmpty()) {
             for (int seq = 1; seq <= images.size(); seq++) {
                 String savedUrl = feedImageUploader.uploadFeedImage(images.get(seq - 1));
                 feedImgRepository.save(FeedImg.from(createdFeed.getFeedId(), savedUrl, seq));
