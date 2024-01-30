@@ -1,12 +1,12 @@
 package com.ssafy.goumunity.domain.feed.service.post;
 
-import com.ssafy.goumunity.domain.feed.infra.commentlike.CommentLikeEntity;
+import com.ssafy.goumunity.domain.feed.domain.CommentLike;
 
 public interface CommentLikeRepository {
 
-    boolean existByCommentIdAndUserId(Long commentId, Long userId);
+    boolean existByCommentLike(CommentLike commentLike);
 
-    void save(CommentLikeEntity commentLikeEntity);
+    void save(CommentLike commentLike);
 
-    void delete(CommentLikeEntity commentLikeEntity);
+    void delete(CommentLike commentLike);
 }

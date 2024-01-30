@@ -2,6 +2,7 @@ package com.ssafy.goumunity.domain.feed.infra.replylike;
 
 import com.ssafy.goumunity.domain.feed.domain.ReplyLike;
 import com.ssafy.goumunity.domain.feed.service.post.ReplyLikeRepository;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -14,6 +15,13 @@ public class ReplyLikeRepositoryImpl implements ReplyLikeRepository {
     @Override
     public void createReplyLike(ReplyLike replyLike) {
         replyLikeJpaRepository.save(ReplyLikeEntity.from(replyLike));
+    }
+
+    @Override
+    public Optional<ReplyLike> findOneByUserIdAndReplyId(Long userId, Long replyId) {
+        return replyLikeJpaRepository
+                .findByUserEntity_IdAndReplyEntity_ReplyId(userId, replyId)
+                .map(ReplyLikeEntity::to);
     }
 
     @Override

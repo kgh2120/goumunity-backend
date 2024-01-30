@@ -12,9 +12,12 @@ import com.ssafy.goumunity.domain.feed.service.post.FeedRepository;
 import com.ssafy.goumunity.domain.user.domain.User;
 import com.ssafy.goumunity.domain.user.exception.UserErrorCode;
 import com.ssafy.goumunity.domain.user.exception.UserException;
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -42,18 +45,25 @@ public class FeedServiceImpl implements FeedService {
 
     @Override
     @Transactional(readOnly = true)
-    public FeedResponse findOneByFeedId(Long feedId) {
-        return FeedResponse.from(
-                feedRepository
-                        .findOneByFeedId(feedId)
-                        .orElseThrow(() -> new ResourceNotFoundException("해당 피드를 찾을 수 없습니다.", this)));
+    public Slice<FeedResponse> findFeed(Long time, Pageable pageable) {
+        return feedRepository.findFeed(Instant.ofEpochMilli(time), pageable);
     }
 
-    @Override
-    @Transactional(readOnly = true)
-    public List<FeedResponse> findAllByUserId(Long userId) {
-        return feedRepository.findAllByUserId(userId).stream().map(FeedResponse::from).toList();
-    }
+    //    @Override
+    //    @Transactional(readOnly = true)
+    //    public FeedResponse findOneByFeedId(Long feedId) {
+    //        return FeedResponse.from(
+    //                feedRepository
+    //                        .findOneByFeedId(feedId)
+    //                        .orElseThrow(() -> new ResourceNotFoundException("해당 피드를 찾을 수 없습니다.",
+    // this)));
+    //    }
+    //
+    //    @Override
+    //    @Transactional(readOnly = true)
+    //    public List<FeedResponse> findAllByUserId(Long userId) {
+    //        return feedRepository.findAllByUserId(userId).stream().map(FeedResponse::from).toList();
+    //    }
 
     @Override
     public void deleteOneByFeedId(Long feedId, User user) {

@@ -7,6 +7,7 @@ import lombok.*;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
+@EqualsAndHashCode
 public class CommentLike {
     private Long commentLikeId;
 
@@ -15,4 +16,8 @@ public class CommentLike {
 
     private Instant createdAt;
     private Instant updatedAt;
+
+    public static CommentLike from(Long userId, Long commentId) {
+        return CommentLike.builder().userId(userId).commentId(commentId).build();
+    }
 }

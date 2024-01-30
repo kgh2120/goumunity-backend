@@ -2,7 +2,7 @@ package com.ssafy.goumunity.domain.feed.service;
 
 public interface CommentLikeService {
 
-    void likeButton(Long commentId, Long userId);
+    void createCommentLike(Long userId, Long commentId);
 
-    void unLikeButton(Long commentId, Long userId);
+    void deleteCommentLike(Long userId, Long commentId);
 }

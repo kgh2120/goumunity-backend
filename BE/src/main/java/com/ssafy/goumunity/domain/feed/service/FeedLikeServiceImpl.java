@@ -1,5 +1,7 @@
 package com.ssafy.goumunity.domain.feed.service;
 
+import static com.ssafy.goumunity.domain.feed.exception.FeedErrorCode.NO_LIKE_DATA;
+
 import com.ssafy.goumunity.domain.feed.domain.FeedLike;
 import com.ssafy.goumunity.domain.feed.exception.FeedErrorCode;
 import com.ssafy.goumunity.domain.feed.exception.FeedException;
@@ -32,11 +34,11 @@ public class FeedLikeServiceImpl implements FeedLikeService {
     @Override
     public void deleteFeedLike(Long userId, Long feedId) {
         verifyFeed(feedId);
-        FeedLike feedLike = FeedLike.from(userId, feedId);
 
-        if (!feedLikeRepository.existsByFeedLike(feedLike)) {
-            throw new FeedException(FeedErrorCode.NO_LIKE_DATA);
-        }
+        FeedLike feedLike =
+                feedLikeRepository
+                        .findOneByUserIdAndFeedId(userId, feedId)
+                        .orElseThrow(() -> new FeedException(NO_LIKE_DATA));
 
         feedLikeRepository.deleteFeedLike(feedLike);
     }
