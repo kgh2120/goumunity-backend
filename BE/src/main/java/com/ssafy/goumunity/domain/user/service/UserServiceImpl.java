@@ -1,15 +1,19 @@
 package com.ssafy.goumunity.domain.user.service;
 
+import com.ssafy.goumunity.domain.chat.controller.response.MyChatRoomResponse;
 import com.ssafy.goumunity.domain.user.domain.User;
 import com.ssafy.goumunity.domain.user.domain.UserStatus;
 import com.ssafy.goumunity.domain.user.dto.UserCreateDto;
 import com.ssafy.goumunity.domain.user.dto.UserUpdateDto;
 import com.ssafy.goumunity.domain.user.exception.UserErrorCode;
 import com.ssafy.goumunity.domain.user.exception.UserException;
+import com.ssafy.goumunity.domain.user.service.port.MyChatRoomFindService;
 import com.ssafy.goumunity.domain.user.service.port.ProfileImageUploader;
 import com.ssafy.goumunity.domain.user.service.port.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,6 +28,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder encoder;
     private final ProfileImageUploader profileImageUploader;
+    private final MyChatRoomFindService myChatRoomFindService;
 
     @Override
     @Transactional
@@ -74,5 +79,10 @@ public class UserServiceImpl implements UserService {
     public void deleteUser(User user) {
         user.deleteUser();
         userRepository.delete(user);
+    }
+
+    @Override
+    public Slice<MyChatRoomResponse> findMyChatRoom(User user, Long time, Pageable pageable) {
+        return myChatRoomFindService.findMyChatRoom(user, time, pageable);
     }
 }

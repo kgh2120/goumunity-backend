@@ -1,6 +1,7 @@
 package com.ssafy.goumunity.domain.feed.infra.reply;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.ssafy.goumunity.common.util.SliceUtils;
 import com.ssafy.goumunity.domain.feed.controller.response.QReplyResponse;
 import com.ssafy.goumunity.domain.feed.controller.response.ReplyResponse;
 import com.ssafy.goumunity.domain.user.infra.QUserEntity;
@@ -34,13 +35,6 @@ public class ReplyQueryDslRepository {
                         .offset(pageable.getOffset())
                         .limit(pageable.getPageSize() + 1)
                         .fetch();
-
-        boolean hasNext = false;
-        if (result.size() > pageable.getPageSize()) {
-            result.remove(pageable.getPageSize());
-            hasNext = true;
-        }
-
-        return new SliceImpl<>(result, pageable, hasNext);
+        return new SliceImpl<>(result, pageable, SliceUtils.hasNext(result, pageable));
     }
 }

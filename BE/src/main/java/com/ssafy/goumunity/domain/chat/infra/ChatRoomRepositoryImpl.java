@@ -1,9 +1,11 @@
 package com.ssafy.goumunity.domain.chat.infra;
 
 import com.ssafy.goumunity.domain.chat.controller.response.ChatRoomSearchResponse;
+import com.ssafy.goumunity.domain.chat.controller.response.MyChatRoomResponse;
 import com.ssafy.goumunity.domain.chat.domain.ChatRoom;
 import com.ssafy.goumunity.domain.chat.service.port.ChatRoomRepository;
 import com.ssafy.goumunity.domain.region.infra.RegionEntity;
+import com.ssafy.goumunity.domain.user.domain.User;
 import com.ssafy.goumunity.domain.user.infra.UserEntity;
 import java.time.Instant;
 import java.util.List;
@@ -21,6 +23,7 @@ public class ChatRoomRepositoryImpl implements ChatRoomRepository {
     private final ChatRoomJpaRepository chatRoomJpaRepository;
     private final ChatRoomHashtagJpaRepository chatRoomHashtagJpaRepository;
     private final UserChatRoomJpaRepository userChatRoomJpaRepository;
+    private final ChatRoomQueryDslRepository chatRoomQueryDslRepository;
 
     @Override
     public void save(ChatRoom chatRoom) {
@@ -78,5 +81,10 @@ public class ChatRoomRepositoryImpl implements ChatRoomRepository {
                 slice.getContent().stream().map(ChatRoomSearchResponse::from).toList(),
                 pageable,
                 slice.hasNext());
+    }
+
+    @Override
+    public Slice<MyChatRoomResponse> findMyChatRoom(User user, Long time, Pageable pageable) {
+        return chatRoomQueryDslRepository.findMyChatRoom(user, time, pageable);
     }
 }

@@ -9,6 +9,7 @@ import com.ssafy.goumunity.domain.user.domain.User;
 import com.ssafy.goumunity.domain.user.domain.UserCategory;
 import com.ssafy.goumunity.domain.user.dto.UserCreateDto;
 import com.ssafy.goumunity.domain.user.service.UserServiceImpl;
+import com.ssafy.goumunity.domain.user.service.port.MyChatRoomFindService;
 import com.ssafy.goumunity.domain.user.service.port.ProfileImageUploader;
 import com.ssafy.goumunity.domain.user.service.port.UserRepository;
 import java.time.Clock;
@@ -29,6 +30,7 @@ public class UserServiceTest {
 
     @Mock ProfileImageUploader profileImageUploader;
     @Mock PasswordEncoder passwordEncoder;
+    @Mock MyChatRoomFindService myChatRoomFindService;
     @InjectMocks UserServiceImpl userService;
 
     @Test

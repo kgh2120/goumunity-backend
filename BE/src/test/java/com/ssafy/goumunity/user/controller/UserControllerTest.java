@@ -13,6 +13,7 @@ import com.ssafy.goumunity.common.exception.GlobalErrorCode;
 import com.ssafy.goumunity.common.exception.GlobalExceptionHandler;
 import com.ssafy.goumunity.config.SecurityConfig;
 import com.ssafy.goumunity.config.security.CustomDetails;
+import com.ssafy.goumunity.domain.chat.controller.response.MyChatRoomResponse;
 import com.ssafy.goumunity.domain.feed.service.FeedService;
 import com.ssafy.goumunity.domain.user.controller.UserController;
 import com.ssafy.goumunity.domain.user.domain.User;
@@ -24,6 +25,7 @@ import com.ssafy.goumunity.domain.user.exception.UserErrorCode;
 import com.ssafy.goumunity.domain.user.exception.UserException;
 import com.ssafy.goumunity.domain.user.service.UserService;
 import com.ssafy.goumunity.domain.user.service.VerificationService;
+import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +35,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.SliceImpl;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.mock.web.MockMultipartFile;
@@ -57,6 +61,8 @@ class UserControllerTest {
     @MockBean private FeedService feedService;
 
     @Autowired private MockMvc mockMvc;
+
+    private static final String USER_CONTROLLER_API_PREFIX = "/api/users";
 
     @DisplayName("회원 가입 성공")
     @Test
@@ -262,6 +268,41 @@ class UserControllerTest {
                 .andExpect(
                         jsonPath("$.errorMessage")
                                 .value(UserErrorCode.NO_INPUT_FOR_MODIFY_USER_INFO.getErrorMessage()))
+                .andDo(print());
+    }
+
+    @Test
+    void 내_거지방_조회_테스트_성공() throws Exception {
+        // given
+        String api = USER_CONTROLLER_API_PREFIX + "/my/chat-rooms";
+        Long time = 100L;
+        int page = 0;
+        int size = 12;
+        given(userService.findMyChatRoom(any(), any(), any()))
+                .willReturn(
+                        new SliceImpl<>(
+                                List.of(
+                                        MyChatRoomResponse.builder()
+                                                .title("거지방")
+                                                .chatRoomId(1L)
+                                                .currentUserCount(5)
+                                                .build()),
+                                PageRequest.of(0, 12),
+                                false));
+        // when // then
+        mockMvc
+                .perform(
+                        get(api)
+                                .queryParam("time", Long.toString(time))
+                                .queryParam("page", Integer.toString(page))
+                                .queryParam("size", Integer.toString(size)))
+                .andExpectAll(
+                        status().isOk(),
+                        jsonPath("$.hasNext").value(false),
+                        jsonPath("$.contents.length()").value(1),
+                        jsonPath("$.contents[0].title").value("거지방"),
+                        jsonPath("$.contents[0].chatRoomId").value(1L),
+                        jsonPath("$.contents[0].currentUserCount").value(5))
                 .andDo(print());
     }
 
