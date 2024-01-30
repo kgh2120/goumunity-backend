@@ -1,7 +1,11 @@
 package com.ssafy.goumunity.domain.feed.controller.response;
 
-import com.ssafy.goumunity.domain.feed.domain.Feed;
+import com.querydsl.core.annotations.QueryProjection;
 import com.ssafy.goumunity.domain.feed.domain.FeedCategory;
+import com.ssafy.goumunity.domain.feed.infra.feed.FeedEntity;
+import com.ssafy.goumunity.domain.region.controller.response.RegionResponse;
+import com.ssafy.goumunity.domain.user.dto.UserResponse;
+import java.util.List;
 import lombok.*;
 
 @Builder
@@ -15,23 +19,29 @@ public class FeedResponse {
     private Integer price;
     private Integer afterPrice;
 
-    private Long regionId;
-    private Long userId;
+    private RegionResponse region;
+    private UserResponse user;
 
     private Long createdAt;
     private Long updatedAt;
 
-    public static FeedResponse from(Feed feed) {
-        return FeedResponse.builder()
-                .feedId(feed.getFeedId())
-                .content(feed.getContent())
-                .feedCategory(feed.getFeedCategory())
-                .price(feed.getPrice())
-                .afterPrice(feed.getAfterPrice())
-                .regionId(feed.getRegionId())
-                .userId(feed.getUserId())
-                .createdAt(feed.getCreatedAt().toEpochMilli())
-                .updatedAt(feed.getUpdatedAt().toEpochMilli())
-                .build();
+    private List<FeedImgResponse> images;
+    private Long commentCount;
+    private Long likeCount;
+
+    @QueryProjection
+    public FeedResponse(FeedEntity feed, Long commentCount, Long likeCount) {
+        this.feedId = feed.getFeedId();
+        this.content = feed.getContent();
+        this.feedCategory = feed.getFeedCategory();
+        this.price = feed.getPrice();
+        this.afterPrice = feed.getAfterPrice();
+        this.region = RegionResponse.from(feed.getRegionEntity().to());
+        this.user = UserResponse.from(feed.getUserEntity().toModel());
+        this.createdAt = feed.getCreatedAt().toEpochMilli();
+        this.updatedAt = feed.getUpdatedAt().toEpochMilli();
+        this.images = feed.getImages().stream().map(FeedImgResponse::from).toList();
+        this.commentCount = commentCount;
+        this.likeCount = likeCount;
     }
 }
