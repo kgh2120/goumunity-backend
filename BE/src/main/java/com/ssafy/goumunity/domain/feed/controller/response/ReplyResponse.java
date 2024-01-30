@@ -20,15 +20,17 @@ public class ReplyResponse {
     private UserResponse user;
     private Long createdAt;
     private Long updatedAt;
+    private Long likeCount;
 
     @QueryProjection
-    public ReplyResponse(ReplyEntity reply) {
+    public ReplyResponse(ReplyEntity reply, Long likeCount) {
         this.replyId = reply.getReplyId();
         this.content = reply.getContent();
         this.commentId = reply.getCommentEntity().getCommentId();
         this.user = UserResponse.from(reply.getUserEntity().toModel());
         this.createdAt = reply.getCreatedAt().toEpochMilli();
         this.updatedAt = reply.getUpdatedAt().toEpochMilli();
+        this.likeCount = likeCount;
     }
 
     public static ReplyResponse from(Reply reply, UserResponse user) {

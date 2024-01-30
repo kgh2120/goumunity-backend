@@ -1,10 +1,15 @@
 package com.ssafy.goumunity.domain.feed.infra.comment;
 
+import static com.ssafy.goumunity.domain.feed.infra.comment.QCommentEntity.commentEntity;
+import static com.ssafy.goumunity.domain.feed.infra.commentlike.QCommentLikeEntity.commentLikeEntity;
+import static com.ssafy.goumunity.domain.feed.infra.reply.QReplyEntity.replyEntity;
+import static com.ssafy.goumunity.domain.user.infra.QUserEntity.userEntity;
+
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.goumunity.common.util.SliceUtils;
 import com.ssafy.goumunity.domain.feed.controller.response.CommentResponse;
 import com.ssafy.goumunity.domain.feed.controller.response.QCommentResponse;
-import com.ssafy.goumunity.domain.user.infra.QUserEntity;
 import java.time.Instant;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -18,20 +23,25 @@ import org.springframework.stereotype.Repository;
 public class CommentQueryDslRepository {
 
     private final JPAQueryFactory queryFactory;
-    private final QCommentEntity comment = QCommentEntity.commentEntity;
-    private final QUserEntity user = QUserEntity.userEntity;
 
     public Slice<CommentResponse> findAllByFeedId(Long feedId, Instant time, Pageable pageable) {
-
         final List<CommentResponse> result =
                 queryFactory
                         .query()
-                        .select(new QCommentResponse(comment))
-                        .from(comment)
-                        .leftJoin(comment.userEntity, user)
-                        .where(comment.feedEntity.feedId.eq(feedId))
-                        .where(comment.createdAt.before(time))
-                        .orderBy(comment.createdAt.desc())
+                        .select(
+                                new QCommentResponse(
+                                        commentEntity,
+                                        JPAExpressions.select(replyEntity.count())
+                                                .from(replyEntity)
+                                                .where(commentEntity.eq(replyEntity.commentEntity)),
+                                        JPAExpressions.select(commentLikeEntity.count())
+                                                .from(commentLikeEntity)
+                                                .where(commentEntity.eq(commentLikeEntity.commentEntity))))
+                        .from(commentEntity)
+                        .leftJoin(commentEntity.userEntity, userEntity)
+                        .where(commentEntity.feedEntity.feedId.eq(feedId))
+                        .where(commentEntity.createdAt.before(time))
+                        .orderBy(commentEntity.createdAt.desc())
                         .offset(pageable.getOffset())
                         .limit(pageable.getPageSize() + 1)
                         .fetch();
