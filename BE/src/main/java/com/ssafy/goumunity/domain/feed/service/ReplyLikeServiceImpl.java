@@ -19,10 +19,7 @@ public class ReplyLikeServiceImpl implements ReplyLikeService {
 
     @Override
     public void createReplyLike(Long userId, Long replyId) {
-        if (!replyRepository.existsByReplyId(replyId)) {
-            throw new ReplyException(ReplyErrorCode.REPLY_NOT_FOUND);
-        }
-
+        verifyReply(replyId);
         ReplyLike replyLike = ReplyLike.from(userId, replyId);
 
         if (replyLikeRepository.existsByReplyLike(replyLike)) {
@@ -34,10 +31,7 @@ public class ReplyLikeServiceImpl implements ReplyLikeService {
 
     @Override
     public void deleteReplyLike(Long userId, Long replyId) {
-        if (!replyRepository.existsByReplyId(replyId)) {
-            throw new ReplyException(ReplyErrorCode.REPLY_NOT_FOUND);
-        }
-
+        verifyReply(replyId);
         ReplyLike replyLike = ReplyLike.from(userId, replyId);
 
         if (!replyLikeRepository.existsByReplyLike(replyLike)) {
@@ -45,5 +39,11 @@ public class ReplyLikeServiceImpl implements ReplyLikeService {
         }
 
         replyLikeRepository.deleteReplyLike(replyLike);
+    }
+
+    private void verifyReply(Long replyId) {
+        if (!replyRepository.existsByReplyId(replyId)) {
+            throw new ReplyException(ReplyErrorCode.REPLY_NOT_FOUND);
+        }
     }
 }

@@ -19,10 +19,7 @@ public class FeedLikeServiceImpl implements FeedLikeService {
 
     @Override
     public void createFeedLike(Long userId, Long feedId) {
-        if (!feedRepository.existsByFeedId(feedId)) {
-            throw new FeedException(FeedErrorCode.FEED_NOT_FOUND);
-        }
-
+        verifyFeed(feedId);
         FeedLike feedLike = FeedLike.from(userId, feedId);
 
         if (feedLikeRepository.existsByFeedLike(feedLike)) {
@@ -34,10 +31,7 @@ public class FeedLikeServiceImpl implements FeedLikeService {
 
     @Override
     public void deleteFeedLike(Long userId, Long feedId) {
-        if (!feedRepository.existsByFeedId(feedId)) {
-            throw new FeedException(FeedErrorCode.FEED_NOT_FOUND);
-        }
-
+        verifyFeed(feedId);
         FeedLike feedLike = FeedLike.from(userId, feedId);
 
         if (!feedLikeRepository.existsByFeedLike(feedLike)) {
@@ -45,5 +39,11 @@ public class FeedLikeServiceImpl implements FeedLikeService {
         }
 
         feedLikeRepository.deleteFeedLike(feedLike);
+    }
+
+    private void verifyFeed(Long feedId) {
+        if (!feedRepository.existsByFeedId(feedId)) {
+            throw new FeedException(FeedErrorCode.FEED_NOT_FOUND);
+        }
     }
 }
