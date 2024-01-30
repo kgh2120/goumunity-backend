@@ -15,4 +15,6 @@ public interface ReplyRepository {
     Optional<Reply> findOneById(Long replyId);
 
     Reply modify(Reply reply);
+
+    boolean existsByReplyId(Long replyId);
 }

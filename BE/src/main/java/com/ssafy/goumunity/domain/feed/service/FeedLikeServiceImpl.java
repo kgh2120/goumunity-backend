@@ -7,9 +7,11 @@ import com.ssafy.goumunity.domain.feed.service.post.FeedLikeRepository;
 import com.ssafy.goumunity.domain.feed.service.post.FeedRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class FeedLikeServiceImpl implements FeedLikeService {
 
     private final FeedLikeRepository feedLikeRepository;
@@ -17,10 +19,7 @@ public class FeedLikeServiceImpl implements FeedLikeService {
 
     @Override
     public void createFeedLike(Long userId, Long feedId) {
-        if (!feedRepository.existsByFeedId(feedId)) {
-            throw new FeedException(FeedErrorCode.FEED_NOT_FOUND);
-        }
-
+        verifyFeed(feedId);
         FeedLike feedLike = FeedLike.from(userId, feedId);
 
         if (feedLikeRepository.existsByFeedLike(feedLike)) {
@@ -32,10 +31,7 @@ public class FeedLikeServiceImpl implements FeedLikeService {
 
     @Override
     public void deleteFeedLike(Long userId, Long feedId) {
-        if (!feedRepository.existsByFeedId(feedId)) {
-            throw new FeedException(FeedErrorCode.FEED_NOT_FOUND);
-        }
-
+        verifyFeed(feedId);
         FeedLike feedLike = FeedLike.from(userId, feedId);
 
         if (!feedLikeRepository.existsByFeedLike(feedLike)) {
@@ -43,5 +39,11 @@ public class FeedLikeServiceImpl implements FeedLikeService {
         }
 
         feedLikeRepository.deleteFeedLike(feedLike);
+    }
+
+    private void verifyFeed(Long feedId) {
+        if (!feedRepository.existsByFeedId(feedId)) {
+            throw new FeedException(FeedErrorCode.FEED_NOT_FOUND);
+        }
     }
 }

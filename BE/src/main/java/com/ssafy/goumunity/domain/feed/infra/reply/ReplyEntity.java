@@ -66,4 +66,8 @@ public class ReplyEntity {
 
         return replyEntityBuilder.build();
     }
+
+    public static ReplyEntity replyEntityOnlyWithId(Long id) {
+        return ReplyEntity.builder().replyId(id).build();
+    }
 }
