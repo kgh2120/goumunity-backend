@@ -17,15 +17,15 @@ public class CommentLikeController {
 
     @PostMapping("/like")
     public ResponseEntity<Void> likeButton(
-            @PathVariable("comment-id") Long commentId, @AuthenticationPrincipal User user) {
-        commentLikeService.likeButton(commentId, user.getId());
+            @AuthenticationPrincipal User user, @PathVariable("comment-id") Long commentId) {
+        commentLikeService.createCommentLike(user.getId(), commentId);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @DeleteMapping("/unlike")
     public ResponseEntity<Void> unLikeButton(
-            @PathVariable("comment-id") Long commentId, @AuthenticationPrincipal User user) {
-        commentLikeService.unLikeButton(commentId, user.getId());
+            @AuthenticationPrincipal User user, @PathVariable("comment-id") Long commentId) {
+        commentLikeService.deleteCommentLike(user.getId(), commentId);
         return ResponseEntity.ok().build();
     }
 }
