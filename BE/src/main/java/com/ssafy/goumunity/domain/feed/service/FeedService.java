@@ -12,7 +12,7 @@ public interface FeedService {
 
     void createFeed(Long userId, FeedRequest.Create feedRequest, List<MultipartFile> images);
 
-    Slice<FeedResponse> find(Long time, Pageable pageable);
+    Slice<FeedResponse> findFeed(Long time, Pageable pageable);
 
     //    FeedResponse findOneByFeedId(Long feedId);
     //

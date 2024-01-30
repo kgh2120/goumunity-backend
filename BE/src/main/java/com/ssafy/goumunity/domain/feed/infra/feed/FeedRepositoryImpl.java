@@ -24,8 +24,8 @@ public class FeedRepositoryImpl implements FeedRepository {
     }
 
     @Override
-    public Slice<FeedResponse> find(Instant time, Pageable pageable) {
-        return feedQueryDslRepository.find(time, pageable);
+    public Slice<FeedResponse> findFeed(Instant time, Pageable pageable) {
+        return feedQueryDslRepository.findFeed(time, pageable);
     }
 
     @Override

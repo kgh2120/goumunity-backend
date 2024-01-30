@@ -45,8 +45,8 @@ public class FeedServiceImpl implements FeedService {
 
     @Override
     @Transactional(readOnly = true)
-    public Slice<FeedResponse> find(Long time, Pageable pageable) {
-        return feedRepository.find(Instant.ofEpochMilli(time), pageable);
+    public Slice<FeedResponse> findFeed(Long time, Pageable pageable) {
+        return feedRepository.findFeed(Instant.ofEpochMilli(time), pageable);
     }
 
     //    @Override

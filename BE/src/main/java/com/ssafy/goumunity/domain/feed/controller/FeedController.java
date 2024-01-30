@@ -35,9 +35,9 @@ public class FeedController {
     }
 
     @GetMapping
-    public ResponseEntity<SliceResponse<FeedResponse>> find(
+    public ResponseEntity<SliceResponse<FeedResponse>> findFeed(
             @RequestParam("time") Long time, Pageable pageable) {
-        Slice<FeedResponse> feeds = feedService.find(time, pageable);
+        Slice<FeedResponse> feeds = feedService.findFeed(time, pageable);
         return ResponseEntity.ok(SliceResponse.from(feeds.getContent(), feeds.hasNext()));
     }
 

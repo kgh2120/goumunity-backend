@@ -26,7 +26,7 @@ public class FeedQueryDslRepository {
 
     private final JPAQueryFactory queryFactory;
 
-    public Slice<FeedResponse> find(Instant time, Pageable pageable) {
+    public Slice<FeedResponse> findFeed(Instant time, Pageable pageable) {
         final List<FeedResponse> res =
                 queryFactory
                         .query()

@@ -13,7 +13,7 @@ public interface FeedRepository {
 
     Feed save(Feed feed);
 
-    Slice<FeedResponse> find(Instant time, Pageable pageable);
+    Slice<FeedResponse> findFeed(Instant time, Pageable pageable);
 
     Optional<Feed> findOneByFeedId(Long feedId);
 
