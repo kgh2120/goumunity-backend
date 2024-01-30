@@ -8,12 +8,14 @@ import com.ssafy.goumunity.common.exception.CustomException;
 import com.ssafy.goumunity.common.exception.GlobalErrorCode;
 import com.ssafy.goumunity.domain.chat.controller.request.ChatRoomRequest;
 import com.ssafy.goumunity.domain.chat.domain.ChatRoom;
+import com.ssafy.goumunity.domain.chat.domain.UserChatRoom;
 import com.ssafy.goumunity.domain.chat.exception.ChatErrorCode;
 import com.ssafy.goumunity.domain.chat.exception.ChatException;
 import com.ssafy.goumunity.domain.chat.service.port.ChatRoomRepository;
 import com.ssafy.goumunity.domain.chat.service.port.ImageUploadService;
 import com.ssafy.goumunity.domain.chat.service.port.RegionFindService;
 import com.ssafy.goumunity.domain.user.domain.User;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -200,9 +202,9 @@ class ChatRoomServiceImplTest {
                         Optional.ofNullable(ChatRoom.builder().id(1L).currentUserCount(5).userId(5L).build()));
         given(chatRoomRepository.isAlreadyJoinedUser(any(), anyLong())).willReturn(true);
         // when
-        chatRoomService.disconnectChatRoom(chatRoomId, user);
+        chatRoomService.exitChatRoom(chatRoomId, user);
         // then
-        verify(chatRoomRepository).disconnectChatRoom(chatRoomId, user.getId());
+        verify(chatRoomRepository).exitChatRoom(chatRoomId, user.getId());
     }
 
     @Test
@@ -215,7 +217,7 @@ class ChatRoomServiceImplTest {
         given(chatRoomRepository.findOneByChatRoomId(any())).willReturn(Optional.ofNullable(chatRoom));
         given(chatRoomRepository.isAlreadyJoinedUser(any(), anyLong())).willReturn(true);
         // when
-        chatRoomService.disconnectChatRoom(chatRoomId, user);
+        chatRoomService.exitChatRoom(chatRoomId, user);
         // then
         verify(chatRoomRepository).deleteChatRoom(chatRoom);
     }
@@ -228,7 +230,7 @@ class ChatRoomServiceImplTest {
         User user = User.builder().id(2L).build();
         given(chatRoomRepository.findOneByChatRoomId(any())).willReturn(Optional.empty());
         // when // then
-        assertThatThrownBy(() -> chatRoomService.disconnectChatRoom(chatRoomId, user))
+        assertThatThrownBy(() -> chatRoomService.exitChatRoom(chatRoomId, user))
                 .isInstanceOf(ChatException.class)
                 .hasFieldOrPropertyWithValue("errorCode", ChatErrorCode.CHAT_ROOM_NOT_FOUND);
     }
@@ -242,7 +244,7 @@ class ChatRoomServiceImplTest {
         given(chatRoomRepository.findOneByChatRoomId(any())).willReturn(Optional.ofNullable(chatRoom));
         given(chatRoomRepository.isAlreadyJoinedUser(any(), anyLong())).willReturn(false);
         // when // then
-        assertThatThrownBy(() -> chatRoomService.disconnectChatRoom(chatRoomId, user))
+        assertThatThrownBy(() -> chatRoomService.exitChatRoom(chatRoomId, user))
                 .isInstanceOf(CustomException.class)
                 .hasFieldOrPropertyWithValue("errorCode", GlobalErrorCode.FORBIDDEN);
     }
@@ -256,8 +258,58 @@ class ChatRoomServiceImplTest {
         given(chatRoomRepository.findOneByChatRoomId(any())).willReturn(Optional.ofNullable(chatRoom));
         given(chatRoomRepository.isAlreadyJoinedUser(any(), anyLong())).willReturn(true);
         // when // then
-        assertThatThrownBy(() -> chatRoomService.disconnectChatRoom(chatRoomId, user))
+        assertThatThrownBy(() -> chatRoomService.exitChatRoom(chatRoomId, user))
                 .isInstanceOf(ChatException.class)
                 .hasFieldOrPropertyWithValue("errorCode", ChatErrorCode.HOST_CANT_OUT);
+    }
+
+    @Test
+    void 거지방_접속_종료_테스트_성공() throws Exception {
+        // given
+        Long chatRoomId = 1L;
+        User user = User.builder().id(1L).build();
+        UserChatRoom userChatRoom =
+                UserChatRoom.builder()
+                        .userChatRoomId(1L)
+                        .chatRoomId(1L)
+                        .userId(1L)
+                        .lastAccessTime(Instant.ofEpochMilli(1000L))
+                        .build();
+        given(chatRoomRepository.isExistChatRoom(any())).willReturn(true);
+        given(chatRoomRepository.findOneUserChatRoomByUserIdAndChatRoomId(any(), any()))
+                .willReturn(Optional.of(userChatRoom));
+        // when
+        chatRoomService.disconnectChatRoom(chatRoomId, user);
+        // then
+        verify(chatRoomRepository).disconnectChatRoom(userChatRoom);
+    }
+
+    @Test
+    void 거지방_접속_종료_테스트_실패_채팅방이_존재하지_않는_경우() throws Exception {
+        // given
+        Long chatRoomId = 1L;
+        User user = User.builder().id(1L).build();
+        given(chatRoomRepository.isExistChatRoom(any())).willReturn(false);
+
+        // when // then
+        assertThatThrownBy(() -> chatRoomService.disconnectChatRoom(chatRoomId, user))
+                .isInstanceOf(ChatException.class)
+                .hasFieldOrPropertyWithValue("errorCode", ChatErrorCode.CHAT_ROOM_NOT_FOUND);
+    }
+
+    @Test
+    void 거지방_접속_종료_테스트_실패_유저가_채팅방에_속해있지_않는_경우() throws Exception {
+        // given
+        Long chatRoomId = 1L;
+        User user = User.builder().id(1L).build();
+        given(chatRoomRepository.isExistChatRoom(any())).willReturn(true);
+        given(chatRoomRepository.findOneUserChatRoomByUserIdAndChatRoomId(any(), any()))
+                .willReturn(Optional.empty());
+        // when
+        assertThatThrownBy(() -> chatRoomService.disconnectChatRoom(chatRoomId, user))
+                .isInstanceOf(CustomException.class)
+                .hasFieldOrPropertyWithValue("errorCode", GlobalErrorCode.FORBIDDEN);
+        // then
+
     }
 }
