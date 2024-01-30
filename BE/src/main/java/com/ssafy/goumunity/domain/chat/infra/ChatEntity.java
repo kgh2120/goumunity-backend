@@ -49,8 +49,8 @@ public class ChatEntity {
                 .chatType(this.chatType)
                 .createdAt(this.createdAt)
                 .updatedAt(this.updatedAt)
-                .chatRoom(this.chatRoomEntity.to())
-                .user(this.user.toModel())
+                .chatRoomId(this.chatRoomEntity.getId())
+                .userId(this.user.getId())
                 .build();
     }
 
@@ -61,7 +61,9 @@ public class ChatEntity {
                         .content(chat.getContent())
                         .chatType(chat.getChatType())
                         .createdAt(chat.getCreatedAt())
-                        .updatedAt(chat.getUpdatedAt());
+                        .updatedAt(chat.getUpdatedAt())
+                        .chatRoomEntity(ChatRoomEntity.chatRoomEntityOnlyWithId(chat.getChatRoomId()))
+                        .user(UserEntity.userEntityOnlyWithId(chat.getUserId()));
 
         if (chat.getCreatedAt() != null) chatEntityBuilder.createdAt(chat.getCreatedAt());
         if (chat.getUpdatedAt() != null) chatEntityBuilder.updatedAt(chat.getUpdatedAt());

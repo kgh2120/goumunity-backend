@@ -87,4 +87,9 @@ public class ChatRoomRepositoryImpl implements ChatRoomRepository {
     public Slice<MyChatRoomResponse> findMyChatRoom(User user, Long time, Pageable pageable) {
         return chatRoomQueryDslRepository.findMyChatRoom(user, time, pageable);
     }
+
+    @Override
+    public boolean isExistChatRoom(Long chatRoomId) {
+        return chatRoomJpaRepository.existsById(chatRoomId);
+    }
 }

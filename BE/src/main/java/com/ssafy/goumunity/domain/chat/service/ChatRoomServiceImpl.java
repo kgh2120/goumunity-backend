@@ -100,6 +100,12 @@ public class ChatRoomServiceImpl implements ChatRoomService {
         return chatRoomRepository.findMyChatRoom(user, time, pageable);
     }
 
+    @Override
+    public boolean verifySendChat(Long chatRoomId, User user) {
+        return chatRoomRepository.isExistChatRoom(chatRoomId)
+                && !chatRoomRepository.isAlreadyJoinedUser(chatRoomId, user.getId());
+    }
+
     private void verifyConnectChatRoom(Long chatRoomId, User user) {
         ChatRoom chatRoom =
                 chatRoomRepository

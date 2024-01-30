@@ -24,4 +24,6 @@ public interface ChatRoomRepository {
     Slice<ChatRoomSearchResponse> searchChatRoom(String keyword, Long time, Pageable pageable);
 
     Slice<MyChatRoomResponse> findMyChatRoom(User user, Long time, Pageable pageable);
+
+    boolean isExistChatRoom(Long chatRoomId);
 }
