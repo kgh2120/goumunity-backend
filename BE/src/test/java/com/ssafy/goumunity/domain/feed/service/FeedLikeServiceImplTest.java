@@ -5,9 +5,11 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
 import com.ssafy.goumunity.domain.feed.domain.FeedLike;
+import com.ssafy.goumunity.domain.feed.exception.FeedErrorCode;
 import com.ssafy.goumunity.domain.feed.exception.FeedException;
 import com.ssafy.goumunity.domain.feed.service.post.FeedLikeRepository;
 import com.ssafy.goumunity.domain.feed.service.post.FeedRepository;
+import java.util.Optional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -69,7 +71,8 @@ class FeedLikeServiceImplTest {
         long feedId = 1L;
 
         given(feedRepository.existsByFeedId(any())).willReturn(true);
-        given(feedLikeRepository.existsByFeedLike(any())).willReturn(true);
+        given(feedLikeRepository.findOneByUserIdAndFeedId(any(), any()))
+                .willReturn(Optional.ofNullable(FeedLike.from(userId, feedId)));
 
         feedLikeService.deleteFeedLike(userId, feedId);
         verify(feedLikeRepository).deleteFeedLike(FeedLike.from(userId, feedId));
@@ -93,8 +96,8 @@ class FeedLikeServiceImplTest {
         long feedId = 1L;
 
         given(feedRepository.existsByFeedId(any())).willReturn(true);
-        given(feedLikeRepository.existsByFeedLike(any())).willReturn(false);
-
+        given(feedLikeRepository.findOneByUserIdAndFeedId(any(), any()))
+                .willThrow(new FeedException(FeedErrorCode.NO_LIKE_DATA));
         Assertions.assertThrows(
                 FeedException.class, () -> feedLikeService.deleteFeedLike(userId, feedId));
     }
