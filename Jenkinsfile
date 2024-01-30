@@ -60,7 +60,7 @@ pipeline {
             steps{
                 script{
                     sh 'echo manual Auto CI Start'
-                    sh 'curl "http://ec2-3-36-165-200.ap-northeast-2.compute.amazonaws.com/control/dev/be"'
+                    sh 'curl "https://ssafycontrol.shop/control/dev/be"'
                 }
 
             }
