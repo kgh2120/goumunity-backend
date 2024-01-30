@@ -55,4 +55,21 @@ public class ReplyServiceImpl implements ReplyService {
         originalReply.modifyContent(reply.getContent());
         return replyRepository.modify(originalReply);
     }
+
+    @Override
+    public void deleteReply(Long userId, Long commentId, Long replyId) {
+        // reply-id 로 조회 했을 때 조회결과가 없으면 exception 발생
+        Reply originalReply =
+                replyRepository
+                        .findOneById(replyId)
+                        .orElseThrow(() -> new ReplyException(ReplyErrorCode.REPLY_NOT_FOUND));
+
+        // 조회해온 reply의 작성자와 세션에 로그인 되어 있는 유저가 다르면 exception 발생
+        originalReply.checkUser(userId);
+
+        // 조회해온 reply의 게시글과 param으로 받은 comment-id가 다르면 exception 발생
+        originalReply.checkComment(commentId);
+
+        replyRepository.delete(originalReply);
+    }
 }

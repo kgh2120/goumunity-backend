@@ -52,4 +52,13 @@ public class ReplyController {
                                 replyService.modifyReply(user.getId(), commentId, replyId, reply),
                                 UserResponse.from(user)));
     }
+
+    @DeleteMapping("/{reply-id}")
+    public ResponseEntity<Void> deleteReply(
+            @AuthenticationPrincipal User user,
+            @PathVariable("comment-id") Long commentId,
+            @PathVariable("reply-id") Long replyId) {
+        replyService.deleteReply(user.getId(), commentId, replyId);
+        return ResponseEntity.ok().build();
+    }
 }
