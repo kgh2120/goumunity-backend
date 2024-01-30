@@ -1,7 +1,9 @@
 package com.ssafy.goumunity.domain.chat.infra;
 
+import com.ssafy.goumunity.domain.chat.domain.UserChatRoom;
 import com.ssafy.goumunity.domain.user.infra.UserEntity;
 import jakarta.persistence.*;
+import java.time.Instant;
 import lombok.*;
 
 @Getter
@@ -25,7 +27,31 @@ public class UserChatRoomEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     private ChatRoomEntity chatRoom;
 
+    @Column(name = "last_access_time")
+    private Instant lastAccessTime;
+
     public static UserChatRoomEntity create(UserEntity userEntity, ChatRoomEntity chatRoom) {
-        return UserChatRoomEntity.builder().chatRoom(chatRoom).user(userEntity).build();
+        return UserChatRoomEntity.builder()
+                .chatRoom(chatRoom)
+                .user(userEntity)
+                .lastAccessTime(Instant.now())
+                .build();
+    }
+
+    public static UserChatRoomEntity from(UserChatRoom userChatRoom) {
+        return UserChatRoomEntity.builder()
+                .id(userChatRoom.getUserChatRoomId())
+                .chatRoom(ChatRoomEntity.chatRoomEntityOnlyWithId(userChatRoom.getChatRoomId()))
+                .user(UserEntity.userEntityOnlyWithId(userChatRoom.getUserId()))
+                .lastAccessTime(userChatRoom.getLastAccessTime())
+                .build();
+    }
+
+    public UserChatRoom to() {
+        return UserChatRoom.builder()
+                .userChatRoomId(id)
+                .userId(user.getId())
+                .userChatRoomId(chatRoom.getId())
+                .build();
     }
 }
