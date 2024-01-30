@@ -21,22 +21,18 @@ public class CommentResponse {
     private Instant createdAt;
     private Instant updatedAt;
 
+    private Long replyCount;
+    private Long likeCount;
+
     @QueryProjection
-    public CommentResponse(CommentEntity comment) {
+    public CommentResponse(CommentEntity comment, Long replyCount, Long likeCount) {
         this.commentId = comment.getCommentId();
         this.content = comment.getContent();
         this.feedId = comment.getFeedEntity().getFeedId();
         this.user = UserResponse.from(comment.getUserEntity().toModel());
         this.createdAt = comment.getCreatedAt();
         this.updatedAt = comment.getUpdatedAt();
-    }
-
-    public CommentResponse from(CommentEntity comment) {
-        return CommentResponse.builder()
-                .commentId(comment.getCommentId())
-                .content(comment.getContent())
-                .feedId(comment.getFeedEntity().getFeedId())
-                .user(UserResponse.from(comment.getUserEntity().toModel()))
-                .build();
+        this.replyCount = replyCount;
+        this.likeCount = likeCount;
     }
 }
