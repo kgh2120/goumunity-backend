@@ -45,7 +45,7 @@ public class FeedEntity {
     @JoinColumn(name = "region_id")
     private RegionEntity regionEntity;
 
-    @OneToMany(mappedBy = "feedEntity", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "feedEntity", cascade = CascadeType.REMOVE)
     private List<FeedImgEntity> images;
 
     @OneToMany(mappedBy = "feedEntity", cascade = CascadeType.REMOVE)
