@@ -51,16 +51,15 @@ public class CommentLikeEntity {
 
     public static CommentLikeEntity from(CommentLike commentLike) {
         CommentLikeEntityBuilder commentLikeEntityBuilder =
-                CommentLikeEntity.builder().commentLikeId(commentLike.getCommentLikeId());
+                CommentLikeEntity.builder()
+                        .commentLikeId(commentLike.getCommentLikeId())
+                        .userEntity(UserEntity.userEntityOnlyWithId(commentLike.getUserId()))
+                        .commentEntity(CommentEntity.commentEntityOnlyWithId(commentLike.getCommentId()));
 
         if (commentLike.getCreatedAt() != null)
             commentLikeEntityBuilder.createdAt(commentLike.getCreatedAt());
         if (commentLike.getUpdatedAt() != null)
             commentLikeEntityBuilder.updatedAt(commentLike.getUpdatedAt());
-
-        commentLikeEntityBuilder
-                .userEntity(UserEntity.userEntityOnlyWithId(commentLike.getUserId()))
-                .commentEntity(CommentEntity.commentEntityOnlyWithId(commentLike.getCommentId()));
 
         return commentLikeEntityBuilder.build();
     }

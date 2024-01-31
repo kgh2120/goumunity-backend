@@ -2,6 +2,7 @@ package com.ssafy.goumunity.domain.feed.infra.feedlike;
 
 import com.ssafy.goumunity.domain.feed.domain.FeedLike;
 import com.ssafy.goumunity.domain.feed.service.post.FeedLikeRepository;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -14,6 +15,13 @@ public class FeedLikeRepositoryImpl implements FeedLikeRepository {
     @Override
     public void createFeedLike(FeedLike feedLike) {
         feedLikeJpaRepository.save(FeedLikeEntity.from(feedLike));
+    }
+
+    @Override
+    public Optional<FeedLike> findOneByUserIdAndFeedId(Long userId, Long feedId) {
+        return feedLikeJpaRepository
+                .findByUserEntity_IdAndAndFeedEntity_FeedId(userId, feedId)
+                .map(FeedLikeEntity::to);
     }
 
     @Override

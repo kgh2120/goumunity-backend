@@ -8,6 +8,7 @@ import com.ssafy.goumunity.domain.chat.controller.request.ChatRoomRequest;
 import com.ssafy.goumunity.domain.chat.controller.response.ChatRoomSearchResponse;
 import com.ssafy.goumunity.domain.chat.controller.response.MyChatRoomResponse;
 import com.ssafy.goumunity.domain.chat.domain.ChatRoom;
+import com.ssafy.goumunity.domain.chat.domain.UserChatRoom;
 import com.ssafy.goumunity.domain.chat.exception.ChatErrorCode;
 import com.ssafy.goumunity.domain.chat.exception.ChatException;
 import com.ssafy.goumunity.domain.chat.service.port.ChatRoomRepository;
@@ -56,20 +57,20 @@ public class ChatRoomServiceImpl implements ChatRoomService {
     }
 
     @Override
-    public void disconnectChatRoom(Long chatRoomId, User user) {
-        ChatRoom chatRoom = verifyDisconnectChatRoom(chatRoomId, user);
-        disconnect(chatRoomId, user, chatRoom);
+    public void exitChatRoom(Long chatRoomId, User user) {
+        ChatRoom chatRoom = verifyExitChatRoom(chatRoomId, user);
+        exit(chatRoomId, user, chatRoom);
     }
 
-    private void disconnect(Long chatRoomId, User user, ChatRoom chatRoom) {
+    private void exit(Long chatRoomId, User user, ChatRoom chatRoom) {
         if (chatRoom.isHost(user)) {
-            disconnectByHost(chatRoom);
+            exitByHost(chatRoom);
         } else {
-            chatRoomRepository.disconnectChatRoom(chatRoomId, user.getId());
+            chatRoomRepository.exitChatRoom(chatRoomId, user.getId());
         }
     }
 
-    private void disconnectByHost(ChatRoom chatRoom) {
+    private void exitByHost(ChatRoom chatRoom) {
         if (chatRoom.isHostAlone()) {
             chatRoomRepository.deleteChatRoom(chatRoom);
         } else {
@@ -77,7 +78,7 @@ public class ChatRoomServiceImpl implements ChatRoomService {
         }
     }
 
-    private ChatRoom verifyDisconnectChatRoom(Long chatRoomId, User user) {
+    private ChatRoom verifyExitChatRoom(Long chatRoomId, User user) {
         ChatRoom chatRoom =
                 chatRoomRepository
                         .findOneByChatRoomId(chatRoomId)
@@ -98,6 +99,22 @@ public class ChatRoomServiceImpl implements ChatRoomService {
     @Override
     public Slice<MyChatRoomResponse> findMyChatRoom(User user, Long time, Pageable pageable) {
         return chatRoomRepository.findMyChatRoom(user, time, pageable);
+    }
+
+    @Override
+    public void disconnectChatRoom(Long chatRoomId, User user) {
+        UserChatRoom userChatRoom = verifyDisconnectChatRoom(chatRoomId, user);
+        userChatRoom.disconnect();
+        chatRoomRepository.disconnectChatRoom(userChatRoom);
+    }
+
+    private UserChatRoom verifyDisconnectChatRoom(Long chatRoomId, User user) {
+        if (!chatRoomRepository.isExistChatRoom(chatRoomId))
+            throw new ChatException(CHAT_ROOM_NOT_FOUND);
+
+        return chatRoomRepository
+                .findOneUserChatRoomByUserIdAndChatRoomId(chatRoomId, user.getId())
+                .orElseThrow(() -> new CustomException(GlobalErrorCode.FORBIDDEN));
     }
 
     @Override

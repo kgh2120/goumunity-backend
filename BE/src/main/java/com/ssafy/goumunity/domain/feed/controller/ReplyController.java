@@ -41,7 +41,7 @@ public class ReplyController {
     }
 
     @PutMapping("/{reply-id}")
-    public ResponseEntity<ReplyResponse> modifyComment(
+    public ResponseEntity<ReplyResponse> modifyReply(
             @AuthenticationPrincipal User user,
             @PathVariable("comment-id") Long commentId,
             @PathVariable("reply-id") Long replyId,

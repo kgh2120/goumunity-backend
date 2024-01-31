@@ -3,6 +3,7 @@ package com.ssafy.goumunity.domain.chat.infra;
 import com.ssafy.goumunity.domain.chat.controller.response.ChatRoomSearchResponse;
 import com.ssafy.goumunity.domain.chat.controller.response.MyChatRoomResponse;
 import com.ssafy.goumunity.domain.chat.domain.ChatRoom;
+import com.ssafy.goumunity.domain.chat.domain.UserChatRoom;
 import com.ssafy.goumunity.domain.chat.service.port.ChatRoomRepository;
 import com.ssafy.goumunity.domain.region.infra.RegionEntity;
 import com.ssafy.goumunity.domain.user.domain.User;
@@ -55,6 +56,11 @@ public class ChatRoomRepositoryImpl implements ChatRoomRepository {
     }
 
     @Override
+    public boolean isExistChatRoom(Long chatRoomId) {
+        return chatRoomJpaRepository.existsById(chatRoomId);
+    }
+
+    @Override
     public void connectChatRoom(Long chatRoomId, Long userId) {
         userChatRoomJpaRepository.save(
                 UserChatRoomEntity.create(
@@ -68,7 +74,7 @@ public class ChatRoomRepositoryImpl implements ChatRoomRepository {
     }
 
     @Override
-    public void disconnectChatRoom(Long chatRoomId, Long userId) {
+    public void exitChatRoom(Long chatRoomId, Long userId) {
         userChatRoomJpaRepository.deleteOneByChatRoom_IdAndUser_Id(chatRoomId, userId);
     }
 
@@ -89,7 +95,15 @@ public class ChatRoomRepositoryImpl implements ChatRoomRepository {
     }
 
     @Override
-    public boolean isExistChatRoom(Long chatRoomId) {
-        return chatRoomJpaRepository.existsById(chatRoomId);
+    public Optional<UserChatRoom> findOneUserChatRoomByUserIdAndChatRoomId(
+            Long userId, Long chatRoomId) {
+        return userChatRoomJpaRepository
+                .findOnyByUser_IdAndChatRoom_Id(userId, chatRoomId)
+                .map(UserChatRoomEntity::to);
+    }
+
+    @Override
+    public void disconnectChatRoom(UserChatRoom userChatRoom) {
+        userChatRoomJpaRepository.save(UserChatRoomEntity.from(userChatRoom));
     }
 }

@@ -3,6 +3,7 @@ package com.ssafy.goumunity.domain.chat.service.port;
 import com.ssafy.goumunity.domain.chat.controller.response.ChatRoomSearchResponse;
 import com.ssafy.goumunity.domain.chat.controller.response.MyChatRoomResponse;
 import com.ssafy.goumunity.domain.chat.domain.ChatRoom;
+import com.ssafy.goumunity.domain.chat.domain.UserChatRoom;
 import com.ssafy.goumunity.domain.user.domain.User;
 import java.util.Optional;
 import org.springframework.data.domain.Pageable;
@@ -15,15 +16,19 @@ public interface ChatRoomRepository {
 
     boolean isAlreadyJoinedUser(Long chatRoomId, Long userId);
 
+    boolean isExistChatRoom(Long chatRoomId);
+
     void connectChatRoom(Long chatRoomId, Long userId);
 
     void deleteChatRoom(ChatRoom chatRoom);
 
-    void disconnectChatRoom(Long chatRoomId, Long userId);
+    void exitChatRoom(Long chatRoomId, Long userId);
 
     Slice<ChatRoomSearchResponse> searchChatRoom(String keyword, Long time, Pageable pageable);
 
     Slice<MyChatRoomResponse> findMyChatRoom(User user, Long time, Pageable pageable);
 
-    boolean isExistChatRoom(Long chatRoomId);
+    Optional<UserChatRoom> findOneUserChatRoomByUserIdAndChatRoomId(Long userId, Long chatRoomId);
+
+    void disconnectChatRoom(UserChatRoom userChatRoom);
 }

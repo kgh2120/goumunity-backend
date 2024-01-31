@@ -197,7 +197,7 @@ class ChatRoomControllerTest {
 
         doThrow(new ChatException(CHAT_ROOM_NOT_FOUND))
                 .when(chatRoomService)
-                .disconnectChatRoom(any(), any());
+                .exitChatRoom(any(), any());
         mockMvc
                 .perform(delete(deleteChatRoomUrl).with(csrf()))
                 .andExpectAll(
@@ -215,7 +215,7 @@ class ChatRoomControllerTest {
         // when // then
         String deleteChatRoomUrl = CHAT_ROOM_API_PREFIX + "/" + chatRoomId;
 
-        doThrow(new CustomException(FORBIDDEN)).when(chatRoomService).disconnectChatRoom(any(), any());
+        doThrow(new CustomException(FORBIDDEN)).when(chatRoomService).exitChatRoom(any(), any());
 
         mockMvc
                 .perform(delete(deleteChatRoomUrl).with(csrf()))
@@ -234,9 +234,7 @@ class ChatRoomControllerTest {
         // when // then
         String deleteChatRoomUrl = CHAT_ROOM_API_PREFIX + "/" + chatRoomId;
 
-        doThrow(new CustomException(HOST_CANT_OUT))
-                .when(chatRoomService)
-                .disconnectChatRoom(any(), any());
+        doThrow(new CustomException(HOST_CANT_OUT)).when(chatRoomService).exitChatRoom(any(), any());
 
         mockMvc
                 .perform(delete(deleteChatRoomUrl).with(csrf()))
@@ -287,6 +285,58 @@ class ChatRoomControllerTest {
                         status().isOk(),
                         jsonPath("$.hasNext").value(false),
                         jsonPath("$.contents.length()").value(2))
+                .andDo(print());
+    }
+
+    @WithMockUser
+    @Test
+    void 거지방_종료_테스트_성공() throws Exception {
+        // given
+        Long chatRoomId = 1L;
+        String url = CHAT_ROOM_API_PREFIX + "/" + chatRoomId + "/disconnect";
+        // when
+        mockMvc
+                .perform(patch(url).with(csrf()))
+                // then
+                .andExpectAll(status().isOk())
+                .andDo(print());
+    }
+
+    @WithMockUser
+    @Test
+    void 거지방_종료_테스트_실패_채팅방이_존재하지_않는_경우() throws Exception {
+        // given
+        Long chatRoomId = 1L;
+        String url = CHAT_ROOM_API_PREFIX + "/" + chatRoomId + "/disconnect";
+        doThrow(new ChatException(CHAT_ROOM_NOT_FOUND))
+                .when(chatRoomService)
+                .disconnectChatRoom(any(), any());
+        // when
+        mockMvc
+                .perform(patch(url).with(csrf()))
+                // then
+                .andExpectAll(
+                        status().isNotFound(),
+                        jsonPath("$.errorMessage").value(CHAT_ROOM_NOT_FOUND.getErrorMessage()),
+                        jsonPath("$.errorName").value(CHAT_ROOM_NOT_FOUND.getErrorName()))
+                .andDo(print());
+    }
+
+    @WithMockUser
+    @Test
+    void 거지방_종료_테스트_실패_회원이_거지방에_참가하지_않은_경우() throws Exception {
+        // given
+        Long chatRoomId = 1L;
+        String url = CHAT_ROOM_API_PREFIX + "/" + chatRoomId + "/disconnect";
+        doThrow(new CustomException(FORBIDDEN)).when(chatRoomService).disconnectChatRoom(any(), any());
+        // when
+        mockMvc
+                .perform(patch(url).with(csrf()))
+                // then
+                .andExpectAll(
+                        status().isForbidden(),
+                        jsonPath("$.errorMessage").value(FORBIDDEN.getErrorMessage()),
+                        jsonPath("$.errorName").value(FORBIDDEN.getErrorName()))
                 .andDo(print());
     }
 }

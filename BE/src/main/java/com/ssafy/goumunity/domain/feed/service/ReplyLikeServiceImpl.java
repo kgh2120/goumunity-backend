@@ -1,5 +1,7 @@
 package com.ssafy.goumunity.domain.feed.service;
 
+import static com.ssafy.goumunity.domain.feed.exception.ReplyErrorCode.NO_LIKE_DATA;
+
 import com.ssafy.goumunity.domain.feed.domain.ReplyLike;
 import com.ssafy.goumunity.domain.feed.exception.ReplyErrorCode;
 import com.ssafy.goumunity.domain.feed.exception.ReplyException;
@@ -32,11 +34,11 @@ public class ReplyLikeServiceImpl implements ReplyLikeService {
     @Override
     public void deleteReplyLike(Long userId, Long replyId) {
         verifyReply(replyId);
-        ReplyLike replyLike = ReplyLike.from(userId, replyId);
 
-        if (!replyLikeRepository.existsByReplyLike(replyLike)) {
-            throw new ReplyException(ReplyErrorCode.NO_LIKE_DATA);
-        }
+        ReplyLike replyLike =
+                replyLikeRepository
+                        .findOneByUserIdAndReplyId(userId, replyId)
+                        .orElseThrow(() -> new ReplyException(NO_LIKE_DATA));
 
         replyLikeRepository.deleteReplyLike(replyLike);
     }

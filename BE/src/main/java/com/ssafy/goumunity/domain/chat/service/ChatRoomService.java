@@ -13,11 +13,13 @@ public interface ChatRoomService {
 
     void connectChatRoom(Long chatRoomId, User user);
 
-    void disconnectChatRoom(Long chatRoomId, User user);
+    void exitChatRoom(Long chatRoomId, User user);
 
     Slice<ChatRoomSearchResponse> searchChatRoom(String keyword, Long time, Pageable pageable);
 
     Slice<MyChatRoomResponse> findMyChatRoom(User user, Long time, Pageable pageable);
 
     boolean verifySendChat(Long chatRoom, User user);
+
+    void disconnectChatRoom(Long chatRoomId, User user);
 }

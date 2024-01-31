@@ -2,10 +2,14 @@ package com.ssafy.goumunity.domain.feed.infra.feed;
 
 import com.ssafy.goumunity.domain.feed.domain.Feed;
 import com.ssafy.goumunity.domain.feed.domain.FeedCategory;
+import com.ssafy.goumunity.domain.feed.infra.comment.CommentEntity;
+import com.ssafy.goumunity.domain.feed.infra.feedimg.FeedImgEntity;
+import com.ssafy.goumunity.domain.feed.infra.feedlike.FeedLikeEntity;
 import com.ssafy.goumunity.domain.region.infra.RegionEntity;
 import com.ssafy.goumunity.domain.user.infra.UserEntity;
 import jakarta.persistence.*;
 import java.time.Instant;
+import java.util.List;
 import lombok.*;
 
 @Entity
@@ -40,6 +44,15 @@ public class FeedEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "region_id")
     private RegionEntity regionEntity;
+
+    @OneToMany(mappedBy = "feedEntity", orphanRemoval = true)
+    private List<FeedImgEntity> images;
+
+    @OneToMany(mappedBy = "feedEntity", orphanRemoval = true)
+    private List<CommentEntity> comments;
+
+    @OneToMany(mappedBy = "feedEntity", orphanRemoval = true)
+    private List<FeedLikeEntity> feedLikes;
 
     @Column(name = "created_at", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private Instant createdAt;

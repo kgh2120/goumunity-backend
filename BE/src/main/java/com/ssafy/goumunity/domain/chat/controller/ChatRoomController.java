@@ -39,9 +39,9 @@ public class ChatRoomController {
     }
 
     @DeleteMapping("/{chatRoomId}")
-    public ResponseEntity<Void> disconnectChatRoom(
+    public ResponseEntity<Void> exitChatRoom(
             @PathVariable Long chatRoomId, @AuthenticationPrincipal User user) {
-        chatRoomService.disconnectChatRoom(chatRoomId, user);
+        chatRoomService.exitChatRoom(chatRoomId, user);
         return ResponseEntity.ok().build();
     }
 
@@ -51,5 +51,12 @@ public class ChatRoomController {
         Slice<ChatRoomSearchResponse> response =
                 chatRoomService.searchChatRoom(keyword, time, pageable);
         return ResponseEntity.ok(SliceResponse.from(response.getContent(), response.hasNext()));
+    }
+
+    @PatchMapping("/{chatRoomId}/disconnect")
+    public ResponseEntity<Void> disconnect(
+            @PathVariable Long chatRoomId, @AuthenticationPrincipal User user) {
+        chatRoomService.disconnectChatRoom(chatRoomId, user);
+        return ResponseEntity.ok().build();
     }
 }
