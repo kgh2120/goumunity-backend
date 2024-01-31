@@ -7,6 +7,7 @@ import static org.mockito.BDDMockito.*;
 import com.ssafy.goumunity.common.exception.CustomException;
 import com.ssafy.goumunity.common.exception.GlobalErrorCode;
 import com.ssafy.goumunity.domain.chat.controller.request.ChatRoomRequest;
+import com.ssafy.goumunity.domain.chat.controller.response.ChatRoomUserResponse;
 import com.ssafy.goumunity.domain.chat.domain.ChatRoom;
 import com.ssafy.goumunity.domain.chat.domain.UserChatRoom;
 import com.ssafy.goumunity.domain.chat.exception.ChatErrorCode;
@@ -19,11 +20,15 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.SliceImpl;
 import org.springframework.mock.web.MockMultipartFile;
 
 @ExtendWith(MockitoExtension.class)
@@ -307,6 +312,93 @@ class ChatRoomServiceImplTest {
                 .willReturn(Optional.empty());
         // when
         assertThatThrownBy(() -> chatRoomService.disconnectChatRoom(chatRoomId, user))
+                .isInstanceOf(CustomException.class)
+                .hasFieldOrPropertyWithValue("errorCode", GlobalErrorCode.FORBIDDEN);
+        // then
+
+    }
+
+    @Test
+    void 거지방_회원조회_테스트_성공() throws Exception {
+        // given
+        Long chatRoomId = 1L;
+        Long time = 1000000000L;
+        int page = 0;
+        int size = 12;
+        User user = User.builder().id(1L).build();
+
+        given(chatRoomRepository.isExistChatRoom(any())).willReturn(true);
+
+        given(chatRoomRepository.isAlreadyJoinedUser(any(), any())).willReturn(true);
+
+        PageRequest pageable = PageRequest.of(page, size);
+        given(chatRoomRepository.findChatRoomUsers(any(), any(), any(), any()))
+                .willReturn(
+                        new SliceImpl<>(
+                                List.of(
+                                        new ChatRoomUserResponse(
+                                                user.getId(), user.getNickname(), user.getImgSrc(), true)),
+                                pageable,
+                                false));
+        // when
+        Slice<ChatRoomUserResponse> sut =
+                chatRoomService.findChatRoomUsers(chatRoomId, pageable, time, user);
+        List<ChatRoomUserResponse> res = sut.getContent();
+        ChatRoomUserResponse chatRoomUserResponse = res.get(0);
+        // then
+
+        SoftAssertions sa = new SoftAssertions();
+
+        sa.assertThat(sut.hasNext()).isFalse();
+        sa.assertThat(res.size()).isOne();
+
+        sa.assertThat(chatRoomUserResponse.getUserId()).isEqualTo(user.getId());
+        sa.assertThat(chatRoomUserResponse.getNickname()).isEqualTo(user.getNickname());
+        sa.assertThat(chatRoomUserResponse.getProfileImageSrc()).isEqualTo(user.getImgSrc());
+        sa.assertThat(chatRoomUserResponse.getIsCurrentUser()).isTrue();
+        sa.assertAll();
+    }
+
+    @Test
+    void 거지방_회원조회_테스트_실패_채팅방이_존재하지_않는_경우() throws Exception {
+        // given
+        Long chatRoomId = 1L;
+        Long time = 1000000000L;
+        int page = 0;
+        int size = 12;
+        User user = User.builder().id(1L).build();
+
+        given(chatRoomRepository.isExistChatRoom(any())).willReturn(false);
+
+        //        given(chatRoomRepository.isAlreadyJoinedUser(any(), any()))
+        //                .willReturn(true);
+
+        PageRequest pageable = PageRequest.of(page, size);
+
+        // when
+        assertThatThrownBy(() -> chatRoomService.findChatRoomUsers(chatRoomId, pageable, time, user))
+                .isInstanceOf(CustomException.class)
+                .hasFieldOrPropertyWithValue("errorCode", GlobalErrorCode.FORBIDDEN);
+        // then
+
+    }
+
+    @Test
+    void 거지방_회원조회_테스트_실패_회원이_채팅방에_참가하지_않는_경우() throws Exception {
+        // given
+        Long chatRoomId = 1L;
+        Long time = 1000000000L;
+        int page = 0;
+        int size = 12;
+        User user = User.builder().id(1L).build();
+
+        given(chatRoomRepository.isExistChatRoom(any())).willReturn(true);
+
+        given(chatRoomRepository.isAlreadyJoinedUser(any(), any())).willReturn(false);
+
+        PageRequest pageable = PageRequest.of(page, size);
+        // when
+        assertThatThrownBy(() -> chatRoomService.findChatRoomUsers(chatRoomId, pageable, time, user))
                 .isInstanceOf(CustomException.class)
                 .hasFieldOrPropertyWithValue("errorCode", GlobalErrorCode.FORBIDDEN);
         // then
