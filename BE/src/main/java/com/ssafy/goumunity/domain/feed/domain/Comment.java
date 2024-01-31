@@ -23,6 +23,7 @@ public class Comment {
 
     public void modifyContent(String content) {
         this.content = content;
+        this.updatedAt = Instant.now();
     }
 
     public void checkUser(Long userId) {
@@ -35,6 +36,12 @@ public class Comment {
     }
 
     public static Comment from(Long userId, Long feedId, CommentRequest.Create comment) {
-        return Comment.builder().feedId(feedId).userId(userId).content(comment.getContent()).build();
+        return Comment.builder()
+                .feedId(feedId)
+                .userId(userId)
+                .content(comment.getContent())
+                .createdAt(Instant.now())
+                .updatedAt(Instant.now())
+                .build();
     }
 }
