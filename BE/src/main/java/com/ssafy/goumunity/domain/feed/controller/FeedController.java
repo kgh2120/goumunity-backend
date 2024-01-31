@@ -2,6 +2,7 @@ package com.ssafy.goumunity.domain.feed.controller;
 
 import com.ssafy.goumunity.common.util.SliceResponse;
 import com.ssafy.goumunity.domain.feed.controller.request.FeedRequest;
+import com.ssafy.goumunity.domain.feed.controller.response.FeedRecommendResponse;
 import com.ssafy.goumunity.domain.feed.controller.response.FeedResponse;
 import com.ssafy.goumunity.domain.feed.service.FeedService;
 import com.ssafy.goumunity.domain.user.domain.User;
@@ -10,8 +11,6 @@ import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -35,10 +34,11 @@ public class FeedController {
     }
 
     @GetMapping
-    public ResponseEntity<SliceResponse<FeedResponse>> findFeed(
-            @RequestParam("time") Long time, Pageable pageable) {
-        Slice<FeedResponse> feeds = feedService.findFeed(time, pageable);
-        return ResponseEntity.ok(SliceResponse.from(feeds.getContent(), feeds.hasNext()));
+    public ResponseEntity<FeedRecommendResponse> findFeed(
+            @AuthenticationPrincipal User user
+            , @RequestParam("time") Long time
+            , @RequestParam("regionId") Long regionId) {
+        return ResponseEntity.ok(feedService.findFeed(user, time, regionId));
     }
 
     @GetMapping("/{feed-id}")
