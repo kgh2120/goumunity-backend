@@ -28,6 +28,11 @@ public class FeedRepositoryImpl implements FeedRepository {
     }
 
     @Override
+    public FeedResponse findOneFeed(Long feedId) {
+        return feedQueryDslRepository.findOneFeed(feedId);
+    }
+
+    @Override
     public Optional<Feed> findOneById(Long feedId) {
         return feedJpaRepository.findByFeedId(feedId).map(FeedEntity::to);
     }

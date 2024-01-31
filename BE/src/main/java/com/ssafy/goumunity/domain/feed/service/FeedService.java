@@ -13,5 +13,7 @@ public interface FeedService {
 
     Slice<FeedResponse> findFeed(Long time, Pageable pageable);
 
+    FeedResponse findOneByFeedId(Long feedId);
+
     void deleteFeed(Long userId, Long feedId);
 }
