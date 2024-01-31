@@ -13,6 +13,8 @@ public interface FeedRepository {
 
     Slice<FeedResponse> findFeed(Instant time, Pageable pageable);
 
+    FeedResponse findOneFeed(Long feedId);
+
     Optional<Feed> findOneById(Long feedId);
 
     void delete(Feed feed);

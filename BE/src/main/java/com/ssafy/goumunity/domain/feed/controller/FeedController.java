@@ -41,6 +41,11 @@ public class FeedController {
         return ResponseEntity.ok(SliceResponse.from(feeds.getContent(), feeds.hasNext()));
     }
 
+    @GetMapping("/{feed-id}")
+    public ResponseEntity<FeedResponse> findOneByFeedId(@PathVariable("feed-id") Long feedId) {
+        return ResponseEntity.ok(feedService.findOneByFeedId(feedId));
+    }
+
     @DeleteMapping("/{feed-id}")
     public ResponseEntity<Void> deleteFeed(
             @AuthenticationPrincipal User user, @PathVariable("feed-id") Long feedId) {

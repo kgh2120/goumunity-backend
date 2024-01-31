@@ -46,6 +46,11 @@ public class FeedServiceImpl implements FeedService {
     }
 
     @Override
+    public FeedResponse findOneByFeedId(Long feedId) {
+        return feedRepository.findOneFeed(feedId);
+    }
+
+    @Override
     public void deleteFeed(Long userId, Long feedId) {
         Feed originalFeed =
                 feedRepository

@@ -52,4 +52,25 @@ public class FeedQueryDslRepository {
 
         return new SliceImpl<>(res, pageable, SliceUtils.hasNext(res, pageable));
     }
+
+    public FeedResponse findOneFeed(Long feedId) {
+        return queryFactory
+                .query()
+                .select(
+                        new QFeedResponse(
+                                feedEntity,
+                                JPAExpressions.select(commentEntity.count())
+                                        .from(commentEntity)
+                                        .where(feedEntity.eq(commentEntity.feedEntity)),
+                                JPAExpressions.select(feedLikeEntity.count())
+                                        .from(feedLikeEntity)
+                                        .where(feedEntity.eq(feedLikeEntity.feedEntity))))
+                .from(feedEntity)
+                .leftJoin(feedEntity.images, feedImgEntity)
+                .leftJoin(feedEntity.userEntity, userEntity)
+                .leftJoin(feedEntity.regionEntity, regionEntity)
+                .where(feedEntity.feedId.eq(feedId))
+                .groupBy(feedEntity)
+                .fetchOne();
+    }
 }
