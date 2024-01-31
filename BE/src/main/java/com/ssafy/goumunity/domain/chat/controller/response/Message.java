@@ -5,7 +5,7 @@ import lombok.*;
 
 public class Message {
 
-    @Data
+    @Getter
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
     @Builder
@@ -14,7 +14,7 @@ public class Message {
         private ChatType chatType;
     }
 
-    @Data
+    @Getter
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
     @Builder
