@@ -117,6 +117,12 @@ public class ChatRoomServiceImpl implements ChatRoomService {
                 .orElseThrow(() -> new CustomException(GlobalErrorCode.FORBIDDEN));
     }
 
+    @Override
+    public boolean verifySendChat(Long chatRoomId, User user) {
+        return chatRoomRepository.isExistChatRoom(chatRoomId)
+                && !chatRoomRepository.isAlreadyJoinedUser(chatRoomId, user.getId());
+    }
+
     private void verifyConnectChatRoom(Long chatRoomId, User user) {
         ChatRoom chatRoom =
                 chatRoomRepository
