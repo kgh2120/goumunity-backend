@@ -14,6 +14,11 @@ import com.ssafy.goumunity.domain.feed.controller.response.FeedResponse;
 import com.ssafy.goumunity.domain.feed.controller.response.QFeedResponse;
 import java.time.Instant;
 import java.util.List;
+
+import com.ssafy.goumunity.domain.feed.domain.FeedRecommendResource;
+import com.ssafy.goumunity.domain.feed.domain.QFeedRecommendResource;
+import com.ssafy.goumunity.domain.region.infra.QRegionEntity;
+import com.ssafy.goumunity.domain.region.infra.RegionEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -26,31 +31,31 @@ public class FeedQueryDslRepository {
 
     private final JPAQueryFactory queryFactory;
 
-    public Slice<FeedResponse> findFeed(Instant time, Pageable pageable) {
-        final List<FeedResponse> res =
-                queryFactory
+    public List<FeedRecommendResource> findFeed(Long userId, Instant time, Long regionId) {
+        return queryFactory
                         .query()
                         .select(
-                                new QFeedResponse(
+                                new QFeedRecommendResource(
                                         feedEntity,
                                         JPAExpressions.select(commentEntity.count())
                                                 .from(commentEntity)
                                                 .where(feedEntity.eq(commentEntity.feedEntity)),
                                         JPAExpressions.select(feedLikeEntity.count())
                                                 .from(feedLikeEntity)
-                                                .where(feedEntity.eq(feedLikeEntity.feedEntity))))
+                                                .where(feedEntity.eq(feedLikeEntity.feedEntity)),
+                                        JPAExpressions.selectFrom(feedLikeEntity)
+                                                .where(feedLikeEntity.userEntity.id.eq(userId))
+                                                .where(feedLikeEntity.feedEntity.feedId.eq(feedEntity.feedId))
+                                                .exists()
+                                        ))
                         .from(feedEntity)
                         .leftJoin(feedEntity.images, feedImgEntity)
                         .leftJoin(feedEntity.userEntity, userEntity)
-                        .leftJoin(feedEntity.regionEntity, regionEntity)
+                        .leftJoin(feedEntity.regionEntity, regionEntity).on(regionEntity.regionId.eq(regionId))
                         .groupBy(feedEntity)
                         .having(feedEntity.createdAt.before(time))
-                        .orderBy(feedEntity.createdAt.desc())
-                        .offset(pageable.getOffset())
-                        .limit(pageable.getPageSize() + 1)
+                        .orderBy(feedEntity.createdAt.desc(), feedImgEntity.sequence.asc())
                         .fetch();
-
-        return new SliceImpl<>(res, pageable, SliceUtils.hasNext(res, pageable));
     }
 
     public FeedResponse findOneFeed(Long feedId) {
