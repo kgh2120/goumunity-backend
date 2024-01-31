@@ -8,7 +8,7 @@ import static com.ssafy.goumunity.domain.user.infra.QUserEntity.userEntity;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.ssafy.goumunity.common.util.SliceUtils;
+import com.ssafy.goumunity.common.util.QueryDslSliceUtils;
 import com.ssafy.goumunity.domain.chat.controller.response.MyChatRoomResponse;
 import com.ssafy.goumunity.domain.user.domain.User;
 import java.time.Instant;
@@ -47,6 +47,6 @@ public class ChatRoomQueryDslRepository {
                         .limit(pageable.getPageSize() + 1)
                         .fetch();
 
-        return new SliceImpl<>(res, pageable, SliceUtils.hasNext(res, pageable));
+        return new SliceImpl<>(res, pageable, QueryDslSliceUtils.hasNext(res, pageable));
     }
 }

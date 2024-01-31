@@ -19,7 +19,7 @@ public interface ChatRoomService {
 
     Slice<MyChatRoomResponse> findMyChatRoom(User user, Long time, Pageable pageable);
 
-    boolean verifySendChat(Long chatRoom, User user);
+    boolean verifyAccessChat(Long chatRoom, User user);
 
     void disconnectChatRoom(Long chatRoomId, User user);
 }

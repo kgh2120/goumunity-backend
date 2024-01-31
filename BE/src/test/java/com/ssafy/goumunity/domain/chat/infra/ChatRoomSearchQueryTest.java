@@ -136,7 +136,7 @@ class ChatRoomSearchQueryTest {
         HashtagEntity h3 = HashtagEntity.builder().name("10만원 미만").build();
         em.persist(h3);
 
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 15; i++) {
             ChatRoomEntity chatRoom =
                     ChatRoomEntity.builder()
                             .title("거지방" + i)
@@ -162,7 +162,6 @@ class ChatRoomSearchQueryTest {
         em.clear();
 
         Pageable pageable = PageRequest.of(0, 10);
-
         Slice<MyChatRoomResponse> res =
                 chatRoomQueryDslRepository.findMyChatRoom(users.toModel(), 100000L, pageable);
 
@@ -171,6 +170,6 @@ class ChatRoomSearchQueryTest {
             System.out.println(myChatRoomResponse);
         }
         assertThat(content.size()).isSameAs(10);
-        assertThat(res.hasNext()).isFalse();
+        assertThat(res.hasNext()).isTrue();
     }
 }
