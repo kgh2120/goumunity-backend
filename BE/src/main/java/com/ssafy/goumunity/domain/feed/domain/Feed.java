@@ -1,6 +1,8 @@
 package com.ssafy.goumunity.domain.feed.domain;
 
 import com.ssafy.goumunity.domain.feed.controller.request.FeedRequest;
+import com.ssafy.goumunity.domain.user.exception.UserErrorCode;
+import com.ssafy.goumunity.domain.user.exception.UserException;
 import java.time.Instant;
 import lombok.*;
 
@@ -20,6 +22,10 @@ public class Feed {
 
     private Instant createdAt;
     private Instant updatedAt;
+
+    public void checkUser(Long userId) {
+        if (!this.getUserId().equals(userId)) throw new UserException(UserErrorCode.INVALID_USER);
+    }
 
     public static Feed from(FeedRequest.Create feedRequest, Long userId) {
         return Feed.builder()

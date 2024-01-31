@@ -39,6 +39,11 @@ public class ReplyRepositoryImpl implements ReplyRepository {
     }
 
     @Override
+    public void delete(Reply reply) {
+        replyJpaRepository.delete(ReplyEntity.from(reply));
+    }
+
+    @Override
     public boolean existsByReplyId(Long replyId) {
         return replyJpaRepository.existsById(replyId);
     }

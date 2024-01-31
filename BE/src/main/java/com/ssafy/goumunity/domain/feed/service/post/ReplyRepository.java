@@ -16,5 +16,7 @@ public interface ReplyRepository {
 
     Reply modify(Reply reply);
 
+    void delete(Reply reply);
+
     boolean existsByReplyId(Long replyId);
 }

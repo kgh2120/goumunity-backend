@@ -64,13 +64,11 @@ public class CommentServiceImpl implements CommentService {
         // 조회해온 comment의 게시글과 param으로 받은 feed-id가 다르면 exception 발생
         originalComment.checkFeed(feedId);
 
-        // TODO: 댓글을 참조하는 댓글좋아요(CommentLike) 모두 삭제하기
-        // TODO: 댓글을 참조하는 답글(Reply) 모두 삭제하기
-
         commentRepository.delete(originalComment);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public boolean isExistComment(Long commentId) {
         return commentRepository.existsById(commentId);
     }

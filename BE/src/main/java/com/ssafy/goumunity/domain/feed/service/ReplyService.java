@@ -12,4 +12,6 @@ public interface ReplyService {
     Slice<ReplyResponse> findAllByCommentId(Long id, Long time, Pageable pageable);
 
     Reply modifyReply(Long userId, Long commentId, Long replyId, ReplyRequest.Modify reply);
+
+    void deleteReply(Long userId, Long commentId, Long replyId);
 }
