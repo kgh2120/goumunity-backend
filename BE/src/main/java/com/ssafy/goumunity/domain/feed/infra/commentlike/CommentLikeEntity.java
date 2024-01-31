@@ -23,7 +23,6 @@ public class CommentLikeEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    @OnDelete(action = OnDeleteAction.CASCADE)
     private UserEntity userEntity;
 
     @ManyToOne(fetch = FetchType.LAZY)

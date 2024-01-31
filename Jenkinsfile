@@ -31,7 +31,7 @@ pipeline {
                 }
             }
         }
-        stage('Send Artifact'){
+        stage('Send Artifact to Control'){
             steps{
                 script{
                     sh 'ls -al'
@@ -55,6 +55,34 @@ pipeline {
                 }
             }
         }
+
+        stage('Send Artifact to Dev'){
+            steps{
+                script{
+                    sh 'ls -al'
+                    sh 'ls -al BE/build'
+                    sh 'cd BE/build/libs && ls -al'
+                    sshPublisher(
+                                publishers: [
+                                    sshPublisherDesc(
+                                        configName: 'ssafyhelper',
+                                        transfers: [
+                                            sshTransfer(
+                                                sourceFiles: 'BE/build/libs/goumunity-0.0.1-SNAPSHOT.jar',
+                                                removePrefix: 'BE/build/libs',
+                                                remoteDirectory: '/sendData',
+                                                execCommand: 'sh temp/AutoDevServer.sh'
+                                            )
+                                        ]
+                                    )
+                                ]
+                            )
+                }
+            }
+        }
+
+
+
         
         stage('Auto CI By Git-lab CI-CD'){
             steps{

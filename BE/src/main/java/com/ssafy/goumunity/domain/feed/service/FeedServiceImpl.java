@@ -1,20 +1,16 @@
 package com.ssafy.goumunity.domain.feed.service;
 
-import com.ssafy.goumunity.common.exception.feed.ResourceNotFoundException;
 import com.ssafy.goumunity.domain.feed.controller.request.FeedRequest;
 import com.ssafy.goumunity.domain.feed.controller.response.FeedResponse;
 import com.ssafy.goumunity.domain.feed.domain.Feed;
 import com.ssafy.goumunity.domain.feed.domain.FeedImg;
-import com.ssafy.goumunity.domain.feed.infra.feed.FeedEntity;
+import com.ssafy.goumunity.domain.feed.exception.FeedErrorCode;
+import com.ssafy.goumunity.domain.feed.exception.FeedException;
 import com.ssafy.goumunity.domain.feed.service.post.FeedImageUploader;
 import com.ssafy.goumunity.domain.feed.service.post.FeedImgRepository;
 import com.ssafy.goumunity.domain.feed.service.post.FeedRepository;
-import com.ssafy.goumunity.domain.user.domain.User;
-import com.ssafy.goumunity.domain.user.exception.UserErrorCode;
-import com.ssafy.goumunity.domain.user.exception.UserException;
 import java.time.Instant;
 import java.util.List;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -49,36 +45,21 @@ public class FeedServiceImpl implements FeedService {
         return feedRepository.findFeed(Instant.ofEpochMilli(time), pageable);
     }
 
-    //    @Override
-    //    @Transactional(readOnly = true)
-    //    public FeedResponse findOneByFeedId(Long feedId) {
-    //        return FeedResponse.from(
-    //                feedRepository
-    //                        .findOneByFeedId(feedId)
-    //                        .orElseThrow(() -> new ResourceNotFoundException("해당 피드를 찾을 수 없습니다.",
-    // this)));
-    //    }
-    //
-    //    @Override
-    //    @Transactional(readOnly = true)
-    //    public List<FeedResponse> findAllByUserId(Long userId) {
-    //        return feedRepository.findAllByUserId(userId).stream().map(FeedResponse::from).toList();
-    //    }
+    @Override
+    public FeedResponse findOneByFeedId(Long feedId) {
+        return feedRepository.findOneFeed(feedId);
+    }
 
     @Override
-    public void deleteOneByFeedId(Long feedId, User user) {
-        Optional<Feed> feed = feedRepository.findOneByFeedId(feedId);
-        if (feed.isEmpty()) throw new ResourceNotFoundException(feedId + " 번 피드를 찾을 수 없습니다.", this);
-        else if (!feed.get().getUserId().equals(user.getId()))
-            throw new UserException(UserErrorCode.INVALID_USER);
-        else {
-            // 1. 피드 삭제
-            feedRepository.delete(FeedEntity.from(feed.get()));
-            // TODO : 2. 피드별 코멘트별 답글 삭제
-            // 3. 피드별 코멘트별 좋아요 삭제 onDelete추가
-            // 4. 피드별 코멘트 삭제 onDelete추가
-            // 5. 피드 이미지 삭제 onDelete추가
-            // 6. 피드 좋아요 삭제 onDelete추가
-        }
+    public void deleteFeed(Long userId, Long feedId) {
+        Feed originalFeed =
+                feedRepository
+                        .findOneById(feedId)
+                        .orElseThrow(() -> new FeedException(FeedErrorCode.FEED_NOT_FOUND));
+
+        // 조회해온 feed의 작성자와 세션에 로그인 되어 있는 유저가 다르면 exception 발생
+        originalFeed.checkUser(userId);
+
+        feedRepository.delete(originalFeed);
     }
 }

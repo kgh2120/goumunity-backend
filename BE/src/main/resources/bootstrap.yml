@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: local
+    default: local
   cloud:
     config:
       uri: https://www.ssafyhelper.shop

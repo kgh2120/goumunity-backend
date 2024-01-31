@@ -41,10 +41,15 @@ public class FeedController {
         return ResponseEntity.ok(SliceResponse.from(feeds.getContent(), feeds.hasNext()));
     }
 
-    @DeleteMapping("/{feedId}")
-    public ResponseEntity<Void> deleteOneByFeedId(
-            @PathVariable Long feedId, @AuthenticationPrincipal User user) {
-        feedService.deleteOneByFeedId(feedId, user);
+    @GetMapping("/{feed-id}")
+    public ResponseEntity<FeedResponse> findOneByFeedId(@PathVariable("feed-id") Long feedId) {
+        return ResponseEntity.ok(feedService.findOneByFeedId(feedId));
+    }
+
+    @DeleteMapping("/{feed-id}")
+    public ResponseEntity<Void> deleteFeed(
+            @AuthenticationPrincipal User user, @PathVariable("feed-id") Long feedId) {
+        feedService.deleteFeed(user.getId(), feedId);
         return ResponseEntity.ok().build();
     }
 }

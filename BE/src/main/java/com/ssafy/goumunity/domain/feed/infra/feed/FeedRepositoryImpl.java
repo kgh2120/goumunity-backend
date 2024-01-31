@@ -4,7 +4,6 @@ import com.ssafy.goumunity.domain.feed.controller.response.FeedResponse;
 import com.ssafy.goumunity.domain.feed.domain.Feed;
 import com.ssafy.goumunity.domain.feed.service.post.FeedRepository;
 import java.time.Instant;
-import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -29,18 +28,18 @@ public class FeedRepositoryImpl implements FeedRepository {
     }
 
     @Override
-    public Optional<Feed> findOneByFeedId(Long feedId) {
-        return feedJpaRepository.findOneByFeedId(feedId).map(FeedEntity::to);
+    public FeedResponse findOneFeed(Long feedId) {
+        return feedQueryDslRepository.findOneFeed(feedId);
     }
 
     @Override
-    public List<Feed> findAllByUserId(Long userId) {
-        return feedJpaRepository.findAllByUserId(userId).stream().map(FeedEntity::to).toList();
+    public Optional<Feed> findOneById(Long feedId) {
+        return feedJpaRepository.findByFeedId(feedId).map(FeedEntity::to);
     }
 
     @Override
-    public void delete(FeedEntity feedEntity) {
-        feedJpaRepository.delete(feedEntity);
+    public void delete(Feed feed) {
+        feedJpaRepository.delete(FeedEntity.from(feed));
     }
 
     @Override
