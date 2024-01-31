@@ -45,13 +45,13 @@ public class FeedEntity {
     @JoinColumn(name = "region_id")
     private RegionEntity regionEntity;
 
-    @OneToMany(mappedBy = "feedEntity", orphanRemoval = true)
+    @OneToMany(mappedBy = "feedEntity", cascade = CascadeType.ALL)
     private List<FeedImgEntity> images;
 
-    @OneToMany(mappedBy = "feedEntity", orphanRemoval = true)
+    @OneToMany(mappedBy = "feedEntity", cascade = CascadeType.REMOVE)
     private List<CommentEntity> comments;
 
-    @OneToMany(mappedBy = "feedEntity", orphanRemoval = true)
+    @OneToMany(mappedBy = "feedEntity", cascade = CascadeType.REMOVE)
     private List<FeedLikeEntity> feedLikes;
 
     @Column(name = "created_at", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")

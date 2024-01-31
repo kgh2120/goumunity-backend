@@ -46,6 +46,16 @@ public class FeedController {
         return ResponseEntity.ok(feedService.findOneByFeedId(feedId));
     }
 
+    @PutMapping("{feed-id}")
+    public ResponseEntity<Void> modifyFeed(
+            @AuthenticationPrincipal User user,
+            @PathVariable("feed-id") Long feedId,
+            @RequestPart("data") @Valid FeedRequest.Modify feedRequest,
+            @RequestPart("images") @Nullable List<MultipartFile> images) {
+        feedService.modifyFeed(user.getId(), feedId, feedRequest, images);
+        return ResponseEntity.ok().build();
+    }
+
     @DeleteMapping("/{feed-id}")
     public ResponseEntity<Void> deleteFeed(
             @AuthenticationPrincipal User user, @PathVariable("feed-id") Long feedId) {
