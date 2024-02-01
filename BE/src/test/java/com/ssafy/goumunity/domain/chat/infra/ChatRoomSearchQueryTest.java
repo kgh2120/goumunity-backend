@@ -75,9 +75,6 @@ class ChatRoomSearchQueryTest {
         Slice<ChatRoomEntity> slice =
                 chatRoomJpaRepository.searchChatRoom("거지방", Instant.now(), PageRequest.of(0, 10));
         assertThat(slice.getContent().size()).isSameAs(10);
-        for (ChatRoomEntity chatRoomEntity : slice) {
-            System.out.println(chatRoomEntity);
-        }
     }
 
     @Test
@@ -122,9 +119,6 @@ class ChatRoomSearchQueryTest {
         Slice<ChatRoomEntity> slice =
                 chatRoomJpaRepository.searchChatRoom("20대", Instant.now(), PageRequest.of(0, 10));
         assertThat(slice.getContent().size()).isSameAs(10);
-        for (ChatRoomEntity chatRoomEntity : slice) {
-            System.out.println(chatRoomEntity);
-        }
     }
 
     @Test
@@ -172,9 +166,6 @@ class ChatRoomSearchQueryTest {
                 chatRoomQueryDslRepository.findMyChatRoom(users.getId(), 100000L, pageable);
 
         List<MyChatRoomResponse> content = res.getContent();
-        for (MyChatRoomResponse myChatRoomResponse : content) {
-            System.out.println(myChatRoomResponse);
-        }
         assertThat(content.size()).isSameAs(10);
         assertThat(res.hasNext()).isTrue();
     }
