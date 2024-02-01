@@ -7,6 +7,7 @@ import lombok.*;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
+@EqualsAndHashCode(exclude = {"createdAt", "updatedAt"})
 public class FeedImg {
     private Long feedImgId;
     private Long feedId;

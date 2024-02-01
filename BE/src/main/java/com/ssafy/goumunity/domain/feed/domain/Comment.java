@@ -12,6 +12,7 @@ import lombok.*;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
+@EqualsAndHashCode(exclude = {"createdAt", "updatedAt"})
 public class Comment {
     private Long commentId;
     private String content;

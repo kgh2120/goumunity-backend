@@ -10,6 +10,7 @@ import lombok.*;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
+@EqualsAndHashCode(exclude = {"createdAt", "updatedAt"})
 public class Feed {
     private Long feedId;
     private String content;

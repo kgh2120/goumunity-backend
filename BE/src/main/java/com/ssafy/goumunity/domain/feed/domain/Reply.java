@@ -12,7 +12,7 @@ import lombok.*;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
-@EqualsAndHashCode
+@EqualsAndHashCode(exclude = {"createdAt", "updatedAt"})
 public class Reply {
     private Long replyId;
     private String content;
