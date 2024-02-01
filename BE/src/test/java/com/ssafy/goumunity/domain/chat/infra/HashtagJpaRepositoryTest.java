@@ -1,8 +1,9 @@
 package com.ssafy.goumunity.domain.chat.infra;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 
+import com.ssafy.goumunity.domain.chat.infra.hashtag.HashtagEntity;
+import com.ssafy.goumunity.domain.chat.infra.hashtag.HashtagJpaRepository;
 import java.time.Instant;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;

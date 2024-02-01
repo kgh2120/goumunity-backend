@@ -1,4 +1,4 @@
-package com.ssafy.goumunity.domain.chat.infra;
+package com.ssafy.goumunity.domain.chat.infra.chatroom;
 
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;

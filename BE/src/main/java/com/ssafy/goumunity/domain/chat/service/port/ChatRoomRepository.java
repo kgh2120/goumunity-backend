@@ -5,7 +5,6 @@ import com.ssafy.goumunity.domain.chat.controller.response.ChatRoomUserResponse;
 import com.ssafy.goumunity.domain.chat.controller.response.MyChatRoomResponse;
 import com.ssafy.goumunity.domain.chat.domain.ChatRoom;
 import com.ssafy.goumunity.domain.chat.domain.UserChatRoom;
-import com.ssafy.goumunity.domain.user.domain.User;
 import java.util.Optional;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -27,7 +26,7 @@ public interface ChatRoomRepository {
 
     Slice<ChatRoomSearchResponse> searchChatRoom(String keyword, Long time, Pageable pageable);
 
-    Slice<MyChatRoomResponse> findMyChatRoom(User user, Long time, Pageable pageable);
+    Slice<MyChatRoomResponse> findMyChatRoom(Long userId, Long time, Pageable pageable);
 
     Optional<UserChatRoom> findOneUserChatRoomByUserIdAndChatRoomId(Long userId, Long chatRoomId);
 

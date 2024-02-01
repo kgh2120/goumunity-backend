@@ -28,12 +28,10 @@ public class FeedLikeEntity {
     @JoinColumn(name = "feed_id")
     private FeedEntity feedEntity;
 
-    @Column(name = "created_at", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @Column(name = "created_at")
     private Instant createdAt;
 
-    @Column(
-            name = "updated_at",
-            columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
+    @Column(name = "updated_at")
     private Instant updatedAt;
 
     public FeedLike to() {
@@ -47,15 +45,12 @@ public class FeedLikeEntity {
     }
 
     public static FeedLikeEntity from(FeedLike feedLike) {
-        FeedLikeEntityBuilder feedLikeEntityBuilder =
-                FeedLikeEntity.builder()
-                        .feedLikeId(feedLike.getFeedLikeId())
-                        .userEntity(UserEntity.userEntityOnlyWithId(feedLike.getUserId()))
-                        .feedEntity(FeedEntity.feedEntityOnlyWithId(feedLike.getFeedId()));
-
-        if (feedLike.getCreatedAt() != null) feedLikeEntityBuilder.createdAt(feedLike.getCreatedAt());
-        if (feedLike.getUpdatedAt() != null) feedLikeEntityBuilder.updatedAt(feedLike.getUpdatedAt());
-
-        return feedLikeEntityBuilder.build();
+        return FeedLikeEntity.builder()
+                .feedLikeId(feedLike.getFeedLikeId())
+                .userEntity(UserEntity.userEntityOnlyWithId(feedLike.getUserId()))
+                .feedEntity(FeedEntity.feedEntityOnlyWithId(feedLike.getFeedId()))
+                .createdAt(feedLike.getCreatedAt())
+                .updatedAt(feedLike.getUpdatedAt())
+                .build();
     }
 }

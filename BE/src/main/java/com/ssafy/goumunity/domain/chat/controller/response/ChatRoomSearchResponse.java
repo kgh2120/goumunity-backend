@@ -1,6 +1,6 @@
 package com.ssafy.goumunity.domain.chat.controller.response;
 
-import com.ssafy.goumunity.domain.chat.infra.ChatRoomEntity;
+import com.ssafy.goumunity.domain.chat.infra.chatroom.ChatRoomEntity;
 import java.util.List;
 import lombok.*;
 

@@ -1,13 +1,15 @@
-package com.ssafy.goumunity.domain.chat.infra;
+package com.ssafy.goumunity.domain.chat.infra.chatroom;
 
 import com.ssafy.goumunity.domain.chat.controller.response.ChatRoomSearchResponse;
 import com.ssafy.goumunity.domain.chat.controller.response.ChatRoomUserResponse;
 import com.ssafy.goumunity.domain.chat.controller.response.MyChatRoomResponse;
 import com.ssafy.goumunity.domain.chat.domain.ChatRoom;
 import com.ssafy.goumunity.domain.chat.domain.UserChatRoom;
+import com.ssafy.goumunity.domain.chat.infra.hashtag.ChatRoomHashtagEntity;
+import com.ssafy.goumunity.domain.chat.infra.hashtag.ChatRoomHashtagJpaRepository;
+import com.ssafy.goumunity.domain.chat.infra.hashtag.HashtagEntity;
 import com.ssafy.goumunity.domain.chat.service.port.ChatRoomRepository;
 import com.ssafy.goumunity.domain.region.infra.RegionEntity;
-import com.ssafy.goumunity.domain.user.domain.User;
 import com.ssafy.goumunity.domain.user.infra.UserEntity;
 import java.time.Instant;
 import java.util.List;
@@ -91,8 +93,8 @@ public class ChatRoomRepositoryImpl implements ChatRoomRepository {
     }
 
     @Override
-    public Slice<MyChatRoomResponse> findMyChatRoom(User user, Long time, Pageable pageable) {
-        return chatRoomQueryDslRepository.findMyChatRoom(user, time, pageable);
+    public Slice<MyChatRoomResponse> findMyChatRoom(Long userId, Long time, Pageable pageable) {
+        return chatRoomQueryDslRepository.findMyChatRoom(userId, time, pageable);
     }
 
     @Override
