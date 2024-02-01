@@ -4,7 +4,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.ssafy.goumunity.config.SecurityConfig;
+import com.ssafy.goumunity.common.config.SecurityConfig;
 import com.ssafy.goumunity.domain.feed.service.CommentLikeService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;

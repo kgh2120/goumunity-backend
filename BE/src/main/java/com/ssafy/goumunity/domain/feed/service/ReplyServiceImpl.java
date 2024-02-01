@@ -17,13 +17,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
+@Transactional(readOnly = true)
 public class ReplyServiceImpl implements ReplyService {
 
     private final ReplyRepository replyRepository;
     private final CommentService commentService;
 
     @Override
+    @Transactional
     public void saveReply(Long userId, Long commentId, ReplyRequest.Create reply) {
         if (!commentService.isExistComment(commentId)) {
             throw new CustomException(CommentErrorCode.COMMENT_NOT_FOUND);
@@ -33,12 +34,12 @@ public class ReplyServiceImpl implements ReplyService {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public Slice<ReplyResponse> findAllByCommentId(Long id, Long time, Pageable pageable) {
         return replyRepository.findAllByCommentId(id, Instant.ofEpochMilli(time), pageable);
     }
 
     @Override
+    @Transactional
     public Reply modifyReply(Long userId, Long commentId, Long replyId, ReplyRequest.Modify reply) {
         // reply-id 로 조회 했을 때 조회결과가 없으면 exception 발생
         Reply originalReply =
@@ -57,6 +58,7 @@ public class ReplyServiceImpl implements ReplyService {
     }
 
     @Override
+    @Transactional
     public void deleteReply(Long userId, Long commentId, Long replyId) {
         // reply-id 로 조회 했을 때 조회결과가 없으면 exception 발생
         Reply originalReply =

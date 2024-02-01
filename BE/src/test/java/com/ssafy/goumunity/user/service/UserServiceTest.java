@@ -5,9 +5,9 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
+import com.ssafy.goumunity.domain.user.controller.request.UserCreateRequest;
 import com.ssafy.goumunity.domain.user.domain.User;
 import com.ssafy.goumunity.domain.user.domain.UserCategory;
-import com.ssafy.goumunity.domain.user.dto.UserCreateDto;
 import com.ssafy.goumunity.domain.user.service.UserServiceImpl;
 import com.ssafy.goumunity.domain.user.service.port.MyChatRoomFindService;
 import com.ssafy.goumunity.domain.user.service.port.ProfileImageUploader;
@@ -37,8 +37,8 @@ public class UserServiceTest {
     void 유저_생성_테스트() throws Exception {
         Clock fixed = Clock.fixed(Instant.now(), ZoneId.of(ZoneId.systemDefault().getId()));
         // given
-        UserCreateDto userCreateDto =
-                UserCreateDto.builder()
+        UserCreateRequest userCreateRequest =
+                UserCreateRequest.builder()
                         .email("ssafy@naver.com")
                         .password("1q2w3e4r!@Q")
                         .monthBudget(30_0000_0000L)
@@ -60,29 +60,29 @@ public class UserServiceTest {
                 .willReturn(
                         User.builder()
                                 .id(1L)
-                                .age(userCreateDto.getAge())
-                                .email(userCreateDto.getEmail())
-                                .nickname(userCreateDto.getNickname())
-                                .password(userCreateDto.getPassword())
-                                .regionId(userCreateDto.getRegionId())
-                                .monthBudget(userCreateDto.getMonthBudget())
-                                .userCategory(userCreateDto.getUserCategory())
+                                .age(userCreateRequest.getAge())
+                                .email(userCreateRequest.getEmail())
+                                .nickname(userCreateRequest.getNickname())
+                                .password(userCreateRequest.getPassword())
+                                .regionId(userCreateRequest.getRegionId())
+                                .monthBudget(userCreateRequest.getMonthBudget())
+                                .userCategory(userCreateRequest.getUserCategory())
                                 .imgSrc(imageSource)
                                 .createdAt(Instant.now(fixed))
                                 .build());
 
-        User sut = userService.saveUser(userCreateDto, image);
+        User sut = userService.saveUser(userCreateRequest, image);
 
         assertAll(
                 () -> {
                     assertThat(sut.getId()).isEqualTo(1L);
-                    assertThat(sut.getEmail()).isEqualTo(userCreateDto.getEmail());
-                    assertThat(sut.getUserCategory()).isEqualTo(userCreateDto.getUserCategory());
-                    assertThat(sut.getNickname()).isEqualTo(userCreateDto.getNickname());
-                    assertThat(sut.getAge()).isSameAs(userCreateDto.getAge());
+                    assertThat(sut.getEmail()).isEqualTo(userCreateRequest.getEmail());
+                    assertThat(sut.getUserCategory()).isEqualTo(userCreateRequest.getUserCategory());
+                    assertThat(sut.getNickname()).isEqualTo(userCreateRequest.getNickname());
+                    assertThat(sut.getAge()).isSameAs(userCreateRequest.getAge());
                     assertThat(sut.getImgSrc()).isEqualTo(imageSource);
-                    assertThat(sut.getMonthBudget()).isSameAs(userCreateDto.getMonthBudget());
-                    assertThat(sut.getRegionId()).isSameAs(userCreateDto.getRegionId());
+                    assertThat(sut.getMonthBudget()).isSameAs(userCreateRequest.getMonthBudget());
+                    assertThat(sut.getRegionId()).isSameAs(userCreateRequest.getRegionId());
                     assertThat(sut.getCreatedAt()).isEqualTo(Instant.now(fixed));
                 });
     }

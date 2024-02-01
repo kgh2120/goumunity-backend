@@ -10,7 +10,5 @@ public interface HashtagService {
 
     Hashtag createHashtag(HashtagCreateRequest dto);
 
-    Hashtag findOneByHashtagId(Long id);
-
     boolean existsOneByHashtagId(Long hashtagId);
 }

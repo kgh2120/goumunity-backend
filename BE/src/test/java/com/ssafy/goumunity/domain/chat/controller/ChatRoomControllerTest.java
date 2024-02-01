@@ -1,17 +1,19 @@
 package com.ssafy.goumunity.domain.chat.controller;
 
-import static com.ssafy.goumunity.common.exception.CustomErrorCode.*;
 import static com.ssafy.goumunity.common.exception.GlobalErrorCode.FORBIDDEN;
 import static com.ssafy.goumunity.domain.chat.exception.ChatErrorCode.*;
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.BDDMockito.*;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.doThrow;
+import static org.mockito.BDDMockito.given;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.goumunity.common.exception.CustomException;
+import com.ssafy.goumunity.common.exception.GlobalErrorCode;
 import com.ssafy.goumunity.common.exception.GlobalExceptionHandler;
 import com.ssafy.goumunity.domain.chat.controller.request.ChatRoomRequest;
 import com.ssafy.goumunity.domain.chat.controller.response.ChatRoomHashtagResponse;
@@ -125,7 +127,7 @@ class ChatRoomControllerTest {
                 new MockPart("data", "", mapper.writeValueAsBytes(dto), MediaType.APPLICATION_JSON);
         MockMultipartFile image = new MockMultipartFile("image", new byte[0]);
 
-        doThrow(new CustomException(FILE_IS_NOT_IMAGE_TYPE))
+        doThrow(new CustomException(GlobalErrorCode.FILE_IS_NOT_IMAGE_TYPE))
                 .when(chatRoomService)
                 .createChatRoom(any(), any(), any());
 
@@ -134,8 +136,10 @@ class ChatRoomControllerTest {
                 .perform(multipart(CHAT_ROOM_API_PREFIX).file(image).part(data).with(csrf()))
                 // then
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.errorName").value(FILE_IS_NOT_IMAGE_TYPE.name()))
-                .andExpect(jsonPath("$.errorMessage").value(FILE_IS_NOT_IMAGE_TYPE.getErrorMessage()))
+                .andExpect(jsonPath("$.errorName").value(GlobalErrorCode.FILE_IS_NOT_IMAGE_TYPE.name()))
+                .andExpect(
+                        jsonPath("$.errorMessage")
+                                .value(GlobalErrorCode.FILE_IS_NOT_IMAGE_TYPE.getErrorMessage()))
                 .andExpect(jsonPath("$.path").value(CHAT_ROOM_API_PREFIX))
                 .andDo(print());
     }
@@ -356,9 +360,9 @@ class ChatRoomControllerTest {
                 .willReturn(
                         new SliceImpl<>(
                                 List.of(
-                                        new ChatRoomUserResponse(),
-                                        new ChatRoomUserResponse(),
-                                        new ChatRoomUserResponse()),
+                                        ChatRoomUserResponse.builder().build(),
+                                        ChatRoomUserResponse.builder().build(),
+                                        ChatRoomUserResponse.builder().build()),
                                 PageRequest.of(page, size),
                                 false));
         // when

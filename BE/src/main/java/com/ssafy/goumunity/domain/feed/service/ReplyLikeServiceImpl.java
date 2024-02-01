@@ -13,13 +13,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
+@Transactional(readOnly = true)
 public class ReplyLikeServiceImpl implements ReplyLikeService {
 
     private final ReplyLikeRepository replyLikeRepository;
     private final ReplyRepository replyRepository;
 
     @Override
+    @Transactional
     public void createReplyLike(Long userId, Long replyId) {
         verifyReply(replyId);
         ReplyLike replyLike = ReplyLike.from(userId, replyId);
@@ -32,6 +33,7 @@ public class ReplyLikeServiceImpl implements ReplyLikeService {
     }
 
     @Override
+    @Transactional
     public void deleteReplyLike(Long userId, Long replyId) {
         verifyReply(replyId);
 

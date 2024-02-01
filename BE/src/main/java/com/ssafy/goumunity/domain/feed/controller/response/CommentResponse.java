@@ -2,15 +2,12 @@ package com.ssafy.goumunity.domain.feed.controller.response;
 
 import com.querydsl.core.annotations.QueryProjection;
 import com.ssafy.goumunity.domain.feed.infra.comment.CommentEntity;
-import com.ssafy.goumunity.domain.user.dto.UserResponse;
+import com.ssafy.goumunity.domain.user.controller.response.UserResponse;
 import java.time.Instant;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-@NoArgsConstructor
-@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
 @Getter
 public class CommentResponse {

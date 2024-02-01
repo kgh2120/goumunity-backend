@@ -3,14 +3,11 @@ package com.ssafy.goumunity.domain.feed.controller.response;
 import com.querydsl.core.annotations.QueryProjection;
 import com.ssafy.goumunity.domain.feed.domain.Reply;
 import com.ssafy.goumunity.domain.feed.infra.reply.ReplyEntity;
-import com.ssafy.goumunity.domain.user.dto.UserResponse;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import com.ssafy.goumunity.domain.user.controller.response.UserResponse;
+import lombok.*;
 
-@NoArgsConstructor
-@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
 @Getter
 public class ReplyResponse {

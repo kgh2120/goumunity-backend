@@ -1,6 +1,6 @@
 package com.ssafy.goumunity.domain.region.infra;
 
-import com.ssafy.goumunity.domain.region.controller.request.RegionRegistRequest;
+import com.ssafy.goumunity.domain.region.controller.request.RegionRequest;
 import com.ssafy.goumunity.domain.region.domain.Region;
 import com.ssafy.goumunity.domain.region.service.port.RegionRepository;
 import java.util.List;
@@ -25,11 +25,6 @@ public class RegionRepositoryImpl implements RegionRepository {
     }
 
     @Override
-    public Optional<Region> findOneBySiGungu(String si, String gungu) {
-        return regionRepository.findOneBySiGungu(si, gungu).map(RegionEntity::to);
-    }
-
-    @Override
     public void save(RegionEntity regionEntity) {
         regionRepository.save(regionEntity);
     }
@@ -40,8 +35,7 @@ public class RegionRepositoryImpl implements RegionRepository {
     }
 
     @Override
-    public boolean isExistsRegion(RegionRegistRequest regionRegistRequest) {
-        return regionRepository.existsBySiAndGungu(
-                regionRegistRequest.getSi(), regionRegistRequest.getGungu());
+    public boolean isExistsRegion(RegionRequest regionRequest) {
+        return regionRepository.existsBySiAndGungu(regionRequest.getSi(), regionRequest.getGungu());
     }
 }

@@ -1,19 +1,16 @@
 package com.ssafy.goumunity.domain.chat.controller.response;
 
 import com.ssafy.goumunity.domain.chat.infra.ChatRoomHashtagEntity;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Data
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class ChatRoomHashtagResponse {
 
     private String name;
-    private int sequence;
+    private Integer sequence;
 
     public static ChatRoomHashtagResponse from(ChatRoomHashtagEntity chatRoomHashtag) {
         return ChatRoomHashtagResponse.builder()

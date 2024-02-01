@@ -1,9 +1,9 @@
 package com.ssafy.goumunity.domain.user.service;
 
-import com.ssafy.goumunity.domain.user.dto.VerificationCodeDto;
+import com.ssafy.goumunity.domain.user.controller.request.VerificationCodeRequest;
 
 public interface VerificationService {
     void send(String email);
 
-    boolean verificate(VerificationCodeDto verificationCodeDto);
+    boolean verificate(VerificationCodeRequest verificationCodeRequest);
 }

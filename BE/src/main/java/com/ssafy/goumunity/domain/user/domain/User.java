@@ -1,8 +1,8 @@
 package com.ssafy.goumunity.domain.user.domain;
 
 import com.ssafy.goumunity.common.exception.CustomException;
-import com.ssafy.goumunity.domain.user.dto.UserCreateDto;
-import com.ssafy.goumunity.domain.user.dto.UserUpdateDto;
+import com.ssafy.goumunity.domain.user.controller.request.UserCreateRequest;
+import com.ssafy.goumunity.domain.user.controller.request.UserModifyRequest;
 import com.ssafy.goumunity.domain.user.exception.UserErrorCode;
 import com.ssafy.goumunity.domain.user.exception.UserException;
 import java.time.Instant;
@@ -12,7 +12,7 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode
+@EqualsAndHashCode(exclude = {"lastPasswordModifiedDate", "createdAt", "updatedAt"})
 public class User {
 
     private Long id;
@@ -31,20 +31,20 @@ public class User {
     private Instant createdAt;
     private Instant updatedAt;
 
-    public static User from(UserCreateDto userCreateDto, String imgUrl, String encodedPw) {
+    public static User from(UserCreateRequest userCreateRequest, String imgUrl, String encodedPw) {
         return User.builder()
-                .email(userCreateDto.getEmail())
+                .email(userCreateRequest.getEmail())
                 .password(encodedPw)
-                .monthBudget(userCreateDto.getMonthBudget())
-                .age(userCreateDto.getAge())
-                .userCategory(userCreateDto.getUserCategory())
-                .gender(userCreateDto.getGender())
-                .nickname(userCreateDto.getNickname())
+                .monthBudget(userCreateRequest.getMonthBudget())
+                .age(userCreateRequest.getAge())
+                .userCategory(userCreateRequest.getUserCategory())
+                .gender(userCreateRequest.getGender())
+                .nickname(userCreateRequest.getNickname())
                 .imgSrc(imgUrl)
                 .registerDate(Instant.now())
                 .userStatus(UserStatus.ACTIVE)
                 .lastPasswordModifiedDate(Instant.now())
-                .regionId(userCreateDto.getRegionId())
+                .regionId(userCreateRequest.getRegionId())
                 .build();
     }
 
@@ -58,7 +58,7 @@ public class User {
      * @param dto
      * @throws CustomException 파라미터의 모든 필드가 비어있으면 예외 발생
      */
-    public void modifyUserInfo(UserUpdateDto dto) {
+    public void modifyUserInfo(UserModifyRequest dto) {
         boolean emptyCheckFlag = true;
         if (dto.getMonthBudget() != null) {
             this.monthBudget = dto.getMonthBudget();

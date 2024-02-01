@@ -2,15 +2,12 @@ package com.ssafy.goumunity.domain.chat.controller.response;
 
 import com.ssafy.goumunity.domain.chat.infra.ChatRoomEntity;
 import java.util.List;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-@Data
+@Getter
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class ChatRoomSearchResponse {
 
     private String title;
