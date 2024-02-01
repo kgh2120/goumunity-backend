@@ -42,7 +42,6 @@ public class MessageHandler {
             @DestinationVariable Long chatRoomId,
             @Payload Message.Request message,
             Authentication principal) {
-        // chatRoomId와 principal의 관계 검증하기. -> 너무 자주 발생하면 캐싱 고려해야 할 듯.
         User user = (User) principal.getPrincipal();
         chatService.saveChat(chatRoomId, message, user);
         return Message.Response.builder()

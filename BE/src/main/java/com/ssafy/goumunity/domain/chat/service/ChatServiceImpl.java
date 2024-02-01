@@ -11,8 +11,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 
-@RequiredArgsConstructor
 @Service
+@RequiredArgsConstructor
 public class ChatServiceImpl implements ChatService {
 
     private final ChatRepository chatRepository;
@@ -23,7 +23,7 @@ public class ChatServiceImpl implements ChatService {
         if (!chatRoomService.verifyAccessChat(chatRoomId, user)) {
             throw new ChatException(ChatErrorCode.CANT_ACCESS_MESSAGE);
         }
-        chatRepository.save(Chat.create(message, chatRoomId, user));
+        chatRepository.save(Chat.create(message, chatRoomId, user.getId()));
     }
 
     @Override

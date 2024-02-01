@@ -4,8 +4,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ssafy.goumunity.config.SecurityConfig;
-import com.ssafy.goumunity.domain.region.controller.request.RegionRegistRequest;
+import com.ssafy.goumunity.common.config.SecurityConfig;
+import com.ssafy.goumunity.domain.region.controller.request.RegionRequest;
 import com.ssafy.goumunity.domain.region.controller.response.RegionResponse;
 import com.ssafy.goumunity.domain.region.service.RegionService;
 import com.ssafy.goumunity.domain.region.service.port.RegionRepository;
@@ -48,13 +48,13 @@ class RegionControllerTest {
     @Autowired private MockMvc mockMvc;
 
     private ObjectMapper mapper;
-    private RegionRegistRequest regionRegistRequest;
+    private RegionRequest regionRequest;
 
     @BeforeEach
     void 매퍼등록및단건등록() throws Exception {
         mapper = new ObjectMapper();
 
-        regionRegistRequest = RegionRegistRequest.builder().si("서울시").gungu("중구").build();
+        regionRequest = RegionRequest.builder().si("서울시").gungu("중구").build();
 
         RegionResponse regionResponse =
                 RegionResponse.builder()
@@ -76,7 +76,7 @@ class RegionControllerTest {
                 .perform(
                         post("/api/regions")
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(mapper.writeValueAsString(regionRegistRequest))
+                                .content(mapper.writeValueAsString(regionRequest))
                                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated());
     }
@@ -112,13 +112,13 @@ class RegionControllerTest {
         @DisplayName("널값등록_성공")
         void NULL등록() throws Exception {
 
-            regionRegistRequest = RegionRegistRequest.builder().si(null).gungu(null).build();
+            regionRequest = RegionRequest.builder().si(null).gungu(null).build();
 
             mockMvc
                     .perform(
                             post("/api/regions")
                                     .contentType(MediaType.APPLICATION_JSON)
-                                    .content(mapper.writeValueAsString(regionRegistRequest))
+                                    .content(mapper.writeValueAsString(regionRequest))
                                     .accept(MediaType.APPLICATION_JSON))
                     .andExpect(status().isBadRequest());
         }
@@ -127,13 +127,13 @@ class RegionControllerTest {
         @DisplayName("빈값등록_성공")
         void 빈값등록() throws Exception {
 
-            regionRegistRequest = RegionRegistRequest.builder().si("").gungu("").build();
+            regionRequest = RegionRequest.builder().si("").gungu("").build();
 
             mockMvc
                     .perform(
                             post("/api/regions")
                                     .contentType(MediaType.APPLICATION_JSON)
-                                    .content(mapper.writeValueAsString(regionRegistRequest))
+                                    .content(mapper.writeValueAsString(regionRequest))
                                     .accept(MediaType.APPLICATION_JSON))
                     .andExpect(status().isBadRequest());
         }
@@ -142,13 +142,13 @@ class RegionControllerTest {
         @DisplayName("공백등록_성공")
         void 공백등록() throws Exception {
 
-            regionRegistRequest = RegionRegistRequest.builder().si(" ").gungu(" ").build();
+            regionRequest = RegionRequest.builder().si(" ").gungu(" ").build();
 
             mockMvc
                     .perform(
                             post("/api/regions")
                                     .contentType(MediaType.APPLICATION_JSON)
-                                    .content(mapper.writeValueAsString(regionRegistRequest))
+                                    .content(mapper.writeValueAsString(regionRequest))
                                     .accept(MediaType.APPLICATION_JSON))
                     .andExpect(status().isBadRequest());
         }

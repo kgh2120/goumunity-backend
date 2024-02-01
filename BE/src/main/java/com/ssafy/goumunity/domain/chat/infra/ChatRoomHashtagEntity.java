@@ -14,7 +14,7 @@ public class ChatRoomHashtagEntity {
 
     @Id
     @Column(name = "chat_room_hashtag_id")
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "sequence")

@@ -1,10 +1,10 @@
 package com.ssafy.goumunity.domain.user.service;
 
 import com.ssafy.goumunity.domain.chat.controller.response.MyChatRoomResponse;
+import com.ssafy.goumunity.domain.user.controller.request.UserCreateRequest;
+import com.ssafy.goumunity.domain.user.controller.request.UserModifyRequest;
 import com.ssafy.goumunity.domain.user.domain.User;
 import com.ssafy.goumunity.domain.user.domain.UserStatus;
-import com.ssafy.goumunity.domain.user.dto.UserCreateDto;
-import com.ssafy.goumunity.domain.user.dto.UserUpdateDto;
 import com.ssafy.goumunity.domain.user.exception.UserErrorCode;
 import com.ssafy.goumunity.domain.user.exception.UserException;
 import com.ssafy.goumunity.domain.user.service.port.MyChatRoomFindService;
@@ -32,14 +32,15 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public User saveUser(UserCreateDto userCreateDto, MultipartFile profileImage) {
+    public User saveUser(UserCreateRequest userCreateRequest, MultipartFile profileImage) {
         // 이메일 중복 검사
-        if (userRepository.existsByEmail(userCreateDto.getEmail())) {
+        if (userRepository.existsByEmail(userCreateRequest.getEmail())) {
             throw new UserException(UserErrorCode.EXIST_EMAIL);
         }
 
         String imgPath = profileImageUploader.uploadProfileImage(profileImage);
-        User user = User.from(userCreateDto, imgPath, encoder.encode(userCreateDto.getPassword()));
+        User user =
+                User.from(userCreateRequest, imgPath, encoder.encode(userCreateRequest.getPassword()));
         return userRepository.save(user);
     }
 
@@ -64,7 +65,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public User modifyUser(User user, UserUpdateDto dto) {
+    public User modifyUser(User user, UserModifyRequest dto) {
         user.modifyUserInfo(dto);
         return userRepository.modify(user);
     }

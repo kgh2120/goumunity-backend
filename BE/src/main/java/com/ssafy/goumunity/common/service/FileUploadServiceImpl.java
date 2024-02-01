@@ -1,11 +1,10 @@
 package com.ssafy.goumunity.common.service;
 
-import static com.ssafy.goumunity.common.exception.CustomErrorCode.FILE_IS_NOT_IMAGE_TYPE;
-
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.ssafy.goumunity.common.exception.CustomException;
+import com.ssafy.goumunity.common.exception.GlobalErrorCode;
 import com.ssafy.goumunity.common.exception.InternalServerCaughtException;
 import com.ssafy.goumunity.common.exception.InternalServerException;
 import java.io.File;
@@ -48,14 +47,13 @@ public class FileUploadServiceImpl implements FileUploadService {
 
     private void validateIsClientSendImageFile(MultipartFile multipartFile) {
         if (!Objects.requireNonNull(multipartFile.getContentType()).contains(IMAGE_CONTENT_TYPE_PREFIX))
-            throw new CustomException(FILE_IS_NOT_IMAGE_TYPE);
+            throw new CustomException(GlobalErrorCode.FILE_IS_NOT_IMAGE_TYPE);
     }
 
     private String uploadFiles(MultipartFile multipartFile) {
         File uploadFile =
                 convert(multipartFile) // 파일 변환할 수 없으면 에러
                         .orElseThrow(() -> new InternalServerException("MultipartFile -> File 변환 실패", this));
-        // TODO Exception 추가
         return upload(uploadFile);
     }
 

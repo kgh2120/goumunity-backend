@@ -2,9 +2,13 @@ package com.ssafy.goumunity.domain.user.controller;
 
 import com.ssafy.goumunity.common.util.SliceResponse;
 import com.ssafy.goumunity.domain.chat.controller.response.MyChatRoomResponse;
-import com.ssafy.goumunity.domain.feed.service.FeedService;
+import com.ssafy.goumunity.domain.user.controller.request.PasswordModifyRequest;
+import com.ssafy.goumunity.domain.user.controller.request.UserCreateRequest;
+import com.ssafy.goumunity.domain.user.controller.request.UserModifyRequest;
+import com.ssafy.goumunity.domain.user.controller.request.VerificationCodeRequest;
+import com.ssafy.goumunity.domain.user.controller.response.NicknameValidationResponse;
+import com.ssafy.goumunity.domain.user.controller.response.UserResponse;
 import com.ssafy.goumunity.domain.user.domain.User;
-import com.ssafy.goumunity.domain.user.dto.*;
 import com.ssafy.goumunity.domain.user.service.UserService;
 import com.ssafy.goumunity.domain.user.service.VerificationService;
 import jakarta.servlet.http.HttpSession;
@@ -27,7 +31,6 @@ import org.springframework.web.multipart.MultipartFile;
 public class UserController {
 
     private final UserService userService;
-    private final FeedService feedService;
     private final VerificationService verificationService;
 
     @Value("${session.key.user}")
@@ -35,9 +38,9 @@ public class UserController {
 
     @PostMapping("/join")
     public ResponseEntity<UserResponse> saveUser(
-            @RequestPart(value = "data") @Valid UserCreateDto userCreateDto,
+            @RequestPart(value = "data") @Valid UserCreateRequest userCreateRequest,
             @RequestPart(value = "image", required = false) MultipartFile profileImage) {
-        User user = userService.saveUser(userCreateDto, profileImage);
+        User user = userService.saveUser(userCreateRequest, profileImage);
         return ResponseEntity.status(HttpStatus.CREATED).body(UserResponse.from(user));
     }
 
@@ -56,16 +59,16 @@ public class UserController {
 
     @PostMapping("/email/verification")
     public ResponseEntity<Boolean> checkVerificationCode(
-            @RequestBody @Valid VerificationCodeDto verificationCodeDto) {
-        return ResponseEntity.ok(verificationService.verificate(verificationCodeDto));
+            @RequestBody @Valid VerificationCodeRequest verificationCodeRequest) {
+        return ResponseEntity.ok(verificationService.verificate(verificationCodeRequest));
     }
 
     @PutMapping("/my/password")
     public ResponseEntity<Void> modifyPassword(
             @AuthenticationPrincipal User user,
-            @RequestBody @Valid PasswordDto passwordDto,
+            @RequestBody @Valid PasswordModifyRequest passwordModifyRequest,
             HttpSession session) {
-        User modifiedUser = userService.modifyPassword(user, passwordDto.getPassword());
+        User modifiedUser = userService.modifyPassword(user, passwordModifyRequest.getPassword());
         session.setAttribute(SESSION_LOGIN_USER_KEY, modifiedUser);
         return ResponseEntity.ok().build();
     }
@@ -99,17 +102,12 @@ public class UserController {
     @PutMapping("/my")
     public ResponseEntity<Void> ModifyMyUser(
             @AuthenticationPrincipal User user,
-            @RequestBody @Valid UserUpdateDto userUpdateDto,
+            @RequestBody @Valid UserModifyRequest userModifyRequest,
             HttpSession session) {
-        User modifiedUser = userService.modifyUser(user, userUpdateDto);
+        User modifiedUser = userService.modifyUser(user, userModifyRequest);
         session.setAttribute(SESSION_LOGIN_USER_KEY, modifiedUser);
         return ResponseEntity.ok().build();
     }
-
-    //    @GetMapping("/{userId}/feeds")
-    //    public ResponseEntity<List<FeedResponse>> findAllFeedsByUserId(@PathVariable Long userId) {
-    //        return ResponseEntity.ok(feedService.findAllByUserId(userId));
-    //    }
 
     @GetMapping("/my/chat-rooms")
     public ResponseEntity<SliceResponse<MyChatRoomResponse>> findMyChatRoom(

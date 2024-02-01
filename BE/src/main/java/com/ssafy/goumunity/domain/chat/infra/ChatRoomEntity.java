@@ -5,21 +5,20 @@ import com.ssafy.goumunity.domain.region.infra.RegionEntity;
 import com.ssafy.goumunity.domain.user.infra.UserEntity;
 import jakarta.persistence.*;
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.List;
 import lombok.*;
 
 @Getter
-@AllArgsConstructor(access = AccessLevel.PROTECTED)
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Entity
 @Builder
 @Table(name = "chat_room")
-@Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PROTECTED)
 public class ChatRoomEntity {
 
-    @Column(name = "chat_room_id")
     @Id
-    @GeneratedValue
+    @Column(name = "chat_room_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "is_official")
@@ -50,10 +49,10 @@ public class ChatRoomEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     private UserEntity host;
 
-    @OneToMany(mappedBy = "chatRoom", orphanRemoval = true)
-    private List<ChatRoomHashtagEntity> chatRoomHashtags = new ArrayList<>();
+    @OneToMany(mappedBy = "chatRoom", cascade = CascadeType.REMOVE)
+    private List<ChatRoomHashtagEntity> chatRoomHashtags;
 
-    @OneToMany(mappedBy = "chatRoom", orphanRemoval = true)
+    @OneToMany(mappedBy = "chatRoom", cascade = CascadeType.REMOVE)
     private List<UserChatRoomEntity> userChatRooms;
 
     public static ChatRoomEntity from(ChatRoom chatRoom) {
@@ -98,33 +97,5 @@ public class ChatRoomEntity {
 
     public static ChatRoomEntity chatRoomEntityOnlyWithId(Long chatRoomId) {
         return ChatRoomEntity.builder().id(chatRoomId).build();
-    }
-
-    @Override
-    public String toString() {
-        return "ChatRoomEntity{"
-                + "id="
-                + id
-                + ", isOfficial="
-                + isOfficial
-                + ", title='"
-                + title
-                + '\''
-                + ", capability="
-                + capability
-                + ", imgSrc='"
-                + imgSrc
-                + '\''
-                + ", createdAt="
-                + createdAt
-                + ", updatedAt="
-                + updatedAt
-                + ", region="
-                + region
-                + ", host="
-                + host.getNickname()
-                + ", chatRoomHashtags="
-                + chatRoomHashtags
-                + '}';
     }
 }

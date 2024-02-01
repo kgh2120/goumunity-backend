@@ -9,18 +9,18 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ssafy.goumunity.common.config.SecurityConfig;
+import com.ssafy.goumunity.common.config.security.CustomDetails;
 import com.ssafy.goumunity.common.exception.GlobalErrorCode;
 import com.ssafy.goumunity.common.exception.GlobalExceptionHandler;
-import com.ssafy.goumunity.config.SecurityConfig;
-import com.ssafy.goumunity.config.security.CustomDetails;
 import com.ssafy.goumunity.domain.chat.controller.response.MyChatRoomResponse;
 import com.ssafy.goumunity.domain.feed.service.FeedService;
 import com.ssafy.goumunity.domain.user.controller.UserController;
+import com.ssafy.goumunity.domain.user.controller.request.PasswordModifyRequest;
+import com.ssafy.goumunity.domain.user.controller.request.UserCreateRequest;
+import com.ssafy.goumunity.domain.user.controller.request.UserModifyRequest;
 import com.ssafy.goumunity.domain.user.domain.User;
 import com.ssafy.goumunity.domain.user.domain.UserCategory;
-import com.ssafy.goumunity.domain.user.dto.PasswordDto;
-import com.ssafy.goumunity.domain.user.dto.UserCreateDto;
-import com.ssafy.goumunity.domain.user.dto.UserUpdateDto;
 import com.ssafy.goumunity.domain.user.exception.UserErrorCode;
 import com.ssafy.goumunity.domain.user.exception.UserException;
 import com.ssafy.goumunity.domain.user.service.UserService;
@@ -68,7 +68,7 @@ class UserControllerTest {
     @Test
     void 회원가입성공() throws Exception {
         ObjectMapper mapper = new ObjectMapper();
-        UserCreateDto user = userCreateDto();
+        UserCreateRequest user = userCreateDto();
 
         MockPart data =
                 new MockPart("data", "", mapper.writeValueAsBytes(user), MediaType.APPLICATION_JSON);
@@ -89,7 +89,7 @@ class UserControllerTest {
     @Test
     void 회원가입실패_중복이메일() throws Exception {
         ObjectMapper mapper = new ObjectMapper();
-        UserCreateDto user = userCreateDto();
+        UserCreateRequest user = userCreateDto();
 
         MockPart data =
                 new MockPart("data", "", mapper.writeValueAsBytes(user), MediaType.APPLICATION_JSON);
@@ -119,7 +119,7 @@ class UserControllerTest {
     @DisplayName("이메일로 회원 조회 성공")
     @Test
     void 이메일로회원조회() throws Exception {
-        UserCreateDto user = userCreateDto();
+        UserCreateRequest user = userCreateDto();
 
         given(userService.findUserByEmail(any())).willReturn(fromUserCreateDto(user));
 
@@ -132,7 +132,7 @@ class UserControllerTest {
     @DisplayName("이메일로 회원 조회 실패 존재하지 않는 이메일")
     @Test
     void 이메일로회원조회실패_존재하지않는이메일() throws Exception {
-        UserCreateDto user = userCreateDto();
+        UserCreateRequest user = userCreateDto();
 
         given(userService.findUserByEmail(any()))
                 .willThrow(new UserException(UserErrorCode.EMAIL_NOT_FOUND));
@@ -148,7 +148,7 @@ class UserControllerTest {
     void 비밀번호변경성공() throws Exception {
         ObjectMapper mapper = new ObjectMapper();
         User user = fromUserCreateDto(userCreateDto());
-        PasswordDto dto = PasswordDto.builder().password("ab214A2!!").build();
+        PasswordModifyRequest dto = PasswordModifyRequest.builder().password("ab214A2!!").build();
         MockHttpSession session = new MockHttpSession();
 
         given(userService.modifyPassword(user, dto.getPassword())).willReturn(user);
@@ -169,7 +169,7 @@ class UserControllerTest {
     @Test
     void 비밀번호변경실패_유효성검사() throws Exception {
         ObjectMapper mapper = new ObjectMapper();
-        PasswordDto dto = PasswordDto.builder().password("11").build();
+        PasswordModifyRequest dto = PasswordModifyRequest.builder().password("11").build();
 
         this.mockMvc
                 .perform(
@@ -213,7 +213,7 @@ class UserControllerTest {
     @DisplayName("내 정보 조회 성공")
     @Test
     void 내정보조회() throws Exception {
-        UserCreateDto user = userCreateDto();
+        UserCreateRequest user = userCreateDto();
         MockHttpSession session = new MockHttpSession();
 
         given(userService.findUserByEmail(any())).willReturn(fromUserCreateDto(user));
@@ -228,8 +228,8 @@ class UserControllerTest {
     @Test
     void 내정보수정성공() throws Exception {
         ObjectMapper mapper = new ObjectMapper();
-        UserUpdateDto userUpdateDto =
-                UserUpdateDto.builder().userCategory(UserCategory.EMPLOYEE).age(100).build();
+        UserModifyRequest userModifyRequest =
+                UserModifyRequest.builder().userCategory(UserCategory.EMPLOYEE).age(100).build();
         User user = fromUserCreateDto(userCreateDto());
         MockHttpSession session = new MockHttpSession();
 
@@ -239,7 +239,7 @@ class UserControllerTest {
                 .perform(
                         put("/api/users/my")
                                 .session(session)
-                                .content(mapper.writeValueAsString(userUpdateDto))
+                                .content(mapper.writeValueAsString(userModifyRequest))
                                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andDo(print());
@@ -249,7 +249,7 @@ class UserControllerTest {
     @Test
     void 내정보수정실패_비어있는요청() throws Exception {
         ObjectMapper mapper = new ObjectMapper();
-        UserUpdateDto userUpdateDto = UserUpdateDto.builder().build();
+        UserModifyRequest userModifyRequest = UserModifyRequest.builder().build();
         MockHttpSession session = new MockHttpSession();
 
         given(userService.modifyUser(any(), any()))
@@ -259,7 +259,7 @@ class UserControllerTest {
                 .perform(
                         put("/api/users/my")
                                 .session(session)
-                                .content(mapper.writeValueAsString(userUpdateDto))
+                                .content(mapper.writeValueAsString(userModifyRequest))
                                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
                 .andExpect(
@@ -306,8 +306,8 @@ class UserControllerTest {
                 .andDo(print());
     }
 
-    private UserCreateDto userCreateDto() {
-        return UserCreateDto.builder()
+    private UserCreateRequest userCreateDto() {
+        return UserCreateRequest.builder()
                 .email("gyu@naver.com")
                 .password("AAbb11!!")
                 .monthBudget(100000L)
@@ -319,7 +319,7 @@ class UserControllerTest {
                 .build();
     }
 
-    private User fromUserCreateDto(UserCreateDto dto) {
+    private User fromUserCreateDto(UserCreateRequest dto) {
         return User.builder()
                 .email(dto.getEmail())
                 .password(dto.getPassword())

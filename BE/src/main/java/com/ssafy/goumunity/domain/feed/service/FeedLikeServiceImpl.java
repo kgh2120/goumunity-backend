@@ -13,13 +13,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
+@Transactional(readOnly = true)
 public class FeedLikeServiceImpl implements FeedLikeService {
 
     private final FeedLikeRepository feedLikeRepository;
     private final FeedRepository feedRepository;
 
     @Override
+    @Transactional
     public void createFeedLike(Long userId, Long feedId) {
         verifyFeed(feedId);
         FeedLike feedLike = FeedLike.from(userId, feedId);
@@ -32,6 +33,7 @@ public class FeedLikeServiceImpl implements FeedLikeService {
     }
 
     @Override
+    @Transactional
     public void deleteFeedLike(Long userId, Long feedId) {
         verifyFeed(feedId);
 

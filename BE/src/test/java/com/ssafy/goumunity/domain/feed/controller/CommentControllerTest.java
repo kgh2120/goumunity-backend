@@ -8,19 +8,19 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ssafy.goumunity.common.config.SecurityConfig;
+import com.ssafy.goumunity.common.config.security.CustomDetails;
 import com.ssafy.goumunity.common.exception.GlobalExceptionHandler;
-import com.ssafy.goumunity.config.SecurityConfig;
-import com.ssafy.goumunity.config.security.CustomDetails;
 import com.ssafy.goumunity.domain.feed.controller.request.CommentRequest;
 import com.ssafy.goumunity.domain.feed.controller.response.CommentResponse;
 import com.ssafy.goumunity.domain.feed.domain.Comment;
 import com.ssafy.goumunity.domain.feed.exception.CommentErrorCode;
 import com.ssafy.goumunity.domain.feed.exception.CommentException;
 import com.ssafy.goumunity.domain.feed.service.CommentService;
+import com.ssafy.goumunity.domain.user.controller.request.UserCreateRequest;
+import com.ssafy.goumunity.domain.user.controller.response.UserResponse;
 import com.ssafy.goumunity.domain.user.domain.User;
 import com.ssafy.goumunity.domain.user.domain.UserCategory;
-import com.ssafy.goumunity.domain.user.dto.UserCreateDto;
-import com.ssafy.goumunity.domain.user.dto.UserResponse;
 import com.ssafy.goumunity.domain.user.exception.UserErrorCode;
 import com.ssafy.goumunity.domain.user.exception.UserException;
 import java.util.ArrayList;
@@ -295,8 +295,8 @@ class CommentControllerTest {
                 .andDo(print());
     }
 
-    private UserCreateDto userCreateDto() {
-        return UserCreateDto.builder()
+    private UserCreateRequest userCreateDto() {
+        return UserCreateRequest.builder()
                 .email("gyu@naver.com")
                 .password("AAbb11!!")
                 .monthBudget(100000L)
@@ -308,7 +308,7 @@ class CommentControllerTest {
                 .build();
     }
 
-    private User fromUserCreateDto(UserCreateDto dto) {
+    private User fromUserCreateDto(UserCreateRequest dto) {
         return User.builder()
                 .id(1L)
                 .email(dto.getEmail())

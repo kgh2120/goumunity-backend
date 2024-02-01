@@ -6,8 +6,9 @@ import lombok.*;
 
 @Getter
 @Builder
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@EqualsAndHashCode(exclude = {"createdAt", "updatedAt"})
 public class Hashtag {
     private Long id;
     private String name;
