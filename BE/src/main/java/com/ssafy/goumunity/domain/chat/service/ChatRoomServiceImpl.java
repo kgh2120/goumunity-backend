@@ -6,6 +6,7 @@ import com.ssafy.goumunity.common.exception.CustomException;
 import com.ssafy.goumunity.common.exception.GlobalErrorCode;
 import com.ssafy.goumunity.domain.chat.controller.request.ChatRoomRequest;
 import com.ssafy.goumunity.domain.chat.controller.response.ChatRoomSearchResponse;
+import com.ssafy.goumunity.domain.chat.controller.response.ChatRoomUserResponse;
 import com.ssafy.goumunity.domain.chat.controller.response.MyChatRoomResponse;
 import com.ssafy.goumunity.domain.chat.domain.ChatRoom;
 import com.ssafy.goumunity.domain.chat.domain.UserChatRoom;
@@ -106,6 +107,16 @@ public class ChatRoomServiceImpl implements ChatRoomService {
         UserChatRoom userChatRoom = verifyDisconnectChatRoom(chatRoomId, user);
         userChatRoom.disconnect();
         chatRoomRepository.disconnectChatRoom(userChatRoom);
+    }
+
+    @Override
+    public Slice<ChatRoomUserResponse> findChatRoomUsers(
+            Long chatRoomId, Pageable pageable, Long time, User user) {
+        if (!(chatRoomRepository.isExistChatRoom(chatRoomId)
+                & chatRoomRepository.isAlreadyJoinedUser(chatRoomId, user.getId()))) {
+            throw new CustomException(GlobalErrorCode.FORBIDDEN);
+        }
+        return chatRoomRepository.findChatRoomUsers(chatRoomId, pageable, time, user.getId());
     }
 
     private UserChatRoom verifyDisconnectChatRoom(Long chatRoomId, User user) {
