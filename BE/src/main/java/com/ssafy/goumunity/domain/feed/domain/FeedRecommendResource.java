@@ -5,9 +5,8 @@ import com.ssafy.goumunity.domain.feed.controller.response.FeedImgResponse;
 import com.ssafy.goumunity.domain.feed.infra.feed.FeedEntity;
 import com.ssafy.goumunity.domain.region.controller.response.RegionResponse;
 import com.ssafy.goumunity.domain.user.dto.UserResponse;
-import lombok.*;
-
 import java.util.List;
+import lombok.*;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
@@ -33,7 +32,8 @@ public class FeedRecommendResource {
     private boolean iLikeThat;
 
     @QueryProjection
-    public FeedRecommendResource(FeedEntity feed, Long commentCount, Long likeCount, boolean iLikeThat) {
+    public FeedRecommendResource(
+            FeedEntity feed, Long commentCount, Long likeCount, boolean iLikeThat) {
         this.feedId = feed.getFeedId();
         this.content = feed.getContent();
         this.feedCategory = feed.getFeedCategory();

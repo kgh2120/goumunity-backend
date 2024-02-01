@@ -7,11 +7,7 @@ import com.ssafy.goumunity.domain.feed.service.post.FeedRepository;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
-
-import com.ssafy.goumunity.domain.region.infra.QRegionEntity;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Repository;
 
 @Repository

@@ -3,13 +3,8 @@ package com.ssafy.goumunity.domain.feed.service;
 import com.ssafy.goumunity.domain.feed.controller.request.FeedRequest;
 import com.ssafy.goumunity.domain.feed.controller.response.FeedRecommendResponse;
 import com.ssafy.goumunity.domain.feed.controller.response.FeedResponse;
-import java.util.List;
-
-import com.ssafy.goumunity.domain.feed.domain.FeedRecommendResource;
-import com.ssafy.goumunity.domain.feed.domain.FeedWeight;
 import com.ssafy.goumunity.domain.user.domain.User;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
+import java.util.List;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface FeedService {

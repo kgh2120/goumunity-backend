@@ -12,18 +12,12 @@ import com.ssafy.goumunity.domain.feed.exception.FeedException;
 import com.ssafy.goumunity.domain.feed.service.post.FeedImageUploader;
 import com.ssafy.goumunity.domain.feed.service.post.FeedImgRepository;
 import com.ssafy.goumunity.domain.feed.service.post.FeedRepository;
+import com.ssafy.goumunity.domain.user.domain.User;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import com.ssafy.goumunity.domain.region.infra.QRegionEntity;
-import com.ssafy.goumunity.domain.region.infra.RegionEntity;
-import com.ssafy.goumunity.domain.region.service.port.RegionRepository;
-import com.ssafy.goumunity.domain.user.domain.User;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -52,12 +46,13 @@ public class FeedServiceImpl implements FeedService {
     @Override
     @Transactional(readOnly = true)
     public FeedRecommendResponse findFeed(User user, Long time, Long regionId) {
-        List<FeedRecommendResource> feeds = feedRepository.findFeed(user.getId(), Instant.ofEpochMilli(time), regionId);
+        List<FeedRecommendResource> feeds =
+                feedRepository.findFeed(user.getId(), Instant.ofEpochMilli(time), regionId);
         List<FeedWeight> feedWeights = feeds.stream().map(item -> FeedWeight.from(item, user)).toList();
         Collections.sort(feedWeights);
 
         List<FeedRecommendResource> result = new ArrayList<>();
-        for(int i = 0; i < 10; i++){
+        for (int i = 0; i < 10; i++) {
             result.add(feedWeights.get(i).getFeedRecommendResource());
         }
 
