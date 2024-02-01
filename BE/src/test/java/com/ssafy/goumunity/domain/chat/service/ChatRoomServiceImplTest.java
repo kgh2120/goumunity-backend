@@ -404,4 +404,26 @@ class ChatRoomServiceImplTest {
         // then
 
     }
+
+    @Test
+    void 거지방_회원조회_테스트_실패_다_false인_경우() throws Exception {
+        // given
+        Long chatRoomId = 1L;
+        Long time = 1000000000L;
+        int page = 0;
+        int size = 12;
+        User user = User.builder().id(1L).build();
+
+        given(chatRoomRepository.isExistChatRoom(any())).willReturn(false);
+
+        given(chatRoomRepository.isAlreadyJoinedUser(any(), any())).willReturn(false);
+
+        PageRequest pageable = PageRequest.of(page, size);
+        // when
+        assertThatThrownBy(() -> chatRoomService.findChatRoomUsers(chatRoomId, pageable, time, user))
+                .isInstanceOf(CustomException.class)
+                .hasFieldOrPropertyWithValue("errorCode", GlobalErrorCode.FORBIDDEN);
+        // then
+
+    }
 }

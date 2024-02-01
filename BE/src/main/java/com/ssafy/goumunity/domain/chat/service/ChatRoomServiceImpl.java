@@ -113,7 +113,7 @@ public class ChatRoomServiceImpl implements ChatRoomService {
     public Slice<ChatRoomUserResponse> findChatRoomUsers(
             Long chatRoomId, Pageable pageable, Long time, User user) {
         if (!(chatRoomRepository.isExistChatRoom(chatRoomId)
-                && chatRoomRepository.isAlreadyJoinedUser(chatRoomId, user.getId()))) {
+                & chatRoomRepository.isAlreadyJoinedUser(chatRoomId, user.getId()))) {
             throw new CustomException(GlobalErrorCode.FORBIDDEN);
         }
         return chatRoomRepository.findChatRoomUsers(chatRoomId, pageable, time, user.getId());
