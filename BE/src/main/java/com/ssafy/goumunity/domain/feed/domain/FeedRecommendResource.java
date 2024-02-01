@@ -4,7 +4,7 @@ import com.querydsl.core.annotations.QueryProjection;
 import com.ssafy.goumunity.domain.feed.controller.response.FeedImgResponse;
 import com.ssafy.goumunity.domain.feed.infra.feed.FeedEntity;
 import com.ssafy.goumunity.domain.region.controller.response.RegionResponse;
-import com.ssafy.goumunity.domain.user.dto.UserResponse;
+import com.ssafy.goumunity.domain.user.controller.response.UserResponse;
 import java.util.List;
 import lombok.*;
 
