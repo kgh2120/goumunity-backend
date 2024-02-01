@@ -24,6 +24,7 @@ public class Reply {
 
     public void modifyContent(String content) {
         this.content = content;
+        this.updatedAt = Instant.now();
     }
 
     public void checkUser(Long userId) {
@@ -36,6 +37,12 @@ public class Reply {
     }
 
     public static Reply from(Long userId, Long commentId, ReplyRequest.Create reply) {
-        return Reply.builder().commentId(commentId).userId(userId).content(reply.getContent()).build();
+        return Reply.builder()
+                .commentId(commentId)
+                .userId(userId)
+                .content(reply.getContent())
+                .createdAt(Instant.now())
+                .updatedAt(Instant.now())
+                .build();
     }
 }

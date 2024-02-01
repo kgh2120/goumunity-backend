@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -31,7 +32,7 @@ public class FeedController {
             @RequestPart("data") @Valid FeedRequest.Create feedRequest,
             @RequestPart("images") @Nullable List<MultipartFile> images) {
         feedService.createFeed(user.getId(), feedRequest, images);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @GetMapping
@@ -44,6 +45,16 @@ public class FeedController {
     @GetMapping("/{feed-id}")
     public ResponseEntity<FeedResponse> findOneByFeedId(@PathVariable("feed-id") Long feedId) {
         return ResponseEntity.ok(feedService.findOneByFeedId(feedId));
+    }
+
+    @PutMapping("{feed-id}")
+    public ResponseEntity<Void> modifyFeed(
+            @AuthenticationPrincipal User user,
+            @PathVariable("feed-id") Long feedId,
+            @RequestPart("data") @Valid FeedRequest.Modify feedRequest,
+            @RequestPart("images") @Nullable List<MultipartFile> images) {
+        feedService.modifyFeed(user.getId(), feedId, feedRequest, images);
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{feed-id}")
