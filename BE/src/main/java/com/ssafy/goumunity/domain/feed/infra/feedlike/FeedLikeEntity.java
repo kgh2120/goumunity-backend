@@ -18,7 +18,7 @@ public class FeedLikeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "feed_like_id")
-    private Long feedLikeId;
+    private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
@@ -36,7 +36,7 @@ public class FeedLikeEntity {
 
     public FeedLike to() {
         return FeedLike.builder()
-                .id(feedLikeId)
+                .id(id)
                 .userId(userEntity.getId())
                 .feedId(feedEntity.getId())
                 .createdAt(createdAt)
@@ -46,7 +46,7 @@ public class FeedLikeEntity {
 
     public static FeedLikeEntity from(FeedLike feedLike) {
         return FeedLikeEntity.builder()
-                .feedLikeId(feedLike.getId())
+                .id(feedLike.getId())
                 .userEntity(UserEntity.userEntityOnlyWithId(feedLike.getUserId()))
                 .feedEntity(FeedEntity.feedEntityOnlyWithId(feedLike.getFeedId()))
                 .createdAt(feedLike.getCreatedAt())
