@@ -48,6 +48,7 @@ public class FeedRecommend {
                 .updatedAt(feedRecommendResource.getUpdatedAt())
                 .images(feedRecommendResource.getImages())
                 .commentCount(feedRecommendResource.getCommentCount())
+                .likeCount(feedRecommendResource.getLikeCount())
                 .iLikeThat(feedRecommendResource.isILikeThat())
                 .build();
     }

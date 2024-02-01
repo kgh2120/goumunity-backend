@@ -51,12 +51,18 @@ public class FeedServiceImpl implements FeedService {
     public FeedRecommendResponse findFeed(User user, Long time, Long regionId) {
         List<FeedRecommendResource> feeds =
                 feedRepository.findFeed(user.getId(), Instant.ofEpochMilli(time), regionId);
-        List<FeedWeight> feedWeights = feeds.stream().map(item -> FeedWeight.from(item, user)).toList();
-        Collections.sort(feedWeights);
+        List<FeedWeight> feedWeights = feeds.stream().map(item -> FeedWeight.from(item, user)).sorted().toList();
 
         List<FeedRecommend> result = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            result.add(FeedRecommend.from(feedWeights.get(i).getFeedRecommendResource()));
+
+        if(feedWeights.size() < 10){
+            for(int i = 0; i < feedWeights.size(); i++){
+                result.add(FeedRecommend.from(feedWeights.get(i).getFeedRecommendResource()));
+            }
+        } else {
+            for (int i = 0; i < 10; i++) {
+                result.add(FeedRecommend.from(feedWeights.get(i).getFeedRecommendResource()));
+            }
         }
 
         return FeedRecommendResponse.builder().feedRecommends(result).build();
