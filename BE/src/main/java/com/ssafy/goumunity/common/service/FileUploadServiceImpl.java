@@ -33,7 +33,6 @@ public class FileUploadServiceImpl implements FileUploadService {
     @Override
     public String uploadFile(MultipartFile multipartFile) {
 
-        log.info("file : {}", multipartFile);
         if (isEmpty(multipartFile)) {
             return null;
         }

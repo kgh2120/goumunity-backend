@@ -1,6 +1,6 @@
-package com.ssafy.goumunity.domain.chat.infra;
+package com.ssafy.goumunity.domain.chat.infra.chat;
 
-import com.ssafy.goumunity.domain.chat.controller.response.Message;
+import com.ssafy.goumunity.domain.chat.controller.response.MessageResponse;
 import com.ssafy.goumunity.domain.chat.domain.Chat;
 import com.ssafy.goumunity.domain.chat.service.port.ChatRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,8 +21,7 @@ public class ChatRepositoryImpl implements ChatRepository {
     }
 
     @Override
-    public Slice<Message.Response> findPreviousMessage(
-            Long chatroomId, Long time, Pageable pageable) {
+    public Slice<MessageResponse> findPreviousMessage(Long chatroomId, Long time, Pageable pageable) {
         return chatQueryDslRepository.findPreviousMessage(chatroomId, time, pageable);
     }
 }

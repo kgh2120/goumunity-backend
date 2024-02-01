@@ -16,6 +16,11 @@ public class FeedLike {
     private Instant updatedAt;
 
     public static FeedLike from(Long userId, Long feedId) {
-        return FeedLike.builder().userId(userId).feedId(feedId).build();
+        return FeedLike.builder()
+                .userId(userId)
+                .feedId(feedId)
+                .createdAt(Instant.now())
+                .updatedAt(Instant.now())
+                .build();
     }
 }

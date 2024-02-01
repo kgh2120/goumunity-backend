@@ -24,7 +24,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 @WebMvcTest(controllers = {MessageHandler.class})
-class MessageHandlerTest {
+class MessageResponseHandlerTest {
 
     @MockBean ChatService chatService;
 

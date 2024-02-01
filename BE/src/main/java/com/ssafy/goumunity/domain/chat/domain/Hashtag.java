@@ -16,6 +16,10 @@ public class Hashtag {
     private Instant updatedAt;
 
     public static Hashtag create(HashtagCreateRequest dto) {
-        return Hashtag.builder().name(dto.getName()).createdAt(Instant.now()).build();
+        return Hashtag.builder()
+                .name(dto.getName())
+                .createdAt(Instant.now())
+                .updatedAt(Instant.now())
+                .build();
     }
 }

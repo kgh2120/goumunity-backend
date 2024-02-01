@@ -1,9 +1,9 @@
-package com.ssafy.goumunity.domain.chat.infra;
+package com.ssafy.goumunity.domain.chat.infra.chatroom;
 
-import static com.ssafy.goumunity.domain.chat.infra.QChatRoomEntity.chatRoomEntity;
-import static com.ssafy.goumunity.domain.chat.infra.QChatRoomHashtagEntity.chatRoomHashtagEntity;
-import static com.ssafy.goumunity.domain.chat.infra.QHashtagEntity.hashtagEntity;
-import static com.ssafy.goumunity.domain.chat.infra.QUserChatRoomEntity.userChatRoomEntity;
+import static com.ssafy.goumunity.domain.chat.infra.chatroom.QChatRoomEntity.chatRoomEntity;
+import static com.ssafy.goumunity.domain.chat.infra.chatroom.QUserChatRoomEntity.userChatRoomEntity;
+import static com.ssafy.goumunity.domain.chat.infra.hashtag.QChatRoomHashtagEntity.chatRoomHashtagEntity;
+import static com.ssafy.goumunity.domain.chat.infra.hashtag.QHashtagEntity.hashtagEntity;
 import static com.ssafy.goumunity.domain.user.infra.QUserEntity.userEntity;
 
 import com.querydsl.core.types.Projections;
@@ -12,7 +12,6 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.goumunity.common.util.QueryDslSliceUtils;
 import com.ssafy.goumunity.domain.chat.controller.response.ChatRoomUserResponse;
 import com.ssafy.goumunity.domain.chat.controller.response.MyChatRoomResponse;
-import com.ssafy.goumunity.domain.user.domain.User;
 import java.time.Instant;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +26,7 @@ public class ChatRoomQueryDslRepository {
 
     private final JPAQueryFactory jpaQueryFactory;
 
-    public Slice<MyChatRoomResponse> findMyChatRoom(User user, Long time, Pageable pageable) {
+    public Slice<MyChatRoomResponse> findMyChatRoom(Long userId, Long time, Pageable pageable) {
         // TODO 채팅방 접속 or 나가기 기록 API가 추가된다면, 마지막으로 읽은 채팅개수 세기,
         List<MyChatRoomResponse> res =
                 jpaQueryFactory
@@ -42,7 +41,7 @@ public class ChatRoomQueryDslRepository {
                                 userChatRoomEntity
                                         .user
                                         .id
-                                        .eq(user.getId())
+                                        .eq(userId)
                                         .and(chatRoomEntity.createdAt.before(Instant.ofEpochMilli(time))))
                         .orderBy(chatRoomEntity.id.desc())
                         .offset(pageable.getOffset())

@@ -1,10 +1,15 @@
 package com.ssafy.goumunity.domain.chat.infra;
 
-import static com.ssafy.goumunity.domain.chat.infra.QChatRoomEntity.chatRoomEntity;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.goumunity.domain.chat.controller.response.MyChatRoomResponse;
+import com.ssafy.goumunity.domain.chat.infra.chatroom.ChatRoomEntity;
+import com.ssafy.goumunity.domain.chat.infra.chatroom.ChatRoomJpaRepository;
+import com.ssafy.goumunity.domain.chat.infra.chatroom.ChatRoomQueryDslRepository;
+import com.ssafy.goumunity.domain.chat.infra.chatroom.UserChatRoomEntity;
+import com.ssafy.goumunity.domain.chat.infra.hashtag.ChatRoomHashtagEntity;
+import com.ssafy.goumunity.domain.chat.infra.hashtag.HashtagEntity;
 import com.ssafy.goumunity.domain.user.infra.UserEntity;
 import jakarta.persistence.EntityManager;
 import java.time.Instant;
@@ -30,6 +35,7 @@ class ChatRoomSearchQueryTest {
     @Test
     void 거지방_검색_아이디로_검색() throws Exception {
         // given
+
         UserEntity users =
                 UserEntity.builder().nickname("1234").email("ssafy@gmail.com").password("1234").build();
 
@@ -69,9 +75,6 @@ class ChatRoomSearchQueryTest {
         Slice<ChatRoomEntity> slice =
                 chatRoomJpaRepository.searchChatRoom("거지방", Instant.now(), PageRequest.of(0, 10));
         assertThat(slice.getContent().size()).isSameAs(10);
-        for (ChatRoomEntity chatRoomEntity : slice) {
-            System.out.println(chatRoomEntity);
-        }
     }
 
     @Test
@@ -116,9 +119,6 @@ class ChatRoomSearchQueryTest {
         Slice<ChatRoomEntity> slice =
                 chatRoomJpaRepository.searchChatRoom("20대", Instant.now(), PageRequest.of(0, 10));
         assertThat(slice.getContent().size()).isSameAs(10);
-        for (ChatRoomEntity chatRoomEntity : slice) {
-            System.out.println(chatRoomEntity);
-        }
     }
 
     @Test
@@ -163,12 +163,9 @@ class ChatRoomSearchQueryTest {
 
         Pageable pageable = PageRequest.of(0, 10);
         Slice<MyChatRoomResponse> res =
-                chatRoomQueryDslRepository.findMyChatRoom(users.toModel(), 100000L, pageable);
+                chatRoomQueryDslRepository.findMyChatRoom(users.getId(), 100000L, pageable);
 
         List<MyChatRoomResponse> content = res.getContent();
-        for (MyChatRoomResponse myChatRoomResponse : content) {
-            System.out.println(myChatRoomResponse);
-        }
         assertThat(content.size()).isSameAs(10);
         assertThat(res.hasNext()).isTrue();
     }

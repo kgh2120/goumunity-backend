@@ -1,6 +1,7 @@
-package com.ssafy.goumunity.domain.chat.infra;
+package com.ssafy.goumunity.domain.chat.infra.chatroom;
 
 import com.ssafy.goumunity.domain.chat.domain.ChatRoom;
+import com.ssafy.goumunity.domain.chat.infra.hashtag.ChatRoomHashtagEntity;
 import com.ssafy.goumunity.domain.region.infra.RegionEntity;
 import com.ssafy.goumunity.domain.user.infra.UserEntity;
 import jakarta.persistence.*;
@@ -56,19 +57,17 @@ public class ChatRoomEntity {
     private List<UserChatRoomEntity> userChatRooms;
 
     public static ChatRoomEntity from(ChatRoom chatRoom) {
-        ChatRoomEntityBuilder chatRoomEntityBuilder =
-                ChatRoomEntity.builder()
-                        .id(chatRoom.getId())
-                        .isOfficial(chatRoom.getIsOfficial())
-                        .title(chatRoom.getTitle())
-                        .capability(chatRoom.getCapability())
-                        .imgSrc(chatRoom.getImgSrc());
-        // TODO UserEntity, ReginEntity 추가 필요
-
-        if (chatRoom.getCreatedAt() != null) chatRoomEntityBuilder.createdAt(chatRoom.getCreatedAt());
-        if (chatRoom.getUpdatedAt() != null) chatRoomEntityBuilder.updatedAt(chatRoom.getUpdatedAt());
-
-        return chatRoomEntityBuilder.build();
+        return ChatRoomEntity.builder()
+                .id(chatRoom.getId())
+                .isOfficial(chatRoom.getIsOfficial())
+                .title(chatRoom.getTitle())
+                .capability(chatRoom.getCapability())
+                .imgSrc(chatRoom.getImgSrc())
+                .host(UserEntity.userEntityOnlyWithId(chatRoom.getUserId()))
+                .region(RegionEntity.regionEntityOnlyWithId(chatRoom.getRegionId()))
+                .createdAt(chatRoom.getCreatedAt())
+                .updatedAt(chatRoom.getUpdatedAt())
+                .build();
     }
 
     public ChatRoom to() {
@@ -81,8 +80,7 @@ public class ChatRoomEntity {
                 .createdAt(this.createdAt)
                 .updatedAt(this.updatedAt)
                 .currentUserCount(userChatRooms.size())
-                // TODO 이후 추가 필요
-                //                                .region()
+                .regionId(this.region.getRegionId())
                 .userId(host == null ? null : this.host.getId())
                 .build();
     }

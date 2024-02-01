@@ -27,12 +27,10 @@ public class CommentLikeEntity {
     @JoinColumn(name = "comment_id")
     private CommentEntity commentEntity;
 
-    @Column(name = "created_at", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @Column(name = "created_at")
     private Instant createdAt;
 
-    @Column(
-            name = "updated_at",
-            columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
+    @Column(name = "updated_at")
     private Instant updatedAt;
 
     public CommentLike to() {
@@ -46,17 +44,13 @@ public class CommentLikeEntity {
     }
 
     public static CommentLikeEntity from(CommentLike commentLike) {
-        CommentLikeEntityBuilder commentLikeEntityBuilder =
-                CommentLikeEntity.builder()
-                        .commentLikeId(commentLike.getId())
-                        .userEntity(UserEntity.userEntityOnlyWithId(commentLike.getUserId()))
-                        .commentEntity(CommentEntity.commentEntityOnlyWithId(commentLike.getCommentId()));
 
-        if (commentLike.getCreatedAt() != null)
-            commentLikeEntityBuilder.createdAt(commentLike.getCreatedAt());
-        if (commentLike.getUpdatedAt() != null)
-            commentLikeEntityBuilder.updatedAt(commentLike.getUpdatedAt());
-
-        return commentLikeEntityBuilder.build();
+        return CommentLikeEntity.builder()
+                .commentLikeId(commentLike.getId())
+                .userEntity(UserEntity.userEntityOnlyWithId(commentLike.getUserId()))
+                .commentEntity(CommentEntity.commentEntityOnlyWithId(commentLike.getCommentId()))
+                .createdAt(commentLike.getCreatedAt())
+                .updatedAt(commentLike.getUpdatedAt())
+                .build();
     }
 }

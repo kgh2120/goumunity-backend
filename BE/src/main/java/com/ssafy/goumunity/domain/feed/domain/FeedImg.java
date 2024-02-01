@@ -17,6 +17,12 @@ public class FeedImg {
     private Instant updatedAt;
 
     public static FeedImg from(Long feedId, String imgSrc, Integer sequence) {
-        return FeedImg.builder().feedId(feedId).imgSrc(imgSrc).sequence(sequence).build();
+        return FeedImg.builder()
+                .feedId(feedId)
+                .imgSrc(imgSrc)
+                .sequence(sequence)
+                .createdAt(Instant.now())
+                .updatedAt(Instant.now())
+                .build();
     }
 }

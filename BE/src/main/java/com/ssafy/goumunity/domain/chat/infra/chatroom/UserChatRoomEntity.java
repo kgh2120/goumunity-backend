@@ -1,4 +1,4 @@
-package com.ssafy.goumunity.domain.chat.infra;
+package com.ssafy.goumunity.domain.chat.infra.chatroom;
 
 import com.ssafy.goumunity.domain.chat.domain.UserChatRoom;
 import com.ssafy.goumunity.domain.user.infra.UserEntity;
@@ -30,11 +30,19 @@ public class UserChatRoomEntity {
     @Column(name = "last_access_time")
     private Instant lastAccessTime;
 
+    @Column(name = "created_at")
+    private Instant createdAt;
+
+    @Column(name = "updated_at")
+    private Instant updatedAt;
+
     public static UserChatRoomEntity create(UserEntity userEntity, ChatRoomEntity chatRoom) {
         return UserChatRoomEntity.builder()
                 .chatRoom(chatRoom)
                 .user(userEntity)
                 .lastAccessTime(Instant.now())
+                .createdAt(Instant.now())
+                .updatedAt(Instant.now())
                 .build();
     }
 
@@ -44,6 +52,8 @@ public class UserChatRoomEntity {
                 .chatRoom(ChatRoomEntity.chatRoomEntityOnlyWithId(userChatRoom.getChatRoomId()))
                 .user(UserEntity.userEntityOnlyWithId(userChatRoom.getUserId()))
                 .lastAccessTime(userChatRoom.getLastAccessTime())
+                .createdAt(userChatRoom.getCreatedAt())
+                .updatedAt(userChatRoom.getUpdatedAt())
                 .build();
     }
 
@@ -52,6 +62,9 @@ public class UserChatRoomEntity {
                 .userChatRoomId(id)
                 .userId(user.getId())
                 .userChatRoomId(chatRoom.getId())
+                .createdAt(this.createdAt)
+                .updatedAt(this.updatedAt)
+                .lastAccessTime(this.lastAccessTime)
                 .build();
     }
 }
