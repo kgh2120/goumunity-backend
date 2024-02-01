@@ -27,7 +27,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
+@Transactional(readOnly = true)
 public class FeedServiceImpl implements FeedService {
 
     private final FeedRepository feedRepository;
@@ -35,6 +35,7 @@ public class FeedServiceImpl implements FeedService {
     private final FeedImageUploader feedImageUploader;
 
     @Override
+    @Transactional
     public void createFeed(Long userId, FeedRequest.Create feedRequest, List<MultipartFile> images) {
         Feed createdFeed = feedRepository.save(Feed.from(feedRequest, userId));
 
@@ -46,7 +47,6 @@ public class FeedServiceImpl implements FeedService {
         }
     }
 
-    @Override
     @Transactional(readOnly = true)
     public FeedRecommendResponse findFeed(User user, Long time, Long regionId) {
         List<FeedRecommendResource> feeds =
@@ -63,12 +63,12 @@ public class FeedServiceImpl implements FeedService {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public FeedResponse findOneByFeedId(Long feedId) {
         return feedRepository.findOneFeed(feedId);
     }
 
     @Override
+    @Transactional
     public void modifyFeed(
             Long userId, Long feedId, FeedRequest.Modify feedRequest, List<MultipartFile> images) {
         Feed originalFeed =
@@ -135,6 +135,7 @@ public class FeedServiceImpl implements FeedService {
     }
 
     @Override
+    @Transactional
     public void deleteFeed(Long userId, Long feedId) {
         Feed originalFeed =
                 feedRepository

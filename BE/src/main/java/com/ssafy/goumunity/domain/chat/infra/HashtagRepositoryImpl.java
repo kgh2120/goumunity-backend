@@ -4,7 +4,6 @@ import com.ssafy.goumunity.common.util.SliceResponse;
 import com.ssafy.goumunity.domain.chat.domain.Hashtag;
 import com.ssafy.goumunity.domain.chat.service.port.HashtagRepository;
 import java.time.Instant;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -32,11 +31,6 @@ public class HashtagRepositoryImpl implements HashtagRepository {
     @Override
     public boolean existsOneByHashtagName(String hashtagName) {
         return hashtagJpaRepository.existsOneByName(hashtagName);
-    }
-
-    @Override
-    public Optional<Hashtag> findOneByHashtagId(Long id) {
-        return hashtagJpaRepository.findOneById(id).map(HashtagEntity::to);
     }
 
     @Override

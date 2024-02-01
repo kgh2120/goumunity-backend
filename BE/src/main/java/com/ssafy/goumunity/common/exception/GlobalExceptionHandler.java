@@ -1,6 +1,5 @@
 package com.ssafy.goumunity.common.exception;
 
-import static com.ssafy.goumunity.common.exception.CustomErrorCode.INTERNAL_SERVER_ERROR_CODE;
 import static com.ssafy.goumunity.common.exception.GlobalErrorCode.BIND_ERROR;
 import static com.ssafy.goumunity.common.exception.GlobalErrorCode.REQUIRED_PARAM_NOT_FOUND;
 
@@ -20,7 +19,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(CustomException.class)
     public ResponseEntity<ErrorResponse> handleGlobalException(
             CustomException e, HttpServletRequest request) {
-        log.debug("Error 발생!!", e);
+        log.debug("Custom Error 발생", e);
         return ResponseEntity.status(e.getErrorCode().getHttpStatus())
                 .body(ErrorResponse.createErrorResponse(e.getErrorCode(), request.getRequestURI()));
     }
@@ -45,7 +44,8 @@ public class GlobalExceptionHandler {
         log.info("서버 내부 예외 발생!! 발생 위치 : {}\n", e.getFrom(), e.getCause());
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(
-                        ErrorResponse.createErrorResponse(INTERNAL_SERVER_ERROR_CODE, request.getRequestURI()));
+                        ErrorResponse.createErrorResponse(
+                                GlobalErrorCode.INTERNAL_SERVER_ERROR_CODE, request.getRequestURI()));
     }
 
     @ExceptionHandler(Exception.class)
@@ -54,6 +54,7 @@ public class GlobalExceptionHandler {
         log.warn("Unhandled Exception 발생!!", e);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(
-                        ErrorResponse.createErrorResponse(INTERNAL_SERVER_ERROR_CODE, request.getRequestURI()));
+                        ErrorResponse.createErrorResponse(
+                                GlobalErrorCode.INTERNAL_SERVER_ERROR_CODE, request.getRequestURI()));
     }
 }

@@ -1,13 +1,12 @@
 package com.ssafy.goumunity.domain.chat.controller.response;
 
 import com.ssafy.goumunity.domain.user.infra.UserEntity;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Getter
-@NoArgsConstructor
-@AllArgsConstructor
+@Builder
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ChatRoomUserResponse {
 
     private Long userId;

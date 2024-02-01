@@ -15,23 +15,24 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
+@Transactional(readOnly = true)
 public class CommentServiceImpl implements CommentService {
 
     private final CommentRepository commentRepository;
 
     @Override
+    @Transactional
     public Comment saveComment(Long userId, Long feedId, CommentRequest.Create comment) {
         return commentRepository.save(Comment.from(userId, feedId, comment));
     }
 
     @Override
-    @Transactional(readOnly = true)
     public Slice<CommentResponse> findAllByFeedId(Long feedId, Long time, Pageable pageable) {
         return commentRepository.findAllByFeedId(feedId, Instant.ofEpochMilli(time), pageable);
     }
 
     @Override
+    @Transactional
     public Comment modifyComment(
             Long userId, Long feedId, Long commentId, CommentRequest.Modify comment) {
         // commend-id 로 조회 했을 때 조회결과가 없으면 exception 발생
@@ -51,6 +52,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
+    @Transactional
     public void deleteComment(Long userId, Long feedId, Long commentId) {
         // commend-id 로 조회 했을 때 조회결과가 없으면 exception 발생
         Comment originalComment =
@@ -68,7 +70,6 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public boolean isExistComment(Long commentId) {
         return commentRepository.existsById(commentId);
     }

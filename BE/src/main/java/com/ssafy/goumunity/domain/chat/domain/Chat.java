@@ -2,16 +2,14 @@ package com.ssafy.goumunity.domain.chat.domain;
 
 import com.ssafy.goumunity.domain.chat.controller.response.Message;
 import com.ssafy.goumunity.domain.chat.infra.ChatType;
-import com.ssafy.goumunity.domain.user.domain.User;
-import jakarta.persistence.*;
 import java.time.Instant;
 import lombok.*;
 
-@EqualsAndHashCode(exclude = {"createdAt", "updatedAt"})
 @Builder
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@EqualsAndHashCode(exclude = {"createdAt", "updatedAt"})
 public class Chat {
     private Long id;
     private String content;
@@ -21,12 +19,12 @@ public class Chat {
     private Long chatRoomId;
     private Long userId;
 
-    public static Chat create(Message.Request messageRequest, Long chatRoomId, User user) {
+    public static Chat create(Message.Request messageRequest, Long chatRoomId, Long userId) {
         return Chat.builder()
                 .content(messageRequest.getContent())
                 .chatType(messageRequest.getChatType())
                 .createdAt(Instant.now())
-                .userId(user.getId())
+                .userId(userId)
                 .chatRoomId(chatRoomId)
                 .build();
     }

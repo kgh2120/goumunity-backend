@@ -1,6 +1,6 @@
 package com.ssafy.goumunity.domain.region.controller;
 
-import com.ssafy.goumunity.domain.region.controller.request.RegionRegistRequest;
+import com.ssafy.goumunity.domain.region.controller.request.RegionRequest;
 import com.ssafy.goumunity.domain.region.controller.response.RegionResponse;
 import com.ssafy.goumunity.domain.region.service.RegionService;
 import jakarta.validation.Valid;
@@ -30,8 +30,8 @@ public class RegionController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> save(@RequestBody @Valid RegionRegistRequest regionRegistRequest) {
-        regionService.save(regionRegistRequest);
+    public ResponseEntity<Void> save(@RequestBody @Valid RegionRequest regionRequest) {
+        regionService.save(regionRequest);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 }

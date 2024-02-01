@@ -1,18 +1,20 @@
 package com.ssafy.goumunity.domain.region.service;
 
-import com.ssafy.goumunity.common.exception.feed.DataExistException;
-import com.ssafy.goumunity.common.exception.feed.ResourceNotFoundException;
-import com.ssafy.goumunity.domain.region.controller.request.RegionRegistRequest;
+import com.ssafy.goumunity.domain.region.controller.request.RegionRequest;
 import com.ssafy.goumunity.domain.region.controller.response.RegionResponse;
 import com.ssafy.goumunity.domain.region.domain.Region;
+import com.ssafy.goumunity.domain.region.exception.RegionErrorCode;
+import com.ssafy.goumunity.domain.region.exception.RegionException;
 import com.ssafy.goumunity.domain.region.infra.RegionEntity;
 import com.ssafy.goumunity.domain.region.service.port.RegionRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class RegionServiceImpl implements RegionService {
 
     private final RegionRepository regionRepository;
@@ -27,15 +29,16 @@ public class RegionServiceImpl implements RegionService {
         return RegionResponse.from(
                 regionRepository
                         .findOneByRegionId(regionId)
-                        .orElseThrow(() -> new ResourceNotFoundException("해당 지역을 찾을 수 없습니다.", this)));
+                        .orElseThrow(() -> new RegionException(RegionErrorCode.NO_REGION_DATA)));
     }
 
     @Override
-    public void save(RegionRegistRequest regionRegistRequest) {
-        if (regionRepository.isExistsRegion(regionRegistRequest)) {
-            throw new DataExistException(this);
+    @Transactional
+    public void save(RegionRequest regionRequest) {
+        if (regionRepository.isExistsRegion(regionRequest)) {
+            throw new RegionException(RegionErrorCode.ALREADY_EXISTS);
         } else {
-            regionRepository.save(RegionEntity.from(Region.from(regionRegistRequest)));
+            regionRepository.save(RegionEntity.from(Region.from(regionRequest)));
         }
     }
 

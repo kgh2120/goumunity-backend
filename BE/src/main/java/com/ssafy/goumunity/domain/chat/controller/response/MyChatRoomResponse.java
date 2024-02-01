@@ -5,9 +5,9 @@ import java.util.List;
 import lombok.*;
 
 @Builder
-@AllArgsConstructor
-@NoArgsConstructor
-@Data
+@Getter
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class MyChatRoomResponse {
 
     private String title;
@@ -25,19 +25,5 @@ public class MyChatRoomResponse {
         this.unReadMessageCount = 0;
         this.hashtags =
                 chatRoom.getChatRoomHashtags().stream().map(ChatRoomHashtagResponse::from).toList();
-    }
-
-    public static MyChatRoomResponse from(ChatRoomEntity chatRoomEntity) {
-        return MyChatRoomResponse.builder()
-                .title(chatRoomEntity.getTitle())
-                .chatRoomId(chatRoomEntity.getId())
-                .imgSrc(chatRoomEntity.getImgSrc())
-                .currentUserCount(chatRoomEntity.getUserChatRooms().size())
-                .unReadMessageCount(0)
-                .hashtags(
-                        chatRoomEntity.getChatRoomHashtags().stream()
-                                .map(ChatRoomHashtagResponse::from)
-                                .toList())
-                .build();
     }
 }

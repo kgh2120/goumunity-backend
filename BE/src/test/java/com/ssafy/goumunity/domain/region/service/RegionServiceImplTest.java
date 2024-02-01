@@ -3,11 +3,10 @@ package com.ssafy.goumunity.domain.region.service;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 
-import com.ssafy.goumunity.common.exception.feed.DataExistException;
-import com.ssafy.goumunity.common.exception.feed.ResourceNotFoundException;
-import com.ssafy.goumunity.domain.region.controller.request.RegionRegistRequest;
+import com.ssafy.goumunity.domain.region.controller.request.RegionRequest;
 import com.ssafy.goumunity.domain.region.controller.response.RegionResponse;
 import com.ssafy.goumunity.domain.region.domain.Region;
+import com.ssafy.goumunity.domain.region.exception.RegionException;
 import com.ssafy.goumunity.domain.region.service.port.RegionRepository;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -33,13 +32,11 @@ class RegionServiceImplTest {
     @DisplayName("중복입력테스트_성공")
     void 중복입력테스트() {
 
-        RegionRegistRequest regionRegistRequest =
-                RegionRegistRequest.builder().si("서울시").gungu("중구").build();
+        RegionRequest regionRequest = RegionRequest.builder().si("서울시").gungu("중구").build();
 
-        BDDMockito.given(regionRepository.isExistsRegion(any(RegionRegistRequest.class)))
-                .willReturn(true);
+        BDDMockito.given(regionRepository.isExistsRegion(any(RegionRequest.class))).willReturn(true);
 
-        assertThrows(DataExistException.class, () -> regionService.save(regionRegistRequest));
+        assertThrows(RegionException.class, () -> regionService.save(regionRequest));
     }
 
     @Nested
@@ -96,8 +93,7 @@ class RegionServiceImplTest {
 
             BDDMockito.given(regionRepository.findOneByRegionId(any())).willReturn(Optional.empty());
 
-            assertThrows(
-                    ResourceNotFoundException.class, () -> regionService.findOneByRegionId(Long.valueOf(1)));
+            assertThrows(RegionException.class, () -> regionService.findOneByRegionId(Long.valueOf(1)));
         }
     }
 }

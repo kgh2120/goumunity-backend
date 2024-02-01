@@ -1,6 +1,6 @@
 package com.ssafy.goumunity.domain.user.service;
 
-import com.ssafy.goumunity.domain.user.dto.VerificationCodeDto;
+import com.ssafy.goumunity.domain.user.controller.request.VerificationCodeRequest;
 import com.ssafy.goumunity.domain.user.exception.UserErrorCode;
 import com.ssafy.goumunity.domain.user.exception.UserException;
 import com.ssafy.goumunity.domain.user.service.port.MailSender;
@@ -13,15 +13,18 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class VerificationServiceImpl implements VerificationService {
 
     private final MailSender mailSender;
-    private final UserService userService;
     private final RedisTemplate<String, String> redisTemplate;
     private final UserRepository userRepository;
+
+    private final int VERIFICATION_CODE_MAX_LENGTH = 6;
 
     @Override
     public void send(String email) {
@@ -45,18 +48,16 @@ public class VerificationServiceImpl implements VerificationService {
     }
 
     @Override
-    public boolean verificate(VerificationCodeDto verificationCodeDto) {
+    public boolean verificate(VerificationCodeRequest verificationCodeRequest) {
         ValueOperations<String, String> vop = redisTemplate.opsForValue();
-        String value = vop.getAndDelete(verificationCodeDto.getCode());
-        return verificationCodeDto.getEmail().equals(value);
+        String value = vop.getAndDelete(verificationCodeRequest.getCode());
+        return verificationCodeRequest.getEmail().equals(value);
     }
 
     private String createCode() throws NoSuchAlgorithmException {
-        int lenth = 6;
-
         Random random = SecureRandom.getInstanceStrong();
         StringBuilder builder = new StringBuilder();
-        for (int i = 0; i < lenth; i++) {
+        for (int i = 0; i < VERIFICATION_CODE_MAX_LENGTH; i++) {
             builder.append(random.nextInt(10));
         }
         return builder.toString();

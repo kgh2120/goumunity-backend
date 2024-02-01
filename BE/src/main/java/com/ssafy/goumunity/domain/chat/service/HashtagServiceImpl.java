@@ -31,13 +31,6 @@ public class HashtagServiceImpl implements HashtagService {
     }
 
     @Override
-    public Hashtag findOneByHashtagId(Long id) {
-        return hashtagRepository
-                .findOneByHashtagId(id)
-                .orElseThrow(() -> new ChatException(ChatErrorCode.HASHTAG_NOT_FOUND));
-    }
-
-    @Override
     public boolean existsOneByHashtagId(Long hashtagId) {
         return hashtagRepository.existsOneByHashtagId(hashtagId);
     }

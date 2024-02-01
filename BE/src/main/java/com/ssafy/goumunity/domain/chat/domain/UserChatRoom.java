@@ -3,11 +3,11 @@ package com.ssafy.goumunity.domain.chat.domain;
 import java.time.Instant;
 import lombok.*;
 
-@EqualsAndHashCode
 @Getter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode(exclude = {"lastAccessTime"})
 public class UserChatRoom {
 
     private Long userChatRoomId;

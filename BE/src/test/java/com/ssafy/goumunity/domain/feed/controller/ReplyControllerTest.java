@@ -12,17 +12,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ssafy.goumunity.common.config.SecurityConfig;
+import com.ssafy.goumunity.common.config.security.CustomDetails;
 import com.ssafy.goumunity.common.exception.GlobalExceptionHandler;
-import com.ssafy.goumunity.config.SecurityConfig;
-import com.ssafy.goumunity.config.security.CustomDetails;
 import com.ssafy.goumunity.domain.feed.controller.request.ReplyRequest;
 import com.ssafy.goumunity.domain.feed.controller.response.ReplyResponse;
 import com.ssafy.goumunity.domain.feed.domain.Reply;
 import com.ssafy.goumunity.domain.feed.exception.CommentException;
 import com.ssafy.goumunity.domain.feed.service.ReplyService;
+import com.ssafy.goumunity.domain.user.controller.response.UserResponse;
 import com.ssafy.goumunity.domain.user.domain.User;
 import com.ssafy.goumunity.domain.user.domain.UserCategory;
-import com.ssafy.goumunity.domain.user.dto.UserResponse;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;

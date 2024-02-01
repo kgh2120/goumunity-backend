@@ -1,8 +1,11 @@
 package com.ssafy.goumunity.domain.chat.service;
 
-import static org.assertj.core.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.BDDMockito.*;
+import static org.assertj.core.api.Assertions.assertThatNoException;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.verify;
 
 import com.ssafy.goumunity.common.exception.CustomException;
 import com.ssafy.goumunity.common.exception.GlobalErrorCode;
@@ -336,8 +339,12 @@ class ChatRoomServiceImplTest {
                 .willReturn(
                         new SliceImpl<>(
                                 List.of(
-                                        new ChatRoomUserResponse(
-                                                user.getId(), user.getNickname(), user.getImgSrc(), true)),
+                                        ChatRoomUserResponse.builder()
+                                                .userId(user.getId())
+                                                .nickname(user.getNickname())
+                                                .profileImageSrc(user.getImgSrc())
+                                                .isCurrentUser(true)
+                                                .build()),
                                 pageable,
                                 false));
         // when

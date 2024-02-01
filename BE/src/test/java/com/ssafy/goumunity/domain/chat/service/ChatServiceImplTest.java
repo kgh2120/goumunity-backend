@@ -35,7 +35,7 @@ class ChatServiceImplTest {
                 Message.Request.builder().content("hello").chatType(ChatType.MESSAGE).build();
         User user = User.builder().id(2L).build();
 
-        Chat chat = Chat.create(message, chatRoomId, user);
+        Chat chat = Chat.create(message, chatRoomId, user.getId());
         given(chatRoomService.verifyAccessChat(any(), any())).willReturn(true);
         // when
         chatService.saveChat(chatRoomId, message, user);

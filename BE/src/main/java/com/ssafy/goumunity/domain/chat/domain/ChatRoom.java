@@ -6,11 +6,11 @@ import java.time.Instant;
 import java.util.List;
 import lombok.*;
 
-@AllArgsConstructor(access = AccessLevel.PROTECTED)
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Builder
 @Getter
-@EqualsAndHashCode
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@EqualsAndHashCode(exclude = {"createdAt", "updatedAt"})
 public class ChatRoom {
     private Long id;
     private Boolean isOfficial;
