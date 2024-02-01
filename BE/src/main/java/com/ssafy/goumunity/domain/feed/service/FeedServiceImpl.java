@@ -2,6 +2,7 @@ package com.ssafy.goumunity.domain.feed.service;
 
 import com.ssafy.goumunity.domain.feed.controller.request.FeedImgRequest;
 import com.ssafy.goumunity.domain.feed.controller.request.FeedRequest;
+import com.ssafy.goumunity.domain.feed.controller.response.FeedRecommend;
 import com.ssafy.goumunity.domain.feed.controller.response.FeedRecommendResponse;
 import com.ssafy.goumunity.domain.feed.controller.response.FeedResponse;
 import com.ssafy.goumunity.domain.feed.domain.Feed;
@@ -53,9 +54,9 @@ public class FeedServiceImpl implements FeedService {
         List<FeedWeight> feedWeights = feeds.stream().map(item -> FeedWeight.from(item, user)).toList();
         Collections.sort(feedWeights);
 
-        List<FeedRecommendResource> result = new ArrayList<>();
+        List<FeedRecommend> result = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
-            result.add(feedWeights.get(i).getFeedRecommendResource());
+            result.add(FeedRecommend.from(feedWeights.get(i).getFeedRecommendResource()));
         }
 
         return FeedRecommendResponse.builder().feedRecommends(result).build();

@@ -1,6 +1,5 @@
 package com.ssafy.goumunity.domain.feed.controller.response;
 
-import com.ssafy.goumunity.domain.feed.domain.FeedRecommendResource;
 import java.util.List;
 import lombok.*;
 
@@ -9,5 +8,5 @@ import lombok.*;
 @Builder
 @Getter
 public class FeedRecommendResponse {
-    private List<FeedRecommendResource> feedRecommends;
+    private List<FeedRecommend> feedRecommends;
 }
