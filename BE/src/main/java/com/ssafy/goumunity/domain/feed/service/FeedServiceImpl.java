@@ -2,20 +2,25 @@ package com.ssafy.goumunity.domain.feed.service;
 
 import com.ssafy.goumunity.domain.feed.controller.request.FeedImgRequest;
 import com.ssafy.goumunity.domain.feed.controller.request.FeedRequest;
+import com.ssafy.goumunity.domain.feed.controller.response.FeedRecommend;
+import com.ssafy.goumunity.domain.feed.controller.response.FeedRecommendResponse;
 import com.ssafy.goumunity.domain.feed.controller.response.FeedResponse;
 import com.ssafy.goumunity.domain.feed.domain.Feed;
 import com.ssafy.goumunity.domain.feed.domain.FeedImg;
+import com.ssafy.goumunity.domain.feed.domain.FeedRecommendResource;
+import com.ssafy.goumunity.domain.feed.domain.FeedWeight;
 import com.ssafy.goumunity.domain.feed.exception.FeedErrorCode;
 import com.ssafy.goumunity.domain.feed.exception.FeedException;
 import com.ssafy.goumunity.domain.feed.service.post.FeedImageUploader;
 import com.ssafy.goumunity.domain.feed.service.post.FeedImgRepository;
 import com.ssafy.goumunity.domain.feed.service.post.FeedRepository;
+import com.ssafy.goumunity.domain.user.domain.User;
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -42,9 +47,19 @@ public class FeedServiceImpl implements FeedService {
         }
     }
 
-    @Override
-    public Slice<FeedResponse> findFeed(Long time, Pageable pageable) {
-        return feedRepository.findFeed(Instant.ofEpochMilli(time), pageable);
+    @Transactional(readOnly = true)
+    public FeedRecommendResponse findFeed(User user, Long time, Long regionId) {
+        List<FeedRecommendResource> feeds =
+                feedRepository.findFeed(user.getId(), Instant.ofEpochMilli(time), regionId);
+        List<FeedWeight> feedWeights = feeds.stream().map(item -> FeedWeight.from(item, user)).toList();
+        Collections.sort(feedWeights);
+
+        List<FeedRecommend> result = new ArrayList<>();
+        for (int i = 0; i < 10; i++) {
+            result.add(FeedRecommend.from(feedWeights.get(i).getFeedRecommendResource()));
+        }
+
+        return FeedRecommendResponse.builder().feedRecommends(result).build();
     }
 
     @Override

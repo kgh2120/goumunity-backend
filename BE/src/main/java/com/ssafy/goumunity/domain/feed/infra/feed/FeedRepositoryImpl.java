@@ -2,12 +2,12 @@ package com.ssafy.goumunity.domain.feed.infra.feed;
 
 import com.ssafy.goumunity.domain.feed.controller.response.FeedResponse;
 import com.ssafy.goumunity.domain.feed.domain.Feed;
+import com.ssafy.goumunity.domain.feed.domain.FeedRecommendResource;
 import com.ssafy.goumunity.domain.feed.service.post.FeedRepository;
 import java.time.Instant;
+import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -23,8 +23,8 @@ public class FeedRepositoryImpl implements FeedRepository {
     }
 
     @Override
-    public Slice<FeedResponse> findFeed(Instant time, Pageable pageable) {
-        return feedQueryDslRepository.findFeed(time, pageable);
+    public List<FeedRecommendResource> findFeed(Long userId, Instant time, Long regionId) {
+        return feedQueryDslRepository.findFeed(userId, time, regionId);
     }
 
     @Override
