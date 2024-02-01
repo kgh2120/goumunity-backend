@@ -9,7 +9,7 @@ import static com.ssafy.goumunity.domain.user.infra.QUserEntity.userEntity;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.ssafy.goumunity.common.util.SliceUtils;
+import com.ssafy.goumunity.common.util.QueryDslSliceUtils;
 import com.ssafy.goumunity.domain.chat.controller.response.ChatRoomUserResponse;
 import com.ssafy.goumunity.domain.chat.controller.response.MyChatRoomResponse;
 import com.ssafy.goumunity.domain.user.domain.User;
@@ -49,7 +49,7 @@ public class ChatRoomQueryDslRepository {
                         .limit(pageable.getPageSize() + 1)
                         .fetch();
 
-        return new SliceImpl<>(res, pageable, SliceUtils.hasNext(res, pageable));
+        return new SliceImpl<>(res, pageable, QueryDslSliceUtils.hasNext(res, pageable));
     }
 
     public Slice<ChatRoomUserResponse> findChatRoomUsers(
@@ -71,6 +71,6 @@ public class ChatRoomQueryDslRepository {
                         .offset(pageable.getOffset())
                         .limit(pageable.getPageSize() + 1)
                         .fetch();
-        return new SliceImpl<>(result, pageable, SliceUtils.hasNext(result, pageable));
+        return new SliceImpl<>(result, pageable, QueryDslSliceUtils.hasNext(result, pageable));
     }
 }

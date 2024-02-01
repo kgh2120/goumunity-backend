@@ -4,9 +4,9 @@ import java.util.List;
 import org.springframework.data.domain.Pageable;
 
 /** QueryDsl에서 SLice 기능을 이용할 때 필요한 작업들을 모아두는 유틸리티 클래스입니다. 이 클래스를 생성하려하면 예외가 발생합니다. @Author 김규현 */
-public class SliceUtils {
+public class QueryDslSliceUtils {
 
-    private SliceUtils() {
+    private QueryDslSliceUtils() {
         throw new IllegalStateException("do not create this class");
     }
 

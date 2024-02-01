@@ -9,7 +9,7 @@ import static com.ssafy.goumunity.domain.user.infra.QUserEntity.userEntity;
 
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.ssafy.goumunity.common.util.SliceUtils;
+import com.ssafy.goumunity.common.util.QueryDslSliceUtils;
 import com.ssafy.goumunity.domain.feed.controller.response.FeedResponse;
 import com.ssafy.goumunity.domain.feed.controller.response.QFeedResponse;
 import java.time.Instant;
@@ -50,7 +50,7 @@ public class FeedQueryDslRepository {
                         .limit(pageable.getPageSize() + 1)
                         .fetch();
 
-        return new SliceImpl<>(res, pageable, SliceUtils.hasNext(res, pageable));
+        return new SliceImpl<>(res, pageable, QueryDslSliceUtils.hasNext(res, pageable));
     }
 
     public FeedResponse findOneFeed(Long feedId) {
