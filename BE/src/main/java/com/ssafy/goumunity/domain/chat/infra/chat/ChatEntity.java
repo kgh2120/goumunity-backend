@@ -1,6 +1,7 @@
-package com.ssafy.goumunity.domain.chat.infra;
+package com.ssafy.goumunity.domain.chat.infra.chat;
 
 import com.ssafy.goumunity.domain.chat.domain.Chat;
+import com.ssafy.goumunity.domain.chat.infra.chatroom.ChatRoomEntity;
 import com.ssafy.goumunity.domain.user.infra.UserEntity;
 import jakarta.persistence.*;
 import java.time.Instant;

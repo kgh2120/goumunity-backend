@@ -1,9 +1,11 @@
 package com.ssafy.goumunity.domain.chat.infra;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 import com.ssafy.goumunity.domain.chat.domain.ChatRoom;
+import com.ssafy.goumunity.domain.chat.infra.chatroom.ChatRoomEntity;
+import com.ssafy.goumunity.domain.chat.infra.chatroom.ChatRoomJpaRepository;
+import com.ssafy.goumunity.domain.chat.infra.chatroom.UserChatRoomEntity;
 import com.ssafy.goumunity.domain.user.infra.UserEntity;
 import jakarta.persistence.EntityManager;
 import java.time.Instant;

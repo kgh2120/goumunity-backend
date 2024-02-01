@@ -1,4 +1,4 @@
-package com.ssafy.goumunity.domain.chat.infra;
+package com.ssafy.goumunity.domain.chat.infra.hashtag;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

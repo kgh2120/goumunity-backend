@@ -99,7 +99,7 @@ public class ChatRoomServiceImpl implements ChatRoomService {
 
     @Override
     public Slice<MyChatRoomResponse> findMyChatRoom(User user, Long time, Pageable pageable) {
-        return chatRoomRepository.findMyChatRoom(user, time, pageable);
+        return chatRoomRepository.findMyChatRoom(user.getId(), time, pageable);
     }
 
     @Override

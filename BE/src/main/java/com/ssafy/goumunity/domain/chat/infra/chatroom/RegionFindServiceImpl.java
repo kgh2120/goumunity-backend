@@ -1,4 +1,4 @@
-package com.ssafy.goumunity.domain.chat.infra;
+package com.ssafy.goumunity.domain.chat.infra.chatroom;
 
 import com.ssafy.goumunity.domain.chat.service.port.RegionFindService;
 import com.ssafy.goumunity.domain.region.service.RegionService;

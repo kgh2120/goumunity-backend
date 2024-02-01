@@ -1,10 +1,15 @@
 package com.ssafy.goumunity.domain.chat.infra;
 
-import static com.ssafy.goumunity.domain.chat.infra.QChatRoomEntity.chatRoomEntity;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.goumunity.domain.chat.controller.response.MyChatRoomResponse;
+import com.ssafy.goumunity.domain.chat.infra.chatroom.ChatRoomEntity;
+import com.ssafy.goumunity.domain.chat.infra.chatroom.ChatRoomJpaRepository;
+import com.ssafy.goumunity.domain.chat.infra.chatroom.ChatRoomQueryDslRepository;
+import com.ssafy.goumunity.domain.chat.infra.chatroom.UserChatRoomEntity;
+import com.ssafy.goumunity.domain.chat.infra.hashtag.ChatRoomHashtagEntity;
+import com.ssafy.goumunity.domain.chat.infra.hashtag.HashtagEntity;
 import com.ssafy.goumunity.domain.user.infra.UserEntity;
 import jakarta.persistence.EntityManager;
 import java.time.Instant;

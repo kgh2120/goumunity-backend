@@ -1,8 +1,9 @@
 package com.ssafy.goumunity.domain.chat.infra;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import com.ssafy.goumunity.domain.chat.controller.response.ChatRoomUserResponse;
+import com.ssafy.goumunity.domain.chat.infra.chatroom.ChatRoomEntity;
+import com.ssafy.goumunity.domain.chat.infra.chatroom.ChatRoomQueryDslRepository;
+import com.ssafy.goumunity.domain.chat.infra.chatroom.UserChatRoomEntity;
 import com.ssafy.goumunity.domain.user.infra.UserEntity;
 import jakarta.persistence.EntityManager;
 import java.time.Instant;

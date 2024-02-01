@@ -1,6 +1,11 @@
 package com.ssafy.goumunity.domain.chat.infra;
 
-import com.ssafy.goumunity.domain.chat.controller.response.Message;
+import com.ssafy.goumunity.domain.chat.controller.response.MessageResponse;
+import com.ssafy.goumunity.domain.chat.infra.chat.ChatEntity;
+import com.ssafy.goumunity.domain.chat.infra.chat.ChatQueryDslRepository;
+import com.ssafy.goumunity.domain.chat.infra.chat.ChatType;
+import com.ssafy.goumunity.domain.chat.infra.chatroom.ChatRoomEntity;
+import com.ssafy.goumunity.domain.chat.infra.chatroom.UserChatRoomEntity;
 import com.ssafy.goumunity.domain.user.infra.UserEntity;
 import jakarta.persistence.EntityManager;
 import java.time.Instant;
@@ -47,7 +52,7 @@ class ChatQueryDslRepositoryTest {
                             .build());
         }
         // when
-        Slice<Message.Response> sut =
+        Slice<MessageResponse> sut =
                 chatQueryDslRepository.findPreviousMessage(
                         chatRoom.getId(), Instant.now().toEpochMilli() + 1000000000L, PageRequest.of(0, 5));
         // then
@@ -85,7 +90,7 @@ class ChatQueryDslRepositoryTest {
                             .build());
         }
         // when
-        Slice<Message.Response> sut =
+        Slice<MessageResponse> sut =
                 chatQueryDslRepository.findPreviousMessage(
                         chatRoom.getId(), Instant.now().toEpochMilli() + 1000000000L, PageRequest.of(0, 5));
         // then
@@ -123,7 +128,7 @@ class ChatQueryDslRepositoryTest {
                             .build());
         }
         // when
-        Slice<Message.Response> sut =
+        Slice<MessageResponse> sut =
                 chatQueryDslRepository.findPreviousMessage(
                         chatRoom.getId(), Instant.now().toEpochMilli() + 1000000000L, PageRequest.of(0, 5));
         // then
@@ -131,7 +136,7 @@ class ChatQueryDslRepositoryTest {
 
         sa.assertThat(sut.hasNext()).isFalse();
         sa.assertThat(sut.getContent().size()).isSameAs(5);
-        List<Message.Response> content = sut.getContent();
+        List<MessageResponse> content = sut.getContent();
         for (int i = 0; i < 4; i++) {
             sa.assertThat(content.get(i).getCreatedAt()).isGreaterThan(content.get(i + 1).getCreatedAt());
         }
@@ -164,7 +169,7 @@ class ChatQueryDslRepositoryTest {
                             .build());
         }
         // when
-        Slice<Message.Response> sut =
+        Slice<MessageResponse> sut =
                 chatQueryDslRepository.findPreviousMessage(chatRoom.getId(), 100L, PageRequest.of(0, 5));
         // then
         SoftAssertions sa = new SoftAssertions();
