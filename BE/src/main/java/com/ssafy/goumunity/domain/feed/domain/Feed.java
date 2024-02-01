@@ -10,6 +10,7 @@ import lombok.*;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
+@EqualsAndHashCode(exclude = {"createdAt", "updatedAt"})
 public class Feed {
     private Long feedId;
     private String content;
@@ -36,6 +37,20 @@ public class Feed {
                 .regionId(feedRequest.getRegionId())
                 .userId(userId)
                 .createdAt(Instant.now())
+                .updatedAt(Instant.now())
+                .build();
+    }
+
+    public static Feed from(Feed feed, FeedRequest.Modify feedRequest) {
+        return Feed.builder()
+                .feedId(feed.getFeedId())
+                .content(feedRequest.getContent())
+                .feedCategory(feedRequest.getFeedCategory())
+                .price(feedRequest.getPrice())
+                .afterPrice(feedRequest.getAfterPrice())
+                .regionId(feedRequest.getRegionId())
+                .userId(feed.userId)
+                .createdAt(feed.createdAt)
                 .updatedAt(Instant.now())
                 .build();
     }

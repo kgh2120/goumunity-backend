@@ -46,6 +46,7 @@ public class FeedImgEntity {
                 .feedImgId(feedImgId)
                 .imgSrc(imgSrc)
                 .sequence(sequence)
+                .feedId(feedEntity.getFeedId())
                 .createdAt(createdAt)
                 .updatedAt(updatedAt)
                 .build();
@@ -54,6 +55,7 @@ public class FeedImgEntity {
     public static FeedImgEntity from(FeedImg feedImg) {
         FeedImgEntityBuilder feedImgEntityBuilder =
                 FeedImgEntity.builder()
+                        .feedImgId(feedImg.getFeedImgId())
                         .feedEntity(FeedEntity.feedEntityOnlyWithId(feedImg.getFeedId()))
                         .imgSrc(feedImg.getImgSrc())
                         .sequence(feedImg.getSequence());

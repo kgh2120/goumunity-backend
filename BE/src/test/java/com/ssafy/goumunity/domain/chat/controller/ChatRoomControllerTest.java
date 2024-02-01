@@ -16,6 +16,7 @@ import com.ssafy.goumunity.common.exception.GlobalExceptionHandler;
 import com.ssafy.goumunity.domain.chat.controller.request.ChatRoomRequest;
 import com.ssafy.goumunity.domain.chat.controller.response.ChatRoomHashtagResponse;
 import com.ssafy.goumunity.domain.chat.controller.response.ChatRoomSearchResponse;
+import com.ssafy.goumunity.domain.chat.controller.response.ChatRoomUserResponse;
 import com.ssafy.goumunity.domain.chat.exception.ChatException;
 import com.ssafy.goumunity.domain.chat.service.ChatRoomService;
 import java.util.ArrayList;
@@ -337,6 +338,71 @@ class ChatRoomControllerTest {
                         status().isForbidden(),
                         jsonPath("$.errorMessage").value(FORBIDDEN.getErrorMessage()),
                         jsonPath("$.errorName").value(FORBIDDEN.getErrorName()))
+                .andDo(print());
+    }
+
+    @WithMockUser
+    @Test
+    void 거지방_참가자_조회_테스트_성공() throws Exception {
+        // given
+        Long chatRoomId = 1L;
+        Long time = 1000000000L;
+        int page = 0;
+        int size = 12;
+
+        String url = CHAT_ROOM_API_PREFIX + "/" + chatRoomId + "/users";
+
+        given(chatRoomService.findChatRoomUsers(any(), any(), any(), any()))
+                .willReturn(
+                        new SliceImpl<>(
+                                List.of(
+                                        new ChatRoomUserResponse(),
+                                        new ChatRoomUserResponse(),
+                                        new ChatRoomUserResponse()),
+                                PageRequest.of(page, size),
+                                false));
+        // when
+        mockMvc
+                .perform(
+                        get(url)
+                                .queryParam("page", String.valueOf(page))
+                                .queryParam("size", String.valueOf(size))
+                                .queryParam("time", String.valueOf(time))
+                                .with(csrf()))
+                // then
+                .andExpectAll(
+                        status().isOk(),
+                        jsonPath("$.hasNext").value(false),
+                        jsonPath("$.contents.length()").value(3))
+                .andDo(print());
+    }
+
+    @WithMockUser
+    @Test
+    void 거지방_참가자_조회_테스트_실패_채팅방_접근_권한이_없는_경우() throws Exception {
+        // given
+        Long chatRoomId = 1L;
+        Long time = 1000000000L;
+        int page = 0;
+        int size = 12;
+
+        String url = CHAT_ROOM_API_PREFIX + "/" + chatRoomId + "/users";
+
+        given(chatRoomService.findChatRoomUsers(any(), any(), any(), any()))
+                .willThrow(new CustomException(FORBIDDEN));
+        // when
+        mockMvc
+                .perform(
+                        get(url)
+                                .queryParam("page", String.valueOf(page))
+                                .queryParam("size", String.valueOf(size))
+                                .queryParam("time", String.valueOf(time))
+                                .with(csrf()))
+                // then
+                .andExpectAll(
+                        status().isForbidden(),
+                        jsonPath("$.errorName").value(FORBIDDEN.getErrorName()),
+                        jsonPath("$.errorMessage").value(FORBIDDEN.getErrorMessage()))
                 .andDo(print());
     }
 }

@@ -1,14 +1,13 @@
 package com.ssafy.goumunity.common.util;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.domain.PageRequest;
 
-class SliceUtilsTest {
+class QueryDslSliceUtilsTest {
 
     @Test
     void hasNext가_True인_경우() throws Exception {
@@ -19,7 +18,7 @@ class SliceUtilsTest {
             contents.add("hi");
         }
         // when
-        boolean sut = SliceUtils.hasNext(contents, pageable);
+        boolean sut = QueryDslSliceUtils.hasNext(contents, pageable);
         // then
         assertThat(sut).isTrue();
     }
@@ -33,7 +32,7 @@ class SliceUtilsTest {
             contents.add("hi");
         }
         // when
-        boolean sut = SliceUtils.hasNext(contents, pageable);
+        boolean sut = QueryDslSliceUtils.hasNext(contents, pageable);
         // then
         assertThat(sut).isFalse();
     }

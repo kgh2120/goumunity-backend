@@ -17,6 +17,8 @@ public interface FeedRepository {
 
     Optional<Feed> findOneById(Long feedId);
 
+    Feed modify(Feed feed);
+
     void delete(Feed feed);
 
     boolean existsByFeedId(Long feedId);

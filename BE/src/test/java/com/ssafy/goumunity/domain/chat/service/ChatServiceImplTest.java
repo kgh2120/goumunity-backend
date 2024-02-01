@@ -36,7 +36,7 @@ class ChatServiceImplTest {
         User user = User.builder().id(2L).build();
 
         Chat chat = Chat.create(message, chatRoomId, user);
-        given(chatRoomService.verifySendChat(any(), any())).willReturn(true);
+        given(chatRoomService.verifyAccessChat(any(), any())).willReturn(true);
         // when
         chatService.saveChat(chatRoomId, message, user);
         // then
@@ -51,10 +51,10 @@ class ChatServiceImplTest {
                 Message.Request.builder().content("hello").chatType(ChatType.MESSAGE).build();
         User user = User.builder().id(2L).build();
 
-        given(chatRoomService.verifySendChat(any(), any())).willReturn(false);
+        given(chatRoomService.verifyAccessChat(any(), any())).willReturn(false);
         // when // then
         assertThatThrownBy(() -> chatService.saveChat(chatRoomId, message, user))
                 .isInstanceOf(ChatException.class)
-                .hasFieldOrPropertyWithValue("errorCode", ChatErrorCode.CANT_SEND_MESSAGE);
+                .hasFieldOrPropertyWithValue("errorCode", ChatErrorCode.CANT_ACCESS_MESSAGE);
     }
 }

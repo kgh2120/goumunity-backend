@@ -3,6 +3,7 @@ package com.ssafy.goumunity.domain.chat.controller;
 import com.ssafy.goumunity.common.util.SliceResponse;
 import com.ssafy.goumunity.domain.chat.controller.request.ChatRoomRequest;
 import com.ssafy.goumunity.domain.chat.controller.response.ChatRoomSearchResponse;
+import com.ssafy.goumunity.domain.chat.controller.response.ChatRoomUserResponse;
 import com.ssafy.goumunity.domain.chat.service.ChatRoomService;
 import com.ssafy.goumunity.domain.user.domain.User;
 import jakarta.validation.Valid;
@@ -58,5 +59,16 @@ public class ChatRoomController {
             @PathVariable Long chatRoomId, @AuthenticationPrincipal User user) {
         chatRoomService.disconnectChatRoom(chatRoomId, user);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/{chatRoomId}/users")
+    public ResponseEntity<SliceResponse<ChatRoomUserResponse>> findChatRoomUsers(
+            @PathVariable Long chatRoomId,
+            Pageable pageable,
+            @RequestParam Long time,
+            @AuthenticationPrincipal User user) {
+        Slice<ChatRoomUserResponse> responses =
+                chatRoomService.findChatRoomUsers(chatRoomId, pageable, time, user);
+        return ResponseEntity.ok(SliceResponse.from(responses.getContent(), responses.hasNext()));
     }
 }

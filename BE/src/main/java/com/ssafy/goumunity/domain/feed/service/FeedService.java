@@ -15,5 +15,8 @@ public interface FeedService {
 
     FeedResponse findOneByFeedId(Long feedId);
 
+    void modifyFeed(
+            Long userId, Long feedId, FeedRequest.Modify feedRequest, List<MultipartFile> images);
+
     void deleteFeed(Long userId, Long feedId);
 }

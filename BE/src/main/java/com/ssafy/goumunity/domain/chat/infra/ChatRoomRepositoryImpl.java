@@ -1,6 +1,7 @@
 package com.ssafy.goumunity.domain.chat.infra;
 
 import com.ssafy.goumunity.domain.chat.controller.response.ChatRoomSearchResponse;
+import com.ssafy.goumunity.domain.chat.controller.response.ChatRoomUserResponse;
 import com.ssafy.goumunity.domain.chat.controller.response.MyChatRoomResponse;
 import com.ssafy.goumunity.domain.chat.domain.ChatRoom;
 import com.ssafy.goumunity.domain.chat.domain.UserChatRoom;
@@ -105,5 +106,11 @@ public class ChatRoomRepositoryImpl implements ChatRoomRepository {
     @Override
     public void disconnectChatRoom(UserChatRoom userChatRoom) {
         userChatRoomJpaRepository.save(UserChatRoomEntity.from(userChatRoom));
+    }
+
+    @Override
+    public Slice<ChatRoomUserResponse> findChatRoomUsers(
+            Long chatRoomId, Pageable pageable, Long time, Long userId) {
+        return chatRoomQueryDslRepository.findChatRoomUsers(chatRoomId, pageable, time, userId);
     }
 }
