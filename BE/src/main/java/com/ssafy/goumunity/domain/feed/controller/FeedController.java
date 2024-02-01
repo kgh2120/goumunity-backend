@@ -1,6 +1,5 @@
 package com.ssafy.goumunity.domain.feed.controller;
 
-import com.ssafy.goumunity.common.util.SliceResponse;
 import com.ssafy.goumunity.domain.feed.controller.request.FeedRequest;
 import com.ssafy.goumunity.domain.feed.controller.response.FeedRecommendResponse;
 import com.ssafy.goumunity.domain.feed.controller.response.FeedResponse;
@@ -35,9 +34,9 @@ public class FeedController {
 
     @GetMapping
     public ResponseEntity<FeedRecommendResponse> findFeed(
-            @AuthenticationPrincipal User user
-            , @RequestParam("time") Long time
-            , @RequestParam("regionId") Long regionId) {
+            @AuthenticationPrincipal User user,
+            @RequestParam("time") Long time,
+            @RequestParam("regionId") Long regionId) {
         return ResponseEntity.ok(feedService.findFeed(user, time, regionId));
     }
 
