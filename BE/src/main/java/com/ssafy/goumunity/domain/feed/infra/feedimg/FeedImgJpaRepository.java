@@ -4,5 +4,5 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface FeedImgJpaRepository extends JpaRepository<FeedImgEntity, Long> {
-    List<FeedImgEntity> findAllByFeedEntity_FeedId(Long feedId);
+    List<FeedImgEntity> findAllByFeedEntity_Id(Long feedId);
 }

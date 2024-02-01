@@ -18,7 +18,7 @@ public class ReplyLikeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "reply_like_id")
-    private Long replyLikeId;
+    private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
@@ -38,9 +38,9 @@ public class ReplyLikeEntity {
 
     public ReplyLike to() {
         return ReplyLike.builder()
-                .replyLikeId(replyLikeId)
+                .id(id)
                 .userId(userEntity.getId())
-                .replyId(replyEntity.getReplyId())
+                .replyId(replyEntity.getId())
                 .createdAt(createdAt)
                 .updatedAt(updatedAt)
                 .build();
@@ -49,7 +49,7 @@ public class ReplyLikeEntity {
     public static ReplyLikeEntity from(ReplyLike replyLike) {
         ReplyLikeEntityBuilder replyLikeEntityBuilder =
                 ReplyLikeEntity.builder()
-                        .replyLikeId(replyLike.getReplyLikeId())
+                        .id(replyLike.getId())
                         .userEntity(UserEntity.userEntityOnlyWithId(replyLike.getUserId()))
                         .replyEntity(ReplyEntity.replyEntityOnlyWithId(replyLike.getReplyId()));
 

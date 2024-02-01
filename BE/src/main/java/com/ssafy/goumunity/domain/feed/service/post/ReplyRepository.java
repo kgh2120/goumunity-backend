@@ -8,15 +8,15 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 
 public interface ReplyRepository {
-    void save(Reply reply);
+    Reply create(Reply reply);
 
     Slice<ReplyResponse> findAllByCommentId(Long commentId, Instant instant, Pageable pageable);
 
     Optional<Reply> findOneById(Long replyId);
 
-    Reply modify(Reply reply);
+    void modify(Reply reply);
 
-    void delete(Reply reply);
+    void delete(Long reply);
 
     boolean existsByReplyId(Long replyId);
 }

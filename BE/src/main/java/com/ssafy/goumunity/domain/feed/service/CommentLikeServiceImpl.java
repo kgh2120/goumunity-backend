@@ -26,12 +26,19 @@ public class CommentLikeServiceImpl implements CommentLikeService {
             throw new CommentException(CommentErrorCode.ALREADY_LIKED);
         }
 
-        commentLikeRepository.save(commentLike);
+        commentLikeRepository.create(commentLike);
     }
 
     @Override
     public void deleteCommentLike(Long userId, Long commentId) {
         verifyComment(commentId);
+
+        CommentLike commentLike =
+                commentLikeRepository
+                        .findOneByUserIdAndCommentId(userId, commentId)
+                        .orElseThrow(() -> new CommentException(CommentErrorCode.NO_LIKE_DATA));
+
+        commentLikeRepository.delete(commentLike.getId());
     }
 
     private void verifyComment(Long commentId) {

@@ -22,7 +22,7 @@ public class FeedEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "feed_id")
-    private Long feedId;
+    private Long id;
 
     @Column(name = "content")
     private String content;
@@ -64,7 +64,7 @@ public class FeedEntity {
 
     public Feed to() {
         return Feed.builder()
-                .feedId(feedId)
+                .id(id)
                 .content(content)
                 .feedCategory(feedCategory)
                 .price(price)
@@ -79,7 +79,7 @@ public class FeedEntity {
     public static FeedEntity from(Feed feed) {
         FeedEntityBuilder feedEntityBuilder =
                 FeedEntity.builder()
-                        .feedId(feed.getFeedId())
+                        .id(feed.getId())
                         .content(feed.getContent())
                         .feedCategory(feed.getFeedCategory())
                         .price(feed.getPrice())
@@ -94,6 +94,6 @@ public class FeedEntity {
     }
 
     public static FeedEntity feedEntityOnlyWithId(Long id) {
-        return FeedEntity.builder().feedId(id).build();
+        return FeedEntity.builder().id(id).build();
     }
 }

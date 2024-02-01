@@ -8,7 +8,7 @@ import lombok.*;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class FeedImgResponse {
-    private Long feedImgId;
+    private Long id;
     private String imgSrc;
     private Integer sequence;
 
@@ -18,7 +18,7 @@ public class FeedImgResponse {
     public static FeedImgResponse from(FeedImgEntity feedImg) {
         FeedImgResponseBuilder feedImgResponseBuilder =
                 FeedImgResponse.builder()
-                        .feedImgId(feedImg.getFeedImgId())
+                        .id(feedImg.getId())
                         .imgSrc(feedImg.getImgSrc())
                         .sequence(feedImg.getSequence());
 

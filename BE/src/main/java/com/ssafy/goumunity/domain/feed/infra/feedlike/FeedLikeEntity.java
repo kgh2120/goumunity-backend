@@ -38,9 +38,9 @@ public class FeedLikeEntity {
 
     public FeedLike to() {
         return FeedLike.builder()
-                .feedLikeId(feedLikeId)
+                .id(feedLikeId)
                 .userId(userEntity.getId())
-                .feedId(feedEntity.getFeedId())
+                .feedId(feedEntity.getId())
                 .createdAt(createdAt)
                 .updatedAt(updatedAt)
                 .build();
@@ -49,7 +49,7 @@ public class FeedLikeEntity {
     public static FeedLikeEntity from(FeedLike feedLike) {
         FeedLikeEntityBuilder feedLikeEntityBuilder =
                 FeedLikeEntity.builder()
-                        .feedLikeId(feedLike.getFeedLikeId())
+                        .feedLikeId(feedLike.getId())
                         .userEntity(UserEntity.userEntityOnlyWithId(feedLike.getUserId()))
                         .feedEntity(FeedEntity.feedEntityOnlyWithId(feedLike.getFeedId()));
 

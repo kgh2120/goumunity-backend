@@ -29,7 +29,7 @@ public class ReplyLikeServiceImpl implements ReplyLikeService {
             throw new ReplyException(ReplyErrorCode.ALREADY_LIKED);
         }
 
-        replyLikeRepository.createReplyLike(replyLike);
+        replyLikeRepository.create(replyLike);
     }
 
     @Override
@@ -42,7 +42,7 @@ public class ReplyLikeServiceImpl implements ReplyLikeService {
                         .findOneByUserIdAndReplyId(userId, replyId)
                         .orElseThrow(() -> new ReplyException(NO_LIKE_DATA));
 
-        replyLikeRepository.deleteReplyLike(replyLike);
+        replyLikeRepository.delete(replyLike.getId());
     }
 
     private void verifyReply(Long replyId) {

@@ -9,11 +9,9 @@ import lombok.*;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @EqualsAndHashCode(exclude = {"createdAt", "updatedAt"})
 public class FeedLike {
-    private Long feedLikeId;
-
+    private Long id;
     private Long feedId;
     private Long userId;
-
     private Instant createdAt;
     private Instant updatedAt;
 

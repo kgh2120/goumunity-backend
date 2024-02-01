@@ -5,11 +5,11 @@ import java.util.Optional;
 
 public interface ReplyLikeRepository {
 
-    void createReplyLike(ReplyLike replyLike);
+    void create(ReplyLike replyLike);
 
     Optional<ReplyLike> findOneByUserIdAndReplyId(Long userId, Long replyId);
 
-    void deleteReplyLike(ReplyLike replyLike);
+    void delete(Long replyLikeId);
 
     boolean existsByReplyLike(ReplyLike replyLike);
 }

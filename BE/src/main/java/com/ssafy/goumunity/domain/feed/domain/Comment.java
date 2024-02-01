@@ -14,11 +14,10 @@ import lombok.*;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @EqualsAndHashCode(exclude = {"createdAt", "updatedAt"})
 public class Comment {
-    private Long commentId;
+    private Long id;
     private String content;
     private Long feedId;
     private Long userId;
-
     private Instant createdAt;
     private Instant updatedAt;
 
@@ -36,7 +35,7 @@ public class Comment {
             throw new CommentException(CommentErrorCode.FEED_NOT_MATCH);
     }
 
-    public static Comment from(Long userId, Long feedId, CommentRequest.Create comment) {
+    public static Comment create(Long userId, Long feedId, CommentRequest.Create comment) {
         return Comment.builder()
                 .feedId(feedId)
                 .userId(userId)

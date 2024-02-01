@@ -37,8 +37,8 @@ public class CommentLikeEntity {
 
     public CommentLike to() {
         return CommentLike.builder()
-                .commentLikeId(commentLikeId)
-                .commentId(commentEntity.getCommentId())
+                .id(commentLikeId)
+                .commentId(commentEntity.getId())
                 .userId(userEntity.getId())
                 .createdAt(createdAt)
                 .updatedAt(updatedAt)
@@ -48,7 +48,7 @@ public class CommentLikeEntity {
     public static CommentLikeEntity from(CommentLike commentLike) {
         CommentLikeEntityBuilder commentLikeEntityBuilder =
                 CommentLikeEntity.builder()
-                        .commentLikeId(commentLike.getCommentLikeId())
+                        .commentLikeId(commentLike.getId())
                         .userEntity(UserEntity.userEntityOnlyWithId(commentLike.getUserId()))
                         .commentEntity(CommentEntity.commentEntityOnlyWithId(commentLike.getCommentId()));
 

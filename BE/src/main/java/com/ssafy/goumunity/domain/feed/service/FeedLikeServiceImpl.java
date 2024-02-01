@@ -29,7 +29,7 @@ public class FeedLikeServiceImpl implements FeedLikeService {
             throw new FeedException(FeedErrorCode.ALREADY_LIKED);
         }
 
-        feedLikeRepository.createFeedLike(feedLike);
+        feedLikeRepository.create(feedLike);
     }
 
     @Override
@@ -42,7 +42,7 @@ public class FeedLikeServiceImpl implements FeedLikeService {
                         .findOneByUserIdAndFeedId(userId, feedId)
                         .orElseThrow(() -> new FeedException(NO_LIKE_DATA));
 
-        feedLikeRepository.deleteFeedLike(feedLike);
+        feedLikeRepository.delete(feedLike.getId());
     }
 
     private void verifyFeed(Long feedId) {

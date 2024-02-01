@@ -67,7 +67,7 @@ public class FeedQueryDslRepository {
                 .leftJoin(feedEntity.images, feedImgEntity)
                 .leftJoin(feedEntity.userEntity, userEntity)
                 .leftJoin(feedEntity.regionEntity, regionEntity)
-                .where(feedEntity.feedId.eq(feedId))
+                .where(feedEntity.id.eq(feedId))
                 .groupBy(feedEntity)
                 .fetchOne();
     }

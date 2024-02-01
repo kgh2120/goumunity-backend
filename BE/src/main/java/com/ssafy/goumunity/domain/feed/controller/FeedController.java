@@ -25,12 +25,12 @@ public class FeedController {
     private final FeedService feedService;
 
     @PostMapping
-    public ResponseEntity<Void> createFeed(
+    public ResponseEntity<Long> createFeed(
             @AuthenticationPrincipal User user,
             @RequestPart("data") @Valid FeedRequest.Create feedRequest,
             @RequestPart("images") @Nullable List<MultipartFile> images) {
-        feedService.createFeed(user.getId(), feedRequest, images);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(feedService.createFeed(user.getId(), feedRequest, images));
     }
 
     @GetMapping
@@ -41,24 +41,24 @@ public class FeedController {
         return ResponseEntity.ok(feedService.findFeed(user, time, regionId));
     }
 
-    @GetMapping("/{feed-id}")
-    public ResponseEntity<FeedResponse> findOneByFeedId(@PathVariable("feed-id") Long feedId) {
+    @GetMapping("/{feedId}")
+    public ResponseEntity<FeedResponse> findOneByFeedId(@PathVariable Long feedId) {
         return ResponseEntity.ok(feedService.findOneByFeedId(feedId));
     }
 
-    @PutMapping("{feed-id}")
+    @PatchMapping("{feedId}")
     public ResponseEntity<Void> modifyFeed(
             @AuthenticationPrincipal User user,
-            @PathVariable("feed-id") Long feedId,
+            @PathVariable Long feedId,
             @RequestPart("data") @Valid FeedRequest.Modify feedRequest,
             @RequestPart("images") @Nullable List<MultipartFile> images) {
         feedService.modifyFeed(user.getId(), feedId, feedRequest, images);
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("/{feed-id}")
+    @DeleteMapping("/{feedId}")
     public ResponseEntity<Void> deleteFeed(
-            @AuthenticationPrincipal User user, @PathVariable("feed-id") Long feedId) {
+            @AuthenticationPrincipal User user, @PathVariable Long feedId) {
         feedService.deleteFeed(user.getId(), feedId);
         return ResponseEntity.ok().build();
     }

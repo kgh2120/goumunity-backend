@@ -18,8 +18,8 @@ public class ReplyRepositoryImpl implements ReplyRepository {
     private final ReplyQueryDslRepository replyQueryDslRepository;
 
     @Override
-    public void save(Reply reply) {
-        replyJpaRepository.save(ReplyEntity.from(reply));
+    public Reply create(Reply reply) {
+        return replyJpaRepository.save(ReplyEntity.from(reply)).to();
     }
 
     @Override
@@ -30,17 +30,17 @@ public class ReplyRepositoryImpl implements ReplyRepository {
 
     @Override
     public Optional<Reply> findOneById(Long replyId) {
-        return replyJpaRepository.findByReplyId(replyId).map(ReplyEntity::to);
+        return replyJpaRepository.findById(replyId).map(ReplyEntity::to);
     }
 
     @Override
-    public Reply modify(Reply reply) {
-        return replyJpaRepository.save(ReplyEntity.from(reply)).to();
+    public void modify(Reply reply) {
+        replyJpaRepository.save(ReplyEntity.from(reply));
     }
 
     @Override
-    public void delete(Reply reply) {
-        replyJpaRepository.delete(ReplyEntity.from(reply));
+    public void delete(Long replyId) {
+        replyJpaRepository.deleteById(replyId);
     }
 
     @Override

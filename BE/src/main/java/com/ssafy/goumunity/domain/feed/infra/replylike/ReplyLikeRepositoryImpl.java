@@ -13,25 +13,25 @@ public class ReplyLikeRepositoryImpl implements ReplyLikeRepository {
     private final ReplyLikeJpaRepository replyLikeJpaRepository;
 
     @Override
-    public void createReplyLike(ReplyLike replyLike) {
+    public void create(ReplyLike replyLike) {
         replyLikeJpaRepository.save(ReplyLikeEntity.from(replyLike));
     }
 
     @Override
     public Optional<ReplyLike> findOneByUserIdAndReplyId(Long userId, Long replyId) {
         return replyLikeJpaRepository
-                .findByUserEntity_IdAndReplyEntity_ReplyId(userId, replyId)
+                .findByUserEntity_IdAndReplyEntity_Id(userId, replyId)
                 .map(ReplyLikeEntity::to);
     }
 
     @Override
-    public void deleteReplyLike(ReplyLike replyLike) {
-        replyLikeJpaRepository.delete(ReplyLikeEntity.from(replyLike));
+    public void delete(Long replyLikeId) {
+        replyLikeJpaRepository.deleteById(replyLikeId);
     }
 
     @Override
     public boolean existsByReplyLike(ReplyLike replyLike) {
-        return replyLikeJpaRepository.existsByUserEntity_IdAndReplyEntity_ReplyId(
+        return replyLikeJpaRepository.existsByUserEntity_IdAndReplyEntity_Id(
                 replyLike.getUserId(), replyLike.getReplyId());
     }
 }

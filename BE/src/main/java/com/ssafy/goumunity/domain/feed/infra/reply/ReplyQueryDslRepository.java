@@ -35,7 +35,7 @@ public class ReplyQueryDslRepository {
                                                 .where(replyEntity.eq(replyLikeEntity.replyEntity))))
                         .from(replyEntity)
                         .leftJoin(replyEntity.userEntity, userEntity)
-                        .where(replyEntity.commentEntity.commentId.eq(commentId))
+                        .where(replyEntity.commentEntity.id.eq(commentId))
                         .where(replyEntity.createdAt.before(time))
                         .orderBy(replyEntity.createdAt.desc())
                         .offset(pageable.getOffset())
