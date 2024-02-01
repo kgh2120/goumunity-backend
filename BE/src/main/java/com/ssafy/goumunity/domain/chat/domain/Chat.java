@@ -24,6 +24,7 @@ public class Chat {
                 .content(messageRequest.getContent())
                 .chatType(messageRequest.getChatType())
                 .createdAt(Instant.now())
+                .updatedAt(Instant.now())
                 .userId(userId)
                 .chatRoomId(chatRoomId)
                 .build();

@@ -35,6 +35,7 @@ class ChatRoomSearchQueryTest {
     @Test
     void 거지방_검색_아이디로_검색() throws Exception {
         // given
+
         UserEntity users =
                 UserEntity.builder().nickname("1234").email("ssafy@gmail.com").password("1234").build();
 
@@ -168,7 +169,7 @@ class ChatRoomSearchQueryTest {
 
         Pageable pageable = PageRequest.of(0, 10);
         Slice<MyChatRoomResponse> res =
-                chatRoomQueryDslRepository.findMyChatRoom(users.toModel(), 100000L, pageable);
+                chatRoomQueryDslRepository.findMyChatRoom(users.getId(), 100000L, pageable);
 
         List<MyChatRoomResponse> content = res.getContent();
         for (MyChatRoomResponse myChatRoomResponse : content) {

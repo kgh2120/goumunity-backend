@@ -18,6 +18,11 @@ public class ReplyLike {
     private Instant updatedAt;
 
     public static ReplyLike from(Long userId, Long replyId) {
-        return ReplyLike.builder().userId(userId).replyId(replyId).build();
+        return ReplyLike.builder()
+                .userId(userId)
+                .replyId(replyId)
+                .createdAt(Instant.now())
+                .updatedAt(Instant.now())
+                .build();
     }
 }

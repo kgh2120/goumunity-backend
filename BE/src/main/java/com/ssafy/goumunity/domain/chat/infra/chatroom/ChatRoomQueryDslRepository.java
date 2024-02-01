@@ -1,9 +1,9 @@
 package com.ssafy.goumunity.domain.chat.infra.chatroom;
 
-import static com.ssafy.goumunity.domain.chat.infra.QChatRoomEntity.chatRoomEntity;
-import static com.ssafy.goumunity.domain.chat.infra.QChatRoomHashtagEntity.chatRoomHashtagEntity;
-import static com.ssafy.goumunity.domain.chat.infra.QHashtagEntity.hashtagEntity;
-import static com.ssafy.goumunity.domain.chat.infra.QUserChatRoomEntity.userChatRoomEntity;
+import static com.ssafy.goumunity.domain.chat.infra.chatroom.QChatRoomEntity.chatRoomEntity;
+import static com.ssafy.goumunity.domain.chat.infra.chatroom.QUserChatRoomEntity.userChatRoomEntity;
+import static com.ssafy.goumunity.domain.chat.infra.hashtag.QChatRoomHashtagEntity.chatRoomHashtagEntity;
+import static com.ssafy.goumunity.domain.chat.infra.hashtag.QHashtagEntity.hashtagEntity;
 import static com.ssafy.goumunity.domain.user.infra.QUserEntity.userEntity;
 
 import com.querydsl.core.types.Projections;

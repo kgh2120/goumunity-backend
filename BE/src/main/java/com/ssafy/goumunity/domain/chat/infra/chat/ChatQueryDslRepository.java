@@ -1,6 +1,6 @@
 package com.ssafy.goumunity.domain.chat.infra.chat;
 
-import static com.ssafy.goumunity.domain.chat.infra.QChatEntity.chatEntity;
+import static com.ssafy.goumunity.domain.chat.infra.chat.QChatEntity.chatEntity;
 import static com.ssafy.goumunity.domain.user.infra.QUserEntity.userEntity;
 
 import com.querydsl.core.types.Projections;

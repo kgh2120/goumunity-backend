@@ -18,6 +18,11 @@ public class CommentLike {
     private Instant updatedAt;
 
     public static CommentLike from(Long userId, Long commentId) {
-        return CommentLike.builder().userId(userId).commentId(commentId).build();
+        return CommentLike.builder()
+                .userId(userId)
+                .commentId(commentId)
+                .createdAt(Instant.now())
+                .updatedAt(Instant.now())
+                .build();
     }
 }

@@ -27,12 +27,10 @@ public class ChatEntity {
     @Column(name = "chat_type")
     private ChatType chatType;
 
-    @Column(name = "created_at", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @Column(name = "created_at")
     private Instant createdAt;
 
-    @Column(
-            name = "updated_at",
-            columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
+    @Column(name = "updated_at")
     private Instant updatedAt;
 
     @JoinColumn(name = "chat_room_id")
@@ -56,19 +54,17 @@ public class ChatEntity {
     }
 
     public static ChatEntity from(Chat chat) {
-        ChatEntityBuilder chatEntityBuilder =
-                ChatEntity.builder()
-                        .id(chat.getId())
-                        .content(chat.getContent())
-                        .chatType(chat.getChatType())
-                        .createdAt(chat.getCreatedAt())
-                        .updatedAt(chat.getUpdatedAt())
-                        .chatRoomEntity(ChatRoomEntity.chatRoomEntityOnlyWithId(chat.getChatRoomId()))
-                        .user(UserEntity.userEntityOnlyWithId(chat.getUserId()));
 
-        if (chat.getCreatedAt() != null) chatEntityBuilder.createdAt(chat.getCreatedAt());
-        if (chat.getUpdatedAt() != null) chatEntityBuilder.updatedAt(chat.getUpdatedAt());
-
-        return chatEntityBuilder.build();
+        return ChatEntity.builder()
+                .id(chat.getId())
+                .content(chat.getContent())
+                .chatType(chat.getChatType())
+                .createdAt(chat.getCreatedAt())
+                .updatedAt(chat.getUpdatedAt())
+                .chatRoomEntity(ChatRoomEntity.chatRoomEntityOnlyWithId(chat.getChatRoomId()))
+                .user(UserEntity.userEntityOnlyWithId(chat.getUserId()))
+                .createdAt(chat.getCreatedAt())
+                .updatedAt(chat.getUpdatedAt())
+                .build();
     }
 }

@@ -81,7 +81,7 @@ class HashtagServiceImplTest {
         sa.assertThat(sut.getId()).isSameAs(1L);
         sa.assertThat(sut.getName()).isSameAs(dto.getName());
         sa.assertThat(sut.getCreatedAt()).isBeforeOrEqualTo(Instant.now());
-        sa.assertThat(sut.getUpdatedAt()).isNull();
+        sa.assertThat(sut.getUpdatedAt()).isBeforeOrEqualTo(Instant.now());
 
         sa.assertAll();
     }

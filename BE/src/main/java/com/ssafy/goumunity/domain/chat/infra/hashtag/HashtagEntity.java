@@ -21,10 +21,10 @@ public class HashtagEntity {
     @Column(name = "name", length = 10)
     private String name;
 
-    @Column(name = "created_at", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @Column(name = "created_at")
     private Instant createdAt;
 
-    @Column(name = "updated_at", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @Column(name = "updated_at")
     private Instant updatedAt;
 
     public static HashtagEntity from(Hashtag hashtag) {

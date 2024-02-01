@@ -6,6 +6,7 @@ import com.ssafy.goumunity.domain.chat.domain.ChatRoom;
 import com.ssafy.goumunity.domain.chat.infra.chatroom.ChatRoomEntity;
 import com.ssafy.goumunity.domain.chat.infra.chatroom.ChatRoomJpaRepository;
 import com.ssafy.goumunity.domain.chat.infra.chatroom.UserChatRoomEntity;
+import com.ssafy.goumunity.domain.region.infra.RegionEntity;
 import com.ssafy.goumunity.domain.user.infra.UserEntity;
 import jakarta.persistence.EntityManager;
 import java.time.Instant;
@@ -24,8 +25,16 @@ class ChatRoomJpaRepositoryTest {
     void 채팅방_조회_시_Count쿼리_체크() throws Exception {
         // given
 
+        RegionEntity region = RegionEntity.builder().si("서울").gungu("강남구").build();
+
+        em.persist(region);
         ChatRoomEntity chatRoom =
-                ChatRoomEntity.builder().title("해윙").createdAt(Instant.now()).capability(10).build();
+                ChatRoomEntity.builder()
+                        .title("해윙")
+                        .createdAt(Instant.now())
+                        .region(region)
+                        .capability(10)
+                        .build();
 
         em.persist(chatRoom);
 

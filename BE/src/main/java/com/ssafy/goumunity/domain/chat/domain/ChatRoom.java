@@ -41,6 +41,7 @@ public class ChatRoom {
                 .currentUserCount(1)
                 .imgSrc(imgSrc)
                 .createdAt(Instant.now())
+                .updatedAt(Instant.now())
                 .regionId(regionId)
                 .userId(hostId)
                 .build();

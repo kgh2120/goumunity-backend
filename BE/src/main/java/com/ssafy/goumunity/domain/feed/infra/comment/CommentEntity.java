@@ -31,12 +31,10 @@ public class CommentEntity {
     @JoinColumn(name = "feed_id")
     private FeedEntity feedEntity;
 
-    @Column(name = "created_at", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @Column(name = "created_at")
     private Instant createdAt;
 
-    @Column(
-            name = "updated_at",
-            columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
+    @Column(name = "updated_at")
     private Instant updatedAt;
 
     public Comment to() {
@@ -51,17 +49,15 @@ public class CommentEntity {
     }
 
     public static CommentEntity from(Comment comment) {
-        CommentEntityBuilder commentEntityBuilder =
-                CommentEntity.builder()
-                        .content(comment.getContent())
-                        .feedEntity(FeedEntity.feedEntityOnlyWithId(comment.getFeedId()))
-                        .userEntity(UserEntity.userEntityOnlyWithId(comment.getUserId()));
 
-        if (comment.getCommentId() != null) commentEntityBuilder.commentId(comment.getCommentId());
-        if (comment.getCreatedAt() != null) commentEntityBuilder.createdAt(comment.getCreatedAt());
-        if (comment.getUpdatedAt() != null) commentEntityBuilder.updatedAt(comment.getUpdatedAt());
-
-        return commentEntityBuilder.build();
+        return CommentEntity.builder()
+                .content(comment.getContent())
+                .feedEntity(FeedEntity.feedEntityOnlyWithId(comment.getFeedId()))
+                .userEntity(UserEntity.userEntityOnlyWithId(comment.getUserId()))
+                .commentId(comment.getCommentId())
+                .createdAt(comment.getCreatedAt())
+                .updatedAt(comment.getUpdatedAt())
+                .build();
     }
 
     public static CommentEntity commentEntityOnlyWithId(Long id) {
