@@ -4,8 +4,7 @@ import com.ssafy.goumunity.common.constraint.Email;
 import com.ssafy.goumunity.common.util.SliceResponse;
 import com.ssafy.goumunity.domain.chat.controller.response.MyChatRoomResponse;
 import com.ssafy.goumunity.domain.user.controller.request.PasswordModifyRequest;
-import com.ssafy.goumunity.domain.user.controller.request.UserCreateRequest;
-import com.ssafy.goumunity.domain.user.controller.request.UserModifyRequest;
+import com.ssafy.goumunity.domain.user.controller.request.UserRequest;
 import com.ssafy.goumunity.domain.user.controller.request.VerificationCodeRequest;
 import com.ssafy.goumunity.domain.user.controller.response.NicknameValidationResponse;
 import com.ssafy.goumunity.domain.user.controller.response.UserResponse;
@@ -38,9 +37,9 @@ public class UserController {
 
     @PostMapping("/join")
     public ResponseEntity<UserResponse> createUser(
-            @RequestPart(value = "data") @Valid UserCreateRequest userCreateRequest,
+            @RequestPart(value = "data") @Valid UserRequest.Create userRequest,
             @RequestPart(value = "image", required = false) MultipartFile profileImage) {
-        User user = userService.createUser(userCreateRequest, profileImage);
+        User user = userService.createUser(userRequest, profileImage);
         return ResponseEntity.status(HttpStatus.CREATED).body(UserResponse.from(user));
     }
 
@@ -102,7 +101,7 @@ public class UserController {
     @PutMapping("/my")
     public ResponseEntity<Void> ModifyMyUser(
             @AuthenticationPrincipal User user,
-            @RequestBody @Valid UserModifyRequest userModifyRequest,
+            @RequestBody @Valid UserRequest.Modify userModifyRequest,
             HttpSession session) {
         User modifiedUser = userService.modifyUser(user, userModifyRequest);
         session.setAttribute(SESSION_LOGIN_USER_KEY, modifiedUser);

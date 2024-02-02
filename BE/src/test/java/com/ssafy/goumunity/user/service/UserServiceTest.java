@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
-import com.ssafy.goumunity.domain.user.controller.request.UserCreateRequest;
+import com.ssafy.goumunity.domain.user.controller.request.UserRequest;
 import com.ssafy.goumunity.domain.user.domain.Gender;
 import com.ssafy.goumunity.domain.user.domain.User;
 import com.ssafy.goumunity.domain.user.domain.UserCategory;
@@ -38,8 +38,8 @@ public class UserServiceTest {
     void 유저_생성_테스트() throws Exception {
         Clock fixed = Clock.fixed(Instant.now(), ZoneId.of(ZoneId.systemDefault().getId()));
         // given
-        UserCreateRequest userCreateRequest =
-                UserCreateRequest.builder()
+        UserRequest.Create userCreateRequest =
+                UserRequest.Create.builder()
                         .email("ssafy@naver.com")
                         .password("1q2w3e4r!@Q")
                         .monthBudget(30_0000_0000L)

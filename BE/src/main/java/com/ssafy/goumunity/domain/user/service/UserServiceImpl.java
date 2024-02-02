@@ -1,8 +1,7 @@
 package com.ssafy.goumunity.domain.user.service;
 
 import com.ssafy.goumunity.domain.chat.controller.response.MyChatRoomResponse;
-import com.ssafy.goumunity.domain.user.controller.request.UserCreateRequest;
-import com.ssafy.goumunity.domain.user.controller.request.UserModifyRequest;
+import com.ssafy.goumunity.domain.user.controller.request.UserRequest;
 import com.ssafy.goumunity.domain.user.domain.User;
 import com.ssafy.goumunity.domain.user.domain.UserStatus;
 import com.ssafy.goumunity.domain.user.exception.UserErrorCode;
@@ -32,7 +31,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public User createUser(UserCreateRequest userCreateRequest, MultipartFile profileImage) {
+    public User createUser(UserRequest.Create userCreateRequest, MultipartFile profileImage) {
         // 이메일 중복 검사
         if (userRepository.existsByEmail(userCreateRequest.getEmail())) {
             throw new UserException(UserErrorCode.EXIST_EMAIL);
@@ -40,7 +39,7 @@ public class UserServiceImpl implements UserService {
 
         String imgPath = profileImageUploader.uploadProfileImage(profileImage);
         User user =
-                User.from(userCreateRequest, imgPath, encoder.encode(userCreateRequest.getPassword()));
+                User.create(userCreateRequest, imgPath, encoder.encode(userCreateRequest.getPassword()));
         return userRepository.create(user);
     }
 
@@ -60,7 +59,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public User modifyUser(User user, UserModifyRequest dto) {
+    public User modifyUser(User user, UserRequest.Modify dto) {
         user.modifyUserInfo(dto);
         return userRepository.modify(user);
     }
