@@ -34,11 +34,8 @@ public class FeedController {
     }
 
     @GetMapping
-    public ResponseEntity<FeedRecommendResponse> findFeed(
-            @AuthenticationPrincipal User user,
-            @RequestParam("time") Long time,
-            @RequestParam("regionId") Long regionId) {
-        return ResponseEntity.ok(feedService.findFeed(user, time, regionId));
+    public ResponseEntity<FeedRecommendResponse> findFeed(@AuthenticationPrincipal User user) {
+        return ResponseEntity.ok(feedService.findFeed(user, Long.valueOf(user.getRegionId())));
     }
 
     @GetMapping("/{feed-id}")
