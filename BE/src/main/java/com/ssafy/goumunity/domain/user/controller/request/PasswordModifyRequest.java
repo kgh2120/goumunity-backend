@@ -1,7 +1,7 @@
 package com.ssafy.goumunity.domain.user.controller.request;
 
+import com.ssafy.goumunity.common.constraint.Password;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -14,6 +14,6 @@ import lombok.NoArgsConstructor;
 public class PasswordModifyRequest {
 
     @NotBlank(message = "비밀번호는 필수값입니다.")
-    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#\\$%])[a-zA-Z\\d!@#\\$%]{8,20}$")
+    @Password
     String password;
 }

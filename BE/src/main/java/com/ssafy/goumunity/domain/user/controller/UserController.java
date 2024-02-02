@@ -1,5 +1,6 @@
 package com.ssafy.goumunity.domain.user.controller;
 
+import com.ssafy.goumunity.common.constraint.Email;
 import com.ssafy.goumunity.common.util.SliceResponse;
 import com.ssafy.goumunity.domain.chat.controller.response.MyChatRoomResponse;
 import com.ssafy.goumunity.domain.user.controller.request.PasswordModifyRequest;
@@ -13,7 +14,6 @@ import com.ssafy.goumunity.domain.user.service.UserService;
 import com.ssafy.goumunity.domain.user.service.VerificationService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
