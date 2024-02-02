@@ -22,7 +22,7 @@ public class FeedEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "feed_id")
-    private Long feedId;
+    private Long id;
 
     @Column(name = "content")
     private String content;
@@ -54,17 +54,15 @@ public class FeedEntity {
     @OneToMany(mappedBy = "feedEntity", cascade = CascadeType.REMOVE)
     private List<FeedLikeEntity> feedLikes;
 
-    @Column(name = "created_at", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @Column(name = "created_at")
     private Instant createdAt;
 
-    @Column(
-            name = "updated_at",
-            columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
+    @Column(name = "updated_at")
     private Instant updatedAt;
 
     public Feed to() {
         return Feed.builder()
-                .feedId(feedId)
+                .id(id)
                 .content(content)
                 .feedCategory(feedCategory)
                 .price(price)
@@ -77,23 +75,20 @@ public class FeedEntity {
     }
 
     public static FeedEntity from(Feed feed) {
-        FeedEntityBuilder feedEntityBuilder =
-                FeedEntity.builder()
-                        .feedId(feed.getFeedId())
-                        .content(feed.getContent())
-                        .feedCategory(feed.getFeedCategory())
-                        .price(feed.getPrice())
-                        .afterPrice(feed.getAfterPrice())
-                        .regionEntity(RegionEntity.regionEntityOnlyWithId(feed.getRegionId()))
-                        .userEntity(UserEntity.userEntityOnlyWithId(feed.getUserId()));
-
-        if (feed.getCreatedAt() != null) feedEntityBuilder.createdAt(feed.getCreatedAt());
-        if (feed.getUpdatedAt() != null) feedEntityBuilder.updatedAt(feed.getUpdatedAt());
-
-        return feedEntityBuilder.build();
+        return FeedEntity.builder()
+                .id(feed.getId())
+                .content(feed.getContent())
+                .feedCategory(feed.getFeedCategory())
+                .price(feed.getPrice())
+                .afterPrice(feed.getAfterPrice())
+                .regionEntity(RegionEntity.regionEntityOnlyWithId(feed.getRegionId()))
+                .userEntity(UserEntity.userEntityOnlyWithId(feed.getUserId()))
+                .createdAt(feed.getCreatedAt())
+                .updatedAt(feed.getUpdatedAt())
+                .build();
     }
 
     public static FeedEntity feedEntityOnlyWithId(Long id) {
-        return FeedEntity.builder().feedId(id).build();
+        return FeedEntity.builder().id(id).build();
     }
 }

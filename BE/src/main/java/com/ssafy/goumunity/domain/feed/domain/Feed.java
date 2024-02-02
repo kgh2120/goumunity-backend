@@ -12,15 +12,13 @@ import lombok.*;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @EqualsAndHashCode(exclude = {"createdAt", "updatedAt"})
 public class Feed {
-    private Long feedId;
+    private Long id;
     private String content;
     private FeedCategory feedCategory;
     private Integer price;
     private Integer afterPrice;
-
     private Long regionId;
     private Long userId;
-
     private Instant createdAt;
     private Instant updatedAt;
 
@@ -28,7 +26,7 @@ public class Feed {
         if (!this.getUserId().equals(userId)) throw new UserException(UserErrorCode.INVALID_USER);
     }
 
-    public static Feed from(FeedRequest.Create feedRequest, Long userId) {
+    public static Feed create(FeedRequest.Create feedRequest, Long userId) {
         return Feed.builder()
                 .content(feedRequest.getContent())
                 .feedCategory(feedRequest.getFeedCategory())
@@ -41,9 +39,9 @@ public class Feed {
                 .build();
     }
 
-    public static Feed from(Feed feed, FeedRequest.Modify feedRequest) {
+    public static Feed create(Feed feed, FeedRequest.Modify feedRequest) {
         return Feed.builder()
-                .feedId(feed.getFeedId())
+                .id(feed.getId())
                 .content(feedRequest.getContent())
                 .feedCategory(feedRequest.getFeedCategory())
                 .price(feedRequest.getPrice())

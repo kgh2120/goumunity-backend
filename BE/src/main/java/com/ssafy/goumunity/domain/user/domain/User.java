@@ -50,6 +50,8 @@ public class User {
 
     public void modifyPassword(String password) {
         this.password = password;
+        this.lastPasswordModifiedDate = Instant.now();
+        updatedAt = Instant.now();
     }
 
     /**
@@ -84,6 +86,7 @@ public class User {
         if (emptyCheckFlag) {
             throw new UserException(UserErrorCode.NO_INPUT_FOR_MODIFY_USER_INFO);
         }
+        updatedAt = Instant.now();
     }
 
     public void deleteUser() {

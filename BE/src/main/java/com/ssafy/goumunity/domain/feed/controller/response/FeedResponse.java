@@ -31,7 +31,7 @@ public class FeedResponse {
 
     @QueryProjection
     public FeedResponse(FeedEntity feed, Long commentCount, Long likeCount) {
-        this.feedId = feed.getFeedId();
+        this.feedId = feed.getId();
         this.content = feed.getContent();
         this.feedCategory = feed.getFeedCategory();
         this.price = feed.getPrice();

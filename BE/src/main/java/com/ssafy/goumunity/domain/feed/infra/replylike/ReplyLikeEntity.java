@@ -18,7 +18,7 @@ public class ReplyLikeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "reply_like_id")
-    private Long replyLikeId;
+    private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
@@ -28,36 +28,29 @@ public class ReplyLikeEntity {
     @JoinColumn(name = "reply_id")
     private ReplyEntity replyEntity;
 
-    @Column(name = "created_at", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @Column(name = "created_at")
     private Instant createdAt;
 
-    @Column(
-            name = "updated_at",
-            columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
+    @Column(name = "updated_at")
     private Instant updatedAt;
 
     public ReplyLike to() {
         return ReplyLike.builder()
-                .replyLikeId(replyLikeId)
+                .id(id)
                 .userId(userEntity.getId())
-                .replyId(replyEntity.getReplyId())
+                .replyId(replyEntity.getId())
                 .createdAt(createdAt)
                 .updatedAt(updatedAt)
                 .build();
     }
 
     public static ReplyLikeEntity from(ReplyLike replyLike) {
-        ReplyLikeEntityBuilder replyLikeEntityBuilder =
-                ReplyLikeEntity.builder()
-                        .replyLikeId(replyLike.getReplyLikeId())
-                        .userEntity(UserEntity.userEntityOnlyWithId(replyLike.getUserId()))
-                        .replyEntity(ReplyEntity.replyEntityOnlyWithId(replyLike.getReplyId()));
-
-        if (replyLike.getCreatedAt() != null)
-            replyLikeEntityBuilder.createdAt(replyLike.getCreatedAt());
-        if (replyLike.getUpdatedAt() != null)
-            replyLikeEntityBuilder.updatedAt(replyLike.getUpdatedAt());
-
-        return replyLikeEntityBuilder.build();
+        return ReplyLikeEntity.builder()
+                .id(replyLike.getId())
+                .userEntity(UserEntity.userEntityOnlyWithId(replyLike.getUserId()))
+                .replyEntity(ReplyEntity.replyEntityOnlyWithId(replyLike.getReplyId()))
+                .createdAt(replyLike.getCreatedAt())
+                .updatedAt(replyLike.getUpdatedAt())
+                .build();
     }
 }

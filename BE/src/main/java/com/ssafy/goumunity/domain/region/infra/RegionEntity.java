@@ -24,12 +24,10 @@ public class RegionEntity {
     @Column(name = "gungu")
     private String gungu;
 
-    @Column(name = "created_at", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @Column(name = "created_at")
     private Instant createdAt;
 
-    @Column(
-            name = "updated_at",
-            columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
+    @Column(name = "updated_at")
     private Instant updatedAt;
 
     public Region to() {
@@ -43,16 +41,14 @@ public class RegionEntity {
     }
 
     public static RegionEntity from(Region region) {
-        RegionEntityBuilder regionEntityBuilder =
-                RegionEntity.builder()
-                        .regionId(region.getRegionId())
-                        .si(region.getSi())
-                        .gungu(region.getGungu());
 
-        if (region.getCreatedAt() != null) regionEntityBuilder.createdAt(region.getCreatedAt());
-        if (region.getUpdatedAt() != null) regionEntityBuilder.updatedAt(region.getUpdatedAt());
-
-        return regionEntityBuilder.build();
+        return RegionEntity.builder()
+                .regionId(region.getRegionId())
+                .si(region.getSi())
+                .gungu(region.getGungu())
+                .createdAt(region.getCreatedAt())
+                .updatedAt(region.getUpdatedAt())
+                .build();
     }
 
     public static RegionEntity regionEntityOnlyWithId(Long regionId) {

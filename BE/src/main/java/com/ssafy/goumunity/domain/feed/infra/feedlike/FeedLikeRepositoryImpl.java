@@ -13,25 +13,25 @@ public class FeedLikeRepositoryImpl implements FeedLikeRepository {
     private final FeedLikeJpaRepository feedLikeJpaRepository;
 
     @Override
-    public void createFeedLike(FeedLike feedLike) {
+    public void create(FeedLike feedLike) {
         feedLikeJpaRepository.save(FeedLikeEntity.from(feedLike));
     }
 
     @Override
     public Optional<FeedLike> findOneByUserIdAndFeedId(Long userId, Long feedId) {
         return feedLikeJpaRepository
-                .findByUserEntity_IdAndAndFeedEntity_FeedId(userId, feedId)
+                .findByUserEntity_IdAndAndFeedEntity_Id(userId, feedId)
                 .map(FeedLikeEntity::to);
     }
 
     @Override
-    public void deleteFeedLike(FeedLike feedLike) {
-        feedLikeJpaRepository.delete(FeedLikeEntity.from(feedLike));
+    public void delete(Long feedLikeId) {
+        feedLikeJpaRepository.deleteById(feedLikeId);
     }
 
     @Override
     public boolean existsByFeedLike(FeedLike feedLike) {
-        return feedLikeJpaRepository.existsByUserEntity_IdAndFeedEntity_FeedId(
+        return feedLikeJpaRepository.existsByUserEntity_IdAndFeedEntity_Id(
                 feedLike.getUserId(), feedLike.getFeedId());
     }
 }

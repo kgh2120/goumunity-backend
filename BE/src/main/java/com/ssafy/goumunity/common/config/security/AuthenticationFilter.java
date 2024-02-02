@@ -35,7 +35,7 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        log.info("dto : {}", dto);
+        log.info("login access : {}", dto);
         return authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(dto.getId(), dto.getPassword(), new ArrayList<>()));
     }

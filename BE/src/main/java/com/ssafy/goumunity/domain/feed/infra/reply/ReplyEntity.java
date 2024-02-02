@@ -17,7 +17,7 @@ public class ReplyEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "reply_id")
-    private Long replyId;
+    private Long id;
 
     @Column(name = "content")
     private String content;
@@ -30,19 +30,17 @@ public class ReplyEntity {
     @JoinColumn(name = "user_id")
     private UserEntity userEntity;
 
-    @Column(name = "created_at", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @Column(name = "created_at")
     private Instant createdAt;
 
-    @Column(
-            name = "updated_at",
-            columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
+    @Column(name = "updated_at")
     private Instant updatedAt;
 
     public Reply to() {
         return Reply.builder()
-                .replyId(replyId)
+                .id(id)
                 .content(content)
-                .commentId(commentEntity.getCommentId())
+                .commentId(commentEntity.getId())
                 .userId(userEntity.getId())
                 .createdAt(createdAt)
                 .updatedAt(updatedAt)
@@ -50,21 +48,17 @@ public class ReplyEntity {
     }
 
     public static ReplyEntity from(Reply reply) {
-
-        ReplyEntityBuilder replyEntityBuilder =
-                ReplyEntity.builder()
-                        .content(reply.getContent())
-                        .commentEntity(CommentEntity.commentEntityOnlyWithId(reply.getCommentId()))
-                        .userEntity(UserEntity.userEntityOnlyWithId(reply.getUserId()));
-
-        if (reply.getReplyId() != null) replyEntityBuilder.replyId(reply.getReplyId());
-        if (reply.getCreatedAt() != null) replyEntityBuilder.createdAt(reply.getCreatedAt());
-        if (reply.getUpdatedAt() != null) replyEntityBuilder.updatedAt(reply.getUpdatedAt());
-
-        return replyEntityBuilder.build();
+        return ReplyEntity.builder()
+                .id(reply.getId())
+                .content(reply.getContent())
+                .commentEntity(CommentEntity.commentEntityOnlyWithId(reply.getCommentId()))
+                .userEntity(UserEntity.userEntityOnlyWithId(reply.getUserId()))
+                .createdAt(reply.getCreatedAt())
+                .updatedAt(reply.getUpdatedAt())
+                .build();
     }
 
     public static ReplyEntity replyEntityOnlyWithId(Long id) {
-        return ReplyEntity.builder().replyId(id).build();
+        return ReplyEntity.builder().id(id).build();
     }
 }

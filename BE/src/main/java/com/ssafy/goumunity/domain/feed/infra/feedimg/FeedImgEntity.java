@@ -17,7 +17,7 @@ public class FeedImgEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "feed_img_id")
-    private Long feedImgId;
+    private Long id;
 
     @Column(name = "img_src")
     private String imgSrc;
@@ -30,36 +30,32 @@ public class FeedImgEntity {
     @JoinColumn(name = "feed_id")
     private FeedEntity feedEntity;
 
-    @Column(name = "created_at", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @Column(name = "created_at")
     private Instant createdAt;
 
-    @Column(
-            name = "updated_at",
-            columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
+    @Column(name = "updated_at")
     private Instant updatedAt;
 
     public FeedImg to() {
         return FeedImg.builder()
-                .feedImgId(feedImgId)
+                .id(id)
                 .imgSrc(imgSrc)
                 .sequence(sequence)
-                .feedId(feedEntity.getFeedId())
+                .feedId(feedEntity.getId())
                 .createdAt(createdAt)
                 .updatedAt(updatedAt)
                 .build();
     }
 
     public static FeedImgEntity from(FeedImg feedImg) {
-        FeedImgEntityBuilder feedImgEntityBuilder =
-                FeedImgEntity.builder()
-                        .feedImgId(feedImg.getFeedImgId())
-                        .feedEntity(FeedEntity.feedEntityOnlyWithId(feedImg.getFeedId()))
-                        .imgSrc(feedImg.getImgSrc())
-                        .sequence(feedImg.getSequence());
 
-        if (feedImg.getCreatedAt() != null) feedImgEntityBuilder.createdAt(feedImg.getCreatedAt());
-        if (feedImg.getUpdatedAt() != null) feedImgEntityBuilder.updatedAt(feedImg.getUpdatedAt());
-
-        return feedImgEntityBuilder.build();
+        return FeedImgEntity.builder()
+                .id(feedImg.getId())
+                .feedEntity(FeedEntity.feedEntityOnlyWithId(feedImg.getFeedId()))
+                .imgSrc(feedImg.getImgSrc())
+                .sequence(feedImg.getSequence())
+                .createdAt(feedImg.getCreatedAt())
+                .updatedAt(feedImg.getUpdatedAt())
+                .build();
     }
 }

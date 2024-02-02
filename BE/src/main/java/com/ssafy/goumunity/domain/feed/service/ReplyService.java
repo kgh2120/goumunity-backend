@@ -7,11 +7,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 
 public interface ReplyService {
-    void saveReply(Long userId, Long commentId, ReplyRequest.Create reply);
+    Long createReply(Long userId, Long commentId, ReplyRequest.Create reply);
 
     Slice<ReplyResponse> findAllByCommentId(Long id, Long time, Pageable pageable);
 
-    Reply modifyReply(Long userId, Long commentId, Long replyId, ReplyRequest.Modify reply);
+    Reply findOneByReplyId(Long replyId);
+
+    void modifyReply(Long userId, Long commentId, Long replyId, ReplyRequest.Modify reply);
 
     void deleteReply(Long userId, Long commentId, Long replyId);
 }

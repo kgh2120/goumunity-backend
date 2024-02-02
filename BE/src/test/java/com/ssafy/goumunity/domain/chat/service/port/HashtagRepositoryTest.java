@@ -1,17 +1,15 @@
 package com.ssafy.goumunity.domain.chat.service.port;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
 import com.ssafy.goumunity.common.util.SliceResponse;
 import com.ssafy.goumunity.domain.chat.domain.Hashtag;
-import com.ssafy.goumunity.domain.chat.infra.HashtagEntity;
-import com.ssafy.goumunity.domain.chat.infra.HashtagJpaRepository;
-import com.ssafy.goumunity.domain.chat.infra.HashtagRepositoryImpl;
+import com.ssafy.goumunity.domain.chat.infra.hashtag.HashtagEntity;
+import com.ssafy.goumunity.domain.chat.infra.hashtag.HashtagJpaRepository;
+import com.ssafy.goumunity.domain.chat.infra.hashtag.HashtagRepositoryImpl;
 import java.time.Instant;
 import java.util.List;
-import javax.swing.*;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

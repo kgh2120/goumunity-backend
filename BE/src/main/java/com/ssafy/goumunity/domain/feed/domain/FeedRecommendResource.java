@@ -34,7 +34,7 @@ public class FeedRecommendResource {
     @QueryProjection
     public FeedRecommendResource(
             FeedEntity feed, Long commentCount, Long likeCount, Boolean iLikeThat) {
-        this.feedId = feed.getFeedId();
+        this.feedId = feed.getId();
         this.content = feed.getContent();
         this.feedCategory = feed.getFeedCategory();
         this.price = feed.getPrice();

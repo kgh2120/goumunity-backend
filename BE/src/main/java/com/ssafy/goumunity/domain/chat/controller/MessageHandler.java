@@ -1,7 +1,8 @@
 package com.ssafy.goumunity.domain.chat.controller;
 
 import com.ssafy.goumunity.common.util.SliceResponse;
-import com.ssafy.goumunity.domain.chat.controller.response.Message;
+import com.ssafy.goumunity.domain.chat.controller.request.MessageRequest;
+import com.ssafy.goumunity.domain.chat.controller.response.MessageResponse;
 import com.ssafy.goumunity.domain.chat.service.ChatService;
 import com.ssafy.goumunity.domain.user.domain.User;
 import lombok.RequiredArgsConstructor;
@@ -26,25 +27,25 @@ public class MessageHandler {
     private final ChatService chatService;
 
     @GetMapping("/api/chat-room/{chatroomId}/messages")
-    public ResponseEntity<SliceResponse<Message.Response>> findPreviousMessages(
+    public ResponseEntity<SliceResponse<MessageResponse>> findPreviousMessages(
             @PathVariable Long chatroomId,
             @RequestParam Long time,
             Pageable pageable,
             @AuthenticationPrincipal User user) {
-        Slice<Message.Response> responses =
+        Slice<MessageResponse> responses =
                 chatService.findPreviousMessage(chatroomId, time, pageable, user);
         return ResponseEntity.ok(SliceResponse.from(responses.getContent(), responses.hasNext()));
     }
 
     @MessageMapping("/messages/{chatRoomId}")
     @SendTo("/topic/{chatRoomId}")
-    public Message.Response sendMessage(
+    public MessageResponse sendMessage(
             @DestinationVariable Long chatRoomId,
-            @Payload Message.Request message,
+            @Payload MessageRequest.Create message,
             Authentication principal) {
         User user = (User) principal.getPrincipal();
         chatService.saveChat(chatRoomId, message, user);
-        return Message.Response.builder()
+        return MessageResponse.builder()
                 .chatType(message.getChatType())
                 .content(message.getContent())
                 .nickname(user.getNickname())

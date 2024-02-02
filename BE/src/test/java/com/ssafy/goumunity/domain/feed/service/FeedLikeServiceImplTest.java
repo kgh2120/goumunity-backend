@@ -37,7 +37,7 @@ class FeedLikeServiceImplTest {
         given(feedLikeRepository.existsByFeedLike(any())).willReturn(false);
 
         feedLikeService.createFeedLike(userId, feedId);
-        verify(feedLikeRepository).createFeedLike(FeedLike.from(userId, feedId));
+        verify(feedLikeRepository).create(FeedLike.from(userId, feedId));
     }
 
     @DisplayName("피드 좋아요 실패_해당 피드 없음")
@@ -75,7 +75,7 @@ class FeedLikeServiceImplTest {
                 .willReturn(Optional.ofNullable(FeedLike.from(userId, feedId)));
 
         feedLikeService.deleteFeedLike(userId, feedId);
-        verify(feedLikeRepository).deleteFeedLike(FeedLike.from(userId, feedId));
+        verify(feedLikeRepository).delete(FeedLike.from(userId, feedId).getId());
     }
 
     @DisplayName("피드 좋아요 취소 실패_해당 피드 없음")

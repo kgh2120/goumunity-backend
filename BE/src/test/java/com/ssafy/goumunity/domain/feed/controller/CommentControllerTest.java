@@ -2,6 +2,7 @@ package com.ssafy.goumunity.domain.feed.controller;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doThrow;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -70,9 +71,6 @@ class CommentControllerTest {
         CommentRequest.Create comment =
                 CommentRequest.Create.builder().content("댓글 테스트 입니다 아아 해안짬타 퇴화론").build();
 
-        given(commentService.saveComment(any(), any(), any()))
-                .willReturn(Comment.from(user.getId(), feedId, comment));
-
         this.mockMvc
                 .perform(
                         post("/api/feeds/" + feedId + "/comments")
@@ -93,7 +91,7 @@ class CommentControllerTest {
         Long feedId = 1L;
         CommentRequest.Create comment = CommentRequest.Create.builder().build();
 
-        given(commentService.saveComment(any(), any(), any()))
+        given(commentService.createComment(any(), any(), any()))
                 .willThrow(MethodArgumentNotValidException.class);
 
         this.mockMvc
@@ -135,7 +133,7 @@ class CommentControllerTest {
 
         CommentRequest.Create comment = CommentRequest.Create.builder().content(content).build();
 
-        given(commentService.saveComment(any(), any(), any()))
+        given(commentService.createComment(any(), any(), any()))
                 .willThrow(MethodArgumentNotValidException.class);
 
         this.mockMvc
@@ -159,7 +157,7 @@ class CommentControllerTest {
         List<CommentResponse> commentResponseList = new ArrayList<>();
         commentResponseList.add(
                 CommentResponse.builder()
-                        .commentId(1L)
+                        .id(1L)
                         .feedId(1L)
                         .content("석주윤")
                         .user(UserResponse.from(user))
@@ -191,23 +189,20 @@ class CommentControllerTest {
 
         Comment modifiedComment =
                 Comment.builder()
-                        .commentId(1L)
+                        .id(1L)
                         .userId(user.getId())
                         .feedId(1L)
                         .content(comment.getContent())
                         .build();
 
-        given(commentService.modifyComment(any(), any(), any(), any())).willReturn(modifiedComment);
-
         this.mockMvc
                 .perform(
-                        put("/api/feeds/" + feedId + "/comments/" + modifiedComment.getCommentId())
+                        patch("/api/feeds/" + feedId + "/comments/" + modifiedComment.getId())
                                 .with(SecurityMockMvcRequestPostProcessors.user(new CustomDetails(user)))
                                 .content(mapper.writeValueAsString(comment))
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .session(session))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.content").value(comment.getContent()))
                 .andDo(print());
     }
 
@@ -221,15 +216,15 @@ class CommentControllerTest {
 
         CommentRequest.Modify comment = CommentRequest.Modify.builder().build();
 
-        Comment modifiedComment =
-                Comment.builder().commentId(1L).userId(user.getId()).feedId(1L).build();
+        Comment modifiedComment = Comment.builder().id(1L).userId(user.getId()).feedId(1L).build();
 
-        given(commentService.modifyComment(any(), any(), any(), any()))
-                .willThrow(MissingFormatArgumentException.class);
+        doThrow(MissingFormatArgumentException.class)
+                .when(commentService)
+                .modifyComment(any(), any(), any(), any());
 
         this.mockMvc
                 .perform(
-                        put("/api/feeds/" + feedId + "/comments/" + modifiedComment.getFeedId())
+                        patch("/api/feeds/" + feedId + "/comments/" + modifiedComment.getFeedId())
                                 .with(SecurityMockMvcRequestPostProcessors.user(new CustomDetails(user)))
                                 .content(mapper.writeValueAsString(comment))
                                 .contentType(MediaType.APPLICATION_JSON)
@@ -248,14 +243,15 @@ class CommentControllerTest {
 
         CommentRequest.Modify comment = CommentRequest.Modify.builder().content("댓글을 수정해볼거야").build();
 
-        Comment modifiedComment = Comment.builder().commentId(1L).userId(3L).feedId(1L).build();
+        Comment modifiedComment = Comment.builder().id(1L).userId(3L).feedId(1L).build();
 
-        given(commentService.modifyComment(any(), any(), any(), any()))
-                .willThrow(new UserException(UserErrorCode.INVALID_USER));
+        doThrow(new UserException(UserErrorCode.INVALID_USER))
+                .when(commentService)
+                .modifyComment(any(), any(), any(), any());
 
         this.mockMvc
                 .perform(
-                        put("/api/feeds/" + feedId + "/comments/" + modifiedComment.getFeedId())
+                        patch("/api/feeds/" + feedId + "/comments/" + modifiedComment.getFeedId())
                                 .with(SecurityMockMvcRequestPostProcessors.user(new CustomDetails(user)))
                                 .content(mapper.writeValueAsString(comment))
                                 .contentType(MediaType.APPLICATION_JSON)
@@ -276,14 +272,15 @@ class CommentControllerTest {
 
         CommentRequest.Modify comment = CommentRequest.Modify.builder().content("댓글을 수정해볼거야").build();
 
-        Comment modifiedComment = Comment.builder().commentId(1L).userId(3L).feedId(1L).build();
+        Comment modifiedComment = Comment.builder().id(1L).userId(3L).feedId(1L).build();
 
-        given(commentService.modifyComment(any(), any(), any(), any()))
-                .willThrow(new CommentException(CommentErrorCode.FEED_NOT_MATCH));
+        doThrow(new CommentException(CommentErrorCode.FEED_NOT_MATCH))
+                .when(commentService)
+                .modifyComment(any(), any(), any(), any());
 
         this.mockMvc
                 .perform(
-                        put("/api/feeds/" + feedId + "/comments/" + modifiedComment.getFeedId())
+                        patch("/api/feeds/" + feedId + "/comments/" + modifiedComment.getFeedId())
                                 .with(SecurityMockMvcRequestPostProcessors.user(new CustomDetails(user)))
                                 .content(mapper.writeValueAsString(comment))
                                 .contentType(MediaType.APPLICATION_JSON)

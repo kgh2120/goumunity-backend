@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public interface FeedRepository {
 
-    Feed save(Feed feed);
+    Feed create(Feed feed);
 
     List<FeedRecommendResource> findFeed(Long userId, Long regionId);
 
@@ -16,9 +16,9 @@ public interface FeedRepository {
 
     Optional<Feed> findOneById(Long feedId);
 
-    Feed modify(Feed feed);
+    void modify(Feed feed);
 
-    void delete(Feed feed);
+    void delete(Long feedId);
 
     boolean existsByFeedId(Long feedId);
 }

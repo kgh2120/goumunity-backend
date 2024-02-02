@@ -8,15 +8,15 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 
 public interface CommentRepository {
-    Comment save(Comment comment);
+    Comment create(Comment comment);
 
     Slice<CommentResponse> findAllByFeedId(Long feedId, Instant time, Pageable page);
 
     Optional<Comment> findOneById(Long commentId);
 
-    Comment modify(Comment comment);
+    void modify(Comment comment);
 
-    void delete(Comment comment);
+    void delete(Long commentId);
 
     boolean existsById(Long commentId);
 }

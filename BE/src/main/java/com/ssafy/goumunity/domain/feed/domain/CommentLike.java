@@ -9,15 +9,18 @@ import lombok.*;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @EqualsAndHashCode(exclude = {"createdAt", "updatedAt"})
 public class CommentLike {
-    private Long commentLikeId;
-
+    private Long id;
     private Long commentId;
     private Long userId;
-
     private Instant createdAt;
     private Instant updatedAt;
 
     public static CommentLike from(Long userId, Long commentId) {
-        return CommentLike.builder().userId(userId).commentId(commentId).build();
+        return CommentLike.builder()
+                .userId(userId)
+                .commentId(commentId)
+                .createdAt(Instant.now())
+                .updatedAt(Instant.now())
+                .build();
     }
 }

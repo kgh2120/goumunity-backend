@@ -39,7 +39,7 @@ public class CommentQueryDslRepository {
                                                 .where(commentEntity.eq(commentLikeEntity.commentEntity))))
                         .from(commentEntity)
                         .leftJoin(commentEntity.userEntity, userEntity)
-                        .where(commentEntity.feedEntity.feedId.eq(feedId))
+                        .where(commentEntity.feedEntity.id.eq(feedId))
                         .where(commentEntity.createdAt.before(time))
                         .orderBy(commentEntity.createdAt.desc())
                         .offset(pageable.getOffset())

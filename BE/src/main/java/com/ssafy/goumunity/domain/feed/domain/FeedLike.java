@@ -9,15 +9,18 @@ import lombok.*;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @EqualsAndHashCode(exclude = {"createdAt", "updatedAt"})
 public class FeedLike {
-    private Long feedLikeId;
-
+    private Long id;
     private Long feedId;
     private Long userId;
-
     private Instant createdAt;
     private Instant updatedAt;
 
     public static FeedLike from(Long userId, Long feedId) {
-        return FeedLike.builder().userId(userId).feedId(feedId).build();
+        return FeedLike.builder()
+                .userId(userId)
+                .feedId(feedId)
+                .createdAt(Instant.now())
+                .updatedAt(Instant.now())
+                .build();
     }
 }

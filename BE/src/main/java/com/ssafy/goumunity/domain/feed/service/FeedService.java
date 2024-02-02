@@ -9,7 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 public interface FeedService {
 
-    void createFeed(Long userId, FeedRequest.Create feedRequest, List<MultipartFile> images);
+    Long createFeed(Long userId, FeedRequest.Create feedRequest, List<MultipartFile> images);
 
     FeedRecommendResponse findFeed(User user, Long regionId);
 

@@ -17,7 +17,7 @@ public class FeedRepositoryImpl implements FeedRepository {
     private final FeedQueryDslRepository feedQueryDslRepository;
 
     @Override
-    public Feed save(Feed feed) {
+    public Feed create(Feed feed) {
         return feedJpaRepository.save(FeedEntity.from(feed)).to();
     }
 
@@ -33,17 +33,17 @@ public class FeedRepositoryImpl implements FeedRepository {
 
     @Override
     public Optional<Feed> findOneById(Long feedId) {
-        return feedJpaRepository.findByFeedId(feedId).map(FeedEntity::to);
+        return feedJpaRepository.findById(feedId).map(FeedEntity::to);
     }
 
     @Override
-    public Feed modify(Feed feed) {
-        return feedJpaRepository.save(FeedEntity.from(feed)).to();
+    public void modify(Feed feed) {
+        feedJpaRepository.save(FeedEntity.from(feed)).to();
     }
 
     @Override
-    public void delete(Feed feed) {
-        feedJpaRepository.delete(FeedEntity.from(feed));
+    public void delete(Long feedId) {
+        feedJpaRepository.deleteById(feedId);
     }
 
     @Override
