@@ -12,7 +12,7 @@ public interface FeedRepository {
 
     List<FeedRecommendResource> findFeed(Long userId, Long regionId);
 
-    FeedResponse findOneFeed(Long feedId);
+    FeedResponse findOneFeed(Long userId, Long feedId);
 
     Optional<Feed> findOneById(Long feedId);
 
