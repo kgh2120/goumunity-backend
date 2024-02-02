@@ -67,9 +67,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth.requestMatchers("/**").permitAll())
                 .authenticationManager(authAuthenticationManager)
                 .addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class)
-                .addFilterAfter(
-                        new AuthorizationFilter(SESSION_LOGIN_USER_KEY),
-                        UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(
+                        new AuthorizationFilter(SESSION_LOGIN_USER_KEY), AuthenticationFilter.class)
                 .build();
     }
 

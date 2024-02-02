@@ -2,7 +2,6 @@ package com.ssafy.goumunity.common.config.security;
 
 import com.ssafy.goumunity.domain.user.domain.UserStatus;
 import com.ssafy.goumunity.domain.user.exception.UserErrorCode;
-import com.ssafy.goumunity.domain.user.exception.UserException;
 import com.ssafy.goumunity.domain.user.service.port.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -21,6 +20,6 @@ public class AuthenticationService implements UserDetailsService {
         return new CustomDetails(
                 userRepository
                         .findByEmailAndStatus(username, UserStatus.ACTIVE)
-                        .orElseThrow(() -> new UserException(UserErrorCode.EMAIL_NOT_FOUND)));
+                        .orElseThrow(() -> new AuthenticationFailureException(UserErrorCode.LOGIN_FAILED)));
     }
 }
