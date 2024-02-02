@@ -253,7 +253,8 @@ class ReplyControllerTest {
         replies.add(reply);
         Slice<ReplyResponse> res = new SliceImpl<>(replies, pageRequest, true);
 
-        given(replyService.findAllByCommentId(commentId, time, pageRequest)).willReturn(res);
+        given(replyService.findAllByCommentId(user.getId(), commentId, time, pageRequest))
+                .willReturn(res);
 
         mockMvc
                 .perform(

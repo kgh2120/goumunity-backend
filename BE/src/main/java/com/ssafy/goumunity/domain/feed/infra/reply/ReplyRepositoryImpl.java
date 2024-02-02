@@ -24,8 +24,13 @@ public class ReplyRepositoryImpl implements ReplyRepository {
 
     @Override
     public Slice<ReplyResponse> findAllByCommentId(
-            Long commentId, Instant instant, Pageable pageable) {
-        return replyQueryDslRepository.findAllByCommentId(commentId, instant, pageable);
+            Long userId, Long commentId, Instant instant, Pageable pageable) {
+        return replyQueryDslRepository.findAllByCommentId(userId, commentId, instant, pageable);
+    }
+
+    @Override
+    public ReplyResponse findOneReply(Long userId, Long replyId) {
+        return replyQueryDslRepository.findOneReply(userId, replyId);
     }
 
     @Override
