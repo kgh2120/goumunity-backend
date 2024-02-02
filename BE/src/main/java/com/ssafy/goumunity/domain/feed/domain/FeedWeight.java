@@ -8,7 +8,7 @@ import lombok.*;
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @Builder
 @Getter
-public class FeedWeight implements Comparable {
+public class FeedWeight implements Comparable<FeedWeight> {
     private FeedRecommendResource feedRecommendResource;
     private Double weight;
 
@@ -184,7 +184,7 @@ public class FeedWeight implements Comparable {
     }
 
     @Override
-    public int compareTo(Object o) {
-        return Double.compare(((FeedWeight) o).weight, this.weight);
+    public int compareTo(FeedWeight fw) {
+        return Double.compare(fw.weight, this.weight);
     }
 }
