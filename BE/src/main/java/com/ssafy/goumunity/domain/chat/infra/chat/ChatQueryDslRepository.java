@@ -4,6 +4,7 @@ import static com.ssafy.goumunity.domain.chat.infra.chat.QChatEntity.chatEntity;
 import static com.ssafy.goumunity.domain.user.infra.QUserEntity.userEntity;
 
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.goumunity.common.util.QueryDslSliceUtils;
 import com.ssafy.goumunity.domain.chat.controller.response.MessageResponse;
@@ -21,10 +22,13 @@ public class ChatQueryDslRepository {
 
     private final JPAQueryFactory jpaQueryFactory;
 
-    public Slice<MessageResponse> findPreviousMessage(Long chatRoomId, Long time, Pageable pageable) {
-        List<MessageResponse> result =
+    public Slice<MessageResponse.Previous> findPreviousMessage(
+            Long chatRoomId, Long time, Pageable pageable, Long userId) {
+        List<MessageResponse.Previous> result =
                 jpaQueryFactory
-                        .select(Projections.constructor(MessageResponse.class, chatEntity))
+                        .select(
+                                Projections.constructor(
+                                        MessageResponse.Previous.class, chatEntity, Expressions.constant(userId)))
                         .distinct()
                         .from(chatEntity)
                         .leftJoin(chatEntity.user, userEntity)

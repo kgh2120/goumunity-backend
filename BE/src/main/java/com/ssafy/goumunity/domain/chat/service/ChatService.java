@@ -9,6 +9,6 @@ import org.springframework.data.domain.Slice;
 public interface ChatService {
     void saveChat(Long chatRoomId, MessageRequest.Create message, User user);
 
-    Slice<MessageResponse> findPreviousMessage(
+    Slice<MessageResponse.Previous> findPreviousMessage(
             Long chatroomId, Long time, Pageable pageable, User user);
 }

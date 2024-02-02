@@ -27,30 +27,24 @@ public class MessageHandler {
     private final ChatService chatService;
 
     @GetMapping("/api/chat-room/{chatroomId}/messages")
-    public ResponseEntity<SliceResponse<MessageResponse>> findPreviousMessages(
+    public ResponseEntity<SliceResponse<MessageResponse.Previous>> findPreviousMessages(
             @PathVariable Long chatroomId,
             @RequestParam Long time,
             Pageable pageable,
             @AuthenticationPrincipal User user) {
-        Slice<MessageResponse> responses =
+        Slice<MessageResponse.Previous> responses =
                 chatService.findPreviousMessage(chatroomId, time, pageable, user);
         return ResponseEntity.ok(SliceResponse.from(responses.getContent(), responses.hasNext()));
     }
 
     @MessageMapping("/messages/{chatRoomId}")
     @SendTo("/topic/{chatRoomId}")
-    public MessageResponse sendMessage(
+    public MessageResponse.Live sendMessage(
             @DestinationVariable Long chatRoomId,
             @Payload MessageRequest.Create message,
             Authentication principal) {
         User user = (User) principal.getPrincipal();
         chatService.saveChat(chatRoomId, message, user);
-        return MessageResponse.builder()
-                .chatType(message.getChatType())
-                .content(message.getContent())
-                .nickname(user.getNickname())
-                .userId(user.getId())
-                .profileImageSrc(user.getImgSrc())
-                .build();
+        return MessageResponse.Live.create(message, user);
     }
 }

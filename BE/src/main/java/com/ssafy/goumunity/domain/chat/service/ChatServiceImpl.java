@@ -28,11 +28,11 @@ public class ChatServiceImpl implements ChatService {
     }
 
     @Override
-    public Slice<MessageResponse> findPreviousMessage(
+    public Slice<MessageResponse.Previous> findPreviousMessage(
             Long chatroomId, Long time, Pageable pageable, User user) {
         if (!chatRoomService.verifyAccessChat(chatroomId, user)) {
             throw new ChatException(ChatErrorCode.CANT_ACCESS_MESSAGE);
         }
-        return chatRepository.findPreviousMessage(chatroomId, time, pageable);
+        return chatRepository.findPreviousMessage(chatroomId, time, pageable, user.getId());
     }
 }
