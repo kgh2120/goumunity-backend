@@ -27,8 +27,8 @@ public class FeedRepositoryImpl implements FeedRepository {
     }
 
     @Override
-    public FeedResponse findOneFeed(Long feedId) {
-        return feedQueryDslRepository.findOneFeed(feedId);
+    public FeedResponse findOneFeed(Long userId, Long feedId) {
+        return feedQueryDslRepository.findOneFeed(userId, feedId);
     }
 
     @Override

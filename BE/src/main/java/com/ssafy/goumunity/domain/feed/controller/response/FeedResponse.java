@@ -28,9 +28,10 @@ public class FeedResponse {
     private List<FeedImgResponse> images;
     private Long commentCount;
     private Long likeCount;
+    private Boolean iLikeThat;
 
     @QueryProjection
-    public FeedResponse(FeedEntity feed, Long commentCount, Long likeCount) {
+    public FeedResponse(FeedEntity feed, Long commentCount, Long likeCount, Boolean iLikeThat) {
         this.feedId = feed.getId();
         this.content = feed.getContent();
         this.feedCategory = feed.getFeedCategory();
@@ -43,5 +44,6 @@ public class FeedResponse {
         this.images = feed.getImages().stream().map(FeedImgResponse::from).toList();
         this.commentCount = commentCount;
         this.likeCount = likeCount;
+        this.iLikeThat = iLikeThat;
     }
 }

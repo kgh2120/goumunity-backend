@@ -51,7 +51,7 @@ public class FeedQueryDslRepository {
                 .fetch();
     }
 
-    public FeedResponse findOneFeed(Long feedId) {
+    public FeedResponse findOneFeed(Long userId, Long feedId) {
         return queryFactory
                 .query()
                 .select(
@@ -62,7 +62,11 @@ public class FeedQueryDslRepository {
                                         .where(feedEntity.eq(commentEntity.feedEntity)),
                                 JPAExpressions.select(feedLikeEntity.count())
                                         .from(feedLikeEntity)
-                                        .where(feedEntity.eq(feedLikeEntity.feedEntity))))
+                                        .where(feedEntity.eq(feedLikeEntity.feedEntity)),
+                                JPAExpressions.selectFrom(feedLikeEntity)
+                                        .where(feedLikeEntity.userEntity.id.eq(userId))
+                                        .where(feedLikeEntity.feedEntity.eq(feedEntity))
+                                        .exists()))
                 .from(feedEntity)
                 .leftJoin(feedEntity.images, feedImgEntity)
                 .leftJoin(feedEntity.userEntity, userEntity)
