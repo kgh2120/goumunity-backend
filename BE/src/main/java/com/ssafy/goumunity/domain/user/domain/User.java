@@ -27,7 +27,7 @@ public class User {
     private Instant registerDate;
     private UserStatus userStatus;
     private Instant lastPasswordModifiedDate;
-    private Integer regionId;
+    private Long regionId;
     private Instant createdAt;
     private Instant updatedAt;
 

@@ -36,5 +36,5 @@ public class UserCreateRequest {
     private String nickname;
 
     @NotNull(message = "지역 id는 필수값입니다.")
-    private Integer regionId;
+    private Long regionId;
 }

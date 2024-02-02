@@ -24,5 +24,5 @@ public class UserModifyRequest {
 
     private String nickname;
 
-    private Integer regionId;
+    private Long regionId;
 }
