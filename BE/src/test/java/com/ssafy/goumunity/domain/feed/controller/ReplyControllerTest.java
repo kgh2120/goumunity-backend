@@ -21,6 +21,7 @@ import com.ssafy.goumunity.domain.feed.domain.Reply;
 import com.ssafy.goumunity.domain.feed.exception.CommentException;
 import com.ssafy.goumunity.domain.feed.service.ReplyService;
 import com.ssafy.goumunity.domain.user.controller.response.UserResponse;
+import com.ssafy.goumunity.domain.user.domain.Gender;
 import com.ssafy.goumunity.domain.user.domain.User;
 import com.ssafy.goumunity.domain.user.domain.UserCategory;
 import java.time.Instant;
@@ -71,7 +72,7 @@ class ReplyControllerTest {
                         .monthBudget(100000L)
                         .age(20)
                         .userCategory(UserCategory.JOB_SEEKER)
-                        .gender(1)
+                        .gender(Gender.MALE)
                         .nickname("규준")
                         .regionId(1L)
                         .build();
@@ -105,7 +106,7 @@ class ReplyControllerTest {
                         .monthBudget(100000L)
                         .age(20)
                         .userCategory(UserCategory.JOB_SEEKER)
-                        .gender(1)
+                        .gender(Gender.MALE)
                         .nickname("규준")
                         .regionId(1L)
                         .build();
@@ -140,7 +141,7 @@ class ReplyControllerTest {
                         .monthBudget(100000L)
                         .age(20)
                         .userCategory(UserCategory.JOB_SEEKER)
-                        .gender(1)
+                        .gender(Gender.MALE)
                         .nickname("규준")
                         .regionId(1L)
                         .build();
@@ -192,7 +193,7 @@ class ReplyControllerTest {
                         .monthBudget(100000L)
                         .age(20)
                         .userCategory(UserCategory.JOB_SEEKER)
-                        .gender(1)
+                        .gender(Gender.MALE)
                         .nickname("규준")
                         .regionId(1L)
                         .build();
@@ -231,7 +232,7 @@ class ReplyControllerTest {
                         .monthBudget(100000L)
                         .age(20)
                         .userCategory(UserCategory.JOB_SEEKER)
-                        .gender(1)
+                        .gender(Gender.MALE)
                         .nickname("규준")
                         .regionId(1L)
                         .build();
@@ -279,7 +280,7 @@ class ReplyControllerTest {
                         .monthBudget(100000L)
                         .age(20)
                         .userCategory(UserCategory.JOB_SEEKER)
-                        .gender(1)
+                        .gender(Gender.MALE)
                         .nickname("규준")
                         .regionId(1L)
                         .build();
@@ -314,7 +315,7 @@ class ReplyControllerTest {
                         .monthBudget(100000L)
                         .age(20)
                         .userCategory(UserCategory.JOB_SEEKER)
-                        .gender(1)
+                        .gender(Gender.MALE)
                         .nickname("규준")
                         .regionId(1L)
                         .build();

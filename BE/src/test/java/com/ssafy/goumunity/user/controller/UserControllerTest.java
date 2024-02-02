@@ -17,8 +17,8 @@ import com.ssafy.goumunity.domain.chat.controller.response.MyChatRoomResponse;
 import com.ssafy.goumunity.domain.feed.service.FeedService;
 import com.ssafy.goumunity.domain.user.controller.UserController;
 import com.ssafy.goumunity.domain.user.controller.request.PasswordModifyRequest;
-import com.ssafy.goumunity.domain.user.controller.request.UserCreateRequest;
-import com.ssafy.goumunity.domain.user.controller.request.UserModifyRequest;
+import com.ssafy.goumunity.domain.user.controller.request.UserRequest;
+import com.ssafy.goumunity.domain.user.domain.Gender;
 import com.ssafy.goumunity.domain.user.domain.User;
 import com.ssafy.goumunity.domain.user.domain.UserCategory;
 import com.ssafy.goumunity.domain.user.exception.UserErrorCode;
@@ -68,13 +68,13 @@ class UserControllerTest {
     @Test
     void 회원가입성공() throws Exception {
         ObjectMapper mapper = new ObjectMapper();
-        UserCreateRequest user = userCreateDto();
+        UserRequest.Create user = userCreateDto();
 
         MockPart data =
                 new MockPart("data", "", mapper.writeValueAsBytes(user), MediaType.APPLICATION_JSON);
         MockMultipartFile image = new MockMultipartFile("image", "test.jpg".getBytes());
 
-        given(userService.saveUser(any(), any())).willReturn(fromUserCreateDto(user));
+        given(userService.createUser(any(), any())).willReturn(fromUserCreateDto(user));
 
         this.mockMvc
                 .perform(
@@ -89,13 +89,13 @@ class UserControllerTest {
     @Test
     void 회원가입실패_중복이메일() throws Exception {
         ObjectMapper mapper = new ObjectMapper();
-        UserCreateRequest user = userCreateDto();
+        UserRequest.Create user = userCreateDto();
 
         MockPart data =
                 new MockPart("data", "", mapper.writeValueAsBytes(user), MediaType.APPLICATION_JSON);
         MockMultipartFile image = new MockMultipartFile("image", "test.jpg".getBytes());
 
-        given(userService.saveUser(any(), any()))
+        given(userService.createUser(any(), any()))
                 .willThrow(new UserException(UserErrorCode.EXIST_EMAIL));
 
         this.mockMvc
@@ -119,7 +119,7 @@ class UserControllerTest {
     @DisplayName("이메일로 회원 조회 성공")
     @Test
     void 이메일로회원조회() throws Exception {
-        UserCreateRequest user = userCreateDto();
+        UserRequest.Create user = userCreateDto();
 
         given(userService.findUserByEmail(any())).willReturn(fromUserCreateDto(user));
 
@@ -132,7 +132,7 @@ class UserControllerTest {
     @DisplayName("이메일로 회원 조회 실패 존재하지 않는 이메일")
     @Test
     void 이메일로회원조회실패_존재하지않는이메일() throws Exception {
-        UserCreateRequest user = userCreateDto();
+        UserRequest.Create user = userCreateDto();
 
         given(userService.findUserByEmail(any()))
                 .willThrow(new UserException(UserErrorCode.EMAIL_NOT_FOUND));
@@ -213,7 +213,7 @@ class UserControllerTest {
     @DisplayName("내 정보 조회 성공")
     @Test
     void 내정보조회() throws Exception {
-        UserCreateRequest user = userCreateDto();
+        UserRequest.Create user = userCreateDto();
         MockHttpSession session = new MockHttpSession();
 
         given(userService.findUserByEmail(any())).willReturn(fromUserCreateDto(user));
@@ -228,8 +228,8 @@ class UserControllerTest {
     @Test
     void 내정보수정성공() throws Exception {
         ObjectMapper mapper = new ObjectMapper();
-        UserModifyRequest userModifyRequest =
-                UserModifyRequest.builder().userCategory(UserCategory.EMPLOYEE).age(100).build();
+        UserRequest.Modify userModifyRequest =
+                UserRequest.Modify.builder().userCategory(UserCategory.EMPLOYEE).age(100).build();
         User user = fromUserCreateDto(userCreateDto());
         MockHttpSession session = new MockHttpSession();
 
@@ -249,7 +249,7 @@ class UserControllerTest {
     @Test
     void 내정보수정실패_비어있는요청() throws Exception {
         ObjectMapper mapper = new ObjectMapper();
-        UserModifyRequest userModifyRequest = UserModifyRequest.builder().build();
+        UserRequest.Modify userModifyRequest = UserRequest.Modify.builder().build();
         MockHttpSession session = new MockHttpSession();
 
         given(userService.modifyUser(any(), any()))
@@ -306,20 +306,20 @@ class UserControllerTest {
                 .andDo(print());
     }
 
-    private UserCreateRequest userCreateDto() {
-        return UserCreateRequest.builder()
+    private UserRequest.Create userCreateDto() {
+        return UserRequest.Create.builder()
                 .email("gyu@naver.com")
                 .password("AAbb11!!")
                 .monthBudget(100000L)
                 .age(20)
                 .userCategory(UserCategory.JOB_SEEKER)
-                .gender(1)
+                .gender(Gender.MALE)
                 .nickname("규준")
                 .regionId(1L)
                 .build();
     }
 
-    private User fromUserCreateDto(UserCreateRequest dto) {
+    private User fromUserCreateDto(UserRequest.Create dto) {
         return User.builder()
                 .email(dto.getEmail())
                 .password(dto.getPassword())

@@ -18,8 +18,9 @@ import com.ssafy.goumunity.domain.feed.domain.Comment;
 import com.ssafy.goumunity.domain.feed.exception.CommentErrorCode;
 import com.ssafy.goumunity.domain.feed.exception.CommentException;
 import com.ssafy.goumunity.domain.feed.service.CommentService;
-import com.ssafy.goumunity.domain.user.controller.request.UserCreateRequest;
+import com.ssafy.goumunity.domain.user.controller.request.UserRequest;
 import com.ssafy.goumunity.domain.user.controller.response.UserResponse;
+import com.ssafy.goumunity.domain.user.domain.Gender;
 import com.ssafy.goumunity.domain.user.domain.User;
 import com.ssafy.goumunity.domain.user.domain.UserCategory;
 import com.ssafy.goumunity.domain.user.exception.UserErrorCode;
@@ -292,20 +293,20 @@ class CommentControllerTest {
                 .andDo(print());
     }
 
-    private UserCreateRequest userCreateDto() {
-        return UserCreateRequest.builder()
+    private UserRequest.Create userCreateDto() {
+        return UserRequest.Create.builder()
                 .email("gyu@naver.com")
                 .password("AAbb11!!")
                 .monthBudget(100000L)
                 .age(20)
                 .userCategory(UserCategory.JOB_SEEKER)
-                .gender(1)
+                .gender(Gender.MALE)
                 .nickname("규준")
                 .regionId(1L)
                 .build();
     }
 
-    private User fromUserCreateDto(UserCreateRequest dto) {
+    private User fromUserCreateDto(UserRequest.Create dto) {
         return User.builder()
                 .id(1L)
                 .email(dto.getEmail())
