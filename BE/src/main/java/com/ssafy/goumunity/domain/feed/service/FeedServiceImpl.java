@@ -15,9 +15,6 @@ import com.ssafy.goumunity.domain.feed.service.post.FeedImageUploader;
 import com.ssafy.goumunity.domain.feed.service.post.FeedImgRepository;
 import com.ssafy.goumunity.domain.feed.service.post.FeedRepository;
 import com.ssafy.goumunity.domain.user.domain.User;
-import java.time.Instant;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -48,23 +45,15 @@ public class FeedServiceImpl implements FeedService {
     }
 
     @Transactional(readOnly = true)
-    public FeedRecommendResponse findFeed(User user, Long time, Long regionId) {
-        List<FeedRecommendResource> feeds =
-                feedRepository.findFeed(user.getId(), Instant.ofEpochMilli(time), regionId);
-        List<FeedWeight> feedWeights = feeds.stream().map(item -> FeedWeight.from(item, user)).sorted().toList();
-
-        List<FeedRecommend> result = new ArrayList<>();
-
-        if(feedWeights.size() < 10){
-            for(int i = 0; i < feedWeights.size(); i++){
-                result.add(FeedRecommend.from(feedWeights.get(i).getFeedRecommendResource()));
-            }
-        } else {
-            for (int i = 0; i < 10; i++) {
-                result.add(FeedRecommend.from(feedWeights.get(i).getFeedRecommendResource()));
-            }
-        }
-
+    public FeedRecommendResponse findFeed(User user, Long regionId) {
+        List<FeedRecommendResource> feeds = feedRepository.findFeed(user.getId(), regionId);
+        List<FeedWeight> feedWeights =
+                feeds.stream().map(item -> FeedWeight.from(item, user)).sorted().toList();
+        List<FeedRecommend> result =
+                feedWeights.stream()
+                        .map(item -> FeedRecommend.from(item.getFeedRecommendResource()))
+                        .limit(10)
+                        .toList();
         return FeedRecommendResponse.builder().feedRecommends(result).build();
     }
 
