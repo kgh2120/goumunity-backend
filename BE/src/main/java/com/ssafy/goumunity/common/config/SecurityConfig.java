@@ -70,7 +70,7 @@ public class SecurityConfig {
                                 auth.requestMatchers(
                                                 "/api/users/join",
                                                 "/api/users/login",
-                                                "/api/users/email/",
+                                                "api/users/nickname",
                                                 "/api/users/email/verification")
                                         .permitAll()
                                         .requestMatchers("/**")
