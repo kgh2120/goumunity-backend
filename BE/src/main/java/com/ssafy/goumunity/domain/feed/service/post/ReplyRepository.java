@@ -10,7 +10,10 @@ import org.springframework.data.domain.Slice;
 public interface ReplyRepository {
     Reply create(Reply reply);
 
-    Slice<ReplyResponse> findAllByCommentId(Long commentId, Instant instant, Pageable pageable);
+    Slice<ReplyResponse> findAllByCommentId(
+            Long userId, Long commentId, Instant instant, Pageable pageable);
+
+    ReplyResponse findOneReply(Long userId, Long replyId);
 
     Optional<Reply> findOneById(Long replyId);
 

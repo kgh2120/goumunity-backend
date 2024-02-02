@@ -32,9 +32,21 @@ public class ReplyController {
 
     @GetMapping
     public ResponseEntity<SliceResponse<ReplyResponse>> findAllReplies(
-            @PathVariable Long commentId, @RequestParam("time") Long time, Pageable pageable) {
-        Slice<ReplyResponse> replies = replyService.findAllByCommentId(commentId, time, pageable);
+            @AuthenticationPrincipal User user,
+            @PathVariable Long commentId,
+            @RequestParam("time") Long time,
+            Pageable pageable) {
+        Slice<ReplyResponse> replies =
+                replyService.findAllByCommentId(user.getId(), commentId, time, pageable);
         return ResponseEntity.ok(SliceResponse.from(replies.getContent(), replies.hasNext()));
+    }
+
+    @GetMapping("/{replyId}")
+    public ResponseEntity<ReplyResponse> findOneByReplyId(
+            @AuthenticationPrincipal User user,
+            @PathVariable Long commentId,
+            @PathVariable Long replyId) {
+        return ResponseEntity.ok(replyService.findOneReply(user.getId(), replyId));
     }
 
     @PatchMapping("/{replyId}")

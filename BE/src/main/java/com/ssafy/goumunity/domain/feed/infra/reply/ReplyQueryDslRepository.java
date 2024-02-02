@@ -23,7 +23,8 @@ public class ReplyQueryDslRepository {
 
     private final JPAQueryFactory queryFactory;
 
-    public Slice<ReplyResponse> findAllByCommentId(Long commentId, Instant time, Pageable pageable) {
+    public Slice<ReplyResponse> findAllByCommentId(
+            Long userId, Long commentId, Instant time, Pageable pageable) {
         final List<ReplyResponse> result =
                 queryFactory
                         .query()
@@ -32,7 +33,11 @@ public class ReplyQueryDslRepository {
                                         replyEntity,
                                         JPAExpressions.select(replyLikeEntity.count())
                                                 .from(replyLikeEntity)
-                                                .where(replyEntity.eq(replyLikeEntity.replyEntity))))
+                                                .where(replyEntity.eq(replyLikeEntity.replyEntity)),
+                                        JPAExpressions.selectFrom(replyLikeEntity)
+                                                .where(replyLikeEntity.userEntity.id.eq(userId))
+                                                .where(replyLikeEntity.replyEntity.eq(replyEntity))
+                                                .exists()))
                         .from(replyEntity)
                         .leftJoin(replyEntity.userEntity, userEntity)
                         .where(replyEntity.commentEntity.id.eq(commentId))
@@ -43,5 +48,24 @@ public class ReplyQueryDslRepository {
                         .fetch();
 
         return new SliceImpl<>(result, pageable, QueryDslSliceUtils.hasNext(result, pageable));
+    }
+
+    public ReplyResponse findOneReply(Long userId, Long replyId) {
+        return queryFactory
+                .query()
+                .select(
+                        new QReplyResponse(
+                                replyEntity,
+                                JPAExpressions.select(replyLikeEntity.count())
+                                        .from(replyLikeEntity)
+                                        .where(replyEntity.eq(replyLikeEntity.replyEntity)),
+                                JPAExpressions.selectFrom(replyLikeEntity)
+                                        .where(replyLikeEntity.userEntity.id.eq(userId))
+                                        .where(replyLikeEntity.replyEntity.eq(replyEntity))
+                                        .exists()))
+                .from(replyEntity)
+                .leftJoin(replyEntity.userEntity, userEntity)
+                .where(replyEntity.id.eq(replyId))
+                .fetchOne();
     }
 }
