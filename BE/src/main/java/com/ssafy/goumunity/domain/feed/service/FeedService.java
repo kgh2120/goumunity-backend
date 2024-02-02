@@ -11,7 +11,7 @@ public interface FeedService {
 
     Long createFeed(Long userId, FeedRequest.Create feedRequest, List<MultipartFile> images);
 
-    FeedRecommendResponse findFeed(User user, Long time, Long regionId);
+    FeedRecommendResponse findFeed(User user, Long regionId);
 
     FeedResponse findOneByFeedId(Long feedId);
 

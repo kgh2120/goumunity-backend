@@ -184,7 +184,7 @@ public class FeedWeight implements Comparable<FeedWeight> {
     }
 
     @Override
-    public int compareTo(FeedWeight o) {
-        return Double.compare(o.weight, this.weight);
+    public int compareTo(FeedWeight fw) {
+        return Double.compare(fw.weight, this.weight);
     }
 }
