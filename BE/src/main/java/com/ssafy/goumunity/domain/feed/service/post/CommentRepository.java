@@ -10,9 +10,11 @@ import org.springframework.data.domain.Slice;
 public interface CommentRepository {
     Comment create(Comment comment);
 
-    Slice<CommentResponse> findAllByFeedId(Long feedId, Instant time, Pageable page);
+    Slice<CommentResponse> findAllByFeedId(Long userId, Long feedId, Instant time, Pageable page);
 
     Optional<Comment> findOneById(Long commentId);
+
+    CommentResponse findOneComment(Long userId, Long commentId);
 
     void modify(Comment comment);
 

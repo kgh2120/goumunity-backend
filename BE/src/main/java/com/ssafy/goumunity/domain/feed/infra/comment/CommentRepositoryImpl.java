@@ -23,13 +23,19 @@ public class CommentRepositoryImpl implements CommentRepository {
     }
 
     @Override
-    public Slice<CommentResponse> findAllByFeedId(Long feedId, Instant time, Pageable pageable) {
-        return commentQueryDslRepository.findAllByFeedId(feedId, time, pageable);
+    public Slice<CommentResponse> findAllByFeedId(
+            Long userId, Long feedId, Instant time, Pageable pageable) {
+        return commentQueryDslRepository.findAllByFeedId(userId, feedId, time, pageable);
     }
 
     @Override
     public Optional<Comment> findOneById(Long commentId) {
         return commentJpaRepository.findById(commentId).map(CommentEntity::to);
+    }
+
+    @Override
+    public CommentResponse findOneComment(Long userId, Long commentId) {
+        return commentQueryDslRepository.findOneComment(userId, commentId);
     }
 
     @Override

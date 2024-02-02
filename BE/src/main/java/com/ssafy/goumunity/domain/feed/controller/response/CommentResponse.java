@@ -20,9 +20,11 @@ public class CommentResponse {
 
     private Long replyCount;
     private Long likeCount;
+    private Boolean iLikeThat;
 
     @QueryProjection
-    public CommentResponse(CommentEntity comment, Long replyCount, Long likeCount) {
+    public CommentResponse(
+            CommentEntity comment, Long replyCount, Long likeCount, Boolean iLikeThat) {
         this.id = comment.getId();
         this.content = comment.getContent();
         this.feedId = comment.getFeedEntity().getId();
@@ -31,5 +33,6 @@ public class CommentResponse {
         this.updatedAt = comment.getUpdatedAt();
         this.replyCount = replyCount;
         this.likeCount = likeCount;
+        this.iLikeThat = iLikeThat;
     }
 }
