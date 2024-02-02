@@ -28,8 +28,14 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public Slice<CommentResponse> findAllByFeedId(Long feedId, Long time, Pageable pageable) {
-        return commentRepository.findAllByFeedId(feedId, Instant.ofEpochMilli(time), pageable);
+    public Slice<CommentResponse> findAllByFeedId(
+            Long userId, Long feedId, Long time, Pageable pageable) {
+        return commentRepository.findAllByFeedId(userId, feedId, Instant.ofEpochMilli(time), pageable);
+    }
+
+    @Override
+    public CommentResponse findOneComment(Long userId, Long commentId) {
+        return commentRepository.findOneComment(userId, commentId);
     }
 
     @Override

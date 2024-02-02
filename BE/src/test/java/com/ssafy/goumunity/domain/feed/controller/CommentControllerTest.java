@@ -165,7 +165,7 @@ class CommentControllerTest {
         Pageable pageable = PageRequest.of(page, size);
         Slice<CommentResponse> res = new SliceImpl<>(commentResponseList, pageable, true);
 
-        given(commentService.findAllByFeedId(any(), any(), any())).willReturn(res);
+        given(commentService.findAllByFeedId(any(), any(), any(), any())).willReturn(res);
 
         this.mockMvc
                 .perform(

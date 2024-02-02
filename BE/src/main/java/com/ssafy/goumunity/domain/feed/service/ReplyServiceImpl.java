@@ -35,15 +35,15 @@ public class ReplyServiceImpl implements ReplyService {
     }
 
     @Override
-    public Slice<ReplyResponse> findAllByCommentId(Long id, Long time, Pageable pageable) {
-        return replyRepository.findAllByCommentId(id, Instant.ofEpochMilli(time), pageable);
+    public Slice<ReplyResponse> findAllByCommentId(
+            Long userId, Long commentId, Long time, Pageable pageable) {
+        return replyRepository.findAllByCommentId(
+                userId, commentId, Instant.ofEpochMilli(time), pageable);
     }
 
     @Override
-    public Reply findOneByReplyId(Long replyId) {
-        return replyRepository
-                .findOneById(replyId)
-                .orElseThrow(() -> new ReplyException(ReplyErrorCode.REPLY_NOT_FOUND));
+    public ReplyResponse findOneReply(Long userId, Long replyId) {
+        return replyRepository.findOneReply(userId, replyId);
     }
 
     @Override

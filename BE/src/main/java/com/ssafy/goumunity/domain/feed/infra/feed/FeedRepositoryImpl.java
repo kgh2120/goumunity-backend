@@ -4,7 +4,6 @@ import com.ssafy.goumunity.domain.feed.controller.response.FeedResponse;
 import com.ssafy.goumunity.domain.feed.domain.Feed;
 import com.ssafy.goumunity.domain.feed.domain.FeedRecommendResource;
 import com.ssafy.goumunity.domain.feed.service.post.FeedRepository;
-import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -23,13 +22,13 @@ public class FeedRepositoryImpl implements FeedRepository {
     }
 
     @Override
-    public List<FeedRecommendResource> findFeed(Long userId, Instant time, Long regionId) {
-        return feedQueryDslRepository.findFeed(userId, time, regionId);
+    public List<FeedRecommendResource> findFeed(Long userId, Long regionId) {
+        return feedQueryDslRepository.findFeed(userId, regionId);
     }
 
     @Override
-    public FeedResponse findOneFeed(Long feedId) {
-        return feedQueryDslRepository.findOneFeed(feedId);
+    public FeedResponse findOneFeed(Long userId, Long feedId) {
+        return feedQueryDslRepository.findOneFeed(userId, feedId);
     }
 
     @Override

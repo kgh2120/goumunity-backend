@@ -18,9 +18,10 @@ public class ReplyResponse {
     private Long createdAt;
     private Long updatedAt;
     private Long likeCount;
+    private Boolean iLikeThat;
 
     @QueryProjection
-    public ReplyResponse(ReplyEntity reply, Long likeCount) {
+    public ReplyResponse(ReplyEntity reply, Long likeCount, Boolean iLikeThat) {
         this.replyId = reply.getId();
         this.content = reply.getContent();
         this.commentId = reply.getCommentEntity().getId();
@@ -28,6 +29,7 @@ public class ReplyResponse {
         this.createdAt = reply.getCreatedAt().toEpochMilli();
         this.updatedAt = reply.getUpdatedAt().toEpochMilli();
         this.likeCount = likeCount;
+        this.iLikeThat = iLikeThat;
     }
 
     public static ReplyResponse from(Reply reply, UserResponse user) {
