@@ -45,6 +45,7 @@ public class FeedServiceImpl implements FeedService {
         return createdFeed.getId();
     }
 
+    @Override
     @Transactional(readOnly = true)
     public FeedRecommendResponse findFeed(User user, Long regionId) {
         List<FeedRecommendResource> feeds = feedRepository.findFeed(user.getId(), regionId);
