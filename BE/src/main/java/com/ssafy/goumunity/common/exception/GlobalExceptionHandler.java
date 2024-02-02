@@ -1,12 +1,15 @@
 package com.ssafy.goumunity.common.exception;
 
-import static com.ssafy.goumunity.common.exception.GlobalErrorCode.BIND_ERROR;
-import static com.ssafy.goumunity.common.exception.GlobalErrorCode.REQUIRED_PARAM_NOT_FOUND;
+import static com.ssafy.goumunity.common.exception.GlobalErrorCode.*;
 
 import jakarta.servlet.http.HttpServletRequest;
+import java.net.ConnectException;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.tomcat.util.http.fileupload.impl.FileSizeLimitExceededException;
+import org.apache.tomcat.util.http.fileupload.impl.SizeLimitExceededException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.CannotCreateTransactionException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -36,6 +39,38 @@ public class GlobalExceptionHandler {
             HttpServletRequest request) {
         return ResponseEntity.status(REQUIRED_PARAM_NOT_FOUND.getHttpStatus())
                 .body(ErrorResponse.createErrorResponse(REQUIRED_PARAM_NOT_FOUND, request.getRequestURI()));
+    }
+
+    @ExceptionHandler(CannotCreateTransactionException.class)
+    public ResponseEntity<ErrorResponse> handleCannotCreateTransactionException(
+            HttpServletRequest request, CannotCreateTransactionException e) {
+        log.debug("CannotCreateTransactionException Error 발생", e);
+        return ResponseEntity.status(DB_CONNECT_FAIL.getHttpStatus())
+                .body(ErrorResponse.createErrorResponse(DB_CONNECT_FAIL, request.getRequestURI()));
+    }
+
+    @ExceptionHandler(ConnectException.class)
+    public ResponseEntity<ErrorResponse> handleConnectException(
+            HttpServletRequest request, ConnectException e) {
+        log.debug("ConnectException Error 발생", e);
+        return ResponseEntity.status(DB_CONNECT_FAIL.getHttpStatus())
+                .body(ErrorResponse.createErrorResponse(DB_CONNECT_FAIL, request.getRequestURI()));
+    }
+
+    @ExceptionHandler(FileSizeLimitExceededException.class)
+    public ResponseEntity<ErrorResponse> handleFileSizeLimitExceededException(
+            HttpServletRequest request, FileSizeLimitExceededException e) {
+        log.debug("FileSizeLimitExceededException Error 발생", e);
+        return ResponseEntity.status(FILE_SIZE_LIMIT_EXCEEDED.getHttpStatus())
+                .body(ErrorResponse.createErrorResponse(FILE_SIZE_LIMIT_EXCEEDED, request.getRequestURI()));
+    }
+
+    @ExceptionHandler(SizeLimitExceededException.class)
+    public ResponseEntity<ErrorResponse> handleSizeLimitExceededException(
+            HttpServletRequest request, SizeLimitExceededException e) {
+        log.debug("SizeLimitExceededException Error 발생", e);
+        return ResponseEntity.status(FILE_SIZE_LIMIT_EXCEEDED.getHttpStatus())
+                .body(ErrorResponse.createErrorResponse(FILE_SIZE_LIMIT_EXCEEDED, request.getRequestURI()));
     }
 
     @ExceptionHandler(InternalServerException.class)
