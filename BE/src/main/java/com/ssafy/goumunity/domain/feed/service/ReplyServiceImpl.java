@@ -25,12 +25,13 @@ public class ReplyServiceImpl implements ReplyService {
 
     @Override
     @Transactional
-    public void saveReply(Long userId, Long commentId, ReplyRequest.Create reply) {
+    public Long createReply(Long userId, Long commentId, ReplyRequest.Create reply) {
         if (!commentService.isExistComment(commentId)) {
             throw new CustomException(CommentErrorCode.COMMENT_NOT_FOUND);
         }
 
-        replyRepository.save(Reply.from(userId, commentId, reply));
+        Reply savedReply = replyRepository.create(Reply.create(userId, commentId, reply));
+        return savedReply.getId();
     }
 
     @Override
@@ -39,8 +40,15 @@ public class ReplyServiceImpl implements ReplyService {
     }
 
     @Override
+    public Reply findOneByReplyId(Long replyId) {
+        return replyRepository
+                .findOneById(replyId)
+                .orElseThrow(() -> new ReplyException(ReplyErrorCode.REPLY_NOT_FOUND));
+    }
+
+    @Override
     @Transactional
-    public Reply modifyReply(Long userId, Long commentId, Long replyId, ReplyRequest.Modify reply) {
+    public void modifyReply(Long userId, Long commentId, Long replyId, ReplyRequest.Modify reply) {
         // reply-id 로 조회 했을 때 조회결과가 없으면 exception 발생
         Reply originalReply =
                 replyRepository
@@ -54,7 +62,7 @@ public class ReplyServiceImpl implements ReplyService {
         originalReply.checkComment(commentId);
 
         originalReply.modifyContent(reply.getContent());
-        return replyRepository.modify(originalReply);
+        replyRepository.modify(originalReply);
     }
 
     @Override
@@ -72,6 +80,6 @@ public class ReplyServiceImpl implements ReplyService {
         // 조회해온 reply의 게시글과 param으로 받은 comment-id가 다르면 exception 발생
         originalReply.checkComment(commentId);
 
-        replyRepository.delete(originalReply);
+        replyRepository.delete(originalReply.getId());
     }
 }

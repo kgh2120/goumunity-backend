@@ -9,11 +9,9 @@ import lombok.*;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @EqualsAndHashCode(exclude = {"createdAt", "updatedAt"})
 public class ReplyLike {
-    private Long replyLikeId;
-
+    private Long id;
     private Long replyId;
     private Long userId;
-
     private Instant createdAt;
     private Instant updatedAt;
 

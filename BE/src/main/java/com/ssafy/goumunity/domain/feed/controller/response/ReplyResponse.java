@@ -21,9 +21,9 @@ public class ReplyResponse {
 
     @QueryProjection
     public ReplyResponse(ReplyEntity reply, Long likeCount) {
-        this.replyId = reply.getReplyId();
+        this.replyId = reply.getId();
         this.content = reply.getContent();
-        this.commentId = reply.getCommentEntity().getCommentId();
+        this.commentId = reply.getCommentEntity().getId();
         this.user = UserResponse.from(reply.getUserEntity().toModel());
         this.createdAt = reply.getCreatedAt().toEpochMilli();
         this.updatedAt = reply.getUpdatedAt().toEpochMilli();
@@ -32,7 +32,7 @@ public class ReplyResponse {
 
     public static ReplyResponse from(Reply reply, UserResponse user) {
         return ReplyResponse.builder()
-                .replyId(reply.getReplyId())
+                .replyId(reply.getId())
                 .content(reply.getContent())
                 .commentId(reply.getCommentId())
                 .user(user)

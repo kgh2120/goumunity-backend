@@ -9,5 +9,5 @@ public interface FeedImgRepository {
 
     List<FeedImg> findAllFeedImgByFeedId(Long feedId);
 
-    void delete(FeedImg feedImg);
+    void delete(Long feedImgId);
 }

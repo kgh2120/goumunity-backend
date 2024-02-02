@@ -79,7 +79,7 @@ class ReplyControllerTest {
         Long commentId = 1L;
 
         Reply reply =
-                Reply.builder().replyId(1L).userId(1L).commentId(commentId).content("규준 거준 구준표").build();
+                Reply.builder().id(1L).userId(1L).commentId(commentId).content("규준 거준 구준표").build();
 
         mockMvc
                 .perform(
@@ -112,7 +112,7 @@ class ReplyControllerTest {
 
         Long commentId = 1L;
 
-        Reply reply = Reply.builder().replyId(1L).userId(1L).commentId(commentId).build();
+        Reply reply = Reply.builder().id(1L).userId(1L).commentId(commentId).build();
 
         mockMvc
                 .perform(
@@ -164,8 +164,7 @@ class ReplyControllerTest {
                         + "무궁화 삼천리 화려 강산\n"
                         + "대한 사람 대한으로 길이 보전하세";
 
-        Reply reply =
-                Reply.builder().replyId(1L).userId(1L).content(content).commentId(commentId).build();
+        Reply reply = Reply.builder().id(1L).userId(1L).content(content).commentId(commentId).build();
 
         mockMvc
                 .perform(
@@ -201,11 +200,11 @@ class ReplyControllerTest {
         Long commentId = 1L;
 
         Reply reply =
-                Reply.builder().replyId(1L).userId(1L).commentId(commentId).content("규준 거준 구준표").build();
+                Reply.builder().id(1L).userId(1L).commentId(commentId).content("규준 거준 구준표").build();
 
         doThrow(new CommentException(COMMENT_NOT_FOUND))
                 .when(replyService)
-                .saveReply(any(), any(), any());
+                .createReply(any(), any(), any());
 
         mockMvc
                 .perform(
@@ -325,7 +324,7 @@ class ReplyControllerTest {
 
         Reply modifiedReply =
                 Reply.builder()
-                        .replyId(1L)
+                        .id(1L)
                         .userId(user.getId())
                         .commentId(1L)
                         .content(reply.getContent())
@@ -333,17 +332,14 @@ class ReplyControllerTest {
                         .updatedAt(Instant.now())
                         .build();
 
-        given(replyService.modifyReply(any(), any(), any(), any())).willReturn(modifiedReply);
-
         this.mockMvc
                 .perform(
-                        put("/api/comments/" + commentId + "/replies/" + modifiedReply.getReplyId())
+                        patch("/api/comments/" + commentId + "/replies/" + modifiedReply.getId())
                                 .with(SecurityMockMvcRequestPostProcessors.user(new CustomDetails(user)))
                                 .content(mapper.writeValueAsString(reply))
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .session(session))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.content").value(reply.getContent()))
                 .andDo(print());
     }
 }

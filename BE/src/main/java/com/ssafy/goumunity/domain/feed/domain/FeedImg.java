@@ -9,11 +9,10 @@ import lombok.*;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @EqualsAndHashCode(exclude = {"createdAt", "updatedAt"})
 public class FeedImg {
-    private Long feedImgId;
+    private Long id;
     private Long feedId;
     private String imgSrc;
     private Integer sequence;
-
     private Instant createdAt;
     private Instant updatedAt;
 

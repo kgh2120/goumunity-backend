@@ -36,22 +36,24 @@ public class FeedServiceImpl implements FeedService {
 
     @Override
     @Transactional
-    public void createFeed(Long userId, FeedRequest.Create feedRequest, List<MultipartFile> images) {
-        Feed createdFeed = feedRepository.save(Feed.from(feedRequest, userId));
+    public Long createFeed(Long userId, FeedRequest.Create feedRequest, List<MultipartFile> images) {
+        Feed createdFeed = feedRepository.create(Feed.create(feedRequest, userId));
 
         if (images != null && !images.isEmpty()) {
             for (int seq = 1; seq <= images.size(); seq++) {
                 String savedUrl = feedImageUploader.uploadFeedImage(images.get(seq - 1));
-                feedImgRepository.save(FeedImg.from(createdFeed.getFeedId(), savedUrl, seq));
+                feedImgRepository.save(FeedImg.from(createdFeed.getId(), savedUrl, seq));
             }
         }
+        return createdFeed.getId();
     }
 
     @Transactional(readOnly = true)
     public FeedRecommendResponse findFeed(User user, Long time, Long regionId) {
         List<FeedRecommendResource> feeds =
                 feedRepository.findFeed(user.getId(), Instant.ofEpochMilli(time), regionId);
-        List<FeedWeight> feedWeights = feeds.stream().map(item -> FeedWeight.from(item, user)).toList();
+        List<FeedWeight> feedWeights =
+                new ArrayList<>(feeds.stream().map(item -> FeedWeight.from(item, user)).toList());
         Collections.sort(feedWeights);
 
         List<FeedRecommend> result = new ArrayList<>();
@@ -82,7 +84,7 @@ public class FeedServiceImpl implements FeedService {
         // 기존 feed images 삭제
         List<FeedImg> originalFeedImages = feedImgRepository.findAllFeedImgByFeedId(feedId);
         for (FeedImg img : originalFeedImages) {
-            feedImgRepository.delete(img);
+            feedImgRepository.delete(img.getId());
         }
 
         // feed 이미지 수정
@@ -90,7 +92,7 @@ public class FeedServiceImpl implements FeedService {
             // 기존에 있던 사진이 모두 없고 새로운 사진만 생겼을 경우
             for (int seq = 1; seq <= images.size(); seq++) {
                 String savedUrl = feedImageUploader.uploadFeedImage(images.get(seq - 1));
-                feedImgRepository.save(FeedImg.from(originalFeed.getFeedId(), savedUrl, seq));
+                feedImgRepository.save(FeedImg.from(originalFeed.getId(), savedUrl, seq));
             }
         } else if (feedRequest.getFeedImages() != null && images == null) {
             // 새로운 사진은 없고 기존에 있던 사진에 대한 수정 사항만 있을 경우
@@ -99,7 +101,7 @@ public class FeedServiceImpl implements FeedService {
 
             for (FeedImgRequest.Modify img : feedImages) {
                 feedImgRepository.save(
-                        FeedImg.from(originalFeed.getFeedId(), img.getImgSrc(), img.getSequence()));
+                        FeedImg.from(originalFeed.getId(), img.getImgSrc(), img.getSequence()));
             }
         } else if (feedRequest.getFeedImages() != null && images != null) {
             // 기존에 있던 사진도 있고 새로운 사진도 있을 경우
@@ -111,13 +113,12 @@ public class FeedServiceImpl implements FeedService {
             for (int idx = 0; idx < feedImages.size(); ) {
                 FeedImgRequest.Modify feedImage = feedImages.get(idx);
                 if (feedImage.getSequence() == nowIdx) {
-                    feedImgRepository.save(
-                            FeedImg.from(originalFeed.getFeedId(), feedImage.getImgSrc(), nowIdx));
+                    feedImgRepository.save(FeedImg.from(originalFeed.getId(), feedImage.getImgSrc(), nowIdx));
                     idx++;
                 } else {
                     if (newImageIdx < images.size()) {
                         String savedUrl = feedImageUploader.uploadFeedImage(images.get(newImageIdx));
-                        feedImgRepository.save(FeedImg.from(originalFeed.getFeedId(), savedUrl, nowIdx));
+                        feedImgRepository.save(FeedImg.from(originalFeed.getId(), savedUrl, nowIdx));
                         newImageIdx++;
                     }
                 }
@@ -126,12 +127,12 @@ public class FeedServiceImpl implements FeedService {
 
             for (int idx = newImageIdx; idx < images.size(); idx++) {
                 String savedUrl = feedImageUploader.uploadFeedImage(images.get(newImageIdx));
-                feedImgRepository.save(FeedImg.from(originalFeed.getFeedId(), savedUrl, nowIdx));
+                feedImgRepository.save(FeedImg.from(originalFeed.getId(), savedUrl, nowIdx));
             }
         }
 
         // feed 내용 수정
-        feedRepository.modify(Feed.from(originalFeed, feedRequest));
+        feedRepository.modify(Feed.create(originalFeed, feedRequest));
     }
 
     @Override
@@ -145,6 +146,6 @@ public class FeedServiceImpl implements FeedService {
         // 조회해온 feed의 작성자와 세션에 로그인 되어 있는 유저가 다르면 exception 발생
         originalFeed.checkUser(userId);
 
-        feedRepository.delete(originalFeed);
+        feedRepository.delete(originalFeed.getId());
     }
 }

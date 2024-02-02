@@ -34,14 +34,15 @@ class ReplyServiceImplTest {
         Long userId = 1L;
         Long commentId = 1L;
 
-        Reply reply = Reply.builder().replyId(1L).userId(1L).commentId(1L).content("규준 거준 구준표").build();
+        Reply reply = Reply.builder().id(1L).userId(1L).commentId(1L).content("규준 거준 구준표").build();
 
         ReplyRequest.Create request = ReplyRequest.Create.builder().content(reply.getContent()).build();
 
         given(commentService.isExistComment(any())).willReturn(true);
+        given(replyRepository.create(any())).willReturn(reply);
 
-        replyService.saveReply(userId, commentId, request);
-        verify(replyRepository).save(Reply.from(userId, commentId, request));
+        Long savedReply = replyService.createReply(userId, commentId, request);
+        assertThat(savedReply).isNotNull();
     }
 
     @DisplayName("답글 저장 실패 - 댓글 존재하지 않음")
@@ -51,29 +52,27 @@ class ReplyServiceImplTest {
         Long commentId = -1L;
 
         Reply reply =
-                Reply.builder().replyId(1L).userId(1L).commentId(commentId).content("규준 거준 구준표").build();
+                Reply.builder().id(1L).userId(1L).commentId(commentId).content("규준 거준 구준표").build();
 
         ReplyRequest.Create request = ReplyRequest.Create.builder().content(reply.getContent()).build();
 
         assertThat(COMMENT_NOT_FOUND)
                 .isEqualTo(
                         assertThrows(
-                                        CustomException.class, () -> replyService.saveReply(userId, commentId, request))
+                                        CustomException.class,
+                                        () -> replyService.createReply(userId, commentId, request))
                                 .getErrorCode());
     }
 
     @DisplayName("답글 수정 성공")
     @Test
     void modifyReply() {
-        Reply reply = Reply.builder().replyId(1L).userId(1L).commentId(1L).content("규준 거준 구준표").build();
+        Reply reply = Reply.builder().id(1L).userId(1L).commentId(1L).content("규준 거준 구준표").build();
         ReplyRequest.Modify request = ReplyRequest.Modify.builder().content("수정수정").build();
 
         given(replyRepository.findOneById(any())).willReturn(Optional.of(reply));
-        given(replyRepository.modify(any())).willReturn(reply);
-        Reply res =
-                replyService.modifyReply(
-                        reply.getUserId(), reply.getCommentId(), reply.getReplyId(), request);
 
-        assertThat(request.getContent()).isEqualTo(res.getContent());
+        replyService.modifyReply(reply.getUserId(), reply.getCommentId(), reply.getId(), request);
+        verify(replyRepository).modify(reply);
     }
 }

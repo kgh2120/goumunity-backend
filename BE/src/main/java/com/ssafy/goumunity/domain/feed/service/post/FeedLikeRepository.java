@@ -5,11 +5,11 @@ import java.util.Optional;
 
 public interface FeedLikeRepository {
 
-    void createFeedLike(FeedLike feedLike);
+    void create(FeedLike feedLike);
 
     Optional<FeedLike> findOneByUserIdAndFeedId(Long userId, Long feedId);
 
-    void deleteFeedLike(FeedLike feedLike);
+    void delete(Long feedLikeId);
 
     boolean existsByFeedLike(FeedLike feedLike);
 }

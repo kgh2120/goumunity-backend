@@ -14,7 +14,7 @@ import lombok.*;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @EqualsAndHashCode(exclude = {"createdAt", "updatedAt"})
 public class Reply {
-    private Long replyId;
+    private Long id;
     private String content;
     private Long commentId;
     private Long userId;
@@ -36,7 +36,7 @@ public class Reply {
             throw new ReplyException(ReplyErrorCode.COMMENT_NOT_MATCH);
     }
 
-    public static Reply from(Long userId, Long commentId, ReplyRequest.Create reply) {
+    public static Reply create(Long userId, Long commentId, ReplyRequest.Create reply) {
         return Reply.builder()
                 .commentId(commentId)
                 .userId(userId)

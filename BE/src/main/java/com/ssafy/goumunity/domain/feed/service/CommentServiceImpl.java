@@ -22,8 +22,9 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     @Transactional
-    public Comment saveComment(Long userId, Long feedId, CommentRequest.Create comment) {
-        return commentRepository.save(Comment.from(userId, feedId, comment));
+    public Long createComment(Long userId, Long feedId, CommentRequest.Create comment) {
+        Comment savedComment = commentRepository.create(Comment.create(userId, feedId, comment));
+        return savedComment.getId();
     }
 
     @Override
@@ -33,7 +34,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     @Transactional
-    public Comment modifyComment(
+    public void modifyComment(
             Long userId, Long feedId, Long commentId, CommentRequest.Modify comment) {
         // commend-id 로 조회 했을 때 조회결과가 없으면 exception 발생
         Comment originalComment =
@@ -48,7 +49,7 @@ public class CommentServiceImpl implements CommentService {
         originalComment.checkFeed(feedId);
 
         originalComment.modifyContent(comment.getContent());
-        return commentRepository.modify(originalComment);
+        commentRepository.modify(originalComment);
     }
 
     @Override
@@ -66,7 +67,7 @@ public class CommentServiceImpl implements CommentService {
         // 조회해온 comment의 게시글과 param으로 받은 feed-id가 다르면 exception 발생
         originalComment.checkFeed(feedId);
 
-        commentRepository.delete(originalComment);
+        commentRepository.delete(originalComment.getId());
     }
 
     @Override

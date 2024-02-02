@@ -11,7 +11,7 @@ import lombok.*;
 @Builder
 @Getter
 public class CommentResponse {
-    private Long commentId;
+    private Long id;
     private String content;
     private Long feedId;
     private UserResponse user;
@@ -23,9 +23,9 @@ public class CommentResponse {
 
     @QueryProjection
     public CommentResponse(CommentEntity comment, Long replyCount, Long likeCount) {
-        this.commentId = comment.getCommentId();
+        this.id = comment.getId();
         this.content = comment.getContent();
-        this.feedId = comment.getFeedEntity().getFeedId();
+        this.feedId = comment.getFeedEntity().getId();
         this.user = UserResponse.from(comment.getUserEntity().toModel());
         this.createdAt = comment.getCreatedAt();
         this.updatedAt = comment.getUpdatedAt();

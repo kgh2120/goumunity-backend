@@ -10,21 +10,21 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/feeds/{feed-id}")
+@RequestMapping("/api/feeds/{feedId}")
 public class FeedLikeController {
 
     private final FeedLikeService feedLikeService;
 
     @PostMapping("/like")
     public ResponseEntity<Void> createdFeedLike(
-            @AuthenticationPrincipal User user, @PathVariable("feed-id") Long feedId) {
+            @AuthenticationPrincipal User user, @PathVariable Long feedId) {
         feedLikeService.createFeedLike(user.getId(), feedId);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @DeleteMapping("/unlike")
     public ResponseEntity<Void> deleteFeedLike(
-            @AuthenticationPrincipal User user, @PathVariable("feed-id") Long feedId) {
+            @AuthenticationPrincipal User user, @PathVariable Long feedId) {
         feedLikeService.deleteFeedLike(user.getId(), feedId);
         return ResponseEntity.ok().build();
     }

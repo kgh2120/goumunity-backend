@@ -17,7 +17,7 @@ public class FeedImgEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "feed_img_id")
-    private Long feedImgId;
+    private Long id;
 
     @Column(name = "img_src")
     private String imgSrc;
@@ -38,10 +38,10 @@ public class FeedImgEntity {
 
     public FeedImg to() {
         return FeedImg.builder()
-                .feedImgId(feedImgId)
+                .id(id)
                 .imgSrc(imgSrc)
                 .sequence(sequence)
-                .feedId(feedEntity.getFeedId())
+                .feedId(feedEntity.getId())
                 .createdAt(createdAt)
                 .updatedAt(updatedAt)
                 .build();
@@ -50,7 +50,7 @@ public class FeedImgEntity {
     public static FeedImgEntity from(FeedImg feedImg) {
 
         return FeedImgEntity.builder()
-                .feedImgId(feedImg.getFeedImgId())
+                .id(feedImg.getId())
                 .feedEntity(FeedEntity.feedEntityOnlyWithId(feedImg.getFeedId()))
                 .imgSrc(feedImg.getImgSrc())
                 .sequence(feedImg.getSequence())

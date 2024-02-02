@@ -18,7 +18,7 @@ public class CommentEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "comment_id")
-    private Long commentId;
+    private Long id;
 
     @Column(name = "content")
     private String content;
@@ -39,9 +39,9 @@ public class CommentEntity {
 
     public Comment to() {
         return Comment.builder()
-                .commentId(commentId)
+                .id(id)
                 .content(content)
-                .feedId(feedEntity.getFeedId())
+                .feedId(feedEntity.getId())
                 .userId(userEntity.getId())
                 .createdAt(createdAt)
                 .updatedAt(updatedAt)
@@ -51,16 +51,16 @@ public class CommentEntity {
     public static CommentEntity from(Comment comment) {
 
         return CommentEntity.builder()
+                .id(comment.getId())
                 .content(comment.getContent())
                 .feedEntity(FeedEntity.feedEntityOnlyWithId(comment.getFeedId()))
                 .userEntity(UserEntity.userEntityOnlyWithId(comment.getUserId()))
-                .commentId(comment.getCommentId())
                 .createdAt(comment.getCreatedAt())
                 .updatedAt(comment.getUpdatedAt())
                 .build();
     }
 
     public static CommentEntity commentEntityOnlyWithId(Long id) {
-        return CommentEntity.builder().commentId(id).build();
+        return CommentEntity.builder().id(id).build();
     }
 }

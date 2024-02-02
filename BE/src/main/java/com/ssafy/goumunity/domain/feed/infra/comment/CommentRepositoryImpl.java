@@ -18,7 +18,7 @@ public class CommentRepositoryImpl implements CommentRepository {
     private final CommentQueryDslRepository commentQueryDslRepository;
 
     @Override
-    public Comment save(Comment comment) {
+    public Comment create(Comment comment) {
         return commentJpaRepository.save(CommentEntity.from(comment)).to();
     }
 
@@ -29,17 +29,17 @@ public class CommentRepositoryImpl implements CommentRepository {
 
     @Override
     public Optional<Comment> findOneById(Long commentId) {
-        return commentJpaRepository.findByCommentId(commentId).map(CommentEntity::to);
+        return commentJpaRepository.findById(commentId).map(CommentEntity::to);
     }
 
     @Override
-    public Comment modify(Comment comment) {
-        return commentJpaRepository.save(CommentEntity.from(comment)).to();
+    public void modify(Comment comment) {
+        commentJpaRepository.save(CommentEntity.from(comment)).to();
     }
 
     @Override
-    public void delete(Comment comment) {
-        commentJpaRepository.delete(CommentEntity.from(comment));
+    public void delete(Long commentId) {
+        commentJpaRepository.deleteById(commentId);
     }
 
     @Override

@@ -19,13 +19,13 @@ public class FeedImgRepositoryImpl implements FeedImgRepository {
 
     @Override
     public List<FeedImg> findAllFeedImgByFeedId(Long feedId) {
-        return feedImgJpaRepository.findAllByFeedEntity_FeedId(feedId).stream()
+        return feedImgJpaRepository.findAllByFeedEntity_Id(feedId).stream()
                 .map(FeedImgEntity::to)
                 .toList();
     }
 
     @Override
-    public void delete(FeedImg feedImg) {
-        feedImgJpaRepository.delete(FeedImgEntity.from(feedImg));
+    public void delete(Long feedImgId) {
+        feedImgJpaRepository.deleteById(feedImgId);
     }
 }

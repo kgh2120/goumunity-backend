@@ -17,7 +17,7 @@ public class ReplyEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "reply_id")
-    private Long replyId;
+    private Long id;
 
     @Column(name = "content")
     private String content;
@@ -38,9 +38,9 @@ public class ReplyEntity {
 
     public Reply to() {
         return Reply.builder()
-                .replyId(replyId)
+                .id(id)
                 .content(content)
-                .commentId(commentEntity.getCommentId())
+                .commentId(commentEntity.getId())
                 .userId(userEntity.getId())
                 .createdAt(createdAt)
                 .updatedAt(updatedAt)
@@ -49,16 +49,16 @@ public class ReplyEntity {
 
     public static ReplyEntity from(Reply reply) {
         return ReplyEntity.builder()
+                .id(reply.getId())
                 .content(reply.getContent())
                 .commentEntity(CommentEntity.commentEntityOnlyWithId(reply.getCommentId()))
                 .userEntity(UserEntity.userEntityOnlyWithId(reply.getUserId()))
-                .replyId(reply.getReplyId())
                 .createdAt(reply.getCreatedAt())
                 .updatedAt(reply.getUpdatedAt())
                 .build();
     }
 
     public static ReplyEntity replyEntityOnlyWithId(Long id) {
-        return ReplyEntity.builder().replyId(id).build();
+        return ReplyEntity.builder().id(id).build();
     }
 }
