@@ -24,7 +24,7 @@ public class FeedQueryDslRepository {
 
     private final JPAQueryFactory queryFactory;
 
-    public List<FeedRecommendResource> findFeed(Long userId, Instant time, Long regionId) {
+    public List<FeedRecommendResource> findFeed(Long userId, Long regionId) {
         return queryFactory
                 .query()
                 .select(
@@ -46,7 +46,7 @@ public class FeedQueryDslRepository {
                 .leftJoin(feedEntity.regionEntity, regionEntity)
                 .where(feedEntity.regionEntity.regionId.eq(regionId))
                 .groupBy(feedEntity)
-                .having(feedEntity.createdAt.before(time))
+                .having(feedEntity.createdAt.before(Instant.now()))
                 .orderBy(feedEntity.createdAt.desc(), feedImgEntity.sequence.asc())
                 .fetch();
     }
