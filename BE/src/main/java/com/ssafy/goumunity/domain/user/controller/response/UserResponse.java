@@ -1,5 +1,6 @@
 package com.ssafy.goumunity.domain.user.controller.response;
 
+import com.ssafy.goumunity.domain.user.domain.Gender;
 import com.ssafy.goumunity.domain.user.domain.User;
 import com.ssafy.goumunity.domain.user.domain.UserCategory;
 import lombok.Builder;
@@ -13,7 +14,7 @@ public class UserResponse {
     private Long monthBudget;
     private Integer age;
     private UserCategory userCategory;
-    private Integer gender;
+    private Gender gender;
     private String nickname;
     private String imgSrc;
     private Long regionId;

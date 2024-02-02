@@ -5,7 +5,7 @@ import com.ssafy.goumunity.domain.user.domain.UserStatus;
 import java.util.Optional;
 
 public interface UserRepository {
-    User save(User user);
+    User create(User user);
 
     Optional<User> findByEmailAndStatus(String email, UserStatus userStatus);
 

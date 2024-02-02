@@ -6,6 +6,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
 import com.ssafy.goumunity.domain.user.controller.request.UserCreateRequest;
+import com.ssafy.goumunity.domain.user.domain.Gender;
 import com.ssafy.goumunity.domain.user.domain.User;
 import com.ssafy.goumunity.domain.user.domain.UserCategory;
 import com.ssafy.goumunity.domain.user.service.UserServiceImpl;
@@ -44,7 +45,7 @@ public class UserServiceTest {
                         .monthBudget(30_0000_0000L)
                         .age(27)
                         .userCategory(UserCategory.JOB_SEEKER)
-                        .gender(1)
+                        .gender(Gender.MALE)
                         .nickname("청룡이")
                         .regionId(1L)
                         .build();
@@ -56,7 +57,7 @@ public class UserServiceTest {
         //        given()
         given(passwordEncoder.encode(any())).willReturn("1q2w3e4r!@Q");
 
-        given(userRepository.save(any()))
+        given(userRepository.create(any()))
                 .willReturn(
                         User.builder()
                                 .id(1L)
@@ -71,7 +72,7 @@ public class UserServiceTest {
                                 .createdAt(Instant.now(fixed))
                                 .build());
 
-        User sut = userService.saveUser(userCreateRequest, image);
+        User sut = userService.createUser(userCreateRequest, image);
 
         assertAll(
                 () -> {

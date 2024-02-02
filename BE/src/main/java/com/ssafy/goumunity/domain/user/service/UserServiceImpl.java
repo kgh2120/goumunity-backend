@@ -32,7 +32,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public User saveUser(UserCreateRequest userCreateRequest, MultipartFile profileImage) {
+    public User createUser(UserCreateRequest userCreateRequest, MultipartFile profileImage) {
         // 이메일 중복 검사
         if (userRepository.existsByEmail(userCreateRequest.getEmail())) {
             throw new UserException(UserErrorCode.EXIST_EMAIL);
@@ -41,7 +41,7 @@ public class UserServiceImpl implements UserService {
         String imgPath = profileImageUploader.uploadProfileImage(profileImage);
         User user =
                 User.from(userCreateRequest, imgPath, encoder.encode(userCreateRequest.getPassword()));
-        return userRepository.save(user);
+        return userRepository.create(user);
     }
 
     @Override
@@ -49,11 +49,6 @@ public class UserServiceImpl implements UserService {
         return userRepository
                 .findByEmailAndStatus(email, UserStatus.ACTIVE)
                 .orElseThrow(() -> new UserException(UserErrorCode.EMAIL_NOT_FOUND));
-    }
-
-    @Override
-    public boolean isExistEmail(String email) {
-        return userRepository.existsByEmail(email);
     }
 
     @Override

@@ -9,11 +9,9 @@ import org.springframework.data.domain.Slice;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface UserService {
-    User saveUser(UserCreateRequest userCreateRequest, MultipartFile profileImage);
+    User createUser(UserCreateRequest userCreateRequest, MultipartFile profileImage);
 
     User findUserByEmail(String email);
-
-    boolean isExistEmail(String email);
 
     User modifyPassword(User user, String password);
 

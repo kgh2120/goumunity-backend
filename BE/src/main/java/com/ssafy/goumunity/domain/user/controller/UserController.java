@@ -37,10 +37,10 @@ public class UserController {
     private String SESSION_LOGIN_USER_KEY;
 
     @PostMapping("/join")
-    public ResponseEntity<UserResponse> saveUser(
+    public ResponseEntity<UserResponse> createUser(
             @RequestPart(value = "data") @Valid UserCreateRequest userCreateRequest,
             @RequestPart(value = "image", required = false) MultipartFile profileImage) {
-        User user = userService.saveUser(userCreateRequest, profileImage);
+        User user = userService.createUser(userCreateRequest, profileImage);
         return ResponseEntity.status(HttpStatus.CREATED).body(UserResponse.from(user));
     }
 

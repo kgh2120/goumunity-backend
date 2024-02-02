@@ -2,6 +2,7 @@ package com.ssafy.goumunity.domain.user.controller.request;
 
 import com.ssafy.goumunity.common.constraint.Email;
 import com.ssafy.goumunity.common.constraint.Password;
+import com.ssafy.goumunity.domain.user.domain.Gender;
 import com.ssafy.goumunity.domain.user.domain.UserCategory;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
@@ -28,10 +29,8 @@ public class UserCreateRequest {
     @NotNull(message = "유저 카테고리는 필수값입니다.")
     private UserCategory userCategory;
 
-    @Min(message = "성별은 0(남자) 또는 1(여자)로 입력해주세요.", value = 0)
-    @Max(message = "성별은 0(남자) 또는 1(여자)로 입력해주세요.", value = 1)
-    @NotNull(message = "성별은 필수값입니다.")
-    private Integer gender;
+    @NotNull(message = "MALE 또는 FEMALE 값이 필요합니다.")
+    private Gender gender;
 
     private String nickname;
 

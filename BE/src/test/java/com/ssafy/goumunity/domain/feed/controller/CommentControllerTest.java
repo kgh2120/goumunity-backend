@@ -20,6 +20,7 @@ import com.ssafy.goumunity.domain.feed.exception.CommentException;
 import com.ssafy.goumunity.domain.feed.service.CommentService;
 import com.ssafy.goumunity.domain.user.controller.request.UserCreateRequest;
 import com.ssafy.goumunity.domain.user.controller.response.UserResponse;
+import com.ssafy.goumunity.domain.user.domain.Gender;
 import com.ssafy.goumunity.domain.user.domain.User;
 import com.ssafy.goumunity.domain.user.domain.UserCategory;
 import com.ssafy.goumunity.domain.user.exception.UserErrorCode;
@@ -299,7 +300,7 @@ class CommentControllerTest {
                 .monthBudget(100000L)
                 .age(20)
                 .userCategory(UserCategory.JOB_SEEKER)
-                .gender(1)
+                .gender(Gender.MALE)
                 .nickname("규준")
                 .regionId(1L)
                 .build();

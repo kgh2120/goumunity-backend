@@ -19,6 +19,7 @@ import com.ssafy.goumunity.domain.user.controller.UserController;
 import com.ssafy.goumunity.domain.user.controller.request.PasswordModifyRequest;
 import com.ssafy.goumunity.domain.user.controller.request.UserCreateRequest;
 import com.ssafy.goumunity.domain.user.controller.request.UserModifyRequest;
+import com.ssafy.goumunity.domain.user.domain.Gender;
 import com.ssafy.goumunity.domain.user.domain.User;
 import com.ssafy.goumunity.domain.user.domain.UserCategory;
 import com.ssafy.goumunity.domain.user.exception.UserErrorCode;
@@ -74,7 +75,7 @@ class UserControllerTest {
                 new MockPart("data", "", mapper.writeValueAsBytes(user), MediaType.APPLICATION_JSON);
         MockMultipartFile image = new MockMultipartFile("image", "test.jpg".getBytes());
 
-        given(userService.saveUser(any(), any())).willReturn(fromUserCreateDto(user));
+        given(userService.createUser(any(), any())).willReturn(fromUserCreateDto(user));
 
         this.mockMvc
                 .perform(
@@ -95,7 +96,7 @@ class UserControllerTest {
                 new MockPart("data", "", mapper.writeValueAsBytes(user), MediaType.APPLICATION_JSON);
         MockMultipartFile image = new MockMultipartFile("image", "test.jpg".getBytes());
 
-        given(userService.saveUser(any(), any()))
+        given(userService.createUser(any(), any()))
                 .willThrow(new UserException(UserErrorCode.EXIST_EMAIL));
 
         this.mockMvc
@@ -313,7 +314,7 @@ class UserControllerTest {
                 .monthBudget(100000L)
                 .age(20)
                 .userCategory(UserCategory.JOB_SEEKER)
-                .gender(1)
+                .gender(Gender.MALE)
                 .nickname("규준")
                 .regionId(1L)
                 .build();

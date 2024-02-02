@@ -21,10 +21,9 @@ public class User {
     private Long monthBudget;
     private Integer age;
     private UserCategory userCategory;
-    private Integer gender;
+    private Gender gender;
     private String nickname;
     private String imgSrc;
-    private Instant registerDate;
     private UserStatus userStatus;
     private Instant lastPasswordModifiedDate;
     private Long regionId;
@@ -41,10 +40,11 @@ public class User {
                 .gender(userCreateRequest.getGender())
                 .nickname(userCreateRequest.getNickname())
                 .imgSrc(imgUrl)
-                .registerDate(Instant.now())
                 .userStatus(UserStatus.ACTIVE)
                 .lastPasswordModifiedDate(Instant.now())
                 .regionId(userCreateRequest.getRegionId())
+                .createdAt(Instant.now())
+                .updatedAt(Instant.now())
                 .build();
     }
 
