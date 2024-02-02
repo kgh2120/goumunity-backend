@@ -30,7 +30,7 @@ public class FeedRecommend {
     private Long commentCount;
     private Long likeCount;
 
-    private boolean iLikeThat;
+    private Boolean iLikeThat;
 
     public static FeedRecommend from(FeedRecommendResource feedRecommendResource) {
         return FeedRecommend.builder()
@@ -48,7 +48,8 @@ public class FeedRecommend {
                 .updatedAt(feedRecommendResource.getUpdatedAt())
                 .images(feedRecommendResource.getImages())
                 .commentCount(feedRecommendResource.getCommentCount())
-                .iLikeThat(feedRecommendResource.isILikeThat())
+                .likeCount(feedRecommendResource.getLikeCount())
+                .iLikeThat(feedRecommendResource.getILikeThat())
                 .build();
     }
 }

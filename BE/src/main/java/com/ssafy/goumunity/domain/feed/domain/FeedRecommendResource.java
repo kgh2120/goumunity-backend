@@ -29,11 +29,11 @@ public class FeedRecommendResource {
     private Long commentCount;
     private Long likeCount;
 
-    private boolean iLikeThat;
+    private Boolean iLikeThat;
 
     @QueryProjection
     public FeedRecommendResource(
-            FeedEntity feed, Long commentCount, Long likeCount, boolean iLikeThat) {
+            FeedEntity feed, Long commentCount, Long likeCount, Boolean iLikeThat) {
         this.feedId = feed.getId();
         this.content = feed.getContent();
         this.feedCategory = feed.getFeedCategory();
