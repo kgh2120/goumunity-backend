@@ -25,7 +25,8 @@ public enum GlobalErrorCode implements ErrorCode {
             "현재 서비스 상태가 고르지 못해 이용에 차질이 발생합니다. 운영자 이메일을 통해 상황을 제보 부탁드립니다."),
 
     FILE_SIZE_LIMIT_EXCEEDED(HttpStatus.BAD_REQUEST, "업로드하신 파일의 크기가 너무 큽니다. 10MB 아래의 파일로 설정해주세요"),
-    ;
+
+    UNAUTHORIZED_ACCESS(HttpStatus.UNAUTHORIZED, "로그인 후 접근해주세요");
 
     private final HttpStatus httpStatus;
     private final String errorMessage;

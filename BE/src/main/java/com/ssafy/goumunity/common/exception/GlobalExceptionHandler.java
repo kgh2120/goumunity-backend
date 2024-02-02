@@ -9,11 +9,13 @@ import org.apache.tomcat.util.http.fileupload.impl.FileSizeLimitExceededExceptio
 import org.apache.tomcat.util.http.fileupload.impl.SizeLimitExceededException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.transaction.CannotCreateTransactionException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
 @Slf4j
 @RestControllerAdvice
@@ -71,6 +73,22 @@ public class GlobalExceptionHandler {
         log.debug("SizeLimitExceededException Error 발생", e);
         return ResponseEntity.status(FILE_SIZE_LIMIT_EXCEEDED.getHttpStatus())
                 .body(ErrorResponse.createErrorResponse(FILE_SIZE_LIMIT_EXCEEDED, request.getRequestURI()));
+    }
+
+    @ExceptionHandler(MaxUploadSizeExceededException.class)
+    public ResponseEntity<ErrorResponse> handleMaxUploadSizeExceededException(
+            HttpServletRequest request, MaxUploadSizeExceededException e) {
+        log.debug("MaxUploadSizeExceededException Error 발생", e);
+        return ResponseEntity.status(FILE_SIZE_LIMIT_EXCEEDED.getHttpStatus())
+                .body(ErrorResponse.createErrorResponse(FILE_SIZE_LIMIT_EXCEEDED, request.getRequestURI()));
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ErrorResponse> handleAccessDeniedException(
+            HttpServletRequest request, AccessDeniedException e) {
+        log.debug("AccessDeniedException Error 발생", e);
+        return ResponseEntity.status(FORBIDDEN.getHttpStatus())
+                .body(ErrorResponse.createErrorResponse(FORBIDDEN, request.getRequestURI()));
     }
 
     @ExceptionHandler(InternalServerException.class)
