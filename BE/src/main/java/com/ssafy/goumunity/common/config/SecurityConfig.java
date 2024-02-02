@@ -3,6 +3,7 @@ package com.ssafy.goumunity.common.config;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.goumunity.common.config.security.AuthenticationFilter;
 import com.ssafy.goumunity.common.config.security.AuthorizationFilter;
+import com.ssafy.goumunity.common.config.security.UnauthorizedEntryPoint;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -64,12 +65,24 @@ public class SecurityConfig {
                 .formLogin(FormLoginConfigurer::disable)
                 .httpBasic(HttpBasicConfigurer::disable)
                 .cors(c -> c.configurationSource(corsConfigurationSource()))
-                .authorizeHttpRequests(auth -> auth.requestMatchers("/**").permitAll())
+                .authorizeHttpRequests(
+                        auth ->
+                                auth.requestMatchers(
+                                                "/api/users/join",
+                                                "/api/users/login",
+                                                "/api/users/nickname/validation",
+                                                "/api/users/email/verification")
+                                        .permitAll()
+                                        .requestMatchers("/**")
+                                        .authenticated())
                 .authenticationManager(authAuthenticationManager)
+                .exceptionHandling(
+                        exceptionHandling ->
+                                exceptionHandling.authenticationEntryPoint(
+                                        new UnauthorizedEntryPoint(objectMapper)))
                 .addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class)
-                .addFilterAfter(
-                        new AuthorizationFilter(SESSION_LOGIN_USER_KEY),
-                        UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(
+                        new AuthorizationFilter(SESSION_LOGIN_USER_KEY), AuthenticationFilter.class)
                 .build();
     }
 

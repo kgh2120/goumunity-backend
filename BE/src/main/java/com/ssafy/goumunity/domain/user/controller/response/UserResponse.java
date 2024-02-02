@@ -16,7 +16,7 @@ public class UserResponse {
     private Integer gender;
     private String nickname;
     private String imgSrc;
-    private Integer regionId;
+    private Long regionId;
 
     public static UserResponse from(User user) {
         return UserResponse.builder()

@@ -54,7 +54,7 @@ class FeedLikeControllerTest {
                         .userCategory(UserCategory.JOB_SEEKER)
                         .gender(1)
                         .nickname("규준")
-                        .regionId(1)
+                        .regionId(1L)
                         .build();
 
         mockMvc
@@ -81,7 +81,7 @@ class FeedLikeControllerTest {
                         .userCategory(UserCategory.JOB_SEEKER)
                         .gender(1)
                         .nickname("규준")
-                        .regionId(1)
+                        .regionId(1L)
                         .build();
 
         mockMvc

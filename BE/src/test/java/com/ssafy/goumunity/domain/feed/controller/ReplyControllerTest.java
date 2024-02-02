@@ -73,7 +73,7 @@ class ReplyControllerTest {
                         .userCategory(UserCategory.JOB_SEEKER)
                         .gender(1)
                         .nickname("규준")
-                        .regionId(1)
+                        .regionId(1L)
                         .build();
 
         Long commentId = 1L;
@@ -107,7 +107,7 @@ class ReplyControllerTest {
                         .userCategory(UserCategory.JOB_SEEKER)
                         .gender(1)
                         .nickname("규준")
-                        .regionId(1)
+                        .regionId(1L)
                         .build();
 
         Long commentId = 1L;
@@ -142,7 +142,7 @@ class ReplyControllerTest {
                         .userCategory(UserCategory.JOB_SEEKER)
                         .gender(1)
                         .nickname("규준")
-                        .regionId(1)
+                        .regionId(1L)
                         .build();
 
         Long commentId = 1L;
@@ -194,7 +194,7 @@ class ReplyControllerTest {
                         .userCategory(UserCategory.JOB_SEEKER)
                         .gender(1)
                         .nickname("규준")
-                        .regionId(1)
+                        .regionId(1L)
                         .build();
 
         Long commentId = 1L;
@@ -233,7 +233,7 @@ class ReplyControllerTest {
                         .userCategory(UserCategory.JOB_SEEKER)
                         .gender(1)
                         .nickname("규준")
-                        .regionId(1)
+                        .regionId(1L)
                         .build();
 
         ReplyResponse reply =
@@ -281,7 +281,7 @@ class ReplyControllerTest {
                         .userCategory(UserCategory.JOB_SEEKER)
                         .gender(1)
                         .nickname("규준")
-                        .regionId(1)
+                        .regionId(1L)
                         .build();
 
         long commentId = 1L;
@@ -316,7 +316,7 @@ class ReplyControllerTest {
                         .userCategory(UserCategory.JOB_SEEKER)
                         .gender(1)
                         .nickname("규준")
-                        .regionId(1)
+                        .regionId(1L)
                         .build();
         long commentId = 1L;
 

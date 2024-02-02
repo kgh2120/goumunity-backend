@@ -1,5 +1,7 @@
 package com.ssafy.goumunity.domain.user.controller.request;
 
+import com.ssafy.goumunity.common.constraint.Email;
+import com.ssafy.goumunity.common.constraint.Password;
 import com.ssafy.goumunity.domain.user.domain.UserCategory;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
@@ -13,13 +15,9 @@ import lombok.NoArgsConstructor;
 @Getter
 public class UserCreateRequest {
 
-    @Email
-    @NotBlank(message = "이메일은 필수값입니다.")
-    private String email;
+    @Email private String email;
 
-    @NotBlank(message = "비밀번호는 필수값입니다.")
-    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#\\$%])[a-zA-Z\\d!@#\\$%]{8,20}$")
-    private String password;
+    @Password private String password;
 
     private Long monthBudget;
 
@@ -38,5 +36,5 @@ public class UserCreateRequest {
     private String nickname;
 
     @NotNull(message = "지역 id는 필수값입니다.")
-    private Integer regionId;
+    private Long regionId;
 }

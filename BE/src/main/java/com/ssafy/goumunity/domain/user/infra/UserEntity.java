@@ -56,7 +56,7 @@ public class UserEntity {
     private Instant lastPasswordModifiedDate;
 
     @Column(name = "region_id")
-    private Integer regionId;
+    private Long regionId;
 
     @Column(name = "created_at")
     private Instant createdAt;

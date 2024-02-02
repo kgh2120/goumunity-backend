@@ -46,7 +46,7 @@ public class UserServiceTest {
                         .userCategory(UserCategory.JOB_SEEKER)
                         .gender(1)
                         .nickname("청룡이")
-                        .regionId(1)
+                        .regionId(1L)
                         .build();
 
         MockMultipartFile image = new MockMultipartFile("image", "test.jpg".getBytes());
