@@ -1,7 +1,9 @@
 spring:
   profiles:
-    default: local
+    default: gyu
   cloud:
     config:
       uri: https://www.ssafyhelper.shop
       name: application
+  cache:
+    cache-names:
