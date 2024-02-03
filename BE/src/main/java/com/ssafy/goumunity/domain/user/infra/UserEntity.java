@@ -1,5 +1,6 @@
 package com.ssafy.goumunity.domain.user.infra;
 
+import com.ssafy.goumunity.domain.user.domain.Gender;
 import com.ssafy.goumunity.domain.user.domain.User;
 import com.ssafy.goumunity.domain.user.domain.UserCategory;
 import com.ssafy.goumunity.domain.user.domain.UserStatus;
@@ -37,16 +38,14 @@ public class UserEntity {
     private UserCategory userCategory;
 
     @Column(name = "gender")
-    private Integer gender;
+    @Enumerated(EnumType.STRING)
+    private Gender gender;
 
     @Column(name = "nickname")
     private String nickname;
 
     @Column(name = "img_src")
     private String imgSrc;
-
-    @Column(name = "register_date")
-    private Instant registerDate;
 
     @Column(name = "status")
     @Enumerated(EnumType.STRING)
@@ -56,7 +55,7 @@ public class UserEntity {
     private Instant lastPasswordModifiedDate;
 
     @Column(name = "region_id")
-    private Integer regionId;
+    private Long regionId;
 
     @Column(name = "created_at")
     private Instant createdAt;
@@ -65,7 +64,6 @@ public class UserEntity {
     private Instant updatedAt;
 
     public static UserEntity fromModel(User user) {
-
         return UserEntity.builder()
                 .id(user.getId())
                 .email(user.getEmail())
@@ -76,7 +74,6 @@ public class UserEntity {
                 .gender(user.getGender())
                 .nickname(user.getNickname())
                 .imgSrc(user.getImgSrc())
-                .registerDate(user.getRegisterDate())
                 .userStatus(user.getUserStatus())
                 .lastPasswordModifiedDate(user.getLastPasswordModifiedDate())
                 .regionId(user.getRegionId())
@@ -96,7 +93,6 @@ public class UserEntity {
                 .gender(this.gender)
                 .nickname(this.nickname)
                 .imgSrc(this.imgSrc)
-                .registerDate(this.registerDate)
                 .userStatus(this.userStatus)
                 .lastPasswordModifiedDate(this.lastPasswordModifiedDate)
                 .regionId(this.regionId)

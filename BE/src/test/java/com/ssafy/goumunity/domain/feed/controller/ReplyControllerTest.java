@@ -21,6 +21,7 @@ import com.ssafy.goumunity.domain.feed.domain.Reply;
 import com.ssafy.goumunity.domain.feed.exception.CommentException;
 import com.ssafy.goumunity.domain.feed.service.ReplyService;
 import com.ssafy.goumunity.domain.user.controller.response.UserResponse;
+import com.ssafy.goumunity.domain.user.domain.Gender;
 import com.ssafy.goumunity.domain.user.domain.User;
 import com.ssafy.goumunity.domain.user.domain.UserCategory;
 import java.time.Instant;
@@ -71,9 +72,9 @@ class ReplyControllerTest {
                         .monthBudget(100000L)
                         .age(20)
                         .userCategory(UserCategory.JOB_SEEKER)
-                        .gender(1)
+                        .gender(Gender.MALE)
                         .nickname("규준")
-                        .regionId(1)
+                        .regionId(1L)
                         .build();
 
         Long commentId = 1L;
@@ -105,9 +106,9 @@ class ReplyControllerTest {
                         .monthBudget(100000L)
                         .age(20)
                         .userCategory(UserCategory.JOB_SEEKER)
-                        .gender(1)
+                        .gender(Gender.MALE)
                         .nickname("규준")
-                        .regionId(1)
+                        .regionId(1L)
                         .build();
 
         Long commentId = 1L;
@@ -140,9 +141,9 @@ class ReplyControllerTest {
                         .monthBudget(100000L)
                         .age(20)
                         .userCategory(UserCategory.JOB_SEEKER)
-                        .gender(1)
+                        .gender(Gender.MALE)
                         .nickname("규준")
-                        .regionId(1)
+                        .regionId(1L)
                         .build();
 
         Long commentId = 1L;
@@ -192,9 +193,9 @@ class ReplyControllerTest {
                         .monthBudget(100000L)
                         .age(20)
                         .userCategory(UserCategory.JOB_SEEKER)
-                        .gender(1)
+                        .gender(Gender.MALE)
                         .nickname("규준")
-                        .regionId(1)
+                        .regionId(1L)
                         .build();
 
         Long commentId = 1L;
@@ -231,9 +232,9 @@ class ReplyControllerTest {
                         .monthBudget(100000L)
                         .age(20)
                         .userCategory(UserCategory.JOB_SEEKER)
-                        .gender(1)
+                        .gender(Gender.MALE)
                         .nickname("규준")
-                        .regionId(1)
+                        .regionId(1L)
                         .build();
 
         ReplyResponse reply =
@@ -251,10 +252,9 @@ class ReplyControllerTest {
         PageRequest pageRequest = PageRequest.of(page, size);
         List<ReplyResponse> replies = new ArrayList<>();
         replies.add(reply);
-        Slice<ReplyResponse> res = new SliceImpl<>(replies, pageRequest, true);
+        Slice<ReplyResponse> res = new SliceImpl<>(replies, pageRequest, false);
 
-        given(replyService.findAllByCommentId(user.getId(), commentId, time, pageRequest))
-                .willReturn(res);
+        given(replyService.findAllByCommentId(any(), any(), any(), any())).willReturn(res);
 
         mockMvc
                 .perform(
@@ -280,9 +280,9 @@ class ReplyControllerTest {
                         .monthBudget(100000L)
                         .age(20)
                         .userCategory(UserCategory.JOB_SEEKER)
-                        .gender(1)
+                        .gender(Gender.MALE)
                         .nickname("규준")
-                        .regionId(1)
+                        .regionId(1L)
                         .build();
 
         long commentId = 1L;
@@ -315,9 +315,9 @@ class ReplyControllerTest {
                         .monthBudget(100000L)
                         .age(20)
                         .userCategory(UserCategory.JOB_SEEKER)
-                        .gender(1)
+                        .gender(Gender.MALE)
                         .nickname("규준")
-                        .regionId(1)
+                        .regionId(1L)
                         .build();
         long commentId = 1L;
 

@@ -32,9 +32,19 @@ public class CommentController {
 
     @GetMapping
     public ResponseEntity<SliceResponse<CommentResponse>> findAllComments(
-            @PathVariable Long feedId, @RequestParam("time") Long time, Pageable pageable) {
-        Slice<CommentResponse> comments = commentService.findAllByFeedId(feedId, time, pageable);
+            @AuthenticationPrincipal User user,
+            @PathVariable Long feedId,
+            @RequestParam("time") Long time,
+            Pageable pageable) {
+        Slice<CommentResponse> comments =
+                commentService.findAllByFeedId(user.getId(), feedId, time, pageable);
         return ResponseEntity.ok(SliceResponse.from(comments.getContent(), comments.hasNext()));
+    }
+
+    @GetMapping("/{commentId}")
+    public ResponseEntity<CommentResponse> findOneByCommentId(
+            @AuthenticationPrincipal User user, @PathVariable Long feedId, @PathVariable Long commentId) {
+        return ResponseEntity.ok(commentService.findOneComment(user.getId(), commentId));
     }
 
     @PatchMapping("/{commentId}")

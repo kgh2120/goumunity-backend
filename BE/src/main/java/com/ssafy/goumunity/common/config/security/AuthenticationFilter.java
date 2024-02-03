@@ -1,7 +1,10 @@
 package com.ssafy.goumunity.common.config.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ssafy.goumunity.common.constraint.ConstraintsValidators;
+import com.ssafy.goumunity.common.exception.ErrorResponse;
 import com.ssafy.goumunity.domain.user.controller.request.UserLoginRequest;
+import com.ssafy.goumunity.domain.user.exception.UserErrorCode;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -10,6 +13,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -35,7 +39,11 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        log.info("login access : {}", dto);
+
+        if (!ConstraintsValidators.validateLoginPattern(dto)) {
+            throw new AuthenticationFailureException(UserErrorCode.LOGIN_FAILED);
+        }
+
         return authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(dto.getId(), dto.getPassword(), new ArrayList<>()));
     }
@@ -52,5 +60,19 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
         request.getSession().setAttribute(SESSION_LOGIN_USER_KEY, principal.getUser());
 
         SecurityContextHolder.getContext().setAuthentication(authResult);
+    }
+
+    @Override
+    protected void unsuccessfulAuthentication(
+            HttpServletRequest request, HttpServletResponse response, AuthenticationException failed)
+            throws IOException, ServletException {
+        log.error("unsuccessfulAuthentication", failed);
+        response.setStatus(HttpStatus.UNAUTHORIZED.value());
+        response.setContentType("application/json; charset=utf-8");
+        ErrorResponse errorResponse =
+                ErrorResponse.createErrorResponse(
+                        ((AuthenticationFailureException) failed).getErrorCode(), request.getRequestURI());
+        String errorMsg = objectMapper.writeValueAsString(errorResponse);
+        response.getWriter().write(errorMsg);
     }
 }

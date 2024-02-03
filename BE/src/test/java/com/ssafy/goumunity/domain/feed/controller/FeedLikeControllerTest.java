@@ -9,6 +9,7 @@ import com.ssafy.goumunity.common.config.SecurityConfig;
 import com.ssafy.goumunity.common.config.security.CustomDetails;
 import com.ssafy.goumunity.common.exception.GlobalExceptionHandler;
 import com.ssafy.goumunity.domain.feed.service.FeedLikeService;
+import com.ssafy.goumunity.domain.user.domain.Gender;
 import com.ssafy.goumunity.domain.user.domain.User;
 import com.ssafy.goumunity.domain.user.domain.UserCategory;
 import org.junit.jupiter.api.DisplayName;
@@ -52,9 +53,9 @@ class FeedLikeControllerTest {
                         .monthBudget(100000L)
                         .age(20)
                         .userCategory(UserCategory.JOB_SEEKER)
-                        .gender(1)
+                        .gender(Gender.MALE)
                         .nickname("규준")
-                        .regionId(1)
+                        .regionId(1L)
                         .build();
 
         mockMvc
@@ -79,9 +80,9 @@ class FeedLikeControllerTest {
                         .monthBudget(100000L)
                         .age(20)
                         .userCategory(UserCategory.JOB_SEEKER)
-                        .gender(1)
+                        .gender(Gender.MALE)
                         .nickname("규준")
-                        .regionId(1)
+                        .regionId(1L)
                         .build();
 
         mockMvc

@@ -1,6 +1,7 @@
 package com.ssafy.goumunity.domain.region.controller;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -58,7 +59,7 @@ class RegionControllerTest {
 
         RegionResponse regionResponse =
                 RegionResponse.builder()
-                        .regionId(Long.valueOf(1))
+                        .regionId(1L)
                         .si("서울시")
                         .gungu("중구")
                         .createdAt(Instant.now().toEpochMilli())

@@ -13,7 +13,7 @@ public interface FeedService {
 
     List<FeedRecommend> findFeed(User user, Long regionId);
 
-    FeedResponse findOneByFeedId(Long feedId);
+    FeedResponse findOneFeed(Long userId, Long feedId);
 
     void modifyFeed(
             Long userId, Long feedId, FeedRequest.Modify feedRequest, List<MultipartFile> images);

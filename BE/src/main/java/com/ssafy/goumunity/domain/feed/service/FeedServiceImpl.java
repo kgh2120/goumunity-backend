@@ -83,8 +83,8 @@ public class FeedServiceImpl implements FeedService {
     }
 
     @Override
-    public FeedResponse findOneByFeedId(Long feedId) {
-        return feedRepository.findOneFeed(feedId);
+    public FeedResponse findOneFeed(Long userId, Long feedId) {
+        return feedRepository.findOneFeed(userId, feedId);
     }
 
     @Override

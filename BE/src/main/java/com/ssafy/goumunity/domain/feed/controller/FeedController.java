@@ -42,8 +42,9 @@ public class FeedController {
     }
 
     @GetMapping("/{feedId}")
-    public ResponseEntity<FeedResponse> findOneByFeedId(@PathVariable Long feedId) {
-        return ResponseEntity.ok(feedService.findOneByFeedId(feedId));
+    public ResponseEntity<FeedResponse> findOneByFeedId(
+            @AuthenticationPrincipal User user, @PathVariable Long feedId) {
+        return ResponseEntity.ok(feedService.findOneFeed(user.getId(), feedId));
     }
 
     @PatchMapping("{feedId}")

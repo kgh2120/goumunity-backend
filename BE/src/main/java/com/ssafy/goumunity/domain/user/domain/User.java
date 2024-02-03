@@ -1,8 +1,7 @@
 package com.ssafy.goumunity.domain.user.domain;
 
 import com.ssafy.goumunity.common.exception.CustomException;
-import com.ssafy.goumunity.domain.user.controller.request.UserCreateRequest;
-import com.ssafy.goumunity.domain.user.controller.request.UserModifyRequest;
+import com.ssafy.goumunity.domain.user.controller.request.UserRequest;
 import com.ssafy.goumunity.domain.user.exception.UserErrorCode;
 import com.ssafy.goumunity.domain.user.exception.UserException;
 import java.time.Instant;
@@ -10,8 +9,8 @@ import lombok.*;
 
 @Getter
 @Builder
-@AllArgsConstructor
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @EqualsAndHashCode(exclude = {"lastPasswordModifiedDate", "createdAt", "updatedAt"})
 public class User {
 
@@ -21,30 +20,30 @@ public class User {
     private Long monthBudget;
     private Integer age;
     private UserCategory userCategory;
-    private Integer gender;
+    private Gender gender;
     private String nickname;
     private String imgSrc;
-    private Instant registerDate;
     private UserStatus userStatus;
     private Instant lastPasswordModifiedDate;
-    private Integer regionId;
+    private Long regionId;
     private Instant createdAt;
     private Instant updatedAt;
 
-    public static User from(UserCreateRequest userCreateRequest, String imgUrl, String encodedPw) {
+    public static User create(UserRequest.Create userRequest, String imgUrl, String encodedPw) {
         return User.builder()
-                .email(userCreateRequest.getEmail())
+                .email(userRequest.getEmail())
                 .password(encodedPw)
-                .monthBudget(userCreateRequest.getMonthBudget())
-                .age(userCreateRequest.getAge())
-                .userCategory(userCreateRequest.getUserCategory())
-                .gender(userCreateRequest.getGender())
-                .nickname(userCreateRequest.getNickname())
+                .monthBudget(userRequest.getMonthBudget())
+                .age(userRequest.getAge())
+                .userCategory(userRequest.getUserCategory())
+                .gender(userRequest.getGender())
+                .nickname(userRequest.getNickname())
                 .imgSrc(imgUrl)
-                .registerDate(Instant.now())
                 .userStatus(UserStatus.ACTIVE)
                 .lastPasswordModifiedDate(Instant.now())
-                .regionId(userCreateRequest.getRegionId())
+                .regionId(userRequest.getRegionId())
+                .createdAt(Instant.now())
+                .updatedAt(Instant.now())
                 .build();
     }
 
@@ -60,7 +59,7 @@ public class User {
      * @param dto
      * @throws CustomException 파라미터의 모든 필드가 비어있으면 예외 발생
      */
-    public void modifyUserInfo(UserModifyRequest dto) {
+    public void modifyUserInfo(UserRequest.Modify dto) {
         boolean emptyCheckFlag = true;
         if (dto.getMonthBudget() != null) {
             this.monthBudget = dto.getMonthBudget();
