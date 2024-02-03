@@ -35,10 +35,8 @@ public class FeedController {
 
     @GetMapping
     public ResponseEntity<FeedRecommendResponse> findFeed(@AuthenticationPrincipal User user) {
-        return ResponseEntity.ok(
-                FeedRecommendResponse.builder()
-                        .feedRecommends(feedService.findFeed(user, Long.valueOf(user.getRegionId())))
-                        .build());
+        // TODO : 피드 중복 방지를 위한 캐싱 기능 추가
+        return ResponseEntity.ok(feedService.findFeed(user, Long.valueOf(user.getRegionId())));
     }
 
     @GetMapping("/{feedId}")
