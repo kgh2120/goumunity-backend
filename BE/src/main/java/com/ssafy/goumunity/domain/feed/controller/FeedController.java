@@ -37,7 +37,7 @@ public class FeedController {
     public ResponseEntity<FeedRecommendResponse> findFeed(@AuthenticationPrincipal User user) {
         return ResponseEntity.ok(
                 FeedRecommendResponse.builder()
-                        .feedRecommends(feedService.findFeed(user, Long.valueOf(user.getRegionId())))
+                        .feedRecommends(feedService.findFeed(user, user.getRegionId()))
                         .build());
     }
 
