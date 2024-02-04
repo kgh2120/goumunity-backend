@@ -3,11 +3,12 @@ package com.ssafy.goumunity.domain.user.controller.response;
 import com.ssafy.goumunity.domain.user.domain.Gender;
 import com.ssafy.goumunity.domain.user.domain.User;
 import com.ssafy.goumunity.domain.user.domain.UserCategory;
-import lombok.Builder;
-import lombok.Getter;
+import lombok.*;
 
-@Getter
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
+@Getter
 public class UserResponse {
     private Long id;
     private String email;

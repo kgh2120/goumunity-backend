@@ -62,7 +62,7 @@ public class UserController {
         return ResponseEntity.ok(verificationService.verificate(verificationCodeRequest));
     }
 
-    @PutMapping("/my/password")
+    @PatchMapping("/my/password")
     public ResponseEntity<Void> modifyPassword(
             @AuthenticationPrincipal User user,
             @RequestBody @Valid PasswordModifyRequest passwordModifyRequest,
@@ -98,7 +98,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(UserResponse.from(me));
     }
 
-    @PutMapping("/my")
+    @PatchMapping("/my")
     public ResponseEntity<Void> ModifyMyUser(
             @AuthenticationPrincipal User user,
             @RequestBody @Valid UserRequest.Modify userModifyRequest,
