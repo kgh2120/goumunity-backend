@@ -167,8 +167,7 @@ public class FeedServiceImpl implements FeedService {
         feedRepository.delete(originalFeed.getId());
     }
 
-    @Override
-    public void findAllByRecommend(User user, Long regionId) {
+    private void findAllByRecommend(User user, Long regionId) {
         List<FeedRecommendResource> feeds = feedRepository.findFeed(user.getId(), regionId);
         List<FeedWeight> feedWeights =
                 feeds.stream().map(item -> FeedWeight.from(item, user)).sorted().toList();

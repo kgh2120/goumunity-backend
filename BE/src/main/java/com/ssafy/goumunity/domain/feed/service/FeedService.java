@@ -19,6 +19,4 @@ public interface FeedService {
             Long userId, Long feedId, FeedRequest.Modify feedRequest, List<MultipartFile> images);
 
     void deleteFeed(Long userId, Long feedId);
-
-    void findAllByRecommend(User user, Long regionId);
 }
