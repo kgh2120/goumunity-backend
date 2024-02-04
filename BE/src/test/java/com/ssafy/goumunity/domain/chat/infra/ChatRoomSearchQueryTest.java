@@ -4,6 +4,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.goumunity.domain.chat.controller.response.MyChatRoomResponse;
+import com.ssafy.goumunity.domain.chat.infra.chat.ChatEntity;
+import com.ssafy.goumunity.domain.chat.infra.chat.ChatType;
 import com.ssafy.goumunity.domain.chat.infra.chatroom.ChatRoomEntity;
 import com.ssafy.goumunity.domain.chat.infra.chatroom.ChatRoomJpaRepository;
 import com.ssafy.goumunity.domain.chat.infra.chatroom.ChatRoomQueryDslRepository;
@@ -136,13 +138,15 @@ class ChatRoomSearchQueryTest {
         HashtagEntity h3 = HashtagEntity.builder().name("10만원 미만").build();
         em.persist(h3);
 
+        ChatRoomEntity chatRoom = null;
+
         for (int i = 0; i < 15; i++) {
-            ChatRoomEntity chatRoom =
+            chatRoom =
                     ChatRoomEntity.builder()
                             .title("거지방" + i)
                             .capability(10)
                             .host(users)
-                            .createdAt(Instant.ofEpochMilli(100L))
+                            .createdAt(Instant.ofEpochMilli(1000L))
                             .build();
             em.persist(chatRoom);
 
@@ -155,7 +159,66 @@ class ChatRoomSearchQueryTest {
             em.persist(
                     ChatRoomHashtagEntity.builder().chatRoom(chatRoom).hashtag(h3).sequence(3).build());
 
-            em.persist(UserChatRoomEntity.builder().chatRoom(chatRoom).user(users).build());
+            em.persist(
+                    UserChatRoomEntity.builder()
+                            .chatRoom(chatRoom)
+                            .user(users)
+                            .lastAccessTime(Instant.ofEpochMilli(100L))
+                            .build());
+
+            for (int j = 0; j < 10; j++) {
+                em.persist(
+                        ChatEntity.builder()
+                                .chatRoomEntity(chatRoom)
+                                .user(users)
+                                .chatType(ChatType.MESSAGE)
+                                .content("hi")
+                                .createdAt(Instant.now())
+                                .build());
+            }
+            for (int j = 0; j < 10; j++) {
+                em.persist(
+                        ChatEntity.builder()
+                                .chatRoomEntity(chatRoom)
+                                .user(users)
+                                .chatType(ChatType.MESSAGE)
+                                .content("hi")
+                                .createdAt(Instant.ofEpochMilli(10L))
+                                .build());
+            }
+        }
+
+        chatRoom =
+                ChatRoomEntity.builder()
+                        .title("거지방---111")
+                        .capability(10)
+                        .host(users)
+                        .createdAt(Instant.ofEpochMilli(1000L))
+                        .build();
+        em.persist(chatRoom);
+
+        em.persist(ChatRoomHashtagEntity.builder().chatRoom(chatRoom).hashtag(h1).sequence(1).build());
+
+        em.persist(ChatRoomHashtagEntity.builder().chatRoom(chatRoom).hashtag(h2).sequence(2).build());
+
+        em.persist(ChatRoomHashtagEntity.builder().chatRoom(chatRoom).hashtag(h3).sequence(3).build());
+
+        em.persist(
+                UserChatRoomEntity.builder()
+                        .chatRoom(chatRoom)
+                        .user(users)
+                        .lastAccessTime(Instant.ofEpochMilli(100L))
+                        .build());
+
+        for (int j = 0; j < 30; j++) {
+            em.persist(
+                    ChatEntity.builder()
+                            .chatRoomEntity(chatRoom)
+                            .user(users)
+                            .chatType(ChatType.MESSAGE)
+                            .content("hi")
+                            .createdAt(Instant.now())
+                            .build());
         }
 
         em.flush();
@@ -167,6 +230,10 @@ class ChatRoomSearchQueryTest {
 
         List<MyChatRoomResponse> content = res.getContent();
         assertThat(content.size()).isSameAs(10);
+        assertThat(content.get(0).getCurrentUserCount()).isEqualTo(1);
+        assertThat(content.get(0).getUnReadMessageCount()).isEqualTo(30);
+        assertThat(content.get(1).getUnReadMessageCount()).isEqualTo(10);
+
         assertThat(res.hasNext()).isTrue();
     }
 }

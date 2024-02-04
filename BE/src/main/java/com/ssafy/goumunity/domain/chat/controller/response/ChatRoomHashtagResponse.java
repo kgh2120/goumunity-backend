@@ -3,6 +3,7 @@ package com.ssafy.goumunity.domain.chat.controller.response;
 import com.ssafy.goumunity.domain.chat.infra.hashtag.ChatRoomHashtagEntity;
 import lombok.*;
 
+@ToString
 @Data
 @Builder
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
