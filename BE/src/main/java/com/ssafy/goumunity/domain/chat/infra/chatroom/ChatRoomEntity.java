@@ -6,6 +6,7 @@ import com.ssafy.goumunity.domain.region.infra.RegionEntity;
 import com.ssafy.goumunity.domain.user.infra.UserEntity;
 import jakarta.persistence.*;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.*;
 
@@ -51,10 +52,10 @@ public class ChatRoomEntity {
     private UserEntity host;
 
     @OneToMany(mappedBy = "chatRoom", cascade = CascadeType.REMOVE)
-    private List<ChatRoomHashtagEntity> chatRoomHashtags;
+    private List<ChatRoomHashtagEntity> chatRoomHashtags = new ArrayList<>();
 
     @OneToMany(mappedBy = "chatRoom", cascade = CascadeType.REMOVE)
-    private List<UserChatRoomEntity> userChatRooms;
+    private List<UserChatRoomEntity> userChatRooms = new ArrayList<>();
 
     public static ChatRoomEntity from(ChatRoom chatRoom) {
         return ChatRoomEntity.builder()
