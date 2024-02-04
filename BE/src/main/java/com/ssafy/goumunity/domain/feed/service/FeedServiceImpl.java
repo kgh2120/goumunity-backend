@@ -68,7 +68,7 @@ public class FeedServiceImpl implements FeedService {
                 List<FeedRecommend> tempReturn =
                         cacheManager.getCache("recommends").get(user.getNickname(), List.class).stream()
                                 .skip((maxPage - 1) * 10)
-                                .limit(maxPage * 10)
+                                .limit(10)
                                 .toList();
                 findAllByRecommend(user, regionId);
                 return tempReturn;
@@ -78,7 +78,7 @@ public class FeedServiceImpl implements FeedService {
         cacheManager.getCache("pagenumber").put(user.getNickname(), pageNumber + 1);
         return cacheManager.getCache("recommends").get(user.getNickname(), List.class).stream()
                 .skip((pageNumber - 1) * 10)
-                .limit((pageNumber) * 10)
+                .limit(10)
                 .toList();
     }
 
