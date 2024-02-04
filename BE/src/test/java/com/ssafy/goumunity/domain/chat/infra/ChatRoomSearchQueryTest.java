@@ -169,7 +169,7 @@ class ChatRoomSearchQueryTest {
             for (int j = 0; j < 10; j++) {
                 em.persist(
                         ChatEntity.builder()
-                                .chatRoomEntity(chatRoom)
+                                .chatRoom(chatRoom)
                                 .user(users)
                                 .chatType(ChatType.MESSAGE)
                                 .content("hi")
@@ -179,7 +179,7 @@ class ChatRoomSearchQueryTest {
             for (int j = 0; j < 10; j++) {
                 em.persist(
                         ChatEntity.builder()
-                                .chatRoomEntity(chatRoom)
+                                .chatRoom(chatRoom)
                                 .user(users)
                                 .chatType(ChatType.MESSAGE)
                                 .content("hi")
@@ -213,7 +213,7 @@ class ChatRoomSearchQueryTest {
         for (int j = 0; j < 30; j++) {
             em.persist(
                     ChatEntity.builder()
-                            .chatRoomEntity(chatRoom)
+                            .chatRoom(chatRoom)
                             .user(users)
                             .chatType(ChatType.MESSAGE)
                             .content("hi")

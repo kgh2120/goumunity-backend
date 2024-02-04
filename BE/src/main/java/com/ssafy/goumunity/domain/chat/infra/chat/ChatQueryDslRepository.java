@@ -35,7 +35,7 @@ public class ChatQueryDslRepository {
                         .fetchJoin()
                         .where(
                                 chatEntity
-                                        .chatRoomEntity
+                                        .chatRoom
                                         .id
                                         .eq(chatRoomId)
                                         .and(chatEntity.createdAt.before(Instant.ofEpochMilli(time))))
