@@ -431,6 +431,108 @@ class ChatRoomServiceImplTest {
                 .isInstanceOf(CustomException.class)
                 .hasFieldOrPropertyWithValue("errorCode", GlobalErrorCode.FORBIDDEN);
         // then
+    }
 
+    @Test
+    void 거지방_수정_테스트_성공() throws Exception {
+        // given
+        Long chatRoomId = 1L;
+        User user = User.builder().id(1L).build();
+        ChatRoomRequest.Modify modify =
+                ChatRoomRequest.Modify.builder()
+                        .title("거지거지거지방")
+                        .capability(20)
+                        .image("test")
+                        .hashtagRequests(new ArrayList<>())
+                        .build();
+        ChatRoom chatRoom =
+                ChatRoom.builder().userId(1L).title("거지방").hashtagsIds(new ArrayList<>()).build();
+        given(chatRoomRepository.findOneByChatRoomId(any())).willReturn(Optional.ofNullable(chatRoom));
+        // when
+        chatRoomService.modifyChatRoom(
+                chatRoomId, user, modify, new MockMultipartFile("image", new byte[0]));
+        // then
+        verify(chatRoomRepository).update(chatRoom);
+    }
+
+    @Test
+    void 거지방_수정_테스트_실패_image값과_file값이_둘_다_없을때() throws Exception {
+        // given
+        Long chatRoomId = 1L;
+        User user = User.builder().id(1L).build();
+        ChatRoomRequest.Modify modify =
+                ChatRoomRequest.Modify.builder()
+                        .title("거지거지거지방")
+                        .capability(20)
+                        .hashtagRequests(new ArrayList<>())
+                        .build();
+        // when // then
+        assertThatThrownBy(() -> chatRoomService.modifyChatRoom(chatRoomId, user, modify, null))
+                .isInstanceOf(CustomException.class)
+                .hasFieldOrPropertyWithValue("errorCode", GlobalErrorCode.BIND_ERROR);
+    }
+
+    @Test
+    void 거지방_수정_테스트_실패_image값과_file값이_둘_다_있을때() throws Exception {
+        // given
+        Long chatRoomId = 1L;
+        User user = User.builder().id(1L).build();
+        ChatRoomRequest.Modify modify =
+                ChatRoomRequest.Modify.builder()
+                        .title("거지거지거지방")
+                        .capability(20)
+                        .image("hello")
+                        .hashtagRequests(new ArrayList<>())
+                        .build();
+        // when // then
+        assertThatThrownBy(
+                        () ->
+                                chatRoomService.modifyChatRoom(
+                                        chatRoomId,
+                                        user,
+                                        modify,
+                                        new MockMultipartFile("image", new byte[] {123, 111})))
+                .isInstanceOf(CustomException.class)
+                .hasFieldOrPropertyWithValue("errorCode", GlobalErrorCode.BIND_ERROR);
+    }
+
+    @Test
+    void 거지방_수정_테스트_실패_채팅방이_존재하지_않을_때() throws Exception {
+        // given
+        Long chatRoomId = 1L;
+        User user = User.builder().id(1L).build();
+        ChatRoomRequest.Modify modify =
+                ChatRoomRequest.Modify.builder()
+                        .title("거지거지거지방")
+                        .capability(20)
+                        .image("hello")
+                        .hashtagRequests(new ArrayList<>())
+                        .build();
+        given(chatRoomRepository.findOneByChatRoomId(any())).willReturn(Optional.empty());
+        // when // then
+        assertThatThrownBy(() -> chatRoomService.modifyChatRoom(chatRoomId, user, modify, null))
+                .isInstanceOf(ChatException.class)
+                .hasFieldOrPropertyWithValue("errorCode", ChatErrorCode.CHAT_ROOM_NOT_FOUND);
+    }
+
+    @Test
+    void 거지방_수정_테스트_실패_왕초가_아닐_때() throws Exception {
+        // given
+        Long chatRoomId = 1L;
+        User user = User.builder().id(1L).build();
+        ChatRoomRequest.Modify modify =
+                ChatRoomRequest.Modify.builder()
+                        .title("거지거지거지방")
+                        .capability(20)
+                        .image("hello")
+                        .hashtagRequests(new ArrayList<>())
+                        .build();
+        ChatRoom chatRoom =
+                ChatRoom.builder().userId(2L).title("거지방").hashtagsIds(new ArrayList<>()).build();
+        given(chatRoomRepository.findOneByChatRoomId(any())).willReturn(Optional.ofNullable(chatRoom));
+        // when // then
+        assertThatThrownBy(() -> chatRoomService.modifyChatRoom(chatRoomId, user, modify, null))
+                .isInstanceOf(CustomException.class)
+                .hasFieldOrPropertyWithValue("errorCode", GlobalErrorCode.FORBIDDEN);
     }
 }

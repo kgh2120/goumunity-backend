@@ -39,6 +39,20 @@ public class ChatRoomRequest {
     @Builder
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
+    public static class Modify {
+        private String title;
+        private Integer capability;
+        private Long leader;
+        private String image;
+
+        @MaxListSize(5)
+        private List<HashtagRequest> hashtagRequests;
+    }
+
+    @Getter
+    @Builder
+    @AllArgsConstructor(access = AccessLevel.PRIVATE)
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
     public static class HashtagRequest {
         private Long id;
     }

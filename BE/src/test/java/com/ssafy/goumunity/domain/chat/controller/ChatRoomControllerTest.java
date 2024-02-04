@@ -1,5 +1,6 @@
 package com.ssafy.goumunity.domain.chat.controller;
 
+import static com.ssafy.goumunity.common.exception.GlobalErrorCode.BIND_ERROR;
 import static com.ssafy.goumunity.common.exception.GlobalErrorCode.FORBIDDEN;
 import static com.ssafy.goumunity.domain.chat.exception.ChatErrorCode.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -31,10 +32,14 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.SliceImpl;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.mock.web.MockPart;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMultipartHttpServletRequestBuilder;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.request.RequestPostProcessor;
 
 @WebMvcTest(controllers = {ChatRoomController.class, GlobalExceptionHandler.class})
 class ChatRoomControllerTest {
@@ -407,6 +412,155 @@ class ChatRoomControllerTest {
                         status().isForbidden(),
                         jsonPath("$.errorName").value(FORBIDDEN.getErrorName()),
                         jsonPath("$.errorMessage").value(FORBIDDEN.getErrorMessage()))
+                .andDo(print());
+    }
+
+    @WithMockUser
+    @Test
+    void 거지방_수정_테스트_성공() throws Exception {
+        // given
+
+        Long chatRoomId = 1L;
+
+        String url = CHAT_ROOM_API_PREFIX + "/" + chatRoomId;
+        ChatRoomRequest.Modify modify =
+                ChatRoomRequest.Modify.builder().title("거지거지거지방").capability(20).build();
+
+        MockPart data =
+                new MockPart("data", "", mapper.writeValueAsBytes(modify), MediaType.APPLICATION_JSON);
+        MockMultipartFile image = new MockMultipartFile("image", new byte[0]);
+
+        MockMultipartHttpServletRequestBuilder builder = MockMvcRequestBuilders.multipart(url);
+        builder.with(
+                new RequestPostProcessor() {
+                    @Override
+                    public MockHttpServletRequest postProcessRequest(MockHttpServletRequest request) {
+                        request.setMethod("PATCH");
+                        return request;
+                    }
+                });
+        // when
+        mockMvc
+                .perform(builder.part(data).file(image).with(csrf()))
+                // then
+                .andExpectAll(status().isOk())
+                .andDo(print());
+    }
+
+    @WithMockUser
+    @Test
+    void 거지방_수정_테스트_실패_채팅방이_존재하지_않는_경우() throws Exception {
+        // given
+
+        Long chatRoomId = 1L;
+
+        String url = CHAT_ROOM_API_PREFIX + "/" + chatRoomId;
+        ChatRoomRequest.Modify modify =
+                ChatRoomRequest.Modify.builder().title("거지거지거지방").capability(20).build();
+
+        MockPart data =
+                new MockPart("data", "", mapper.writeValueAsBytes(modify), MediaType.APPLICATION_JSON);
+        MockMultipartFile image = new MockMultipartFile("image", new byte[0]);
+
+        MockMultipartHttpServletRequestBuilder builder = MockMvcRequestBuilders.multipart(url);
+        builder.with(
+                new RequestPostProcessor() {
+                    @Override
+                    public MockHttpServletRequest postProcessRequest(MockHttpServletRequest request) {
+                        request.setMethod("PATCH");
+                        return request;
+                    }
+                });
+
+        doThrow(new ChatException(CHAT_ROOM_NOT_FOUND))
+                .when(chatRoomService)
+                .modifyChatRoom(any(), any(), any(), any());
+        // when
+        mockMvc
+                .perform(builder.part(data).file(image).with(csrf()))
+                // then
+                .andExpectAll(
+                        status().isNotFound(),
+                        jsonPath("$.errorMessage").value(CHAT_ROOM_NOT_FOUND.getErrorMessage()),
+                        jsonPath("$.errorName").value(CHAT_ROOM_NOT_FOUND.getErrorName()))
+                .andDo(print());
+    }
+
+    @WithMockUser
+    @Test
+    void 거지방_수정_테스트_실패_회원이_왕초가_아닌_경우() throws Exception {
+        // given
+
+        Long chatRoomId = 1L;
+
+        String url = CHAT_ROOM_API_PREFIX + "/" + chatRoomId;
+        ChatRoomRequest.Modify modify =
+                ChatRoomRequest.Modify.builder().title("거지거지거지방").capability(20).build();
+
+        MockPart data =
+                new MockPart("data", "", mapper.writeValueAsBytes(modify), MediaType.APPLICATION_JSON);
+        MockMultipartFile image = new MockMultipartFile("image", new byte[0]);
+
+        MockMultipartHttpServletRequestBuilder builder = MockMvcRequestBuilders.multipart(url);
+        builder.with(
+                new RequestPostProcessor() {
+                    @Override
+                    public MockHttpServletRequest postProcessRequest(MockHttpServletRequest request) {
+                        request.setMethod("PATCH");
+                        return request;
+                    }
+                });
+
+        doThrow(new CustomException(FORBIDDEN))
+                .when(chatRoomService)
+                .modifyChatRoom(any(), any(), any(), any());
+        // when
+        mockMvc
+                .perform(builder.part(data).file(image).with(csrf()))
+                // then
+                .andExpectAll(
+                        status().isForbidden(),
+                        jsonPath("$.errorMessage").value(FORBIDDEN.getErrorMessage()),
+                        jsonPath("$.errorName").value(FORBIDDEN.getErrorName()))
+                .andDo(print());
+    }
+
+    @WithMockUser
+    @Test
+    void 거지방_수정_테스트_실패_이미지소스와_멀티파트파일이_같이_올라온_경우() throws Exception {
+        // given
+
+        Long chatRoomId = 1L;
+
+        String url = CHAT_ROOM_API_PREFIX + "/" + chatRoomId;
+        ChatRoomRequest.Modify modify =
+                ChatRoomRequest.Modify.builder().title("거지거지거지방").capability(20).build();
+
+        MockPart data =
+                new MockPart("data", "", mapper.writeValueAsBytes(modify), MediaType.APPLICATION_JSON);
+        MockMultipartFile image = new MockMultipartFile("image", new byte[0]);
+
+        MockMultipartHttpServletRequestBuilder builder = MockMvcRequestBuilders.multipart(url);
+        builder.with(
+                new RequestPostProcessor() {
+                    @Override
+                    public MockHttpServletRequest postProcessRequest(MockHttpServletRequest request) {
+                        request.setMethod("PATCH");
+                        return request;
+                    }
+                });
+
+        doThrow(new CustomException(BIND_ERROR))
+                .when(chatRoomService)
+                .modifyChatRoom(any(), any(), any(), any());
+        // when
+        mockMvc
+                .perform(builder.part(data).file(image).with(csrf()))
+                // then
+                .andExpectAll(
+                        status().isBadRequest(),
+                        jsonPath("$.errorMessage").value(BIND_ERROR.getErrorMessage()),
+                        jsonPath("$.errorName").value(BIND_ERROR.getErrorName()))
                 .andDo(print());
     }
 }

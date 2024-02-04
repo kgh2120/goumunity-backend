@@ -1,5 +1,6 @@
 package com.ssafy.goumunity.domain.chat.service;
 
+import static com.ssafy.goumunity.common.exception.GlobalErrorCode.BIND_ERROR;
 import static com.ssafy.goumunity.domain.chat.exception.ChatErrorCode.*;
 
 import com.ssafy.goumunity.common.exception.CustomException;
@@ -22,6 +23,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 @RequiredArgsConstructor
@@ -117,6 +119,35 @@ public class ChatRoomServiceImpl implements ChatRoomService {
             throw new CustomException(GlobalErrorCode.FORBIDDEN);
         }
         return chatRoomRepository.findChatRoomUsers(chatRoomId, pageable, time, user.getId());
+    }
+
+    @Override
+    public void modifyChatRoom(
+            Long chatRoomId, User user, ChatRoomRequest.Modify dto, MultipartFile multipartFile) {
+
+        if ((dto.getImage() == null && (multipartFile == null || multipartFile.isEmpty()))
+                || StringUtils.hasText(dto.getImage())
+                        && (multipartFile != null && !multipartFile.isEmpty())) {
+            throw new CustomException(BIND_ERROR);
+        }
+
+        ChatRoom chatRoom =
+                chatRoomRepository
+                        .findOneByChatRoomId(chatRoomId)
+                        .orElseThrow(() -> new ChatException(CHAT_ROOM_NOT_FOUND));
+
+        if (!chatRoom.isHost(user)) {
+            throw new CustomException(GlobalErrorCode.FORBIDDEN);
+        }
+
+        String imageSource = dto.getImage();
+        if (!StringUtils.hasText(dto.getImage())) {
+            imageSource = imageUploadService.uploadImage(multipartFile);
+        }
+
+        chatRoom.modify(dto, imageSource);
+
+        chatRoomRepository.update(chatRoom);
     }
 
     private UserChatRoom verifyDisconnectChatRoom(Long chatRoomId, User user) {

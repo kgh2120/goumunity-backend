@@ -115,4 +115,19 @@ public class ChatRoomRepositoryImpl implements ChatRoomRepository {
             Long chatRoomId, Pageable pageable, Long time, Long userId) {
         return chatRoomQueryDslRepository.findChatRoomUsers(chatRoomId, pageable, time, userId);
     }
+
+    @Override
+    public void update(ChatRoom chatRoom) {
+        ChatRoomEntity chatRoomEntity = ChatRoomEntity.from(chatRoom);
+        chatRoomJpaRepository.save(chatRoomEntity);
+
+        chatRoomHashtagJpaRepository.deleteAllByChatRoom(chatRoomEntity);
+
+        List<HashtagEntity> hashtagEntities =
+                chatRoom.getHashtagsIds().stream().map(HashtagEntity::hashtagEntityOnlyWithId).toList();
+        for (int i = 0; i < hashtagEntities.size(); i++) {
+            chatRoomHashtagJpaRepository.save(
+                    ChatRoomHashtagEntity.create(hashtagEntities.get(i), chatRoomEntity, i + 1));
+        }
+    }
 }
