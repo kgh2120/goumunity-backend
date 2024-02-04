@@ -52,9 +52,12 @@ class ChatQueryDslRepositoryTest {
                             .build());
         }
         // when
-        Slice<MessageResponse> sut =
+        Slice<MessageResponse.Previous> sut =
                 chatQueryDslRepository.findPreviousMessage(
-                        chatRoom.getId(), Instant.now().toEpochMilli() + 1000000000L, PageRequest.of(0, 5));
+                        chatRoom.getId(),
+                        Instant.now().toEpochMilli() + 1000000000L,
+                        PageRequest.of(0, 5),
+                        ucr.getId());
         // then
         SoftAssertions sa = new SoftAssertions();
 
@@ -90,14 +93,18 @@ class ChatQueryDslRepositoryTest {
                             .build());
         }
         // when
-        Slice<MessageResponse> sut =
+        Slice<MessageResponse.Previous> sut =
                 chatQueryDslRepository.findPreviousMessage(
-                        chatRoom.getId(), Instant.now().toEpochMilli() + 1000000000L, PageRequest.of(0, 5));
+                        chatRoom.getId(),
+                        Instant.now().toEpochMilli() + 1000000000L,
+                        PageRequest.of(0, 5),
+                        ucr.getId());
         // then
         SoftAssertions sa = new SoftAssertions();
 
         sa.assertThat(sut.hasNext()).isFalse();
         sa.assertThat(sut.getContent().size()).isSameAs(5);
+        sa.assertThat(sut.getContent().get(0).getIsCurrentUser()).isTrue();
         sa.assertAll();
     }
 
@@ -128,15 +135,18 @@ class ChatQueryDslRepositoryTest {
                             .build());
         }
         // when
-        Slice<MessageResponse> sut =
+        Slice<MessageResponse.Previous> sut =
                 chatQueryDslRepository.findPreviousMessage(
-                        chatRoom.getId(), Instant.now().toEpochMilli() + 1000000000L, PageRequest.of(0, 5));
+                        chatRoom.getId(),
+                        Instant.now().toEpochMilli() + 1000000000L,
+                        PageRequest.of(0, 5),
+                        ucr.getId());
         // then
         SoftAssertions sa = new SoftAssertions();
 
         sa.assertThat(sut.hasNext()).isFalse();
         sa.assertThat(sut.getContent().size()).isSameAs(5);
-        List<MessageResponse> content = sut.getContent();
+        List<MessageResponse.Previous> content = sut.getContent();
         for (int i = 0; i < 4; i++) {
             sa.assertThat(content.get(i).getCreatedAt()).isGreaterThan(content.get(i + 1).getCreatedAt());
         }
@@ -169,8 +179,9 @@ class ChatQueryDslRepositoryTest {
                             .build());
         }
         // when
-        Slice<MessageResponse> sut =
-                chatQueryDslRepository.findPreviousMessage(chatRoom.getId(), 100L, PageRequest.of(0, 5));
+        Slice<MessageResponse.Previous> sut =
+                chatQueryDslRepository.findPreviousMessage(
+                        chatRoom.getId(), 100L, PageRequest.of(0, 5), ucr.getId());
         // then
         SoftAssertions sa = new SoftAssertions();
 

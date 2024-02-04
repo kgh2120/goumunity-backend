@@ -21,7 +21,8 @@ public class ChatRepositoryImpl implements ChatRepository {
     }
 
     @Override
-    public Slice<MessageResponse> findPreviousMessage(Long chatroomId, Long time, Pageable pageable) {
-        return chatQueryDslRepository.findPreviousMessage(chatroomId, time, pageable);
+    public Slice<MessageResponse.Previous> findPreviousMessage(
+            Long chatroomId, Long time, Pageable pageable, Long userId) {
+        return chatQueryDslRepository.findPreviousMessage(chatroomId, time, pageable, userId);
     }
 }
