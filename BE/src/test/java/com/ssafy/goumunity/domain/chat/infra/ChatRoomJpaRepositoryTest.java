@@ -100,7 +100,7 @@ class ChatRoomJpaRepositoryTest {
 
         ChatRoomRequest.Modify modify =
                 ChatRoomRequest.Modify.builder()
-                        .leader(user.getId())
+                        .leaderId(user.getId())
                         .title("거거지지")
                         .hashtagRequests(
                                 List.of(

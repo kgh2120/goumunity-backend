@@ -42,7 +42,7 @@ public class ChatRoomRequest {
     public static class Modify {
         private String title;
         private Integer capability;
-        private Long leader;
+        private Long leaderId;
         private String image;
 
         @MaxListSize(5)
