@@ -138,8 +138,10 @@ class ChatRoomSearchQueryTest {
         HashtagEntity h3 = HashtagEntity.builder().name("10만원 미만").build();
         em.persist(h3);
 
+        ChatRoomEntity chatRoom = null;
+
         for (int i = 0; i < 15; i++) {
-            ChatRoomEntity chatRoom =
+            chatRoom =
                     ChatRoomEntity.builder()
                             .title("거지방" + i)
                             .capability(10)
@@ -186,6 +188,39 @@ class ChatRoomSearchQueryTest {
             }
         }
 
+        chatRoom =
+                ChatRoomEntity.builder()
+                        .title("거지방---111")
+                        .capability(10)
+                        .host(users)
+                        .createdAt(Instant.ofEpochMilli(1000L))
+                        .build();
+        em.persist(chatRoom);
+
+        em.persist(ChatRoomHashtagEntity.builder().chatRoom(chatRoom).hashtag(h1).sequence(1).build());
+
+        em.persist(ChatRoomHashtagEntity.builder().chatRoom(chatRoom).hashtag(h2).sequence(2).build());
+
+        em.persist(ChatRoomHashtagEntity.builder().chatRoom(chatRoom).hashtag(h3).sequence(3).build());
+
+        em.persist(
+                UserChatRoomEntity.builder()
+                        .chatRoom(chatRoom)
+                        .user(users)
+                        .lastAccessTime(Instant.ofEpochMilli(100L))
+                        .build());
+
+        for (int j = 0; j < 30; j++) {
+            em.persist(
+                    ChatEntity.builder()
+                            .chatRoomEntity(chatRoom)
+                            .user(users)
+                            .chatType(ChatType.MESSAGE)
+                            .content("hi")
+                            .createdAt(Instant.now())
+                            .build());
+        }
+
         em.flush();
         em.clear();
 
@@ -196,10 +231,9 @@ class ChatRoomSearchQueryTest {
         List<MyChatRoomResponse> content = res.getContent();
         assertThat(content.size()).isSameAs(10);
         assertThat(content.get(0).getCurrentUserCount()).isEqualTo(1);
-        assertThat(content.get(0).getUnReadMessageCount()).isEqualTo(10);
+        assertThat(content.get(0).getUnReadMessageCount()).isEqualTo(30);
+        assertThat(content.get(1).getUnReadMessageCount()).isEqualTo(10);
 
         assertThat(res.hasNext()).isTrue();
-
-        System.out.println(content.get(0));
     }
 }
