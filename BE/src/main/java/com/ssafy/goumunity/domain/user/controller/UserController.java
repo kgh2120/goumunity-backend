@@ -3,6 +3,9 @@ package com.ssafy.goumunity.domain.user.controller;
 import com.ssafy.goumunity.common.constraint.Email;
 import com.ssafy.goumunity.common.util.SliceResponse;
 import com.ssafy.goumunity.domain.chat.controller.response.MyChatRoomResponse;
+import com.ssafy.goumunity.domain.feed.controller.response.FeedSearchResult;
+import com.ssafy.goumunity.domain.feed.controller.response.SavingResult;
+import com.ssafy.goumunity.domain.feed.service.FeedService;
 import com.ssafy.goumunity.domain.user.controller.request.PasswordModifyRequest;
 import com.ssafy.goumunity.domain.user.controller.request.UserRequest;
 import com.ssafy.goumunity.domain.user.controller.request.VerificationCodeRequest;
@@ -31,6 +34,8 @@ public class UserController {
 
     private final UserService userService;
     private final VerificationService verificationService;
+
+    private final FeedService feedService;
 
     @Value("${session.key.user}")
     private String SESSION_LOGIN_USER_KEY;
@@ -113,5 +118,15 @@ public class UserController {
             @AuthenticationPrincipal User user, Long time, Pageable pageable) {
         Slice<MyChatRoomResponse> res = userService.findMyChatRoom(user, time, pageable);
         return ResponseEntity.ok(SliceResponse.from(res.getContent(), res.hasNext()));
+    }
+
+    @GetMapping("/{userId}/feeds")
+    public ResponseEntity<FeedSearchResult> findAllFeedByUserId(@PathVariable Long userId) {
+        return ResponseEntity.ok(feedService.findAllFeedByUserId(userId));
+    }
+
+    @GetMapping("/{userId}/savings")
+    public ResponseEntity<SavingResult> findAllSavingByUserId(@PathVariable Long userId) {
+        return ResponseEntity.ok(feedService.findAllSavingByUserId(userId));
     }
 }
