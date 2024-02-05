@@ -130,4 +130,10 @@ public class ChatRoomRepositoryImpl implements ChatRoomRepository {
                     ChatRoomHashtagEntity.create(hashtagEntities.get(i), chatRoomEntity, i + 1));
         }
     }
+
+    @Override
+    public Optional<MyChatRoomResponse> findOneMyChatRoomByChatRoomId(Long chatRoomId, Long userId) {
+        return Optional.ofNullable(
+                chatRoomQueryDslRepository.findOneMyChatRoomByChatRoomId(chatRoomId, userId));
+    }
 }

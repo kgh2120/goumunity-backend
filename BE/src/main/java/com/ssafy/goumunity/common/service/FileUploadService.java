@@ -11,4 +11,6 @@ public interface FileUploadService {
      * @return source of image or null
      */
     String uploadFile(MultipartFile multipartFile);
+
+    String uploadFile(MultipartFile multipartFile, boolean resize);
 }
