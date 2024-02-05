@@ -48,12 +48,14 @@ public class FeedRepositoryImpl implements FeedRepository {
         return feedJpaRepository
                 .findAllByUserEntity_IdAndPriceIsNotNullAndAfterPriceIsNotNull(userId)
                 .stream()
-                .filter(
-                        item ->
-                                item.getFeedCategory().equals("INFO")
-                                        && item.getPrice() - item.getAfterPrice() >= 0)
+                .filter(item -> item.getFeedCategory().equals("INFO"))
                 .map(SavingResource::from)
                 .toList();
+    }
+
+    @Override
+    public List<FeedSearchResource> findAllScrappedFeedByUserId(Long userId) {
+        return feedQueryDslRepository.findAllScrappedFeedByUserId(userId);
     }
 
     @Override
