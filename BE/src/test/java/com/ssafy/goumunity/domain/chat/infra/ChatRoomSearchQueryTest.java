@@ -239,7 +239,7 @@ class ChatRoomSearchQueryTest {
     }
 
     @Test
-    void 내_채팅방_하나_테스트() throws Exception {
+    void 내_채팅방_하나_테스트_null반환() throws Exception {
         // given
         UserEntity users =
                 UserEntity.builder().nickname("1234").email("ssafy@gmail.com").password("1234").build();
@@ -346,5 +346,112 @@ class ChatRoomSearchQueryTest {
         sa.assertThat(res.getTitle()).isEqualTo(chatRoom.getTitle());
         sa.assertThat(res.getCurrentUserCount()).isEqualTo(1);
         sa.assertThat(res.getUnReadMessageCount()).isEqualTo(30);
+    }
+
+    @Test
+    void 내_채팅방_하나_테스트() throws Exception {
+        // given
+        UserEntity users =
+                UserEntity.builder().nickname("1234").email("ssafy@gmail.com").password("1234").build();
+
+        em.persist(users);
+
+        HashtagEntity h1 = HashtagEntity.builder().name("20대").build();
+        em.persist(h1);
+        HashtagEntity h2 = HashtagEntity.builder().name("관악구").build();
+        em.persist(h2);
+        HashtagEntity h3 = HashtagEntity.builder().name("10만원 미만").build();
+        em.persist(h3);
+
+        ChatRoomEntity chatRoom = null;
+
+        for (int i = 0; i < 15; i++) {
+            chatRoom =
+                    ChatRoomEntity.builder()
+                            .title("거지방" + i)
+                            .capability(10)
+                            .host(users)
+                            .createdAt(Instant.ofEpochMilli(1000L))
+                            .build();
+            em.persist(chatRoom);
+
+            em.persist(
+                    ChatRoomHashtagEntity.builder().chatRoom(chatRoom).hashtag(h1).sequence(1).build());
+
+            em.persist(
+                    ChatRoomHashtagEntity.builder().chatRoom(chatRoom).hashtag(h2).sequence(2).build());
+
+            em.persist(
+                    ChatRoomHashtagEntity.builder().chatRoom(chatRoom).hashtag(h3).sequence(3).build());
+
+            em.persist(
+                    UserChatRoomEntity.builder()
+                            .chatRoom(chatRoom)
+                            .user(users)
+                            .lastAccessTime(Instant.ofEpochMilli(100L))
+                            .build());
+
+            for (int j = 0; j < 10; j++) {
+                em.persist(
+                        ChatEntity.builder()
+                                .chatRoom(chatRoom)
+                                .user(users)
+                                .chatType(ChatType.MESSAGE)
+                                .content("hi")
+                                .createdAt(Instant.now())
+                                .build());
+            }
+            for (int j = 0; j < 10; j++) {
+                em.persist(
+                        ChatEntity.builder()
+                                .chatRoom(chatRoom)
+                                .user(users)
+                                .chatType(ChatType.MESSAGE)
+                                .content("hi")
+                                .createdAt(Instant.ofEpochMilli(10L))
+                                .build());
+            }
+        }
+
+        chatRoom =
+                ChatRoomEntity.builder()
+                        .title("거지방---111")
+                        .capability(10)
+                        .host(users)
+                        .createdAt(Instant.ofEpochMilli(1000L))
+                        .build();
+        em.persist(chatRoom);
+
+        em.persist(ChatRoomHashtagEntity.builder().chatRoom(chatRoom).hashtag(h1).sequence(1).build());
+
+        em.persist(ChatRoomHashtagEntity.builder().chatRoom(chatRoom).hashtag(h2).sequence(2).build());
+
+        em.persist(ChatRoomHashtagEntity.builder().chatRoom(chatRoom).hashtag(h3).sequence(3).build());
+
+        em.persist(
+                UserChatRoomEntity.builder()
+                        .chatRoom(chatRoom)
+                        .user(users)
+                        .lastAccessTime(Instant.ofEpochMilli(100L))
+                        .build());
+
+        for (int j = 0; j < 30; j++) {
+            em.persist(
+                    ChatEntity.builder()
+                            .chatRoom(chatRoom)
+                            .user(users)
+                            .chatType(ChatType.MESSAGE)
+                            .content("hi")
+                            .createdAt(Instant.now())
+                            .build());
+        }
+
+        em.flush();
+        em.clear();
+
+        MyChatRoomResponse sut =
+                chatRoomQueryDslRepository.findOneMyChatRoomByChatRoomId(53259L, users.getId());
+        assertThat(sut).isNull();
+        ;
     }
 }

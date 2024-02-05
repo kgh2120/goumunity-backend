@@ -132,7 +132,8 @@ public class ChatRoomRepositoryImpl implements ChatRoomRepository {
     }
 
     @Override
-    public Optional<MyChatRoomResponse> findOneMyChatRoomByChatRoomId(Long chatRoomId, Long id) {
-        return Optional.empty();
+    public Optional<MyChatRoomResponse> findOneMyChatRoomByChatRoomId(Long chatRoomId, Long userId) {
+        return Optional.ofNullable(
+                chatRoomQueryDslRepository.findOneMyChatRoomByChatRoomId(chatRoomId, userId));
     }
 }
