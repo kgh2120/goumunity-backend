@@ -34,4 +34,6 @@ public interface ChatRoomRepository {
 
     Slice<ChatRoomUserResponse> findChatRoomUsers(
             Long chatRoomRepository, Pageable pageable, Long time, Long userId);
+
+    void update(ChatRoom chatRoom);
 }

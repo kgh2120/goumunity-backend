@@ -1,12 +1,12 @@
 package com.ssafy.goumunity.domain.chat.infra.chatroom;
 
 import com.ssafy.goumunity.domain.chat.domain.ChatRoom;
+import com.ssafy.goumunity.domain.chat.infra.chat.ChatEntity;
 import com.ssafy.goumunity.domain.chat.infra.hashtag.ChatRoomHashtagEntity;
 import com.ssafy.goumunity.domain.region.infra.RegionEntity;
 import com.ssafy.goumunity.domain.user.infra.UserEntity;
 import jakarta.persistence.*;
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.List;
 import lombok.*;
 
@@ -35,12 +35,10 @@ public class ChatRoomEntity {
     @Column(name = "img_src")
     private String imgSrc;
 
-    @Column(name = "created_at", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+    @Column(name = "created_at")
     private Instant createdAt;
 
-    @Column(
-            name = "updated_at",
-            columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP")
+    @Column(name = "updated_at")
     private Instant updatedAt;
 
     @JoinColumn(name = "region_id")
@@ -52,10 +50,13 @@ public class ChatRoomEntity {
     private UserEntity host;
 
     @OneToMany(mappedBy = "chatRoom", cascade = CascadeType.REMOVE)
-    private List<ChatRoomHashtagEntity> chatRoomHashtags = new ArrayList<>();
+    private List<ChatRoomHashtagEntity> chatRoomHashtags;
 
     @OneToMany(mappedBy = "chatRoom", cascade = CascadeType.REMOVE)
-    private List<UserChatRoomEntity> userChatRooms = new ArrayList<>();
+    private List<UserChatRoomEntity> userChatRooms;
+
+    @OneToMany(mappedBy = "chatRoom", cascade = CascadeType.REMOVE)
+    private List<ChatEntity> chats;
 
     public static ChatRoomEntity from(ChatRoom chatRoom) {
         return ChatRoomEntity.builder()

@@ -35,7 +35,7 @@ public class ChatEntity {
 
     @JoinColumn(name = "chat_room_id")
     @ManyToOne
-    private ChatRoomEntity chatRoomEntity;
+    private ChatRoomEntity chatRoom;
 
     @JoinColumn(name = "user_id")
     @ManyToOne
@@ -48,7 +48,7 @@ public class ChatEntity {
                 .chatType(this.chatType)
                 .createdAt(this.createdAt)
                 .updatedAt(this.updatedAt)
-                .chatRoomId(this.chatRoomEntity.getId())
+                .chatRoomId(this.chatRoom.getId())
                 .userId(this.user.getId())
                 .build();
     }
@@ -61,7 +61,7 @@ public class ChatEntity {
                 .chatType(chat.getChatType())
                 .createdAt(chat.getCreatedAt())
                 .updatedAt(chat.getUpdatedAt())
-                .chatRoomEntity(ChatRoomEntity.chatRoomEntityOnlyWithId(chat.getChatRoomId()))
+                .chatRoom(ChatRoomEntity.chatRoomEntityOnlyWithId(chat.getChatRoomId()))
                 .user(UserEntity.userEntityOnlyWithId(chat.getUserId()))
                 .createdAt(chat.getCreatedAt())
                 .updatedAt(chat.getUpdatedAt())

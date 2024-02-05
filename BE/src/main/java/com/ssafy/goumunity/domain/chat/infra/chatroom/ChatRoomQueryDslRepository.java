@@ -39,7 +39,7 @@ public class ChatRoomQueryDslRepository {
                                                 .from(chatEntity)
                                                 .where(
                                                         chatEntity
-                                                                .chatRoomEntity
+                                                                .chatRoom
                                                                 .eq(chatRoomEntity)
                                                                 .and(
                                                                         chatEntity.createdAt.after(

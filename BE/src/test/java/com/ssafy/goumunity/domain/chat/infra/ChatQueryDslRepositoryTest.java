@@ -45,7 +45,7 @@ class ChatQueryDslRepositoryTest {
             em.persist(
                     ChatEntity.builder()
                             .user(user)
-                            .chatRoomEntity(chatRoom)
+                            .chatRoom(chatRoom)
                             .chatType(ChatType.MESSAGE)
                             .content("zㅋㅋㅋㅋㅋㅋㅋ")
                             .createdAt(Instant.now())
@@ -86,7 +86,7 @@ class ChatQueryDslRepositoryTest {
             em.persist(
                     ChatEntity.builder()
                             .user(user)
-                            .chatRoomEntity(chatRoom)
+                            .chatRoom(chatRoom)
                             .chatType(ChatType.MESSAGE)
                             .content("zㅋㅋㅋㅋㅋㅋㅋ")
                             .createdAt(Instant.now())
@@ -128,7 +128,7 @@ class ChatQueryDslRepositoryTest {
             em.persist(
                     ChatEntity.builder()
                             .user(user)
-                            .chatRoomEntity(chatRoom)
+                            .chatRoom(chatRoom)
                             .chatType(ChatType.MESSAGE)
                             .content("zㅋㅋㅋㅋㅋㅋㅋ")
                             .createdAt(Instant.ofEpochMilli(10000000L + 10000000L * i * 10000))
@@ -172,7 +172,7 @@ class ChatQueryDslRepositoryTest {
             em.persist(
                     ChatEntity.builder()
                             .user(user)
-                            .chatRoomEntity(chatRoom)
+                            .chatRoom(chatRoom)
                             .chatType(ChatType.MESSAGE)
                             .content("zㅋㅋㅋㅋㅋㅋㅋ")
                             .createdAt(Instant.ofEpochMilli(10000000L + 10000000L * i * 10000))
