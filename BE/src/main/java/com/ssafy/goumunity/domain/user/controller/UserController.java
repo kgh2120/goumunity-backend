@@ -121,12 +121,17 @@ public class UserController {
     }
 
     @GetMapping("/{userId}/feeds")
-    public ResponseEntity<FeedSearchResult> findAllFeedByUserId(@PathVariable Long userId) {
+    public ResponseEntity<FeedSearchResult> findAllFeedByUserId(Long userId) {
         return ResponseEntity.ok(feedService.findAllFeedByUserId(userId));
     }
 
     @GetMapping("/{userId}/savings")
-    public ResponseEntity<SavingResult> findAllSavingByUserId(@PathVariable Long userId) {
+    public ResponseEntity<SavingResult> findAllSavingByUserId(Long userId) {
         return ResponseEntity.ok(feedService.findAllSavingByUserId(userId));
+    }
+
+    @GetMapping("/{userId}/scraps")
+    public ResponseEntity<FeedSearchResult> findAllScrappedFeedByUserId(Long userId) {
+        return ResponseEntity.ok(feedService.findAllScrappedFeedByUserId(userId));
     }
 }
