@@ -4,6 +4,7 @@ import com.ssafy.goumunity.common.util.SliceResponse;
 import com.ssafy.goumunity.domain.chat.controller.request.ChatRoomRequest;
 import com.ssafy.goumunity.domain.chat.controller.response.ChatRoomSearchResponse;
 import com.ssafy.goumunity.domain.chat.controller.response.ChatRoomUserResponse;
+import com.ssafy.goumunity.domain.chat.controller.response.MyChatRoomResponse;
 import com.ssafy.goumunity.domain.chat.service.ChatRoomService;
 import com.ssafy.goumunity.domain.user.domain.User;
 import jakarta.validation.Valid;
@@ -80,5 +81,11 @@ public class ChatRoomController {
             @RequestPart("image") MultipartFile multipartFile) {
         chatRoomService.modifyChatRoom(chatRoomId, user, dto, multipartFile);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/{chatRoomId}")
+    public ResponseEntity<MyChatRoomResponse> findOneByChatRoomId(
+            @PathVariable Long chatRoomId, @AuthenticationPrincipal User user) {
+        return ResponseEntity.ok(chatRoomService.findOneMyChatRoomByChatRoomId(chatRoomId, user));
     }
 }

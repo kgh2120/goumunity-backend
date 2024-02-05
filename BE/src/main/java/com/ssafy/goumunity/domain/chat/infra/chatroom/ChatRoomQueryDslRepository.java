@@ -73,6 +73,45 @@ public class ChatRoomQueryDslRepository {
         return new SliceImpl<>(res, pageable, QueryDslSliceUtils.hasNext(res, pageable));
     }
 
+    public MyChatRoomResponse findOneMyChatRoomByChatRoomId(Long chatRoomId, Long userId) {
+
+        return jpaQueryFactory
+                .select(
+                        Projections.constructor(
+                                MyChatRoomResponse.class,
+                                chatRoomEntity,
+                                JPAExpressions.select(chatEntity.count())
+                                        .from(chatEntity)
+                                        .where(
+                                                chatEntity
+                                                        .chatRoom
+                                                        .eq(chatRoomEntity)
+                                                        .and(
+                                                                chatEntity.createdAt.after(
+                                                                        JPAExpressions.select(userChatRoomEntity.lastAccessTime)
+                                                                                .from(userChatRoomEntity)
+                                                                                .where(
+                                                                                        userChatRoomEntity
+                                                                                                .chatRoom
+                                                                                                .eq(chatRoomEntity)
+                                                                                                .and(
+                                                                                                        userChatRoomEntity.user.id.eq(
+                                                                                                                Expressions.constant(userId)))))))))
+                .distinct()
+                .from(chatRoomEntity)
+                .leftJoin(chatRoomEntity.chatRoomHashtags, chatRoomHashtagEntity)
+                .leftJoin(chatRoomHashtagEntity.hashtag, hashtagEntity)
+                .leftJoin(chatRoomEntity.userChatRooms, userChatRoomEntity)
+                .leftJoin(userChatRoomEntity.user, userEntity)
+                .where(
+                        chatRoomEntity
+                                .id
+                                .eq(chatRoomId)
+                                .and(userChatRoomEntity.user.id.eq(userId))
+                                .and(userChatRoomEntity.chatRoom.id.eq(chatRoomId)))
+                .fetchOne();
+    }
+
     public Slice<ChatRoomUserResponse> findChatRoomUsers(
             Long chatRoomId, Pageable pageable, Long time, Long userId) {
         List<ChatRoomUserResponse> result =

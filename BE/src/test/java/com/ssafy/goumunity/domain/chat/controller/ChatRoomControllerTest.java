@@ -20,6 +20,7 @@ import com.ssafy.goumunity.domain.chat.controller.request.ChatRoomRequest;
 import com.ssafy.goumunity.domain.chat.controller.response.ChatRoomHashtagResponse;
 import com.ssafy.goumunity.domain.chat.controller.response.ChatRoomSearchResponse;
 import com.ssafy.goumunity.domain.chat.controller.response.ChatRoomUserResponse;
+import com.ssafy.goumunity.domain.chat.controller.response.MyChatRoomResponse;
 import com.ssafy.goumunity.domain.chat.exception.ChatException;
 import com.ssafy.goumunity.domain.chat.service.ChatRoomService;
 import java.util.ArrayList;
@@ -561,6 +562,73 @@ class ChatRoomControllerTest {
                         status().isBadRequest(),
                         jsonPath("$.errorMessage").value(BIND_ERROR.getErrorMessage()),
                         jsonPath("$.errorName").value(BIND_ERROR.getErrorName()))
+                .andDo(print());
+    }
+
+    @WithMockUser
+    @Test
+    void 채팅방_목록_단건_조회_테스트_성공() throws Exception {
+        // given
+        Long chatRoomId = 1L;
+        String url = CHAT_ROOM_API_PREFIX + "/" + chatRoomId;
+
+        given(chatRoomService.findOneMyChatRoomByChatRoomId(any(), any()))
+                .willReturn(
+                        MyChatRoomResponse.builder()
+                                .title("거지")
+                                .chatRoomId(chatRoomId)
+                                .imgSrc("")
+                                .currentUserCount(10)
+                                .unReadMessageCount(100L)
+                                .hashtags(new ArrayList<>())
+                                .build());
+        // when // then
+        mockMvc
+                .perform(get(url).with(csrf()))
+                .andExpectAll(
+                        status().isOk(),
+                        jsonPath("$.title").value("거지"),
+                        jsonPath("$.currentUserCount").value(10),
+                        jsonPath("$.unReadMessageCount").value(100L),
+                        jsonPath("$.chatRoomId").value(1))
+                .andDo(print());
+    }
+
+    @WithMockUser
+    @Test
+    void 채팅방_목록_단건_조회_테스트_실패_채팅방이_없는_경우() throws Exception {
+        // given
+        Long chatRoomId = 1L;
+        String url = CHAT_ROOM_API_PREFIX + "/" + chatRoomId;
+
+        given(chatRoomService.findOneMyChatRoomByChatRoomId(any(), any()))
+                .willThrow(new ChatException(CHAT_ROOM_NOT_FOUND));
+        // when // then
+        mockMvc
+                .perform(get(url).with(csrf()))
+                .andExpectAll(
+                        status().isNotFound(),
+                        jsonPath("$.errorName").value(CHAT_ROOM_NOT_FOUND.getErrorName()),
+                        jsonPath("$.errorMessage").value(CHAT_ROOM_NOT_FOUND.getErrorMessage()))
+                .andDo(print());
+    }
+
+    @WithMockUser
+    @Test
+    void 채팅방_목록_단건_조회_테스트_실패_유저가_채팅방에_속하지_않는_경우() throws Exception {
+        // given
+        Long chatRoomId = 1L;
+        String url = CHAT_ROOM_API_PREFIX + "/" + chatRoomId;
+
+        given(chatRoomService.findOneMyChatRoomByChatRoomId(any(), any()))
+                .willThrow(new CustomException(FORBIDDEN));
+        // when // then
+        mockMvc
+                .perform(get(url).with(csrf()))
+                .andExpectAll(
+                        status().isForbidden(),
+                        jsonPath("$.errorName").value(FORBIDDEN.getErrorName()),
+                        jsonPath("$.errorMessage").value(FORBIDDEN.getErrorMessage()))
                 .andDo(print());
     }
 }
