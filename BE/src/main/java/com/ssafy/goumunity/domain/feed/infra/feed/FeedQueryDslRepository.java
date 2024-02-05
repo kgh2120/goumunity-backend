@@ -11,8 +11,7 @@ import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.goumunity.domain.feed.controller.response.FeedResponse;
 import com.ssafy.goumunity.domain.feed.controller.response.QFeedResponse;
-import com.ssafy.goumunity.domain.feed.domain.FeedRecommendResource;
-import com.ssafy.goumunity.domain.feed.domain.QFeedRecommendResource;
+import com.ssafy.goumunity.domain.feed.domain.*;
 import java.time.Instant;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -48,6 +47,33 @@ public class FeedQueryDslRepository {
                 .groupBy(feedEntity)
                 .having(feedEntity.createdAt.before(Instant.now()))
                 .orderBy(feedEntity.createdAt.desc(), feedImgEntity.sequence.asc())
+                .fetch();
+    }
+
+    public List<FeedSearchResource> findAllFeedByUserId(Long userId) {
+        return queryFactory
+                .query()
+                .select(
+                        new QFeedSearchResource(
+                                feedEntity,
+                                JPAExpressions.select(commentEntity.count())
+                                        .from(commentEntity)
+                                        .where(feedEntity.eq(commentEntity.feedEntity)),
+                                JPAExpressions.select(feedLikeEntity.count())
+                                        .from(feedLikeEntity)
+                                        .where(feedEntity.eq(feedLikeEntity.feedEntity)),
+                                JPAExpressions.selectFrom(feedLikeEntity)
+                                        .where(feedLikeEntity.userEntity.id.eq(userId))
+                                        .where(feedLikeEntity.feedEntity.id.eq(feedEntity.id))
+                                        .exists()))
+                .from(feedEntity)
+                .leftJoin(feedEntity.images, feedImgEntity)
+                .leftJoin(feedEntity.userEntity, userEntity)
+                .leftJoin(feedEntity.regionEntity, regionEntity)
+                .where(feedEntity.userEntity.id.eq(userId))
+                .groupBy(feedEntity)
+                .having(feedEntity.createdAt.before(Instant.now()))
+                .orderBy(feedEntity.createdAt.desc())
                 .fetch();
     }
 
