@@ -14,6 +14,6 @@ public class ProfileImageUploaderImpl implements ProfileImageUploader {
 
     @Override
     public String uploadProfileImage(MultipartFile multipartFile) {
-        return fileUploadService.uploadFile(multipartFile);
+        return fileUploadService.uploadFile(multipartFile, true);
     }
 }
