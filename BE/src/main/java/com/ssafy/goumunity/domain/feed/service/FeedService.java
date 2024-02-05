@@ -1,7 +1,7 @@
 package com.ssafy.goumunity.domain.feed.service;
 
 import com.ssafy.goumunity.domain.feed.controller.request.FeedRequest;
-import com.ssafy.goumunity.domain.feed.controller.response.FeedRecommendResponse;
+import com.ssafy.goumunity.domain.feed.controller.response.FeedRecommend;
 import com.ssafy.goumunity.domain.feed.controller.response.FeedResponse;
 import com.ssafy.goumunity.domain.user.domain.User;
 import java.util.List;
@@ -11,7 +11,7 @@ public interface FeedService {
 
     Long createFeed(Long userId, FeedRequest.Create feedRequest, List<MultipartFile> images);
 
-    FeedRecommendResponse findFeed(User user, Long regionId);
+    List<FeedRecommend> findFeed(User user, Long regionId);
 
     FeedResponse findOneFeed(Long userId, Long feedId);
 
