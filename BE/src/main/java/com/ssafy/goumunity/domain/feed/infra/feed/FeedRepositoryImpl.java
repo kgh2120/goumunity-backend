@@ -3,6 +3,8 @@ package com.ssafy.goumunity.domain.feed.infra.feed;
 import com.ssafy.goumunity.domain.feed.controller.response.FeedResponse;
 import com.ssafy.goumunity.domain.feed.domain.Feed;
 import com.ssafy.goumunity.domain.feed.domain.FeedRecommendResource;
+import com.ssafy.goumunity.domain.feed.domain.FeedSearchResource;
+import com.ssafy.goumunity.domain.feed.domain.SavingResource;
 import com.ssafy.goumunity.domain.feed.service.post.FeedRepository;
 import java.util.List;
 import java.util.Optional;
@@ -34,6 +36,18 @@ public class FeedRepositoryImpl implements FeedRepository {
     @Override
     public Optional<Feed> findOneById(Long feedId) {
         return feedJpaRepository.findById(feedId).map(FeedEntity::to);
+    }
+
+    @Override
+    public List<FeedSearchResource> findAllFeedByUserId(Long userId) {
+        return feedQueryDslRepository.findAllFeedByUserId(userId);
+    }
+
+    @Override
+    public List<SavingResource> findAllSavingByUserId(Long userId) {
+        return feedJpaRepository.findAllByUserEntity_Id(userId).stream()
+                .map(SavingResource::from)
+                .toList();
     }
 
     @Override
