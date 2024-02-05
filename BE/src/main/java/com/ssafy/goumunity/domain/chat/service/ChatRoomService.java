@@ -26,4 +26,7 @@ public interface ChatRoomService {
 
     Slice<ChatRoomUserResponse> findChatRoomUsers(
             Long chatRoomId, Pageable pageable, Long time, User user);
+
+    void modifyChatRoom(
+            Long chatRoomId, User user, ChatRoomRequest.Modify dto, MultipartFile multipartFile);
 }

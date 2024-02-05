@@ -71,4 +71,14 @@ public class ChatRoomController {
                 chatRoomService.findChatRoomUsers(chatRoomId, pageable, time, user);
         return ResponseEntity.ok(SliceResponse.from(responses.getContent(), responses.hasNext()));
     }
+
+    @PatchMapping("/{chatRoomId}")
+    public ResponseEntity<Void> modifyChatRoom(
+            @PathVariable Long chatRoomId,
+            @AuthenticationPrincipal User user,
+            @RequestPart("data") ChatRoomRequest.Modify dto,
+            @RequestPart("image") MultipartFile multipartFile) {
+        chatRoomService.modifyChatRoom(chatRoomId, user, dto, multipartFile);
+        return ResponseEntity.ok().build();
+    }
 }
