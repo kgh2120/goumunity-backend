@@ -36,4 +36,6 @@ public interface ChatRoomRepository {
             Long chatRoomRepository, Pageable pageable, Long time, Long userId);
 
     void update(ChatRoom chatRoom);
+
+    Optional<MyChatRoomResponse> findOneMyChatRoomByChatRoomId(Long chatRoomId, Long id);
 }

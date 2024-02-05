@@ -36,6 +36,7 @@ public class ChatRoomServiceImpl implements ChatRoomService {
     private final ImageUploadService imageUploadService;
     private final RegionFindService regionFindService;
 
+    @Transactional
     @Override
     public void createChatRoom(ChatRoomRequest.Create dto, MultipartFile multipartFile, User user) {
         // 해시 검색
@@ -50,6 +51,7 @@ public class ChatRoomServiceImpl implements ChatRoomService {
                         convertHashtagIds(dto)));
     }
 
+    @Transactional
     @Override
     public void connectChatRoom(Long chatRoomId, User user) {
         // 채팅방이 있는지 체크
@@ -59,6 +61,7 @@ public class ChatRoomServiceImpl implements ChatRoomService {
         chatRoomRepository.connectChatRoom(chatRoomId, user.getId());
     }
 
+    @Transactional
     @Override
     public void exitChatRoom(Long chatRoomId, User user) {
         ChatRoom chatRoom = verifyExitChatRoom(chatRoomId, user);
@@ -104,6 +107,7 @@ public class ChatRoomServiceImpl implements ChatRoomService {
         return chatRoomRepository.findMyChatRoom(user.getId(), time, pageable);
     }
 
+    @Transactional
     @Override
     public void disconnectChatRoom(Long chatRoomId, User user) {
         UserChatRoom userChatRoom = verifyDisconnectChatRoom(chatRoomId, user);
@@ -121,6 +125,7 @@ public class ChatRoomServiceImpl implements ChatRoomService {
         return chatRoomRepository.findChatRoomUsers(chatRoomId, pageable, time, user.getId());
     }
 
+    @Transactional
     @Override
     public void modifyChatRoom(
             Long chatRoomId, User user, ChatRoomRequest.Modify dto, MultipartFile multipartFile) {
@@ -148,6 +153,16 @@ public class ChatRoomServiceImpl implements ChatRoomService {
         chatRoom.modify(dto, imageSource);
 
         chatRoomRepository.update(chatRoom);
+    }
+
+    @Override
+    public MyChatRoomResponse findOneMyChatRoomByChatRoomId(Long chatRoomId, User user) {
+        if (!chatRoomRepository.isExistChatRoom(chatRoomId)) {
+            throw new ChatException(CHAT_ROOM_NOT_FOUND);
+        }
+        return chatRoomRepository
+                .findOneMyChatRoomByChatRoomId(chatRoomId, user.getId())
+                .orElseThrow(() -> new CustomException(GlobalErrorCode.FORBIDDEN));
     }
 
     private UserChatRoom verifyDisconnectChatRoom(Long chatRoomId, User user) {
