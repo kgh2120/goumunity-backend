@@ -100,6 +100,11 @@ public class FeedServiceImpl implements FeedService {
     }
 
     @Override
+    public FeedSearchResult findAllScrappedFeedByUserId(Long userId) {
+        return FeedSearchResult.from(feedRepository.findAllScrappedFeedByUserId(userId));
+    }
+
+    @Override
     @Transactional
     public void modifyFeed(
             Long userId, Long feedId, FeedRequest.Modify feedRequest, List<MultipartFile> images) {
