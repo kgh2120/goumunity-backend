@@ -4,6 +4,8 @@ import com.ssafy.goumunity.domain.feed.controller.request.FeedImgRequest;
 import com.ssafy.goumunity.domain.feed.controller.request.FeedRequest;
 import com.ssafy.goumunity.domain.feed.controller.response.FeedRecommend;
 import com.ssafy.goumunity.domain.feed.controller.response.FeedResponse;
+import com.ssafy.goumunity.domain.feed.controller.response.FeedSearchResult;
+import com.ssafy.goumunity.domain.feed.controller.response.SavingResult;
 import com.ssafy.goumunity.domain.feed.domain.Feed;
 import com.ssafy.goumunity.domain.feed.domain.FeedImg;
 import com.ssafy.goumunity.domain.feed.domain.FeedRecommendResource;
@@ -85,6 +87,16 @@ public class FeedServiceImpl implements FeedService {
     @Override
     public FeedResponse findOneFeed(Long userId, Long feedId) {
         return feedRepository.findOneFeed(userId, feedId);
+    }
+
+    @Override
+    public FeedSearchResult findAllFeedByUserId(Long userId) {
+        return FeedSearchResult.from(feedRepository.findAllFeedByUserId(userId));
+    }
+
+    @Override
+    public SavingResult findAllSavingByUserId(Long userId) {
+        return SavingResult.from(feedRepository.findAllSavingByUserId(userId));
     }
 
     @Override
