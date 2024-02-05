@@ -1,7 +1,10 @@
 package com.ssafy.goumunity.domain.user.controller.response;
 
-import lombok.Getter;
+import lombok.*;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@Builder
 @Getter
 public class NicknameValidationResponse {
 

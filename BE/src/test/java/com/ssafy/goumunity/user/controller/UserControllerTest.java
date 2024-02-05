@@ -155,7 +155,7 @@ class UserControllerTest {
 
         this.mockMvc
                 .perform(
-                        put("/api/users/my/password")
+                        patch("/api/users/my/password")
                                 .with(SecurityMockMvcRequestPostProcessors.user(new CustomDetails(user)))
                                 .content(mapper.writeValueAsString(dto))
                                 .contentType(MediaType.APPLICATION_JSON)
@@ -173,7 +173,7 @@ class UserControllerTest {
 
         this.mockMvc
                 .perform(
-                        put("/api/users/my/password")
+                        patch("/api/users/my/password")
                                 .content(mapper.writeValueAsString(dto))
                                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
@@ -237,7 +237,7 @@ class UserControllerTest {
 
         this.mockMvc
                 .perform(
-                        put("/api/users/my")
+                        patch("/api/users/my")
                                 .session(session)
                                 .content(mapper.writeValueAsString(userModifyRequest))
                                 .contentType(MediaType.APPLICATION_JSON))
@@ -257,7 +257,7 @@ class UserControllerTest {
 
         this.mockMvc
                 .perform(
-                        put("/api/users/my")
+                        patch("/api/users/my")
                                 .session(session)
                                 .content(mapper.writeValueAsString(userModifyRequest))
                                 .contentType(MediaType.APPLICATION_JSON))
