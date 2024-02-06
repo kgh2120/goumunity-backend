@@ -53,6 +53,12 @@ public class FileUploadServiceImpl implements FileUploadService {
         return uploadFiles(multipartFile, resize);
     }
 
+    @Override
+    public boolean isExistsImgSrc(String imgSrc) {
+        String imageObjectName = getImageObjectName(imgSrc);
+        return amazonS3Client.doesObjectExist(bucket, imageObjectName);
+    }
+
     private boolean isEmpty(MultipartFile multipartFile) {
         return multipartFile == null || multipartFile.isEmpty();
     }
@@ -70,7 +76,7 @@ public class FileUploadServiceImpl implements FileUploadService {
     }
 
     private String upload(File uploadFile) {
-        String fileName = "upload/" + UUID.randomUUID() + uploadFile.getName(); // S3에 저장된 파일 이름
+        String fileName = "upload/" + UUID.randomUUID(); // S3에 저장된 파일 이름
         String uploadImageUrl = putS3(uploadFile, fileName); // s3로 업로드
         removeNewFile(uploadFile);
         return uploadImageUrl;
@@ -131,6 +137,14 @@ public class FileUploadServiceImpl implements FileUploadService {
         return Optional.ofNullable(filename)
                 .filter(f -> f.contains("."))
                 .map(f -> f.substring(filename.lastIndexOf(".") + 1))
-                .orElseThrow(() -> new InternalServerException("파일 이름이 비었습니다", filename));
+                .orElseThrow(() -> new InternalServerException("파일 이름이 비었습니다", this));
+    }
+
+    private String getImageObjectName(String imgSrc) {
+        return "upload/"
+                + Optional.ofNullable(imgSrc)
+                        .filter(f -> f.contains("/"))
+                        .map(f -> f.substring(imgSrc.lastIndexOf("/") + 1))
+                        .orElseThrow(() -> new InternalServerException("파일 이름이 비었습니다", this));
     }
 }

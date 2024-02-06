@@ -16,6 +16,10 @@ public interface UserService {
 
     User modifyUser(User user, UserRequest.Modify dto);
 
+    String createProfileImage(MultipartFile profileImage);
+
+    User modifyProfileImage(User user, String imgSrc);
+
     boolean isExistNickname(String nickname);
 
     void deleteUser(User user);

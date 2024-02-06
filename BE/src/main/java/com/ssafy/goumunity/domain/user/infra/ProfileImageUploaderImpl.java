@@ -16,4 +16,9 @@ public class ProfileImageUploaderImpl implements ProfileImageUploader {
     public String uploadProfileImage(MultipartFile multipartFile) {
         return fileUploadService.uploadFile(multipartFile, true);
     }
+
+    @Override
+    public boolean isExistsImgSrc(String imgSrc) {
+        return fileUploadService.isExistsImgSrc(imgSrc);
+    }
 }

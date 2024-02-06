@@ -3,6 +3,7 @@ package com.ssafy.goumunity.common.config;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.goumunity.common.config.security.AuthenticationFilter;
 import com.ssafy.goumunity.common.config.security.AuthorizationFilter;
+import com.ssafy.goumunity.common.config.security.UnSuccessfulAuthenticationHandler;
 import com.ssafy.goumunity.common.config.security.UnauthorizedEntryPoint;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +17,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.FormLoginConfigurer;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.annotation.web.configurers.HttpBasicConfigurer;
+import org.springframework.security.config.annotation.web.configurers.RequestCacheConfigurer;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -50,8 +52,12 @@ public class SecurityConfig {
         AuthenticationManager authAuthenticationManager = authenticationManagerBuilder.build();
 
         AuthenticationFilter authenticationFilter =
-                new AuthenticationFilter(objectMapper, authAuthenticationManager, SESSION_LOGIN_USER_KEY);
-        authenticationFilter.setFilterProcessesUrl(LOGIN_API_URL);
+                new AuthenticationFilter(
+                        objectMapper,
+                        authAuthenticationManager,
+                        SESSION_LOGIN_USER_KEY,
+                        LOGIN_API_URL,
+                        new UnSuccessfulAuthenticationHandler(objectMapper));
 
         return httpSecurity
                 .csrf(
@@ -72,6 +78,7 @@ public class SecurityConfig {
                                         .requestMatchers("/**")
                                         .authenticated())
                 .authenticationManager(authAuthenticationManager)
+                .requestCache(RequestCacheConfigurer::disable)
                 .exceptionHandling(
                         exceptionHandling ->
                                 exceptionHandling.authenticationEntryPoint(

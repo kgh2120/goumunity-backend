@@ -11,4 +11,6 @@ public interface ProfileImageUploader {
      * @return
      */
     String uploadProfileImage(MultipartFile profileImage);
+
+    boolean isExistsImgSrc(String imgSrc);
 }

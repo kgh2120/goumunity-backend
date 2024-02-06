@@ -65,6 +65,23 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
+    public String createProfileImage(MultipartFile profileImage) {
+        return profileImageUploader.uploadProfileImage(profileImage);
+    }
+
+    @Override
+    @Transactional
+    public User modifyProfileImage(User user, String imgSrc) {
+        if (!profileImageUploader.isExistsImgSrc(imgSrc)) {
+            throw new UserException(UserErrorCode.IMAGE_NOT_EXISTS);
+        }
+
+        user.modifyProfileImage(imgSrc);
+        return userRepository.modify(user);
+    }
+
+    @Override
     public boolean isExistNickname(String nickname) {
         return userRepository.existsByNickname(nickname);
     }
