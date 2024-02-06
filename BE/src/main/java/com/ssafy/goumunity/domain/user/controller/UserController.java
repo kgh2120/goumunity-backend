@@ -115,14 +115,14 @@ public class UserController {
     }
 
     @PostMapping("/my/profile-images")
-    public ResponseEntity<String> CreateProfileImage(
+    public ResponseEntity<String> createProfileImage(
             @RequestParam("image") MultipartFile profileImage) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(userService.createProfileImage(profileImage));
     }
 
     @PatchMapping("/my/profile-images")
-    public ResponseEntity<Void> CreateProfileImage(
+    public ResponseEntity<Void> modifyProfileImage(
             @AuthenticationPrincipal User user,
             @RequestBody ProfileImageModifyRequest profileImageModifyRequest,
             HttpSession session) {
