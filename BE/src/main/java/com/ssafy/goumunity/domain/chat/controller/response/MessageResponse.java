@@ -5,6 +5,7 @@ import com.ssafy.goumunity.domain.chat.infra.chat.ChatEntity;
 import com.ssafy.goumunity.domain.chat.infra.chat.ChatType;
 import com.ssafy.goumunity.domain.user.domain.User;
 import com.ssafy.goumunity.domain.user.infra.UserEntity;
+import java.time.Instant;
 import lombok.*;
 
 public class MessageResponse {
@@ -60,7 +61,16 @@ public class MessageResponse {
                     .nickname(user.getNickname())
                     .userId(user.getId())
                     .profileImageSrc(user.getImgSrc())
+                    .createdAt(Instant.now().toEpochMilli())
                     .build();
+        }
+
+        public static Live enter(User user) {
+            return Live.builder().chatType(ChatType.NOTICE).nickname(user.getNickname()).build();
+        }
+
+        public static Live exit(User user) {
+            return Live.builder().chatType(ChatType.EXIT).nickname(user.getNickname()).build();
         }
     }
 }

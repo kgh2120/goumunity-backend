@@ -2,5 +2,8 @@ package com.ssafy.goumunity.domain.chat.infra.chat;
 
 public enum ChatType {
     MESSAGE,
-    IMAGE
+    IMAGE,
+    NOTICE,
+    ENTER,
+    EXIT
 }
