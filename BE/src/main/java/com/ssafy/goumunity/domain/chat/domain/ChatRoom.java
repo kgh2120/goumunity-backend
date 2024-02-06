@@ -59,12 +59,11 @@ public class ChatRoom {
         return currentUserCount.equals(1);
     }
 
-    public void modify(ChatRoomRequest.Modify dto, String imageSource) {
+    public void modify(ChatRoomRequest.Modify dto, List<Long> hashtagsIds, String imageSource) {
         title = dto.getTitle();
         capability = dto.getCapability();
         imgSrc = imageSource;
         updatedAt = Instant.now();
-        hashtagsIds =
-                dto.getHashtagRequests().stream().map(ChatRoomRequest.HashtagRequest::getId).toList();
+        this.hashtagsIds = hashtagsIds;
     }
 }

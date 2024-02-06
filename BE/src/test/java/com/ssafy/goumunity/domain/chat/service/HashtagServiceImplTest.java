@@ -5,12 +5,8 @@ import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.*;
 
 import com.ssafy.goumunity.common.util.SliceResponse;
-import com.ssafy.goumunity.domain.chat.controller.request.HashtagCreateRequest;
 import com.ssafy.goumunity.domain.chat.domain.Hashtag;
-import com.ssafy.goumunity.domain.chat.exception.ChatErrorCode;
-import com.ssafy.goumunity.domain.chat.exception.ChatException;
 import com.ssafy.goumunity.domain.chat.service.port.HashtagRepository;
-import java.time.Instant;
 import java.util.List;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.Test;
@@ -53,48 +49,5 @@ class HashtagServiceImplTest {
             softAssertions.assertThat(tag.getName()).isEqualTo("tag" + i);
         }
         softAssertions.assertAll();
-    }
-
-    @Test
-    void 해시태그_추가_테스트_성공() throws Exception {
-        // given
-        HashtagCreateRequest dto = HashtagCreateRequest.builder().name("hashtag").build();
-
-        given(hashtagRepository.existsOneByHashtagName(any())).willReturn(false);
-
-        Hashtag hashtag = Hashtag.create(dto);
-        given(hashtagRepository.save(any()))
-                .willReturn(
-                        Hashtag.builder()
-                                .id(1L)
-                                .name(hashtag.getName())
-                                .createdAt(hashtag.getCreatedAt())
-                                .updatedAt(hashtag.getUpdatedAt())
-                                .build());
-        // when
-
-        Hashtag sut = hashtagService.createHashtag(dto);
-        // then
-
-        SoftAssertions sa = new SoftAssertions();
-
-        sa.assertThat(sut.getId()).isSameAs(1L);
-        sa.assertThat(sut.getName()).isSameAs(dto.getName());
-        sa.assertThat(sut.getCreatedAt()).isBeforeOrEqualTo(Instant.now());
-        sa.assertThat(sut.getUpdatedAt()).isBeforeOrEqualTo(Instant.now());
-
-        sa.assertAll();
-    }
-
-    @Test
-    void 해시태그_추가_테스트_실패_이미_등록된_해시태그가_있는_경우() throws Exception {
-        // given
-        HashtagCreateRequest dto = HashtagCreateRequest.builder().name("hashtag").build();
-
-        given(hashtagRepository.existsOneByHashtagName(any())).willReturn(true);
-        // when//then
-        assertThatThrownBy(() -> hashtagService.createHashtag(dto))
-                .isInstanceOf(ChatException.class)
-                .hasFieldOrPropertyWithValue("errorCode", ChatErrorCode.ALREADY_CREATED_HASHTAG);
     }
 }

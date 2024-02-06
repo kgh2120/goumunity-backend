@@ -54,6 +54,6 @@ public class ChatRoomRequest {
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
     public static class HashtagRequest {
-        private Long id;
+        private String name;
     }
 }

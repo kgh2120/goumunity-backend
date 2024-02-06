@@ -66,9 +66,9 @@ class ChatRoomControllerTest {
                         .regionId(1L)
                         .hashtags(
                                 List.of(
-                                        ChatRoomRequest.HashtagRequest.builder().id(1L).build(),
-                                        ChatRoomRequest.HashtagRequest.builder().id(2L).build(),
-                                        ChatRoomRequest.HashtagRequest.builder().id(3L).build()))
+                                        ChatRoomRequest.HashtagRequest.builder().name("1L").build(),
+                                        ChatRoomRequest.HashtagRequest.builder().name("2L").build(),
+                                        ChatRoomRequest.HashtagRequest.builder().name("3L").build()))
                         .build();
 
         MockPart data =
@@ -93,13 +93,13 @@ class ChatRoomControllerTest {
                         .regionId(1L)
                         .hashtags(
                                 List.of(
-                                        ChatRoomRequest.HashtagRequest.builder().id(1L).build(),
-                                        ChatRoomRequest.HashtagRequest.builder().id(2L).build(),
-                                        ChatRoomRequest.HashtagRequest.builder().id(3L).build(),
-                                        ChatRoomRequest.HashtagRequest.builder().id(3L).build(),
-                                        ChatRoomRequest.HashtagRequest.builder().id(3L).build(),
-                                        ChatRoomRequest.HashtagRequest.builder().id(3L).build(),
-                                        ChatRoomRequest.HashtagRequest.builder().id(3L).build()))
+                                        ChatRoomRequest.HashtagRequest.builder().name("1L").build(),
+                                        ChatRoomRequest.HashtagRequest.builder().name("2L").build(),
+                                        ChatRoomRequest.HashtagRequest.builder().name("3L").build(),
+                                        ChatRoomRequest.HashtagRequest.builder().name("3L").build(),
+                                        ChatRoomRequest.HashtagRequest.builder().name("3L").build(),
+                                        ChatRoomRequest.HashtagRequest.builder().name("3L").build(),
+                                        ChatRoomRequest.HashtagRequest.builder().name("3L").build()))
                         .build();
 
         MockPart data =
@@ -124,9 +124,9 @@ class ChatRoomControllerTest {
                         .regionId(1L)
                         .hashtags(
                                 List.of(
-                                        ChatRoomRequest.HashtagRequest.builder().id(1L).build(),
-                                        ChatRoomRequest.HashtagRequest.builder().id(2L).build(),
-                                        ChatRoomRequest.HashtagRequest.builder().id(3L).build()))
+                                        ChatRoomRequest.HashtagRequest.builder().name("1L").build(),
+                                        ChatRoomRequest.HashtagRequest.builder().name("2L").build(),
+                                        ChatRoomRequest.HashtagRequest.builder().name("3L").build()))
                         .build();
 
         MockPart data =
@@ -161,9 +161,9 @@ class ChatRoomControllerTest {
                         .regionId(1L)
                         .hashtags(
                                 List.of(
-                                        ChatRoomRequest.HashtagRequest.builder().id(1L).build(),
-                                        ChatRoomRequest.HashtagRequest.builder().id(2L).build(),
-                                        ChatRoomRequest.HashtagRequest.builder().id(3L).build()))
+                                        ChatRoomRequest.HashtagRequest.builder().name("1L").build(),
+                                        ChatRoomRequest.HashtagRequest.builder().name("2L").build(),
+                                        ChatRoomRequest.HashtagRequest.builder().name("3L").build()))
                         .build();
 
         MockPart data =
