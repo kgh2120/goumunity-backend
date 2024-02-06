@@ -16,4 +16,8 @@ public class FeedScrap {
 
     private Instant createdAt;
     private Instant updatedAt;
+
+    public static FeedScrap feedScrapWithUserIdAndFeedId(Long userId, Long feedId) {
+        return FeedScrap.builder().userId(userId).feedId(feedId).build();
+    }
 }
