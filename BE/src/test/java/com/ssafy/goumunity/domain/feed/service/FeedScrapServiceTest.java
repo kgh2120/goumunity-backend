@@ -37,7 +37,7 @@ class FeedScrapServiceTest {
     }
 
     @Test
-    @DisplayName("스크랩_피드없음_성공")
+    @DisplayName("스크랩_피드없음_실패")
     void 스크랩_피드없음() {
 
         BDDMockito.given(feedRepository.existsByFeedId(any())).willReturn(false);
@@ -48,7 +48,7 @@ class FeedScrapServiceTest {
     }
 
     @Test
-    @DisplayName("스크랩_중복스크랩_성공")
+    @DisplayName("스크랩_중복스크랩_실패")
     void 스크랩_중복스크랩() {
 
         BDDMockito.given(feedRepository.existsByFeedId(any())).willReturn(true);
@@ -66,7 +66,7 @@ class FeedScrapServiceTest {
 
         BDDMockito.given(feedRepository.existsByFeedId(any())).willReturn(true);
 
-        BDDMockito.given(feedScrapRepository.findOneByUserIdAndFeedId(any(), any()))
+        BDDMockito.given(feedScrapRepository.findOneByUserIdAndFeedId(any()))
                 .willReturn(
                         Optional.of(
                                 FeedScrap.builder()
@@ -79,7 +79,7 @@ class FeedScrapServiceTest {
     }
 
     @Test
-    @DisplayName("스크랩해제_피드없음_성공")
+    @DisplayName("스크랩해제_피드없음_실패")
     void 스크랩해제_피드없음() {
 
         BDDMockito.given(feedRepository.existsByFeedId(any())).willReturn(false);
@@ -90,12 +90,12 @@ class FeedScrapServiceTest {
     }
 
     @Test
-    @DisplayName("스크랩해제_스크랩없음_성공")
+    @DisplayName("스크랩해제_스크랩없음_실패")
     void 스크랩해제_스크랩데이터없음() {
 
         BDDMockito.given(feedRepository.existsByFeedId(any())).willReturn(true);
 
-        BDDMockito.given(feedScrapRepository.findOneByUserIdAndFeedId(any(), any()))
+        BDDMockito.given(feedScrapRepository.findOneByUserIdAndFeedId(any()))
                 .willReturn(Optional.empty());
 
         assertThrows(
