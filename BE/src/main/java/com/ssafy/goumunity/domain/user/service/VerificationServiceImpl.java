@@ -43,7 +43,7 @@ public class VerificationServiceImpl implements VerificationService {
 
             mailSender.send(email, title, authCode);
         } catch (NoSuchAlgorithmException e) {
-            throw new UserException(UserErrorCode.EMAIL_NOT_FOUND);
+            throw new UserException(UserErrorCode.UNABLE_TO_SEND_EMAIL);
         }
     }
 
