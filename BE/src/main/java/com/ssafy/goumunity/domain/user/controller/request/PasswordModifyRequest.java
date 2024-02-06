@@ -2,13 +2,10 @@ package com.ssafy.goumunity.domain.user.controller.request;
 
 import com.ssafy.goumunity.common.constraint.Password;
 import jakarta.validation.constraints.NotBlank;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-@NoArgsConstructor
-@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
 @Builder
 public class PasswordModifyRequest {
