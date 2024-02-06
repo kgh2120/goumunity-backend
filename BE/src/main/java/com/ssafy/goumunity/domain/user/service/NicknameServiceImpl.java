@@ -1,9 +1,7 @@
 package com.ssafy.goumunity.domain.user.service;
 
-import com.ssafy.goumunity.common.util.RandomEnumGenerator;
-import com.ssafy.goumunity.domain.user.domain.FirstNickname;
-import com.ssafy.goumunity.domain.user.domain.LastNickname;
-import com.ssafy.goumunity.domain.user.domain.MiddleNickname;
+import static com.ssafy.goumunity.common.util.RandomEnumGenerator.*;
+
 import com.ssafy.goumunity.domain.user.exception.UserErrorCode;
 import com.ssafy.goumunity.domain.user.exception.UserException;
 import java.security.NoSuchAlgorithmException;
@@ -26,13 +24,6 @@ public class NicknameServiceImpl implements NicknameService {
     @Override
     @Transactional
     public String createRandomNickname() {
-        RandomEnumGenerator<FirstNickname> firstNicknameRandomGenerator =
-                new RandomEnumGenerator<>(FirstNickname.class);
-        RandomEnumGenerator<MiddleNickname> middleNicknameRandomGenerator =
-                new RandomEnumGenerator<>(MiddleNickname.class);
-        RandomEnumGenerator<LastNickname> lastNicknameRandomGenerator =
-                new RandomEnumGenerator<>(LastNickname.class);
-
         try {
             for (int tryNum = 0; tryNum < NICKNAME_CREATE_TRY_NUM; tryNum++) {
                 String first = firstNicknameRandomGenerator.randomEnum().getKr();
