@@ -7,6 +7,7 @@ import com.ssafy.goumunity.domain.feed.controller.response.FeedSearchResult;
 import com.ssafy.goumunity.domain.feed.controller.response.SavingResult;
 import com.ssafy.goumunity.domain.feed.service.FeedService;
 import com.ssafy.goumunity.domain.user.controller.request.PasswordModifyRequest;
+import com.ssafy.goumunity.domain.user.controller.request.ProfileImageModifyRequest;
 import com.ssafy.goumunity.domain.user.controller.request.UserRequest;
 import com.ssafy.goumunity.domain.user.controller.request.VerificationCodeRequest;
 import com.ssafy.goumunity.domain.user.controller.response.NicknameValidationResponse;
@@ -51,7 +52,7 @@ public class UserController {
     @GetMapping("/{email}")
     public ResponseEntity<UserResponse> findUserByEmail(@PathVariable(value = "email") String email) {
         User user = userService.findUserByEmail(email);
-        return ResponseEntity.status(HttpStatus.OK).body(UserResponse.from(user));
+        return ResponseEntity.ok().body(UserResponse.from(user));
     }
 
     @GetMapping("/email/verification")
@@ -109,6 +110,23 @@ public class UserController {
             @RequestBody @Valid UserRequest.Modify userModifyRequest,
             HttpSession session) {
         User modifiedUser = userService.modifyUser(user, userModifyRequest);
+        session.setAttribute(SESSION_LOGIN_USER_KEY, modifiedUser);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/my/profile-images")
+    public ResponseEntity<String> CreateProfileImage(
+            @RequestParam("image") MultipartFile profileImage) {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(userService.createProfileImage(profileImage));
+    }
+
+    @PatchMapping("/my/profile-images")
+    public ResponseEntity<Void> CreateProfileImage(
+            @AuthenticationPrincipal User user,
+            @RequestBody ProfileImageModifyRequest profileImageModifyRequest,
+            HttpSession session) {
+        User modifiedUser = userService.modifyProfileImage(user, profileImageModifyRequest.getImgSrc());
         session.setAttribute(SESSION_LOGIN_USER_KEY, modifiedUser);
         return ResponseEntity.ok().build();
     }
