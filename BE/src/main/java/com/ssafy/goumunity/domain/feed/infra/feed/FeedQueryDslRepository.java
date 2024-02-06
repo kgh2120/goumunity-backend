@@ -106,11 +106,12 @@ public class FeedQueryDslRepository {
                 .leftJoin(feedEntity.images, feedImgEntity)
                 .leftJoin(feedEntity.userEntity, userEntity)
                 .leftJoin(feedEntity.regionEntity, regionEntity)
+                .where(feedEntity.feedCategory.eq(FeedCategory.INFO))
                 .where(feedScrapEntity.userEntity.id.eq(userId))
                 .where(feedScrapEntity.feedEntity.eq(feedEntity))
                 .groupBy(feedEntity)
                 .having(feedEntity.createdAt.before(Instant.now()))
-                .orderBy(feedEntity.createdAt.desc())
+                .orderBy(feedScrapEntity.createdAt.desc())
                 .fetch();
     }
 
