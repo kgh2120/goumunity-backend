@@ -25,9 +25,10 @@ public class HashtagServiceImpl implements HashtagService {
     }
 
     @Override
-    public Hashtag createHashtag(HashtagCreateRequest dto) {
-        verifyDuplicateHashtag(dto);
-        return hashtagRepository.save(Hashtag.create(dto));
+    public Hashtag getHashtag(String name) {
+        return hashtagRepository
+                .findOneHashtagByName(name)
+                .orElseGet(() -> hashtagRepository.save(Hashtag.create(name)));
     }
 
     @Override

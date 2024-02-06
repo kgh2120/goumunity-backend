@@ -13,6 +13,7 @@ import com.ssafy.goumunity.domain.chat.controller.request.ChatRoomRequest;
 import com.ssafy.goumunity.domain.chat.controller.response.ChatRoomUserResponse;
 import com.ssafy.goumunity.domain.chat.controller.response.MyChatRoomResponse;
 import com.ssafy.goumunity.domain.chat.domain.ChatRoom;
+import com.ssafy.goumunity.domain.chat.domain.Hashtag;
 import com.ssafy.goumunity.domain.chat.domain.UserChatRoom;
 import com.ssafy.goumunity.domain.chat.exception.ChatErrorCode;
 import com.ssafy.goumunity.domain.chat.exception.ChatException;
@@ -53,7 +54,7 @@ class ChatRoomServiceImplTest {
         // 유저 정보
         List<ChatRoomRequest.HashtagRequest> hashtags = new ArrayList<>();
         for (int i = 1; i <= 3; i++) {
-            hashtags.add(ChatRoomRequest.HashtagRequest.builder().id((long) i).build());
+            hashtags.add(ChatRoomRequest.HashtagRequest.builder().name(Integer.toString(i)).build());
         }
 
         ChatRoomRequest.Create request =
@@ -66,7 +67,7 @@ class ChatRoomServiceImplTest {
         MockMultipartFile image = new MockMultipartFile("image", new byte[0]);
         User user = User.builder().id(2L).build();
 
-        given(hashtagService.existsOneByHashtagId(any())).willReturn(true);
+        given(hashtagService.getHashtag(any())).willReturn(Hashtag.create(""));
         given(uploadService.uploadImage(any())).willReturn("image");
         given(regionFindService.isExistsRegion(any())).willReturn(true);
         // when
@@ -75,40 +76,6 @@ class ChatRoomServiceImplTest {
 
         // then
 
-    }
-
-    /*
-    생성 실패 케이스 1. 해시태그 아이디 검증 실패
-    생성 실패 케이스 2. RegionId 검증 실패
-    */
-    @Test
-    void 채팅방_생성_테스트_실패_해시태그_아이디가_없는_경우() throws Exception {
-        // given
-
-        // 채팅방 리퀘스트
-        // 파일
-        // 유저 정보
-        List<ChatRoomRequest.HashtagRequest> hashtags = new ArrayList<>();
-        for (int i = 1; i <= 3; i++) {
-            hashtags.add(ChatRoomRequest.HashtagRequest.builder().id((long) i).build());
-        }
-
-        ChatRoomRequest.Create request =
-                ChatRoomRequest.Create.builder()
-                        .title("거지방")
-                        .capability(10)
-                        .regionId(1L)
-                        .hashtags(hashtags)
-                        .build();
-        MockMultipartFile image = new MockMultipartFile("image", new byte[0]);
-        User user = User.builder().id(2L).build();
-
-        given(hashtagService.existsOneByHashtagId(any())).willReturn(false);
-        given(regionFindService.isExistsRegion(any())).willReturn(true);
-        // when // then
-        assertThatThrownBy(() -> chatRoomService.createChatRoom(request, image, user))
-                .isInstanceOf(ChatException.class)
-                .hasFieldOrPropertyWithValue("errorCode", ChatErrorCode.HASHTAG_NOT_FOUND);
     }
 
     @Test
@@ -120,7 +87,7 @@ class ChatRoomServiceImplTest {
         // 유저 정보
         List<ChatRoomRequest.HashtagRequest> hashtags = new ArrayList<>();
         for (int i = 1; i <= 3; i++) {
-            hashtags.add(ChatRoomRequest.HashtagRequest.builder().id((long) i).build());
+            hashtags.add(ChatRoomRequest.HashtagRequest.builder().name(Integer.toString(i)).build());
         }
 
         ChatRoomRequest.Create request =

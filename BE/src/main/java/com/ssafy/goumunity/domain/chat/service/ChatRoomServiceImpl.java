@@ -40,7 +40,7 @@ public class ChatRoomServiceImpl implements ChatRoomService {
     @Override
     public void createChatRoom(ChatRoomRequest.Create dto, MultipartFile multipartFile, User user) {
         // 해시 검색
-        verifyCreateChatRoom(dto);
+        verifyRegionId(dto);
         // 채팅방 생성
         chatRoomRepository.save(
                 ChatRoom.create(
@@ -48,7 +48,7 @@ public class ChatRoomServiceImpl implements ChatRoomService {
                         dto.getRegionId(),
                         user.getId(),
                         imageUploadService.uploadImage(multipartFile),
-                        convertHashtagIds(dto)));
+                        convertHashtagIds(dto.getHashtags())));
     }
 
     @Transactional
@@ -150,7 +150,7 @@ public class ChatRoomServiceImpl implements ChatRoomService {
             imageSource = imageUploadService.uploadImage(multipartFile);
         }
 
-        chatRoom.modify(dto, imageSource);
+        chatRoom.modify(dto, convertHashtagIds(dto.getHashtagRequests()), imageSource);
 
         chatRoomRepository.update(chatRoom);
     }
@@ -194,29 +194,15 @@ public class ChatRoomServiceImpl implements ChatRoomService {
         }
     }
 
-    private void verifyCreateChatRoom(ChatRoomRequest.Create dto) {
-        verifyRegionId(dto);
-        verifyHashtagIds(dto);
-    }
-
     private void verifyRegionId(ChatRoomRequest.Create dto) {
         if (!regionFindService.isExistsRegion(dto.getRegionId())) {
             throw new ChatException(ChatErrorCode.REGION_ID_NOT_MATCHED);
         }
     }
 
-    private List<Long> convertHashtagIds(ChatRoomRequest.Create dto) {
-        return dto.getHashtags().stream().map(ChatRoomRequest.HashtagRequest::getId).toList();
-    }
-
-    private void verifyHashtagIds(ChatRoomRequest.Create dto) {
-        List<ChatRoomRequest.HashtagRequest> list =
-                dto.getHashtags().stream()
-                        .filter(h -> hashtagService.existsOneByHashtagId(h.getId()))
-                        .toList();
-
-        if (list.size() != dto.getHashtags().size()) {
-            throw new ChatException(ChatErrorCode.HASHTAG_NOT_FOUND);
-        }
+    private List<Long> convertHashtagIds(List<ChatRoomRequest.HashtagRequest> dto) {
+        return dto.stream()
+                .map(hashtagRequest -> hashtagService.getHashtag(hashtagRequest.getName()).getId())
+                .toList();
     }
 }

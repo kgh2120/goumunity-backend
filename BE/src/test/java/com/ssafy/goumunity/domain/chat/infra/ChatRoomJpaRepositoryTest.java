@@ -3,7 +3,6 @@ package com.ssafy.goumunity.domain.chat.infra;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.ssafy.goumunity.domain.chat.controller.request.ChatRoomRequest;
-import com.ssafy.goumunity.domain.chat.controller.request.HashtagCreateRequest;
 import com.ssafy.goumunity.domain.chat.domain.ChatRoom;
 import com.ssafy.goumunity.domain.chat.domain.Hashtag;
 import com.ssafy.goumunity.domain.chat.infra.chatroom.ChatRoomEntity;
@@ -88,9 +87,7 @@ class ChatRoomJpaRepositoryTest {
         em.persist(chatRoom);
 
         for (int i = 0; i < 4; i++) {
-            HashtagEntity hashtag =
-                    HashtagEntity.from(
-                            Hashtag.create(HashtagCreateRequest.builder().name("해시태그" + i).build()));
+            HashtagEntity hashtag = HashtagEntity.from(Hashtag.create("해시태그"));
             em.persist(hashtag);
             em.persist(ChatRoomHashtagEntity.create(hashtag, chatRoom, i));
         }
@@ -104,11 +101,16 @@ class ChatRoomJpaRepositoryTest {
                         .title("거거지지")
                         .hashtagRequests(
                                 List.of(
-                                        ChatRoomRequest.HashtagRequest.builder().id(1L).build(),
-                                        ChatRoomRequest.HashtagRequest.builder().id(2L).build()))
+                                        ChatRoomRequest.HashtagRequest.builder().name("1").build(),
+                                        ChatRoomRequest.HashtagRequest.builder().name("2").build()))
                         .capability(20)
                         .build();
-        model.modify(modify, "");
+        model.modify(
+                modify,
+                modify.getHashtagRequests().stream()
+                        .map(request -> Long.valueOf(request.getName()))
+                        .toList(),
+                "");
         chatRoomRepository.update(model);
         em.flush();
         em.clear();
