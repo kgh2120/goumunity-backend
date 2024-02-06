@@ -5,6 +5,7 @@ import com.ssafy.goumunity.domain.feed.domain.FeedCategory;
 import com.ssafy.goumunity.domain.feed.infra.comment.CommentEntity;
 import com.ssafy.goumunity.domain.feed.infra.feedimg.FeedImgEntity;
 import com.ssafy.goumunity.domain.feed.infra.feedlike.FeedLikeEntity;
+import com.ssafy.goumunity.domain.feed.infra.feedscrap.FeedScrapEntity;
 import com.ssafy.goumunity.domain.region.infra.RegionEntity;
 import com.ssafy.goumunity.domain.user.infra.UserEntity;
 import jakarta.persistence.*;
@@ -53,6 +54,9 @@ public class FeedEntity {
 
     @OneToMany(mappedBy = "feedEntity", cascade = CascadeType.REMOVE)
     private List<FeedLikeEntity> feedLikes;
+
+    @OneToMany(mappedBy = "feedEntity", cascade = CascadeType.REMOVE)
+    private List<FeedScrapEntity> feedScraps;
 
     @Column(name = "created_at")
     private Instant createdAt;

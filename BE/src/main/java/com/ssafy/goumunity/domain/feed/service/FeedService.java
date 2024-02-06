@@ -21,6 +21,8 @@ public interface FeedService {
 
     SavingResult findAllSavingByUserId(Long userId);
 
+    FeedSearchResult findAllScrappedFeedByUserId(Long userId);
+
     void modifyFeed(
             Long userId, Long feedId, FeedRequest.Modify feedRequest, List<MultipartFile> images);
 

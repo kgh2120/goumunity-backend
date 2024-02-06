@@ -4,6 +4,7 @@ import static com.ssafy.goumunity.domain.feed.infra.comment.QCommentEntity.comme
 import static com.ssafy.goumunity.domain.feed.infra.feed.QFeedEntity.feedEntity;
 import static com.ssafy.goumunity.domain.feed.infra.feedimg.QFeedImgEntity.feedImgEntity;
 import static com.ssafy.goumunity.domain.feed.infra.feedlike.QFeedLikeEntity.feedLikeEntity;
+import static com.ssafy.goumunity.domain.feed.infra.feedscrap.QFeedScrapEntity.feedScrapEntity;
 import static com.ssafy.goumunity.domain.region.infra.QRegionEntity.regionEntity;
 import static com.ssafy.goumunity.domain.user.infra.QUserEntity.userEntity;
 
@@ -65,6 +66,10 @@ public class FeedQueryDslRepository {
                                 JPAExpressions.selectFrom(feedLikeEntity)
                                         .where(feedLikeEntity.userEntity.id.eq(userId))
                                         .where(feedLikeEntity.feedEntity.id.eq(feedEntity.id))
+                                        .exists(),
+                                JPAExpressions.selectFrom(feedScrapEntity)
+                                        .where(feedScrapEntity.userEntity.id.eq(userId))
+                                        .where(feedScrapEntity.feedEntity.id.eq(feedEntity.id))
                                         .exists()))
                 .from(feedEntity)
                 .leftJoin(feedEntity.images, feedImgEntity)
@@ -74,6 +79,39 @@ public class FeedQueryDslRepository {
                 .groupBy(feedEntity)
                 .having(feedEntity.createdAt.before(Instant.now()))
                 .orderBy(feedEntity.createdAt.desc())
+                .fetch();
+    }
+
+    public List<FeedSearchResource> findAllScrappedFeedByUserId(Long userId) {
+        return queryFactory
+                .query()
+                .select(
+                        new QFeedSearchResource(
+                                feedEntity,
+                                JPAExpressions.select(commentEntity.count())
+                                        .from(commentEntity)
+                                        .where(feedEntity.eq(commentEntity.feedEntity)),
+                                JPAExpressions.select(feedLikeEntity.count())
+                                        .from(feedLikeEntity)
+                                        .where(feedEntity.eq(feedLikeEntity.feedEntity)),
+                                JPAExpressions.selectFrom(feedLikeEntity)
+                                        .where(feedLikeEntity.userEntity.id.eq(userId))
+                                        .where(feedLikeEntity.feedEntity.eq(feedEntity))
+                                        .exists(),
+                                JPAExpressions.selectFrom(feedScrapEntity)
+                                        .where(feedScrapEntity.userEntity.id.eq(userId))
+                                        .where(feedScrapEntity.feedEntity.eq(feedEntity))
+                                        .exists()))
+                .from(feedEntity, feedScrapEntity)
+                .leftJoin(feedEntity.images, feedImgEntity)
+                .leftJoin(feedEntity.userEntity, userEntity)
+                .leftJoin(feedEntity.regionEntity, regionEntity)
+                .where(feedEntity.feedCategory.eq(FeedCategory.INFO))
+                .where(feedScrapEntity.userEntity.id.eq(userId))
+                .where(feedScrapEntity.feedEntity.eq(feedEntity))
+                .groupBy(feedEntity)
+                .having(feedEntity.createdAt.before(Instant.now()))
+                .orderBy(feedScrapEntity.createdAt.desc())
                 .fetch();
     }
 
