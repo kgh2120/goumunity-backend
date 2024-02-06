@@ -23,9 +23,9 @@ public class FeedScrapRepositoryImpl implements FeedScrapRepository {
     }
 
     @Override
-    public Optional<FeedScrap> findOneByUserIdAndFeedId(Long userId, Long feedId) {
+    public Optional<FeedScrap> findOneByUserIdAndFeedId(FeedScrap feedScrap) {
         return feedScrapJpaRepository
-                .findByUserEntityIdAndFeedEntityId(userId, feedId)
+                .findByUserEntityIdAndFeedEntityId(feedScrap.getUserId(), feedScrap.getFeedId())
                 .map(FeedScrapEntity::to);
     }
 

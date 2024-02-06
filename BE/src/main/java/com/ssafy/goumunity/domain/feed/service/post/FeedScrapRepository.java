@@ -10,7 +10,7 @@ public interface FeedScrapRepository {
 
     void delete(Long feedScrapId);
 
-    Optional<FeedScrap> findOneByUserIdAndFeedId(Long userId, Long feedId);
+    Optional<FeedScrap> findOneByUserIdAndFeedId(FeedScrap feedScrap);
 
     boolean existByUserIdAndFeedId(Long userId, Long feedId);
 }
