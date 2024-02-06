@@ -51,11 +51,17 @@ public class FeedScrapEntity {
                         .feedEntity(FeedEntity.feedEntityOnlyWithId(feedScrap.getId()))
                         .userEntity(UserEntity.userEntityOnlyWithId(feedScrap.getUserId()));
 
-        if (feedScrap.getCreatedAt() == null) builder.createdAt(Instant.now());
-        else builder.createdAt(feedScrap.getCreatedAt());
+        if (feedScrap.getCreatedAt() == null) {
+            builder.createdAt(Instant.now());
+        } else {
+            builder.createdAt(feedScrap.getCreatedAt());
+        }
 
-        if (feedScrap.getUpdatedAt() == null) builder.updatedAt(Instant.now());
-        else builder.updatedAt(feedScrap.getUpdatedAt());
+        if (feedScrap.getUpdatedAt() == null) {
+            builder.updatedAt(Instant.now());
+        } else {
+            builder.updatedAt(feedScrap.getUpdatedAt());
+        }
 
         return builder.build();
     }
