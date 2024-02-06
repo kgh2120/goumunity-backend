@@ -4,5 +4,5 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface FeedJpaRepository extends JpaRepository<FeedEntity, Long> {
-    List<FeedEntity> findAllByUserEntity_Id(Long userId);
+    List<FeedEntity> findAllByUserEntity_IdAndPriceIsNotNullAndAfterPriceIsNotNull(Long userId);
 }

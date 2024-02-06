@@ -147,4 +147,9 @@ public class UserController {
     public ResponseEntity<SavingResult> findAllSavingByUserId(@PathVariable Long userId) {
         return ResponseEntity.ok(feedService.findAllSavingByUserId(userId));
     }
+
+    @GetMapping("/{userId}/scraps")
+    public ResponseEntity<FeedSearchResult> findAllScrappedFeedByUserId(@PathVariable Long userId) {
+        return ResponseEntity.ok(feedService.findAllScrappedFeedByUserId(userId));
+    }
 }

@@ -30,9 +30,11 @@ public class FeedSearchResource {
     private Long likeCount;
 
     private Boolean iLikeThat;
+    private Boolean isScrapped;
 
     @QueryProjection
-    public FeedSearchResource(FeedEntity feed, Long commentCount, Long likeCount, Boolean iLikeThat) {
+    public FeedSearchResource(
+            FeedEntity feed, Long commentCount, Long likeCount, Boolean iLikeThat, Boolean isScrapped) {
         this.feedId = feed.getId();
         this.content = feed.getContent();
         this.feedCategory = feed.getFeedCategory();
@@ -46,5 +48,6 @@ public class FeedSearchResource {
         this.commentCount = commentCount;
         this.likeCount = likeCount;
         this.iLikeThat = iLikeThat;
+        this.isScrapped = isScrapped;
     }
 }

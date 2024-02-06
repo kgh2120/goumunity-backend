@@ -45,9 +45,16 @@ public class FeedRepositoryImpl implements FeedRepository {
 
     @Override
     public List<SavingResource> findAllSavingByUserId(Long userId) {
-        return feedJpaRepository.findAllByUserEntity_Id(userId).stream()
+        return feedJpaRepository
+                .findAllByUserEntity_IdAndPriceIsNotNullAndAfterPriceIsNotNull(userId)
+                .stream()
                 .map(SavingResource::from)
                 .toList();
+    }
+
+    @Override
+    public List<FeedSearchResource> findAllScrappedFeedByUserId(Long userId) {
+        return feedQueryDslRepository.findAllScrappedFeedByUserId(userId);
     }
 
     @Override

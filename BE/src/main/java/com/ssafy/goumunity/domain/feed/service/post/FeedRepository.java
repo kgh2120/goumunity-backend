@@ -22,6 +22,8 @@ public interface FeedRepository {
 
     List<SavingResource> findAllSavingByUserId(Long userId);
 
+    List<FeedSearchResource> findAllScrappedFeedByUserId(Long userId);
+
     void modify(Feed feed);
 
     void delete(Long feedId);
