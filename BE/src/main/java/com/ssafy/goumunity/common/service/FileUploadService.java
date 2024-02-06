@@ -13,4 +13,6 @@ public interface FileUploadService {
     String uploadFile(MultipartFile multipartFile);
 
     String uploadFile(MultipartFile multipartFile, boolean resize);
+
+    boolean isExistsImgSrc(String imgSrc);
 }
