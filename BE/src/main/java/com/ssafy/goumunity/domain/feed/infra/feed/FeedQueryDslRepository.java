@@ -102,7 +102,7 @@ public class FeedQueryDslRepository {
                                         .where(feedScrapEntity.userEntity.id.eq(userId))
                                         .where(feedScrapEntity.feedEntity.eq(feedEntity))
                                         .exists()))
-                .from(feedEntity)
+                .from(feedEntity, feedScrapEntity)
                 .leftJoin(feedEntity.images, feedImgEntity)
                 .leftJoin(feedEntity.userEntity, userEntity)
                 .leftJoin(feedEntity.regionEntity, regionEntity)
