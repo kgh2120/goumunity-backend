@@ -27,7 +27,7 @@ public class ChatRoomController {
     @PostMapping
     public ResponseEntity<Void> createChatRoom(
             @RequestPart("data") @Valid ChatRoomRequest.Create dto,
-            @RequestPart("image") MultipartFile multipartFile,
+            @RequestPart(value = "image", required = false) MultipartFile multipartFile,
             @AuthenticationPrincipal User user) {
         chatRoomService.createChatRoom(dto, multipartFile, user);
         return ResponseEntity.status(HttpStatus.CREATED).build();
@@ -78,7 +78,7 @@ public class ChatRoomController {
             @PathVariable Long chatRoomId,
             @AuthenticationPrincipal User user,
             @RequestPart("data") ChatRoomRequest.Modify dto,
-            @RequestPart("image") MultipartFile multipartFile) {
+            @RequestPart(value = "image", required = false) MultipartFile multipartFile) {
         chatRoomService.modifyChatRoom(chatRoomId, user, dto, multipartFile);
         return ResponseEntity.ok().build();
     }
