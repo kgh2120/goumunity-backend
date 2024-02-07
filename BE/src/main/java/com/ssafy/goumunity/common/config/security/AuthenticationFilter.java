@@ -10,6 +10,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -67,7 +71,24 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
         CustomDetails principal = (CustomDetails) authResult.getPrincipal();
         request.getSession().setAttribute(SESSION_LOGIN_USER_KEY, principal.getUser());
-
         SecurityContextHolder.getContext().setAuthentication(authResult);
+        writeResponseData(response, principal);
+    }
+
+    private void writeResponseData(HttpServletResponse response, CustomDetails principal)
+            throws IOException {
+        response.setContentType("application/json; charset=utf-8");
+        Long userId = principal.getUser().getId();
+        response
+                .getWriter()
+                .write(objectMapper.writeValueAsString(UserLoginResponse.builder().userId(userId).build()));
+    }
+
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
+    static class UserLoginResponse {
+        private Long userId;
     }
 }
