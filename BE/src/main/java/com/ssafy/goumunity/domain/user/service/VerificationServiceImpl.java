@@ -5,9 +5,7 @@ import com.ssafy.goumunity.domain.user.exception.UserErrorCode;
 import com.ssafy.goumunity.domain.user.exception.UserException;
 import com.ssafy.goumunity.domain.user.service.port.MailSender;
 import com.ssafy.goumunity.domain.user.service.port.UserRepository;
-import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
-import java.util.Random;
+import com.ssafy.goumunity.domain.user.util.RandomCodeGenerator;
 import java.util.concurrent.TimeUnit;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -28,23 +26,19 @@ public class VerificationServiceImpl implements VerificationService {
 
     @Override
     public void send(String email) {
-        try {
-            // 이메일 중복 검사
-            if (userRepository.existsByEmail(email)) {
-                throw new UserException(UserErrorCode.EXIST_EMAIL);
-            }
-
-            String title = "거뮤니티 이메일 인증 번호";
-            String authCode = createCode();
-
-            // redis -> (code, email) 저장
-            ValueOperations<String, String> vop = redisTemplate.opsForValue();
-            vop.set(authCode, email, 5, TimeUnit.MINUTES);
-
-            mailSender.send(email, title, authCode);
-        } catch (NoSuchAlgorithmException e) {
-            throw new UserException(UserErrorCode.EMAIL_NOT_FOUND);
+        // 이메일 중복 검사
+        if (userRepository.existsByEmail(email)) {
+            throw new UserException(UserErrorCode.EXIST_EMAIL);
         }
+
+        String title = "거뮤니티 이메일 인증 번호";
+        String authCode = RandomCodeGenerator.randomCode(VERIFICATION_CODE_MAX_LENGTH);
+
+        // redis -> (code, email) 저장
+        ValueOperations<String, String> vop = redisTemplate.opsForValue();
+        vop.set(authCode, email, 5, TimeUnit.MINUTES);
+
+        mailSender.send(email, title, authCode);
     }
 
     @Override
@@ -52,14 +46,5 @@ public class VerificationServiceImpl implements VerificationService {
         ValueOperations<String, String> vop = redisTemplate.opsForValue();
         String value = vop.getAndDelete(verificationCodeRequest.getCode());
         return verificationCodeRequest.getEmail().equals(value);
-    }
-
-    private String createCode() throws NoSuchAlgorithmException {
-        Random random = SecureRandom.getInstanceStrong();
-        StringBuilder builder = new StringBuilder();
-        for (int i = 0; i < VERIFICATION_CODE_MAX_LENGTH; i++) {
-            builder.append(random.nextInt(10));
-        }
-        return builder.toString();
     }
 }
