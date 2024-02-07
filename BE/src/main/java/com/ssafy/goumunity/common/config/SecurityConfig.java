@@ -73,7 +73,8 @@ public class SecurityConfig {
                                                 "/api/users/join",
                                                 "/api/users/login",
                                                 "/api/users/nickname/validation",
-                                                "/api/users/email/verification")
+                                                "/api/users/email/verification",
+                                                "/api/nicknames")
                                         .permitAll()
                                         .requestMatchers("/**")
                                         .authenticated())
