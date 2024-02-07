@@ -33,7 +33,8 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public User createUser(UserRequest.Create userCreateRequest, MultipartFile profileImage) {
         // 이메일 중복 검사
-        if (userRepository.existsByEmail(userCreateRequest.getEmail())) {
+        if (userRepository.existsByEmailAndUserStatus(
+                userCreateRequest.getEmail(), UserStatus.ACTIVE)) {
             throw new UserException(UserErrorCode.EXIST_EMAIL);
         }
 

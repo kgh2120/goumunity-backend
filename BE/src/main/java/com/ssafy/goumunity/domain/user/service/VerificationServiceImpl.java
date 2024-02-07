@@ -1,6 +1,7 @@
 package com.ssafy.goumunity.domain.user.service;
 
 import com.ssafy.goumunity.domain.user.controller.request.VerificationCodeRequest;
+import com.ssafy.goumunity.domain.user.domain.UserStatus;
 import com.ssafy.goumunity.domain.user.exception.UserErrorCode;
 import com.ssafy.goumunity.domain.user.exception.UserException;
 import com.ssafy.goumunity.domain.user.service.port.MailSender;
@@ -27,7 +28,7 @@ public class VerificationServiceImpl implements VerificationService {
     @Override
     public void send(String email) {
         // 이메일 중복 검사
-        if (userRepository.existsByEmail(email)) {
+        if (userRepository.existsByEmailAndUserStatus(email, UserStatus.ACTIVE)) {
             throw new UserException(UserErrorCode.EXIST_EMAIL);
         }
 
