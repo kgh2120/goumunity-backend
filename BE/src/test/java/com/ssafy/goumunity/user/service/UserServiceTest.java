@@ -52,7 +52,7 @@ public class UserServiceTest {
 
         MockMultipartFile image = new MockMultipartFile("image", "test.jpg".getBytes());
         String imageSource = "/ppap";
-        given(userRepository.existsByEmail(any())).willReturn(false);
+        given(userRepository.existsByEmailAndUserStatus(any(), any())).willReturn(false);
         given(profileImageUploader.uploadProfileImage(any())).willReturn(imageSource);
         //        given()
         given(passwordEncoder.encode(any())).willReturn("1q2w3e4r!@Q");

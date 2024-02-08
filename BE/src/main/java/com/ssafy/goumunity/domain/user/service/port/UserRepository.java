@@ -11,7 +11,7 @@ public interface UserRepository {
 
     boolean existsByNickname(String nickname);
 
-    boolean existsByEmail(String email);
+    boolean existsByEmailAndUserStatus(String email, UserStatus userStatus);
 
     User modify(User user);
 
