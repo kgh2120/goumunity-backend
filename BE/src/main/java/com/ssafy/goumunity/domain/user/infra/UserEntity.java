@@ -51,6 +51,9 @@ public class UserEntity {
     @Enumerated(EnumType.STRING)
     private UserStatus userStatus;
 
+    @Column(name = "is_authenticated")
+    private Boolean isAuthenticated;
+
     @Column(name = "last_password_modified_date")
     private Instant lastPasswordModifiedDate;
 
@@ -75,6 +78,7 @@ public class UserEntity {
                 .nickname(user.getNickname())
                 .imgSrc(user.getImgSrc())
                 .userStatus(user.getUserStatus())
+                .isAuthenticated(user.getIsAuthenticated())
                 .lastPasswordModifiedDate(user.getLastPasswordModifiedDate())
                 .regionId(user.getRegionId())
                 .createdAt(user.getCreatedAt())
@@ -94,6 +98,7 @@ public class UserEntity {
                 .nickname(this.nickname)
                 .imgSrc(this.imgSrc)
                 .userStatus(this.userStatus)
+                .isAuthenticated(this.isAuthenticated)
                 .lastPasswordModifiedDate(this.lastPasswordModifiedDate)
                 .regionId(this.regionId)
                 .createdAt(this.createdAt)

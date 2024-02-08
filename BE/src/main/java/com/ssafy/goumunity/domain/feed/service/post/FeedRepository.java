@@ -29,4 +29,6 @@ public interface FeedRepository {
     void delete(Long feedId);
 
     boolean existsByFeedId(Long feedId);
+
+    Long countByUserId(Long userId);
 }

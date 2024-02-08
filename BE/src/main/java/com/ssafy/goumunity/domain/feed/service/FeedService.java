@@ -1,17 +1,14 @@
 package com.ssafy.goumunity.domain.feed.service;
 
 import com.ssafy.goumunity.domain.feed.controller.request.FeedRequest;
-import com.ssafy.goumunity.domain.feed.controller.response.FeedRecommend;
-import com.ssafy.goumunity.domain.feed.controller.response.FeedResponse;
-import com.ssafy.goumunity.domain.feed.controller.response.FeedSearchResult;
-import com.ssafy.goumunity.domain.feed.controller.response.SavingResult;
+import com.ssafy.goumunity.domain.feed.controller.response.*;
 import com.ssafy.goumunity.domain.user.domain.User;
 import java.util.List;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface FeedService {
 
-    Long createFeed(Long userId, FeedRequest.Create feedRequest, List<MultipartFile> images);
+    FeedIdWithUser createFeed(User user, FeedRequest.Create feedRequest, List<MultipartFile> images);
 
     List<FeedRecommend> findFeed(User user, Long regionId);
 
