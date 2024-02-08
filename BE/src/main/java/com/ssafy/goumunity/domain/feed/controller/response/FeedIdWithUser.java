@@ -7,16 +7,12 @@ import lombok.*;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder
 @Getter
-public class FeedCreateResponse {
+public class FeedIdWithUser {
     private Long feedId;
     private Boolean isAuthenticated;
     private User user;
 
-    public static FeedCreateResponse create(Long feedId, Boolean isChanged, User user) {
-        return FeedCreateResponse.builder()
-                .feedId(feedId)
-                .isAuthenticated(isChanged)
-                .user(user)
-                .build();
+    public static FeedIdWithUser create(Long feedId, Boolean isChanged, User user) {
+        return FeedIdWithUser.builder().feedId(feedId).isAuthenticated(isChanged).user(user).build();
     }
 }

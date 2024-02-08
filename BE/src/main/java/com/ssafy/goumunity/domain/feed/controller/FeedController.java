@@ -1,7 +1,7 @@
 package com.ssafy.goumunity.domain.feed.controller;
 
 import com.ssafy.goumunity.domain.feed.controller.request.FeedRequest;
-import com.ssafy.goumunity.domain.feed.controller.response.FeedCreateResponse;
+import com.ssafy.goumunity.domain.feed.controller.response.FeedIdWithUser;
 import com.ssafy.goumunity.domain.feed.controller.response.FeedRecommendResponse;
 import com.ssafy.goumunity.domain.feed.controller.response.FeedResponse;
 import com.ssafy.goumunity.domain.feed.service.FeedService;
@@ -36,7 +36,7 @@ public class FeedController {
             @RequestPart("data") @Valid FeedRequest.Create feedRequest,
             @RequestPart("images") @Nullable List<MultipartFile> images,
             HttpSession session) {
-        FeedCreateResponse feed = feedService.createFeed(user, feedRequest, images);
+        FeedIdWithUser feed = feedService.createFeed(user, feedRequest, images);
         if (feed.getIsAuthenticated()) {
             session.setAttribute(SESSION_LOGIN_USER_KEY, feed.getUser());
         }

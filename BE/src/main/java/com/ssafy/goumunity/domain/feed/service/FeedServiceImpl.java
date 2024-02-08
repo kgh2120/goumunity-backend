@@ -37,7 +37,7 @@ public class FeedServiceImpl implements FeedService {
 
     @Override
     @Transactional
-    public FeedCreateResponse createFeed(
+    public FeedIdWithUser createFeed(
             User user, FeedRequest.Create feedRequest, List<MultipartFile> images) {
         Feed createdFeed = feedRepository.create(Feed.create(feedRequest, user.getId()));
         boolean isAuthenticated = false;
@@ -56,7 +56,7 @@ public class FeedServiceImpl implements FeedService {
             isAuthenticated = true;
         }
 
-        return FeedCreateResponse.create(createdFeed.getId(), isAuthenticated, user);
+        return FeedIdWithUser.create(createdFeed.getId(), isAuthenticated, user);
     }
 
     @Override
