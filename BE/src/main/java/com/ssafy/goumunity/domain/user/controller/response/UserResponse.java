@@ -20,6 +20,8 @@ public class UserResponse {
     private String imgSrc;
     private Boolean isAuthenticated;
     private Long regionId;
+    private String si;
+    private String gungu;
 
     public static UserResponse from(User user) {
         return UserResponse.builder()
@@ -33,6 +35,8 @@ public class UserResponse {
                 .imgSrc(user.getImgSrc())
                 .isAuthenticated(user.getIsAuthenticated())
                 .regionId(user.getRegionId())
+                .si(user.getSi())
+                .gungu(user.getGungu())
                 .build();
     }
 }
