@@ -24,6 +24,7 @@ public class User {
     private String nickname;
     private String imgSrc;
     private UserStatus userStatus;
+    private Boolean isAuthenticated;
     private Instant lastPasswordModifiedDate;
     private Long regionId;
     private Instant createdAt;
@@ -40,6 +41,7 @@ public class User {
                 .nickname(userRequest.getNickname())
                 .imgSrc(imgUrl)
                 .userStatus(UserStatus.ACTIVE)
+                .isAuthenticated(false)
                 .lastPasswordModifiedDate(Instant.now())
                 .regionId(userRequest.getRegionId())
                 .createdAt(Instant.now())
@@ -55,6 +57,11 @@ public class User {
 
     public void modifyProfileImage(String imgSrc) {
         this.imgSrc = imgSrc;
+        this.updatedAt = Instant.now();
+    }
+
+    public void modifyIsAuthenticatedToTrue() {
+        this.isAuthenticated = true;
         this.updatedAt = Instant.now();
     }
 

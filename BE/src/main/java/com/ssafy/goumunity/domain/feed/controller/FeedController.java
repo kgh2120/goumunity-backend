@@ -1,15 +1,18 @@
 package com.ssafy.goumunity.domain.feed.controller;
 
 import com.ssafy.goumunity.domain.feed.controller.request.FeedRequest;
+import com.ssafy.goumunity.domain.feed.controller.response.FeedCreateResponse;
 import com.ssafy.goumunity.domain.feed.controller.response.FeedRecommendResponse;
 import com.ssafy.goumunity.domain.feed.controller.response.FeedResponse;
 import com.ssafy.goumunity.domain.feed.service.FeedService;
 import com.ssafy.goumunity.domain.user.domain.User;
 import jakarta.annotation.Nullable;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -24,13 +27,21 @@ public class FeedController {
 
     private final FeedService feedService;
 
+    @Value("${session.key.user}")
+    private String SESSION_LOGIN_USER_KEY;
+
     @PostMapping
     public ResponseEntity<Long> createFeed(
             @AuthenticationPrincipal User user,
             @RequestPart("data") @Valid FeedRequest.Create feedRequest,
-            @RequestPart("images") @Nullable List<MultipartFile> images) {
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(feedService.createFeed(user.getId(), feedRequest, images));
+            @RequestPart("images") @Nullable List<MultipartFile> images,
+            HttpSession session) {
+        FeedCreateResponse feed = feedService.createFeed(user, feedRequest, images);
+        if (feed.getIsAuthenticated()) {
+            session.setAttribute(SESSION_LOGIN_USER_KEY, feed.getUser());
+        }
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(feed.getFeedId());
     }
 
     @GetMapping
