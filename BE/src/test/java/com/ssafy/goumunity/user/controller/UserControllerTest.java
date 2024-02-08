@@ -74,8 +74,6 @@ class UserControllerTest {
                 new MockPart("data", "", mapper.writeValueAsBytes(user), MediaType.APPLICATION_JSON);
         MockMultipartFile image = new MockMultipartFile("image", "test.jpg".getBytes());
 
-        given(userService.createUser(any(), any())).willReturn(fromUserCreateDto(user));
-
         this.mockMvc
                 .perform(
                         multipart("/api/users/join")
