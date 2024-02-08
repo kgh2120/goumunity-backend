@@ -8,7 +8,7 @@ import org.springframework.data.domain.Slice;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface UserService {
-    User createUser(UserRequest.Create userCreateRequest, MultipartFile profileImage);
+    Long createUser(UserRequest.Create userCreateRequest, MultipartFile profileImage);
 
     User findUserByEmail(String email);
 

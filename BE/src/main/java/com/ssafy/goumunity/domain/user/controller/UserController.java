@@ -42,11 +42,11 @@ public class UserController {
     private String SESSION_LOGIN_USER_KEY;
 
     @PostMapping("/join")
-    public ResponseEntity<UserResponse> createUser(
+    public ResponseEntity<Long> createUser(
             @RequestPart(value = "data") @Valid UserRequest.Create userRequest,
             @RequestPart(value = "image", required = false) MultipartFile profileImage) {
-        User user = userService.createUser(userRequest, profileImage);
-        return ResponseEntity.status(HttpStatus.CREATED).body(UserResponse.from(user));
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(userService.createUser(userRequest, profileImage));
     }
 
     @GetMapping("/{email}")

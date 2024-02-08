@@ -27,6 +27,8 @@ public class User {
     private Boolean isAuthenticated;
     private Instant lastPasswordModifiedDate;
     private Long regionId;
+    private String si;
+    private String gungu;
     private Instant createdAt;
     private Instant updatedAt;
 
