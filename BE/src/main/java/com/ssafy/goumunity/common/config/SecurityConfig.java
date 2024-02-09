@@ -70,6 +70,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(
                         auth ->
                                 auth.requestMatchers(
+                                                "/h2/**",
                                                 "/api/users/join",
                                                 "/api/users/login",
                                                 "/api/users/nickname/validation",
