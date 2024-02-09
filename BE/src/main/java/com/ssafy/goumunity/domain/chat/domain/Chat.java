@@ -29,4 +29,13 @@ public class Chat {
                 .chatRoomId(chatRoomId)
                 .build();
     }
+
+    public static Chat userDeleted(Long chatRoomId) {
+        return Chat.builder()
+                .chatType(ChatType.EXIT)
+                .createdAt(Instant.now())
+                .updatedAt(Instant.now())
+                .chatRoomId(chatRoomId)
+                .build();
+    }
 }

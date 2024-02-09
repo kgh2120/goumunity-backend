@@ -17,6 +17,7 @@ import com.ssafy.goumunity.domain.chat.domain.Hashtag;
 import com.ssafy.goumunity.domain.chat.domain.UserChatRoom;
 import com.ssafy.goumunity.domain.chat.exception.ChatErrorCode;
 import com.ssafy.goumunity.domain.chat.exception.ChatException;
+import com.ssafy.goumunity.domain.chat.service.port.ChatRepository;
 import com.ssafy.goumunity.domain.chat.service.port.ChatRoomRepository;
 import com.ssafy.goumunity.domain.chat.service.port.ImageUploadService;
 import com.ssafy.goumunity.domain.chat.service.port.RegionFindService;
@@ -34,6 +35,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.mock.web.MockMultipartFile;
 
 @ExtendWith(MockitoExtension.class)
@@ -43,6 +45,9 @@ class ChatRoomServiceImplTest {
     @Mock ChatRoomRepository chatRoomRepository;
     @Mock ImageUploadService uploadService;
     @Mock RegionFindService regionFindService;
+    @Mock SimpMessagingTemplate template;
+    @Mock ChatRepository chatRepository;
+
     @InjectMocks ChatRoomServiceImpl chatRoomService;
 
     @Test

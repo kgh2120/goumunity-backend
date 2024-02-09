@@ -8,11 +8,14 @@ import com.ssafy.goumunity.common.exception.GlobalErrorCode;
 import com.ssafy.goumunity.domain.chat.controller.request.ChatRoomRequest;
 import com.ssafy.goumunity.domain.chat.controller.response.ChatRoomSearchResponse;
 import com.ssafy.goumunity.domain.chat.controller.response.ChatRoomUserResponse;
+import com.ssafy.goumunity.domain.chat.controller.response.MessageResponse;
 import com.ssafy.goumunity.domain.chat.controller.response.MyChatRoomResponse;
+import com.ssafy.goumunity.domain.chat.domain.Chat;
 import com.ssafy.goumunity.domain.chat.domain.ChatRoom;
 import com.ssafy.goumunity.domain.chat.domain.UserChatRoom;
 import com.ssafy.goumunity.domain.chat.exception.ChatErrorCode;
 import com.ssafy.goumunity.domain.chat.exception.ChatException;
+import com.ssafy.goumunity.domain.chat.service.port.ChatRepository;
 import com.ssafy.goumunity.domain.chat.service.port.ChatRoomRepository;
 import com.ssafy.goumunity.domain.chat.service.port.ImageUploadService;
 import com.ssafy.goumunity.domain.chat.service.port.RegionFindService;
@@ -21,6 +24,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -35,6 +39,10 @@ public class ChatRoomServiceImpl implements ChatRoomService {
     private final ChatRoomRepository chatRoomRepository;
     private final ImageUploadService imageUploadService;
     private final RegionFindService regionFindService;
+    private final SimpMessagingTemplate template;
+    private final ChatRepository chatRepository;
+
+    //    private final ChatService chatService;
 
     @Transactional
     @Override
@@ -177,7 +185,11 @@ public class ChatRoomServiceImpl implements ChatRoomService {
                         chatRoom.modifyHost(oldestUserId);
                         chatRoomRepository.update(chatRoom);
                     }
+                    template.convertAndSend("/topic/" + chatRoom.getId(), MessageResponse.Live.delete());
+                    chatRepository.save(Chat.userDeleted(chatRoom.getId()));
                 });
+        // TODO 그냥 채팅방 전체한테 보냈어야 했네 시벌 진짜 짜증난다. 개 새 끼 들 아.
+
         chatRoomRepository.deleteAllUserChatRoomByUserId(userId);
     }
 

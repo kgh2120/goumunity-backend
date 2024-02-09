@@ -66,11 +66,23 @@ public class MessageResponse {
         }
 
         public static Live enter(User user) {
-            return Live.builder().chatType(ChatType.NOTICE).nickname(user.getNickname()).build();
+            return Live.builder()
+                    .chatType(ChatType.ENTER)
+                    .nickname(user.getNickname())
+                    .createdAt(Instant.now().toEpochMilli())
+                    .build();
         }
 
         public static Live exit(User user) {
-            return Live.builder().chatType(ChatType.EXIT).nickname(user.getNickname()).build();
+            return Live.builder()
+                    .chatType(ChatType.EXIT)
+                    .nickname(user.getNickname())
+                    .createdAt(Instant.now().toEpochMilli())
+                    .build();
+        }
+
+        public static Live delete() {
+            return Live.builder().chatType(ChatType.EXIT).createdAt(Instant.now().toEpochMilli()).build();
         }
     }
 }
