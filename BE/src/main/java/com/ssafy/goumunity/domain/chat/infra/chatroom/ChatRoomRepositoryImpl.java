@@ -13,6 +13,7 @@ import com.ssafy.goumunity.domain.region.infra.RegionEntity;
 import com.ssafy.goumunity.domain.user.infra.UserEntity;
 import java.time.Instant;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -28,6 +29,7 @@ public class ChatRoomRepositoryImpl implements ChatRoomRepository {
     private final ChatRoomHashtagJpaRepository chatRoomHashtagJpaRepository;
     private final UserChatRoomJpaRepository userChatRoomJpaRepository;
     private final ChatRoomQueryDslRepository chatRoomQueryDslRepository;
+    private final UserChatRoomQueryDslRepository userChatRoomQueryDslRepository;
 
     @Override
     public void save(ChatRoom chatRoom) {
@@ -123,6 +125,8 @@ public class ChatRoomRepositoryImpl implements ChatRoomRepository {
 
         chatRoomHashtagJpaRepository.deleteAllByChatRoom(chatRoomEntity);
 
+        if (Objects.isNull(chatRoom.getHashtagsIds())) return;
+
         List<HashtagEntity> hashtagEntities =
                 chatRoom.getHashtagsIds().stream().map(HashtagEntity::hashtagEntityOnlyWithId).toList();
         for (int i = 0; i < hashtagEntities.size(); i++) {
@@ -135,5 +139,20 @@ public class ChatRoomRepositoryImpl implements ChatRoomRepository {
     public Optional<MyChatRoomResponse> findOneMyChatRoomByChatRoomId(Long chatRoomId, Long userId) {
         return Optional.ofNullable(
                 chatRoomQueryDslRepository.findOneMyChatRoomByChatRoomId(chatRoomId, userId));
+    }
+
+    @Override
+    public List<ChatRoom> findAllMyChatRoomWhereIAmHost(Long userId) {
+        return chatRoomJpaRepository.findAllByIAmHost(userId).stream().map(ChatRoomEntity::to).toList();
+    }
+
+    @Override
+    public void deleteAllUserChatRoomByUserId(Long userId) {
+        userChatRoomJpaRepository.deleteAllByUserId(userId);
+    }
+
+    @Override
+    public Long getOldestUserInChatRoom(Long chatRoomId, Long userId) {
+        return userChatRoomQueryDslRepository.getOldestUserIdOnChatRoom(chatRoomId, userId);
     }
 }

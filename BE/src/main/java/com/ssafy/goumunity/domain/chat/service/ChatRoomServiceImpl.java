@@ -165,6 +165,22 @@ public class ChatRoomServiceImpl implements ChatRoomService {
                 .orElseThrow(() -> new CustomException(GlobalErrorCode.FORBIDDEN));
     }
 
+    @Override
+    public void clearChatRoom(Long userId) {
+        List<ChatRoom> chatRooms = chatRoomRepository.findAllMyChatRoomWhereIAmHost(userId);
+        chatRooms.forEach(
+                chatRoom -> {
+                    Long oldestUserId = chatRoomRepository.getOldestUserInChatRoom(chatRoom.getId(), userId);
+                    if (oldestUserId == null) {
+                        chatRoomRepository.deleteChatRoom(chatRoom);
+                    } else {
+                        chatRoom.modifyHost(oldestUserId);
+                        chatRoomRepository.update(chatRoom);
+                    }
+                });
+        chatRoomRepository.deleteAllUserChatRoomByUserId(userId);
+    }
+
     private UserChatRoom verifyDisconnectChatRoom(Long chatRoomId, User user) {
         if (!chatRoomRepository.isExistChatRoom(chatRoomId))
             throw new ChatException(CHAT_ROOM_NOT_FOUND);

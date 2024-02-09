@@ -66,4 +66,8 @@ public class ChatRoom {
         updatedAt = Instant.now();
         this.hashtagsIds = hashtagsIds;
     }
+
+    public void modifyHost(Long userId) {
+        this.userId = userId;
+    }
 }

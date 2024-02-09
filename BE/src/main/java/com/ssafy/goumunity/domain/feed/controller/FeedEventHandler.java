@@ -13,7 +13,7 @@ import org.springframework.transaction.event.TransactionalEventListener;
 @Slf4j
 @RequiredArgsConstructor
 @Component
-public class EventHandler {
+public class FeedEventHandler {
 
     private final FeedService feedService;
 
