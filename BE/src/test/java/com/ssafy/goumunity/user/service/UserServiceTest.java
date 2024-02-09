@@ -52,7 +52,7 @@ public class UserServiceTest {
 
         MockMultipartFile image = new MockMultipartFile("image", "test.jpg".getBytes());
         String imageSource = "/ppap";
-        given(userRepository.existsByEmail(any())).willReturn(false);
+        given(userRepository.existsByEmailAndUserStatus(any(), any())).willReturn(false);
         given(profileImageUploader.uploadProfileImage(any())).willReturn(imageSource);
         //        given()
         given(passwordEncoder.encode(any())).willReturn("1q2w3e4r!@Q");
@@ -72,19 +72,11 @@ public class UserServiceTest {
                                 .createdAt(Instant.now(fixed))
                                 .build());
 
-        User sut = userService.createUser(userCreateRequest, image);
+        Long result = userService.createUser(userCreateRequest, image);
 
         assertAll(
                 () -> {
-                    assertThat(sut.getId()).isEqualTo(1L);
-                    assertThat(sut.getEmail()).isEqualTo(userCreateRequest.getEmail());
-                    assertThat(sut.getUserCategory()).isEqualTo(userCreateRequest.getUserCategory());
-                    assertThat(sut.getNickname()).isEqualTo(userCreateRequest.getNickname());
-                    assertThat(sut.getAge()).isSameAs(userCreateRequest.getAge());
-                    assertThat(sut.getImgSrc()).isEqualTo(imageSource);
-                    assertThat(sut.getMonthBudget()).isSameAs(userCreateRequest.getMonthBudget());
-                    assertThat(sut.getRegionId()).isSameAs(userCreateRequest.getRegionId());
-                    assertThat(sut.getCreatedAt()).isEqualTo(Instant.now(fixed));
+                    assertThat(result).isEqualTo(1L);
                 });
     }
 }

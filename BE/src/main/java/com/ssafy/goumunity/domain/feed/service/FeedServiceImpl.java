@@ -2,10 +2,7 @@ package com.ssafy.goumunity.domain.feed.service;
 
 import com.ssafy.goumunity.domain.feed.controller.request.FeedImgRequest;
 import com.ssafy.goumunity.domain.feed.controller.request.FeedRequest;
-import com.ssafy.goumunity.domain.feed.controller.response.FeedRecommend;
-import com.ssafy.goumunity.domain.feed.controller.response.FeedResponse;
-import com.ssafy.goumunity.domain.feed.controller.response.FeedSearchResult;
-import com.ssafy.goumunity.domain.feed.controller.response.SavingResult;
+import com.ssafy.goumunity.domain.feed.controller.response.*;
 import com.ssafy.goumunity.domain.feed.domain.Feed;
 import com.ssafy.goumunity.domain.feed.domain.FeedImg;
 import com.ssafy.goumunity.domain.feed.domain.FeedRecommendResource;
@@ -16,6 +13,7 @@ import com.ssafy.goumunity.domain.feed.service.post.FeedImageUploader;
 import com.ssafy.goumunity.domain.feed.service.post.FeedImgRepository;
 import com.ssafy.goumunity.domain.feed.service.post.FeedRepository;
 import com.ssafy.goumunity.domain.user.domain.User;
+import com.ssafy.goumunity.domain.user.service.port.UserRepository;
 import java.util.Comparator;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -32,13 +30,17 @@ public class FeedServiceImpl implements FeedService {
     private final FeedRepository feedRepository;
     private final FeedImgRepository feedImgRepository;
     private final FeedImageUploader feedImageUploader;
-
+    private final UserRepository userRepository;
     private final CacheManager cacheManager;
+
+    private final int AUTHENICATE_BASELINE_FEED_NUM = 5;
 
     @Override
     @Transactional
-    public Long createFeed(Long userId, FeedRequest.Create feedRequest, List<MultipartFile> images) {
-        Feed createdFeed = feedRepository.create(Feed.create(feedRequest, userId));
+    public FeedIdWithUser createFeed(
+            User user, FeedRequest.Create feedRequest, List<MultipartFile> images) {
+        Feed createdFeed = feedRepository.create(Feed.create(feedRequest, user.getId()));
+        boolean isAuthenticated = false;
 
         if (images != null && !images.isEmpty()) {
             for (int seq = 1; seq <= images.size(); seq++) {
@@ -46,7 +48,15 @@ public class FeedServiceImpl implements FeedService {
                 feedImgRepository.save(FeedImg.from(createdFeed.getId(), savedUrl, seq));
             }
         }
-        return createdFeed.getId();
+
+        if (!user.getIsAuthenticated()
+                && feedRepository.countByUserId(user.getId()) >= AUTHENICATE_BASELINE_FEED_NUM) {
+            user.modifyIsAuthenticatedToTrue();
+            userRepository.modify(user);
+            isAuthenticated = true;
+        }
+
+        return FeedIdWithUser.create(createdFeed.getId(), isAuthenticated, user);
     }
 
     @Override

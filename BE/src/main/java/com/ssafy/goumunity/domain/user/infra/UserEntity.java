@@ -1,5 +1,6 @@
 package com.ssafy.goumunity.domain.user.infra;
 
+import com.ssafy.goumunity.domain.region.infra.RegionEntity;
 import com.ssafy.goumunity.domain.user.domain.Gender;
 import com.ssafy.goumunity.domain.user.domain.User;
 import com.ssafy.goumunity.domain.user.domain.UserCategory;
@@ -51,11 +52,15 @@ public class UserEntity {
     @Enumerated(EnumType.STRING)
     private UserStatus userStatus;
 
+    @Column(name = "is_authenticated")
+    private Boolean isAuthenticated;
+
     @Column(name = "last_password_modified_date")
     private Instant lastPasswordModifiedDate;
 
-    @Column(name = "region_id")
-    private Long regionId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "region_id")
+    private RegionEntity regionEntity;
 
     @Column(name = "created_at")
     private Instant createdAt;
@@ -75,8 +80,9 @@ public class UserEntity {
                 .nickname(user.getNickname())
                 .imgSrc(user.getImgSrc())
                 .userStatus(user.getUserStatus())
+                .isAuthenticated(user.getIsAuthenticated())
                 .lastPasswordModifiedDate(user.getLastPasswordModifiedDate())
-                .regionId(user.getRegionId())
+                .regionEntity(RegionEntity.regionEntityOnlyWithId(user.getRegionId()))
                 .createdAt(user.getCreatedAt())
                 .updatedAt(user.getUpdatedAt())
                 .build();
@@ -94,8 +100,11 @@ public class UserEntity {
                 .nickname(this.nickname)
                 .imgSrc(this.imgSrc)
                 .userStatus(this.userStatus)
+                .isAuthenticated(this.isAuthenticated)
                 .lastPasswordModifiedDate(this.lastPasswordModifiedDate)
-                .regionId(this.regionId)
+                .regionId(this.regionEntity.getRegionId())
+                .si(this.regionEntity.getSi())
+                .gungu(this.regionEntity.getGungu())
                 .createdAt(this.createdAt)
                 .updatedAt(this.updatedAt)
                 .build();

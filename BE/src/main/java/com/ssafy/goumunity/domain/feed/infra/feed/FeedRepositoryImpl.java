@@ -71,4 +71,9 @@ public class FeedRepositoryImpl implements FeedRepository {
     public boolean existsByFeedId(Long feedId) {
         return feedJpaRepository.existsById(feedId);
     }
+
+    @Override
+    public Long countByUserId(Long userId) {
+        return feedJpaRepository.countByUserEntity_Id(userId);
+    }
 }

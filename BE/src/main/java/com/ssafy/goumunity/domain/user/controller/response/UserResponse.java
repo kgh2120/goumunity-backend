@@ -18,7 +18,10 @@ public class UserResponse {
     private Gender gender;
     private String nickname;
     private String imgSrc;
+    private Boolean isAuthenticated;
     private Long regionId;
+    private String si;
+    private String gungu;
 
     public static UserResponse from(User user) {
         return UserResponse.builder()
@@ -30,7 +33,10 @@ public class UserResponse {
                 .gender(user.getGender())
                 .nickname(user.getNickname())
                 .imgSrc(user.getImgSrc())
+                .isAuthenticated(user.getIsAuthenticated())
                 .regionId(user.getRegionId())
+                .si(user.getSi())
+                .gungu(user.getGungu())
                 .build();
     }
 }

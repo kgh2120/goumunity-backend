@@ -5,6 +5,7 @@ import com.ssafy.goumunity.domain.user.domain.User;
 import lombok.*;
 
 public class MessageRequest {
+    @ToString
     @Getter
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
