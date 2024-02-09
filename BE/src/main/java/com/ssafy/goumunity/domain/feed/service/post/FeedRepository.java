@@ -31,4 +31,8 @@ public interface FeedRepository {
     boolean existsByFeedId(Long feedId);
 
     Long countByUserId(Long userId);
+
+    void deleteAllFeedByUserId(Long userId);
+
+    List<Long> findAllFeedIdsByUserId(Long userId);
 }

@@ -139,4 +139,8 @@ public class FeedQueryDslRepository {
                 .groupBy(feedEntity)
                 .fetchOne();
     }
+
+    public void deleteAllByUserId(Long userId) {
+        queryFactory.delete(feedEntity).where(feedEntity.userEntity.id.eq(userId)).execute();
+    }
 }

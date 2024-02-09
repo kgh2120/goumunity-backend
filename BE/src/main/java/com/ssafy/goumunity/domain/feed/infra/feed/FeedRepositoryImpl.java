@@ -76,4 +76,15 @@ public class FeedRepositoryImpl implements FeedRepository {
     public Long countByUserId(Long userId) {
         return feedJpaRepository.countByUserEntity_Id(userId);
     }
+
+    @Override
+    public void deleteAllFeedByUserId(Long userId) {
+        feedJpaRepository.deleteAllById(feedJpaRepository.findAllFeedIdsByUserId(userId));
+        //        feedQueryDslRepository.deleteAllByUserId(userId);
+    }
+
+    @Override
+    public List<Long> findAllFeedIdsByUserId(Long userId) {
+        return feedJpaRepository.findAllFeedIdsByUserId(userId);
+    }
 }

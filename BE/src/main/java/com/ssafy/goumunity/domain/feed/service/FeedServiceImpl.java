@@ -194,6 +194,20 @@ public class FeedServiceImpl implements FeedService {
         feedRepository.delete(originalFeed.getId());
     }
 
+    @Override
+    public void clearUserFeed(Long userId) {
+        /*
+            1. userId에 해당하는 피드 아이디 전체 조회
+            2. 피드 Id에 해당하는 commentId 전체 조회
+            3. commentId에 해당하는 reply 전체 삭제
+            4. feedIds에 속하는 comment 전체 삭제
+            5. feedIds 전체 삭제
+         */
+
+//        List<Long> feedIds = feedRepository.findAllFeedIdsByUserId(userId);
+        feedRepository.deleteAllFeedByUserId(userId);
+    }
+
     private void findAllByRecommend(User user, Long regionId) {
         List<FeedRecommendResource> feeds = feedRepository.findFeed(user.getId(), regionId);
         List<FeedWeight> feedWeights =
