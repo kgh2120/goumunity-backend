@@ -42,6 +42,8 @@ public interface ChatRoomRepository {
 
     List<ChatRoom> findAllMyChatRoomWhereIAmHost(Long userId);
 
+    List<ChatRoom> findAllMyChatRoom(Long userId);
+
     void deleteAllUserChatRoomByUserId(Long userId);
 
     Long getOldestUserInChatRoom(Long chatRoomId, Long userId);

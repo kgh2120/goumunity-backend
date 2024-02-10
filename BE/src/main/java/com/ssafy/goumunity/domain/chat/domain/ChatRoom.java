@@ -55,6 +55,10 @@ public class ChatRoom {
         return userId.equals(user.getId());
     }
 
+    public boolean isHost(Long userId) {
+        return this.userId.equals(userId);
+    }
+
     public boolean isHostAlone() {
         return currentUserCount.equals(1);
     }

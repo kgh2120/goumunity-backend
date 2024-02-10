@@ -42,8 +42,6 @@ public class ChatRoomServiceImpl implements ChatRoomService {
     private final SimpMessagingTemplate template;
     private final ChatRepository chatRepository;
 
-    //    private final ChatService chatService;
-
     @Transactional
     @Override
     public void createChatRoom(ChatRoomRequest.Create dto, MultipartFile multipartFile, User user) {
@@ -175,22 +173,26 @@ public class ChatRoomServiceImpl implements ChatRoomService {
 
     @Override
     public void clearChatRoom(Long userId) {
-        List<ChatRoom> chatRooms = chatRoomRepository.findAllMyChatRoomWhereIAmHost(userId);
-        chatRooms.forEach(
+        List<ChatRoom> myChatRoom = chatRoomRepository.findAllMyChatRoom(userId);
+        myChatRoom.forEach(
                 chatRoom -> {
-                    Long oldestUserId = chatRoomRepository.getOldestUserInChatRoom(chatRoom.getId(), userId);
-                    if (oldestUserId == null) {
-                        chatRoomRepository.deleteChatRoom(chatRoom);
-                    } else {
-                        chatRoom.modifyHost(oldestUserId);
-                        chatRoomRepository.update(chatRoom);
+                    if (chatRoom.isHost(userId)) {
+                        clearChatRoomWhenUserHost(userId, chatRoom);
                     }
                     template.convertAndSend("/topic/" + chatRoom.getId(), MessageResponse.Live.delete());
                     chatRepository.save(Chat.userDeleted(chatRoom.getId()));
                 });
-        // TODO 그냥 채팅방 전체한테 보냈어야 했네 시벌 진짜 짜증난다. 개 새 끼 들 아.
-
         chatRoomRepository.deleteAllUserChatRoomByUserId(userId);
+    }
+
+    private void clearChatRoomWhenUserHost(Long userId, ChatRoom chatRoom) {
+        Long oldestUserId = chatRoomRepository.getOldestUserInChatRoom(chatRoom.getId(), userId);
+        if (oldestUserId == null) {
+            chatRoomRepository.deleteChatRoom(chatRoom);
+        } else {
+            chatRoom.modifyHost(oldestUserId);
+            chatRoomRepository.update(chatRoom);
+        }
     }
 
     private UserChatRoom verifyDisconnectChatRoom(Long chatRoomId, User user) {

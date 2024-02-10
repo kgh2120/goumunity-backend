@@ -38,4 +38,24 @@ public class Chat {
                 .chatRoomId(chatRoomId)
                 .build();
     }
+
+    public static Chat userDisconnected(Long chatRoomId, Long userId) {
+        return Chat.builder()
+                .chatType(ChatType.EXIT)
+                .createdAt(Instant.now())
+                .updatedAt(Instant.now())
+                .userId(userId)
+                .chatRoomId(chatRoomId)
+                .build();
+    }
+
+    public static Chat userEntered(Long chatRoomId, Long userId) {
+        return Chat.builder()
+                .chatType(ChatType.ENTER)
+                .createdAt(Instant.now())
+                .updatedAt(Instant.now())
+                .userId(userId)
+                .chatRoomId(chatRoomId)
+                .build();
+    }
 }

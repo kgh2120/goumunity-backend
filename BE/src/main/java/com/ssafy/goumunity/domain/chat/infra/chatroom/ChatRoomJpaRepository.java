@@ -19,6 +19,9 @@ public interface ChatRoomJpaRepository extends JpaRepository<ChatRoomEntity, Lon
                     + " order by c.id desc")
     Slice<ChatRoomEntity> searchChatRoom(String keyword, Instant time, Pageable pageable);
 
-    @Query("select c from ChatRoomEntity c " + "where c.host.id =:userId")
+    @Query("select c from ChatRoomEntity c where c.host.id =:userId")
     List<ChatRoomEntity> findAllByIAmHost(Long userId);
+
+    @Query("select c from ChatRoomEntity c join c.userChatRooms u where u.user.id =:userId")
+    List<ChatRoomEntity> findAllByUserId(Long userId);
 }

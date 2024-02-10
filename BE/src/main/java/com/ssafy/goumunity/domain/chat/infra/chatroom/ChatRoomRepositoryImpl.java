@@ -147,6 +147,11 @@ public class ChatRoomRepositoryImpl implements ChatRoomRepository {
     }
 
     @Override
+    public List<ChatRoom> findAllMyChatRoom(Long userId) {
+        return chatRoomJpaRepository.findAllByUserId(userId).stream().map(ChatRoomEntity::to).toList();
+    }
+
+    @Override
     public void deleteAllUserChatRoomByUserId(Long userId) {
         userChatRoomJpaRepository.deleteAllByUserId(userId);
     }

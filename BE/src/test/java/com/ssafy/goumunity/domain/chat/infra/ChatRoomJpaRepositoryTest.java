@@ -125,4 +125,35 @@ class ChatRoomJpaRepositoryTest {
 
         sa.assertAll();
     }
+
+    @Test
+    void 내_채팅방_목록_전체_획득() throws Exception {
+        // given
+        UserEntity user = UserEntity.builder().build();
+        em.persist(user);
+
+        for (int i = 0; i < 10; i++) {
+            ChatRoomEntity chatRoom = ChatRoomEntity.builder().host(user).build();
+            em.persist(chatRoom);
+            UserEntity u2 = UserEntity.builder().build();
+            em.persist(u2);
+
+            em.persist(
+                    UserChatRoomEntity.builder()
+                            .user(user)
+                            .chatRoom(chatRoom)
+                            .createdAt(Instant.ofEpochMilli(100))
+                            .build());
+            em.persist(
+                    UserChatRoomEntity.builder()
+                            .user(u2)
+                            .chatRoom(chatRoom)
+                            .createdAt(Instant.ofEpochMilli(100))
+                            .build());
+        }
+        // when
+        List<ChatRoomEntity> sut = chatRoomJpaRepository.findAllByUserId(user.getId());
+        // then
+        assertThat(sut.size()).isEqualTo(10);
+    }
 }
