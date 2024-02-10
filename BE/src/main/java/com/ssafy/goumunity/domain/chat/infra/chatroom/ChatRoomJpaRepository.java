@@ -1,6 +1,7 @@
 package com.ssafy.goumunity.domain.chat.infra.chatroom;
 
 import java.time.Instant;
+import java.util.List;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -17,4 +18,10 @@ public interface ChatRoomJpaRepository extends JpaRepository<ChatRoomEntity, Lon
                     + " and c.createdAt <= :time "
                     + " order by c.id desc")
     Slice<ChatRoomEntity> searchChatRoom(String keyword, Instant time, Pageable pageable);
+
+    @Query("select c from ChatRoomEntity c where c.host.id =:userId")
+    List<ChatRoomEntity> findAllByIAmHost(Long userId);
+
+    @Query("select c from ChatRoomEntity c join c.userChatRooms u where u.user.id =:userId")
+    List<ChatRoomEntity> findAllByUserId(Long userId);
 }

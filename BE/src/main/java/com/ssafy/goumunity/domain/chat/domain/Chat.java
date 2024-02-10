@@ -29,4 +29,33 @@ public class Chat {
                 .chatRoomId(chatRoomId)
                 .build();
     }
+
+    public static Chat userDeleted(Long chatRoomId) {
+        return Chat.builder()
+                .chatType(ChatType.EXIT)
+                .createdAt(Instant.now())
+                .updatedAt(Instant.now())
+                .chatRoomId(chatRoomId)
+                .build();
+    }
+
+    public static Chat userExit(Long chatRoomId, Long userId) {
+        return Chat.builder()
+                .chatType(ChatType.EXIT)
+                .createdAt(Instant.now())
+                .updatedAt(Instant.now())
+                .userId(userId)
+                .chatRoomId(chatRoomId)
+                .build();
+    }
+
+    public static Chat userEntered(Long chatRoomId, Long userId) {
+        return Chat.builder()
+                .chatType(ChatType.ENTER)
+                .createdAt(Instant.now())
+                .updatedAt(Instant.now())
+                .userId(userId)
+                .chatRoomId(chatRoomId)
+                .build();
+    }
 }

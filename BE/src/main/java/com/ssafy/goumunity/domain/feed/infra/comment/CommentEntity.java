@@ -1,10 +1,13 @@
 package com.ssafy.goumunity.domain.feed.infra.comment;
 
 import com.ssafy.goumunity.domain.feed.domain.Comment;
+import com.ssafy.goumunity.domain.feed.infra.commentlike.CommentLikeEntity;
 import com.ssafy.goumunity.domain.feed.infra.feed.FeedEntity;
+import com.ssafy.goumunity.domain.feed.infra.reply.ReplyEntity;
 import com.ssafy.goumunity.domain.user.infra.UserEntity;
 import jakarta.persistence.*;
 import java.time.Instant;
+import java.util.List;
 import lombok.*;
 
 @Entity
@@ -36,6 +39,12 @@ public class CommentEntity {
 
     @Column(name = "updated_at")
     private Instant updatedAt;
+
+    @OneToMany(mappedBy = "commentEntity", cascade = CascadeType.REMOVE)
+    private List<ReplyEntity> replies;
+
+    @OneToMany(mappedBy = "commentEntity", cascade = CascadeType.REMOVE)
+    private List<CommentLikeEntity> commentLikes;
 
     public Comment to() {
         return Comment.builder()

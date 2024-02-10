@@ -24,4 +24,6 @@ public interface FeedService {
             Long userId, Long feedId, FeedRequest.Modify feedRequest, List<MultipartFile> images);
 
     void deleteFeed(Long userId, Long feedId);
+
+    void clearUserFeed(Long userId);
 }

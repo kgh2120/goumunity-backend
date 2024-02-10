@@ -2,9 +2,11 @@ package com.ssafy.goumunity.domain.feed.infra.reply;
 
 import com.ssafy.goumunity.domain.feed.domain.Reply;
 import com.ssafy.goumunity.domain.feed.infra.comment.CommentEntity;
+import com.ssafy.goumunity.domain.feed.infra.replylike.ReplyLikeEntity;
 import com.ssafy.goumunity.domain.user.infra.UserEntity;
 import jakarta.persistence.*;
 import java.time.Instant;
+import java.util.List;
 import lombok.*;
 
 @Entity
@@ -35,6 +37,9 @@ public class ReplyEntity {
 
     @Column(name = "updated_at")
     private Instant updatedAt;
+
+    @OneToMany(mappedBy = "replyEntity", cascade = CascadeType.REMOVE)
+    private List<ReplyLikeEntity> replyLikes;
 
     public Reply to() {
         return Reply.builder()

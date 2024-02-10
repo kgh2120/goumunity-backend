@@ -31,4 +31,6 @@ public interface ChatRoomService {
             Long chatRoomId, User user, ChatRoomRequest.Modify dto, MultipartFile multipartFile);
 
     MyChatRoomResponse findOneMyChatRoomByChatRoomId(Long chatRoomId, User user);
+
+    void clearChatRoom(Long userId);
 }

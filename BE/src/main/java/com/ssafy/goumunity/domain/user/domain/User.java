@@ -1,7 +1,9 @@
 package com.ssafy.goumunity.domain.user.domain;
 
+import com.ssafy.goumunity.common.event.Events;
 import com.ssafy.goumunity.common.exception.CustomException;
 import com.ssafy.goumunity.domain.user.controller.request.UserRequest;
+import com.ssafy.goumunity.domain.user.event.UserDeletedEvent;
 import com.ssafy.goumunity.domain.user.exception.UserErrorCode;
 import com.ssafy.goumunity.domain.user.exception.UserException;
 import java.time.Instant;
@@ -104,5 +106,7 @@ public class User {
 
     public void deleteUser() {
         this.userStatus = UserStatus.DELETED;
+        this.nickname = null;
+        Events.raise(UserDeletedEvent.create(this.id));
     }
 }

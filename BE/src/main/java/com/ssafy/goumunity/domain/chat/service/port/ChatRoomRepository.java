@@ -5,6 +5,7 @@ import com.ssafy.goumunity.domain.chat.controller.response.ChatRoomUserResponse;
 import com.ssafy.goumunity.domain.chat.controller.response.MyChatRoomResponse;
 import com.ssafy.goumunity.domain.chat.domain.ChatRoom;
 import com.ssafy.goumunity.domain.chat.domain.UserChatRoom;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -38,4 +39,12 @@ public interface ChatRoomRepository {
     void update(ChatRoom chatRoom);
 
     Optional<MyChatRoomResponse> findOneMyChatRoomByChatRoomId(Long chatRoomId, Long id);
+
+    List<ChatRoom> findAllMyChatRoomWhereIAmHost(Long userId);
+
+    List<ChatRoom> findAllMyChatRoom(Long userId);
+
+    void deleteAllUserChatRoomByUserId(Long userId);
+
+    Long getOldestUserInChatRoom(Long chatRoomId, Long userId);
 }

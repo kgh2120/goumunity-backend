@@ -55,6 +55,10 @@ public class ChatRoom {
         return userId.equals(user.getId());
     }
 
+    public boolean isHost(Long userId) {
+        return this.userId.equals(userId);
+    }
+
     public boolean isHostAlone() {
         return currentUserCount.equals(1);
     }
@@ -65,5 +69,9 @@ public class ChatRoom {
         imgSrc = imageSource;
         updatedAt = Instant.now();
         this.hashtagsIds = hashtagsIds;
+    }
+
+    public void modifyHost(Long userId) {
+        this.userId = userId;
     }
 }

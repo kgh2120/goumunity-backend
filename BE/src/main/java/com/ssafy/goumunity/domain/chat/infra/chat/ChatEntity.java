@@ -34,11 +34,11 @@ public class ChatEntity {
     private Instant updatedAt;
 
     @JoinColumn(name = "chat_room_id")
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private ChatRoomEntity chatRoom;
 
     @JoinColumn(name = "user_id")
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private UserEntity user;
 
     public Chat to() {
@@ -62,7 +62,7 @@ public class ChatEntity {
                 .createdAt(chat.getCreatedAt())
                 .updatedAt(chat.getUpdatedAt())
                 .chatRoom(ChatRoomEntity.chatRoomEntityOnlyWithId(chat.getChatRoomId()))
-                .user(UserEntity.userEntityOnlyWithId(chat.getUserId()))
+                .user(chat.getUserId() != null ? UserEntity.userEntityOnlyWithId(chat.getUserId()) : null)
                 .createdAt(chat.getCreatedAt())
                 .updatedAt(chat.getUpdatedAt())
                 .build();
