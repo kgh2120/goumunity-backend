@@ -25,12 +25,12 @@ public class ChatRoomController {
     private final ChatRoomService chatRoomService;
 
     @PostMapping
-    public ResponseEntity<Void> createChatRoom(
+    public ResponseEntity<Long> createChatRoom(
             @RequestPart("data") @Valid ChatRoomRequest.Create dto,
             @RequestPart(value = "image", required = false) MultipartFile multipartFile,
             @AuthenticationPrincipal User user) {
-        chatRoomService.createChatRoom(dto, multipartFile, user);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(chatRoomService.createChatRoom(dto, multipartFile, user));
     }
 
     @PostMapping("/{chatRoomId}")

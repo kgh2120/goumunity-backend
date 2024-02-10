@@ -44,11 +44,11 @@ public class ChatRoomServiceImpl implements ChatRoomService {
 
     @Transactional
     @Override
-    public void createChatRoom(ChatRoomRequest.Create dto, MultipartFile multipartFile, User user) {
-        // 해시 검색
+    public Long createChatRoom(ChatRoomRequest.Create dto, MultipartFile multipartFile, User user) {
+
         verifyRegionId(dto);
         // 채팅방 생성
-        chatRoomRepository.save(
+        return chatRoomRepository.save(
                 ChatRoom.create(
                         dto,
                         dto.getRegionId(),
