@@ -65,6 +65,9 @@ public class ChatRoomServiceImpl implements ChatRoomService {
         // 유저가 이미 가입했는지 체크
         verifyConnectChatRoom(chatRoomId, user);
         chatRoomRepository.connectChatRoom(chatRoomId, user.getId());
+
+        template.convertAndSend("/topic/" + chatRoomId, MessageResponse.Live.enter(user));
+        chatRepository.save(Chat.userEntered(chatRoomId, user.getId()));
     }
 
     @Transactional
@@ -72,6 +75,8 @@ public class ChatRoomServiceImpl implements ChatRoomService {
     public void exitChatRoom(Long chatRoomId, User user) {
         ChatRoom chatRoom = verifyExitChatRoom(chatRoomId, user);
         exit(chatRoomId, user, chatRoom);
+        template.convertAndSend("/topic/" + chatRoomId, MessageResponse.Live.exit(user));
+        chatRepository.save(Chat.userExit(chatRoomId, user.getId()));
     }
 
     private void exit(Long chatRoomId, User user, ChatRoom chatRoom) {

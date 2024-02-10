@@ -49,22 +49,4 @@ public class MessageHandler {
         chatService.saveChat(chatRoomId, message, user);
         return MessageResponse.Live.create(message, user);
     }
-
-    @MessageMapping("/messages/{chatRoomId}/enter")
-    @SendTo("/topic/{chatRoomId}")
-    public MessageResponse.Live enterChatRoom(
-            @DestinationVariable Long chatRoomId, Authentication principal) {
-        User user = (User) principal.getPrincipal();
-        chatService.saveChat(chatRoomId, MessageRequest.Create.enter(user), user);
-        return MessageResponse.Live.enter(user);
-    }
-
-    @MessageMapping("/messages/{chatRoomId}/exit")
-    @SendTo("/topic/{chatRoomId}")
-    public MessageResponse.Live exitChatRoom(
-            @DestinationVariable Long chatRoomId, Authentication principal) {
-        User user = (User) principal.getPrincipal();
-        chatService.saveChat(chatRoomId, MessageRequest.Create.exit(user), user);
-        return MessageResponse.Live.enter(user);
-    }
 }

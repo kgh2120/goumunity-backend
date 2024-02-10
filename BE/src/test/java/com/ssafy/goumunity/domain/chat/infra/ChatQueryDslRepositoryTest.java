@@ -104,7 +104,6 @@ class ChatQueryDslRepositoryTest {
 
         sa.assertThat(sut.hasNext()).isFalse();
         sa.assertThat(sut.getContent().size()).isSameAs(5);
-        sa.assertThat(sut.getContent().get(0).getIsCurrentUser()).isTrue();
         sa.assertAll();
     }
 

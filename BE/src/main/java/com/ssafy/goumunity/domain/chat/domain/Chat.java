@@ -39,7 +39,7 @@ public class Chat {
                 .build();
     }
 
-    public static Chat userDisconnected(Long chatRoomId, Long userId) {
+    public static Chat userExit(Long chatRoomId, Long userId) {
         return Chat.builder()
                 .chatType(ChatType.EXIT)
                 .createdAt(Instant.now())
