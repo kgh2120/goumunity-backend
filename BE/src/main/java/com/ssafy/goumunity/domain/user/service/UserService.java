@@ -2,7 +2,9 @@ package com.ssafy.goumunity.domain.user.service;
 
 import com.ssafy.goumunity.domain.chat.controller.response.MyChatRoomResponse;
 import com.ssafy.goumunity.domain.user.controller.request.UserRequest;
+import com.ssafy.goumunity.domain.user.controller.response.UserRankingResponse;
 import com.ssafy.goumunity.domain.user.domain.User;
+import java.util.List;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,4 +27,6 @@ public interface UserService {
     void deleteUser(User user);
 
     Slice<MyChatRoomResponse> findMyChatRoom(User user, Long time, Pageable pageable);
+
+    List<UserRankingResponse> findUserRanking();
 }
