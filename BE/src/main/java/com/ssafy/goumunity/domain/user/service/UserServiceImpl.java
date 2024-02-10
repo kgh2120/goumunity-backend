@@ -2,6 +2,7 @@ package com.ssafy.goumunity.domain.user.service;
 
 import com.ssafy.goumunity.domain.chat.controller.response.MyChatRoomResponse;
 import com.ssafy.goumunity.domain.user.controller.request.UserRequest;
+import com.ssafy.goumunity.domain.user.controller.response.UserRankingResponse;
 import com.ssafy.goumunity.domain.user.domain.User;
 import com.ssafy.goumunity.domain.user.domain.UserStatus;
 import com.ssafy.goumunity.domain.user.exception.UserErrorCode;
@@ -9,6 +10,7 @@ import com.ssafy.goumunity.domain.user.exception.UserException;
 import com.ssafy.goumunity.domain.user.service.port.MyChatRoomFindService;
 import com.ssafy.goumunity.domain.user.service.port.ProfileImageUploader;
 import com.ssafy.goumunity.domain.user.service.port.UserRepository;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -97,5 +99,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public Slice<MyChatRoomResponse> findMyChatRoom(User user, Long time, Pageable pageable) {
         return myChatRoomFindService.findMyChatRoom(user, time, pageable);
+    }
+
+    @Override
+    public List<UserRankingResponse> findUserRanking() {
+        return userRepository.findUserRanking().stream().map(UserRankingResponse::from).toList();
     }
 }

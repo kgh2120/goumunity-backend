@@ -11,6 +11,7 @@ import com.ssafy.goumunity.domain.user.controller.request.ProfileImageModifyRequ
 import com.ssafy.goumunity.domain.user.controller.request.UserRequest;
 import com.ssafy.goumunity.domain.user.controller.request.VerificationCodeRequest;
 import com.ssafy.goumunity.domain.user.controller.response.NicknameValidationResponse;
+import com.ssafy.goumunity.domain.user.controller.response.UserRankingResponse;
 import com.ssafy.goumunity.domain.user.controller.response.UserResponse;
 import com.ssafy.goumunity.domain.user.domain.User;
 import com.ssafy.goumunity.domain.user.service.UserService;
@@ -18,6 +19,7 @@ import com.ssafy.goumunity.domain.user.service.VerificationService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Pageable;
@@ -151,5 +153,10 @@ public class UserController {
     @GetMapping("/{userId}/scraps")
     public ResponseEntity<FeedSearchResult> findAllScrappedFeedByUserId(@PathVariable Long userId) {
         return ResponseEntity.ok(feedService.findAllScrappedFeedByUserId(userId));
+    }
+
+    @GetMapping("/ranking")
+    public ResponseEntity<List<UserRankingResponse>> findUserRanking() {
+        return ResponseEntity.ok(userService.findUserRanking());
     }
 }

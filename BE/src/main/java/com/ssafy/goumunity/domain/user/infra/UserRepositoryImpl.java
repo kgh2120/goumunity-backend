@@ -3,6 +3,7 @@ package com.ssafy.goumunity.domain.user.infra;
 import com.ssafy.goumunity.domain.user.domain.User;
 import com.ssafy.goumunity.domain.user.domain.UserStatus;
 import com.ssafy.goumunity.domain.user.service.port.UserRepository;
+import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -21,6 +22,11 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public Optional<User> findByEmailAndStatus(String email, UserStatus userStatus) {
         return userJpaRepository.findByEmailAndUserStatus(email, userStatus).map(UserEntity::toModel);
+    }
+
+    @Override
+    public List<UserRankingInterface> findUserRanking() {
+        return userJpaRepository.findUserRanking();
     }
 
     @Override
