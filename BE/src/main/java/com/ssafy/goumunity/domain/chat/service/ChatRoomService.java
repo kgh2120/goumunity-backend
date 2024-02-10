@@ -10,7 +10,7 @@ import org.springframework.data.domain.Slice;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface ChatRoomService {
-    void createChatRoom(ChatRoomRequest.Create dto, MultipartFile multipartFile, User user);
+    Long createChatRoom(ChatRoomRequest.Create dto, MultipartFile multipartFile, User user);
 
     void connectChatRoom(Long chatRoomId, User user);
 

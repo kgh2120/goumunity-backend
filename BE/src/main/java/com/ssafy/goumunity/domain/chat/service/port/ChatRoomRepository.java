@@ -11,7 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 
 public interface ChatRoomRepository {
-    void save(ChatRoom chatRoom);
+    Long save(ChatRoom chatRoom);
 
     Optional<ChatRoom> findOneByChatRoomId(Long chatRoomId);
 

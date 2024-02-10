@@ -32,7 +32,7 @@ public class ChatRoomRepositoryImpl implements ChatRoomRepository {
     private final UserChatRoomQueryDslRepository userChatRoomQueryDslRepository;
 
     @Override
-    public void save(ChatRoom chatRoom) {
+    public Long save(ChatRoom chatRoom) {
         ChatRoomEntity chatRoomEntity = ChatRoomEntity.from(chatRoom);
         UserEntity userEntity = UserEntity.userEntityOnlyWithId(chatRoom.getUserId());
         chatRoomEntity.associatedWithUserEntity(userEntity);
@@ -48,6 +48,8 @@ public class ChatRoomRepositoryImpl implements ChatRoomRepository {
                     ChatRoomHashtagEntity.create(hashtagEntities.get(i), chatRoomEntity, i + 1));
         }
         userChatRoomJpaRepository.save(UserChatRoomEntity.create(userEntity, chatRoomEntity));
+
+        return chatRoomEntity.getId();
     }
 
     @Override

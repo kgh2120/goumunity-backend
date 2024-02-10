@@ -9,8 +9,7 @@ import static org.mockito.BDDMockito.given;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.goumunity.common.exception.CustomException;
@@ -78,7 +77,7 @@ class ChatRoomControllerTest {
         mockMvc
                 .perform(multipart(CHAT_ROOM_API_PREFIX).file(image).part(data).with(csrf()))
                 // then
-                .andExpect(status().isCreated())
+                .andExpectAll(status().isCreated(), content().string("0"))
                 .andDo(print());
     }
 
