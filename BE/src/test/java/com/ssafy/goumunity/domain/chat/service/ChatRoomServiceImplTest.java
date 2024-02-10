@@ -1,7 +1,6 @@
 package com.ssafy.goumunity.domain.chat.service;
 
-import static org.assertj.core.api.Assertions.assertThatNoException;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
@@ -75,12 +74,12 @@ class ChatRoomServiceImplTest {
         given(hashtagService.getHashtag(any())).willReturn(Hashtag.create(""));
         given(uploadService.uploadImage(any())).willReturn("image");
         given(regionFindService.isExistsRegion(any())).willReturn(true);
+        given(chatRoomRepository.save(any())).willReturn(1L);
+
         // when
-
-        assertThatNoException().isThrownBy(() -> chatRoomService.createChatRoom(request, image, user));
-
+        Long sut = chatRoomService.createChatRoom(request, image, user);
         // then
-
+        assertThat(sut).isEqualTo(1);
     }
 
     @Test
