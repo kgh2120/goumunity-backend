@@ -61,7 +61,7 @@ public class UserChatRoomEntity {
         return UserChatRoom.builder()
                 .userChatRoomId(id)
                 .userId(user.getId())
-                .userChatRoomId(chatRoom.getId())
+                .chatRoomId(chatRoom.getId())
                 .createdAt(this.createdAt)
                 .updatedAt(this.updatedAt)
                 .lastAccessTime(this.lastAccessTime)
