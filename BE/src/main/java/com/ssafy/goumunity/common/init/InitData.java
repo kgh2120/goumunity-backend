@@ -21,9 +21,11 @@ import jakarta.persistence.EntityTransaction;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+@ConditionalOnProperty(name = "profile", havingValue = "local")
 @RequiredArgsConstructor
 @Component
 public class InitData implements InitializingBean {
