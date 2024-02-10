@@ -205,7 +205,7 @@ public class ChatRoomServiceImpl implements ChatRoomService {
             throw new ChatException(CHAT_ROOM_NOT_FOUND);
 
         return chatRoomRepository
-                .findOneUserChatRoomByUserIdAndChatRoomId(chatRoomId, user.getId())
+                .findOneUserChatRoomByUserIdAndChatRoomId(user.getId(), chatRoomId)
                 .orElseThrow(() -> new CustomException(GlobalErrorCode.FORBIDDEN));
     }
 
