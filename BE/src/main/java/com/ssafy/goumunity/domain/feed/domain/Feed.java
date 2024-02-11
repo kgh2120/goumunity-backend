@@ -1,7 +1,6 @@
 package com.ssafy.goumunity.domain.feed.domain;
 
 import com.ssafy.goumunity.domain.feed.controller.request.FeedRequest;
-import com.ssafy.goumunity.domain.feed.infra.feed.FeedSavingCategory;
 import com.ssafy.goumunity.domain.user.exception.UserErrorCode;
 import com.ssafy.goumunity.domain.user.exception.UserException;
 import java.time.Instant;

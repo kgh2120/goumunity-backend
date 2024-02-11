@@ -1,4 +1,4 @@
-package com.ssafy.goumunity.domain.feed.infra.feed;
+package com.ssafy.goumunity.domain.feed.domain;
 
 public enum FeedSavingCategory {
     HOUSING,

@@ -1,7 +1,6 @@
 package com.ssafy.goumunity.domain.feed.domain;
 
 import com.ssafy.goumunity.domain.feed.infra.feed.FeedEntity;
-import com.ssafy.goumunity.domain.feed.infra.feed.FeedSavingCategory;
 import lombok.*;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

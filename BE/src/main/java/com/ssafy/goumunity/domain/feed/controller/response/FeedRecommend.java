@@ -2,7 +2,7 @@ package com.ssafy.goumunity.domain.feed.controller.response;
 
 import com.ssafy.goumunity.domain.feed.domain.FeedCategory;
 import com.ssafy.goumunity.domain.feed.domain.FeedRecommendResource;
-import com.ssafy.goumunity.domain.feed.infra.feed.FeedSavingCategory;
+import com.ssafy.goumunity.domain.feed.domain.FeedSavingCategory;
 import java.util.List;
 import lombok.*;
 

@@ -2,6 +2,7 @@ package com.ssafy.goumunity.domain.feed.infra.feed;
 
 import com.ssafy.goumunity.domain.feed.domain.Feed;
 import com.ssafy.goumunity.domain.feed.domain.FeedCategory;
+import com.ssafy.goumunity.domain.feed.domain.FeedSavingCategory;
 import com.ssafy.goumunity.domain.feed.infra.comment.CommentEntity;
 import com.ssafy.goumunity.domain.feed.infra.feedimg.FeedImgEntity;
 import com.ssafy.goumunity.domain.feed.infra.feedlike.FeedLikeEntity;

@@ -1,7 +1,7 @@
 package com.ssafy.goumunity.domain.feed.controller.request;
 
 import com.ssafy.goumunity.domain.feed.domain.FeedCategory;
-import com.ssafy.goumunity.domain.feed.infra.feed.FeedSavingCategory;
+import com.ssafy.goumunity.domain.feed.domain.FeedSavingCategory;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import java.util.List;

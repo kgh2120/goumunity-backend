@@ -1,6 +1,5 @@
 package com.ssafy.goumunity.domain.feed.domain;
 
-import com.ssafy.goumunity.domain.feed.infra.feed.FeedSavingCategory;
 import com.ssafy.goumunity.domain.user.domain.User;
 import com.ssafy.goumunity.domain.user.domain.UserCategory;
 import com.ssafy.goumunity.domain.user.domain.UserSavingCategory;

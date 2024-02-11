@@ -2,8 +2,8 @@ package com.ssafy.goumunity.domain.feed.controller.response;
 
 import com.querydsl.core.annotations.QueryProjection;
 import com.ssafy.goumunity.domain.feed.domain.FeedCategory;
+import com.ssafy.goumunity.domain.feed.domain.FeedSavingCategory;
 import com.ssafy.goumunity.domain.feed.infra.feed.FeedEntity;
-import com.ssafy.goumunity.domain.feed.infra.feed.FeedSavingCategory;
 import com.ssafy.goumunity.domain.region.controller.response.RegionResponse;
 import com.ssafy.goumunity.domain.user.controller.response.UserResponse;
 import java.util.List;
