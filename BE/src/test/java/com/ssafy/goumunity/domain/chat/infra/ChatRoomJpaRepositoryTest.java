@@ -103,10 +103,13 @@ class ChatRoomJpaRepositoryTest {
         Long id = chatRoom.getId();
         ChatRoom model = chatRoom.to();
 
+        em.flush();
+        em.clear();
         ChatRoomRequest.Modify modify =
                 ChatRoomRequest.Modify.builder()
                         .leaderId(user.getId())
                         .title("거거지지")
+                        .regionId(region.getRegionId())
                         .hashtagRequests(
                                 List.of(
                                         ChatRoomRequest.HashtagRequest.builder().name("1").build(),

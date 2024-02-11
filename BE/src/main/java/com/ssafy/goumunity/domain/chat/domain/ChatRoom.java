@@ -64,11 +64,13 @@ public class ChatRoom {
     }
 
     public void modify(ChatRoomRequest.Modify dto, List<Long> hashtagsIds, String imageSource) {
+        this.userId = dto.getLeaderId();
         title = dto.getTitle();
         capability = dto.getCapability();
         imgSrc = imageSource;
         updatedAt = Instant.now();
         this.hashtagsIds = hashtagsIds;
+        this.regionId = dto.getRegionId();
     }
 
     public void modifyHost(Long userId) {
