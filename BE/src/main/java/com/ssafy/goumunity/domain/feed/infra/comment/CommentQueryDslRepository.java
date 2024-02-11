@@ -3,6 +3,7 @@ package com.ssafy.goumunity.domain.feed.infra.comment;
 import static com.ssafy.goumunity.domain.feed.infra.comment.QCommentEntity.commentEntity;
 import static com.ssafy.goumunity.domain.feed.infra.commentlike.QCommentLikeEntity.commentLikeEntity;
 import static com.ssafy.goumunity.domain.feed.infra.reply.QReplyEntity.replyEntity;
+import static com.ssafy.goumunity.domain.region.infra.QRegionEntity.regionEntity;
 import static com.ssafy.goumunity.domain.user.infra.QUserEntity.userEntity;
 
 import com.querydsl.jpa.JPAExpressions;
@@ -28,7 +29,6 @@ public class CommentQueryDslRepository {
             Long userId, Long feedId, Instant time, Pageable pageable) {
         final List<CommentResponse> result =
                 queryFactory
-                        .query()
                         .select(
                                 new QCommentResponse(
                                         commentEntity,
@@ -44,6 +44,9 @@ public class CommentQueryDslRepository {
                                                 .exists()))
                         .from(commentEntity)
                         .leftJoin(commentEntity.userEntity, userEntity)
+                        .fetchJoin()
+                        .leftJoin(userEntity.regionEntity, regionEntity)
+                        .fetchJoin()
                         .where(commentEntity.feedEntity.id.eq(feedId))
                         .where(commentEntity.createdAt.before(time))
                         .orderBy(commentEntity.createdAt.desc())
@@ -56,7 +59,6 @@ public class CommentQueryDslRepository {
 
     public CommentResponse findOneComment(Long userId, Long commentId) {
         return queryFactory
-                .query()
                 .select(
                         new QCommentResponse(
                                 commentEntity,
@@ -72,6 +74,9 @@ public class CommentQueryDslRepository {
                                         .exists()))
                 .from(commentEntity)
                 .leftJoin(commentEntity.userEntity, userEntity)
+                .fetchJoin()
+                .leftJoin(userEntity.regionEntity, regionEntity)
+                .fetchJoin()
                 .where(commentEntity.id.eq(commentId))
                 .fetchOne();
     }

@@ -1,5 +1,6 @@
 package com.ssafy.goumunity.domain.feed.service;
 
+import com.ssafy.goumunity.common.util.TimeUtils;
 import com.ssafy.goumunity.domain.feed.controller.request.FeedImgRequest;
 import com.ssafy.goumunity.domain.feed.controller.request.FeedRequest;
 import com.ssafy.goumunity.domain.feed.controller.response.*;
@@ -23,6 +24,9 @@ import org.springframework.cache.CacheManager;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.Comparator;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -127,6 +131,16 @@ public class FeedServiceImpl implements FeedService {
     @Override
     public FeedSearchResult findAllScrappedFeedByUserId(Long userId) {
         return FeedSearchResult.from(feedRepository.findAllScrappedFeedByUserId(userId));
+    }
+
+    @Override
+    public List<FeedScrapRankingResponse> findFeedScrapRanking(TimeUtils.TimeKey key) {
+        TimeUtils.TimeRange timeRange = TimeUtils.getTimeRange(key);
+        return feedRepository
+                .findFeedScrapRanking(timeRange.getStart(), timeRange.getEnd())
+                .stream()
+                .map(FeedScrapRankingResponse::from)
+                .toList();
     }
 
     @Override

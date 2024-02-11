@@ -1,5 +1,6 @@
 package com.ssafy.goumunity.domain.chat.infra.chatroom;
 
+import com.ssafy.goumunity.domain.chat.controller.response.ChatRoomDetailResponse;
 import com.ssafy.goumunity.domain.chat.controller.response.ChatRoomSearchResponse;
 import com.ssafy.goumunity.domain.chat.controller.response.ChatRoomUserResponse;
 import com.ssafy.goumunity.domain.chat.controller.response.MyChatRoomResponse;
@@ -161,5 +162,10 @@ public class ChatRoomRepositoryImpl implements ChatRoomRepository {
     @Override
     public Long getOldestUserInChatRoom(Long chatRoomId, Long userId) {
         return userChatRoomQueryDslRepository.getOldestUserIdOnChatRoom(chatRoomId, userId);
+    }
+
+    @Override
+    public ChatRoomDetailResponse findDetailByChatRoomId(Long chatRoomId, Long userId) {
+        return chatRoomQueryDslRepository.findDetailByChatRoomId(chatRoomId, userId);
     }
 }

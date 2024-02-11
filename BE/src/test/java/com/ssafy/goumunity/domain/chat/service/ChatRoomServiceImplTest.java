@@ -9,6 +9,7 @@ import static org.mockito.BDDMockito.verify;
 import com.ssafy.goumunity.common.exception.CustomException;
 import com.ssafy.goumunity.common.exception.GlobalErrorCode;
 import com.ssafy.goumunity.domain.chat.controller.request.ChatRoomRequest;
+import com.ssafy.goumunity.domain.chat.controller.response.ChatRoomDetailResponse;
 import com.ssafy.goumunity.domain.chat.controller.response.ChatRoomUserResponse;
 import com.ssafy.goumunity.domain.chat.controller.response.MyChatRoomResponse;
 import com.ssafy.goumunity.domain.chat.domain.ChatRoom;
@@ -16,11 +17,16 @@ import com.ssafy.goumunity.domain.chat.domain.Hashtag;
 import com.ssafy.goumunity.domain.chat.domain.UserChatRoom;
 import com.ssafy.goumunity.domain.chat.exception.ChatErrorCode;
 import com.ssafy.goumunity.domain.chat.exception.ChatException;
+import com.ssafy.goumunity.domain.chat.infra.chatroom.ChatRoomEntity;
+import com.ssafy.goumunity.domain.chat.infra.chatroom.UserChatRoomEntity;
+import com.ssafy.goumunity.domain.chat.infra.hashtag.ChatRoomHashtagEntity;
+import com.ssafy.goumunity.domain.chat.infra.hashtag.HashtagEntity;
 import com.ssafy.goumunity.domain.chat.service.port.ChatRepository;
 import com.ssafy.goumunity.domain.chat.service.port.ChatRoomRepository;
 import com.ssafy.goumunity.domain.chat.service.port.ImageUploadService;
 import com.ssafy.goumunity.domain.chat.service.port.RegionFindService;
 import com.ssafy.goumunity.domain.user.domain.User;
+import com.ssafy.goumunity.domain.user.infra.UserEntity;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -558,6 +564,114 @@ class ChatRoomServiceImplTest {
 
     @Test
     void 거지방_목록_단건_조회_테스트_실패_채팅방이_없는_경우() throws Exception {
+        // given
+        Long chatRoomId = 1L;
+        User user = User.builder().id(1L).build();
+
+        given(chatRoomRepository.isExistChatRoom(any())).willReturn(false);
+        // when
+        // then
+        assertThatThrownBy(() -> chatRoomService.findOneMyChatRoomByChatRoomId(chatRoomId, user))
+                .isInstanceOf(ChatException.class)
+                .hasFieldOrPropertyWithValue("errorCode", ChatErrorCode.CHAT_ROOM_NOT_FOUND);
+    }
+
+    @Test
+    void 거지방_상세_조회_테스트_성공() throws Exception {
+        UserEntity users =
+                UserEntity.builder()
+                        .id(1L)
+                        .nickname("1234")
+                        .email("ssafy@gmail.com")
+                        .password("1234")
+                        .build();
+
+        UserEntity users2 =
+                UserEntity.builder()
+                        .id(2L)
+                        .nickname("짭수")
+                        .email("ssafy@gmail.com")
+                        .password("1234")
+                        .build();
+
+        HashtagEntity h1 = HashtagEntity.builder().name("20대").build();
+        HashtagEntity h2 = HashtagEntity.builder().name("관악구").build();
+        HashtagEntity h3 = HashtagEntity.builder().name("10만원 미만").build();
+        ChatRoomEntity chatRoom = null;
+        ChatRoomHashtagEntity crh1 =
+                ChatRoomHashtagEntity.builder().chatRoom(chatRoom).hashtag(h1).sequence(1).build();
+        ChatRoomHashtagEntity crh2 =
+                ChatRoomHashtagEntity.builder().chatRoom(chatRoom).hashtag(h2).sequence(2).build();
+        ChatRoomHashtagEntity crh3 =
+                ChatRoomHashtagEntity.builder().chatRoom(chatRoom).hashtag(h3).sequence(3).build();
+        UserChatRoomEntity ucr =
+                UserChatRoomEntity.builder()
+                        .chatRoom(chatRoom)
+                        .user(users)
+                        .lastAccessTime(Instant.ofEpochMilli(100L))
+                        .build();
+        UserChatRoomEntity uc2 =
+                UserChatRoomEntity.builder()
+                        .chatRoom(chatRoom)
+                        .user(users2)
+                        .lastAccessTime(Instant.ofEpochMilli(100L))
+                        .build();
+
+        chatRoom =
+                ChatRoomEntity.builder()
+                        .id(1L)
+                        .title("거지방")
+                        .capability(10)
+                        .host(users)
+                        .chatRoomHashtags(List.of(crh1, crh2, crh3))
+                        .userChatRooms(List.of(ucr, uc2))
+                        .createdAt(Instant.ofEpochMilli(1000L))
+                        .build();
+
+        given(chatRoomRepository.isExistChatRoom(any())).willReturn(true);
+        given(chatRoomRepository.isAlreadyJoinedUser(any(), any())).willReturn(true);
+
+        given(chatRoomRepository.findDetailByChatRoomId(any(), any()))
+                .willReturn(new ChatRoomDetailResponse(chatRoom, 1L));
+
+        // when
+        User user = User.builder().id(2L).build();
+        ChatRoomDetailResponse sut = chatRoomService.findDetailByChatRoomId(1L, user);
+        // then
+        SoftAssertions sa = new SoftAssertions();
+
+        sa.assertThat(sut.getChatRoomId()).isEqualTo(1L);
+        sa.assertThat(sut.getTitle()).isEqualTo("거지방");
+        sa.assertThat(sut.getImgSrc()).isNull();
+        sa.assertThat(sut.getCapability()).isEqualTo(10);
+        sa.assertThat(sut.getCurrentUserCount()).isEqualTo(2);
+        sa.assertThat(sut.getHashtags().size()).isEqualTo(3);
+        sa.assertThat(sut.getHost().getUserId()).isEqualTo(1L);
+        sa.assertThat(sut.getHost().getNickname()).isEqualTo("1234");
+        sa.assertThat(sut.getHost().getProfileImageSrc()).isNull();
+        sa.assertThat(sut.getHost().getIsCurrentUser()).isFalse();
+        sa.assertThat(sut.getIsHost()).isFalse();
+        sa.assertThat(sut.getMembers().size()).isEqualTo(2);
+    }
+
+    @Test
+    void 거지방_상세_조회_테스트_실패_회원이_채팅방에_속하지_않는_경우() throws Exception {
+        // given
+        Long chatRoomId = 1L;
+        User user = User.builder().id(1L).build();
+
+        given(chatRoomRepository.isExistChatRoom(any())).willReturn(true);
+        given(chatRoomRepository.findOneMyChatRoomByChatRoomId(any(), any()))
+                .willReturn(Optional.empty());
+        // when
+        // then
+        assertThatThrownBy(() -> chatRoomService.findOneMyChatRoomByChatRoomId(chatRoomId, user))
+                .isInstanceOf(CustomException.class)
+                .hasFieldOrPropertyWithValue("errorCode", GlobalErrorCode.FORBIDDEN);
+    }
+
+    @Test
+    void 거지방_상세_조회_테스트_실패_채팅방이_없는_경우() throws Exception {
         // given
         Long chatRoomId = 1L;
         User user = User.builder().id(1L).build();

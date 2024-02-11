@@ -31,9 +31,11 @@ public class FeedResponse {
     private Long commentCount;
     private Long likeCount;
     private Boolean iLikeThat;
+    private Boolean isScrapped;
 
     @QueryProjection
-    public FeedResponse(FeedEntity feed, Long commentCount, Long likeCount, Boolean iLikeThat) {
+    public FeedResponse(
+            FeedEntity feed, Long commentCount, Long likeCount, Boolean iLikeThat, Boolean isScrapped) {
         this.feedId = feed.getId();
         this.content = feed.getContent();
         this.feedCategory = feed.getFeedCategory();
@@ -48,5 +50,6 @@ public class FeedResponse {
         this.commentCount = commentCount;
         this.likeCount = likeCount;
         this.iLikeThat = iLikeThat;
+        this.isScrapped = isScrapped;
     }
 }

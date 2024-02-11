@@ -5,6 +5,7 @@ import static com.ssafy.goumunity.domain.chat.infra.chatroom.QChatRoomEntity.cha
 import static com.ssafy.goumunity.domain.chat.infra.chatroom.QUserChatRoomEntity.userChatRoomEntity;
 import static com.ssafy.goumunity.domain.chat.infra.hashtag.QChatRoomHashtagEntity.chatRoomHashtagEntity;
 import static com.ssafy.goumunity.domain.chat.infra.hashtag.QHashtagEntity.hashtagEntity;
+import static com.ssafy.goumunity.domain.region.infra.QRegionEntity.regionEntity;
 import static com.ssafy.goumunity.domain.user.infra.QUserEntity.userEntity;
 
 import com.querydsl.core.types.Projections;
@@ -12,8 +13,10 @@ import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.goumunity.common.util.QueryDslSliceUtils;
+import com.ssafy.goumunity.domain.chat.controller.response.ChatRoomDetailResponse;
 import com.ssafy.goumunity.domain.chat.controller.response.ChatRoomUserResponse;
 import com.ssafy.goumunity.domain.chat.controller.response.MyChatRoomResponse;
+import com.ssafy.goumunity.domain.user.infra.QUserEntity;
 import java.time.Instant;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -132,5 +135,22 @@ public class ChatRoomQueryDslRepository {
                         .limit(pageable.getPageSize() + 1)
                         .fetch();
         return new SliceImpl<>(result, pageable, QueryDslSliceUtils.hasNext(result, pageable));
+    }
+
+    public ChatRoomDetailResponse findDetailByChatRoomId(Long chatRoomId, Long userId) {
+        return jpaQueryFactory
+                .select(
+                        Projections.constructor(
+                                ChatRoomDetailResponse.class, chatRoomEntity, Expressions.constant(userId)))
+                .distinct()
+                .from(chatRoomEntity)
+                .join(chatRoomEntity.host, new QUserEntity("h"))
+                .fetchJoin()
+                .join(chatRoomEntity.region, regionEntity)
+                .fetchJoin()
+                .join(chatRoomEntity.userChatRooms, userChatRoomEntity)
+                .join(userChatRoomEntity.user, userEntity)
+                .where(chatRoomEntity.id.eq(chatRoomId))
+                .fetchOne();
     }
 }

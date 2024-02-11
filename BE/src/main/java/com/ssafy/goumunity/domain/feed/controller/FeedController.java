@@ -1,9 +1,11 @@
 package com.ssafy.goumunity.domain.feed.controller;
 
+import com.ssafy.goumunity.common.util.TimeUtils;
 import com.ssafy.goumunity.domain.feed.controller.request.FeedRequest;
 import com.ssafy.goumunity.domain.feed.controller.response.FeedIdWithUser;
 import com.ssafy.goumunity.domain.feed.controller.response.FeedRecommendResponse;
 import com.ssafy.goumunity.domain.feed.controller.response.FeedResponse;
+import com.ssafy.goumunity.domain.feed.controller.response.FeedScrapRankingResponse;
 import com.ssafy.goumunity.domain.feed.service.FeedService;
 import com.ssafy.goumunity.domain.user.domain.User;
 import jakarta.annotation.Nullable;
@@ -53,6 +55,12 @@ public class FeedController {
     public ResponseEntity<FeedResponse> findOneByFeedId(
             @AuthenticationPrincipal User user, @PathVariable Long feedId) {
         return ResponseEntity.ok(feedService.findOneFeed(user.getId(), feedId));
+    }
+
+    @GetMapping("/ranking/scrap")
+    public ResponseEntity<List<FeedScrapRankingResponse>> findFeedScrapRanking(
+            @RequestParam("time-key") TimeUtils.TimeKey key) {
+        return ResponseEntity.ok(feedService.findFeedScrapRanking(key));
     }
 
     @PatchMapping("{feedId}")

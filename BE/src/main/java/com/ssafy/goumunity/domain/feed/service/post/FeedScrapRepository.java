@@ -1,12 +1,11 @@
 package com.ssafy.goumunity.domain.feed.service.post;
 
 import com.ssafy.goumunity.domain.feed.domain.FeedScrap;
-import com.ssafy.goumunity.domain.feed.infra.feedscrap.FeedScrapEntity;
 import java.util.Optional;
 
 public interface FeedScrapRepository {
 
-    void create(FeedScrapEntity feedScrapEntity);
+    void create(FeedScrap feedScrap);
 
     void delete(Long feedScrapId);
 

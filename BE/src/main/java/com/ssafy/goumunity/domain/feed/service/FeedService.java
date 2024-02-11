@@ -1,5 +1,6 @@
 package com.ssafy.goumunity.domain.feed.service;
 
+import com.ssafy.goumunity.common.util.TimeUtils;
 import com.ssafy.goumunity.domain.feed.controller.request.FeedRequest;
 import com.ssafy.goumunity.domain.feed.controller.response.*;
 import com.ssafy.goumunity.domain.user.domain.User;
@@ -19,6 +20,8 @@ public interface FeedService {
     SavingResult findAllSavingByUserId(Long userId);
 
     FeedSearchResult findAllScrappedFeedByUserId(Long userId);
+
+    List<FeedScrapRankingResponse> findFeedScrapRanking(TimeUtils.TimeKey key);
 
     void modifyFeed(
             Long userId, Long feedId, FeedRequest.Modify feedRequest, List<MultipartFile> images);

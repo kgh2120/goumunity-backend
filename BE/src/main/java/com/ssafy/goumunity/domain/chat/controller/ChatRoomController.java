@@ -2,6 +2,7 @@ package com.ssafy.goumunity.domain.chat.controller;
 
 import com.ssafy.goumunity.common.util.SliceResponse;
 import com.ssafy.goumunity.domain.chat.controller.request.ChatRoomRequest;
+import com.ssafy.goumunity.domain.chat.controller.response.ChatRoomDetailResponse;
 import com.ssafy.goumunity.domain.chat.controller.response.ChatRoomSearchResponse;
 import com.ssafy.goumunity.domain.chat.controller.response.ChatRoomUserResponse;
 import com.ssafy.goumunity.domain.chat.controller.response.MyChatRoomResponse;
@@ -87,5 +88,11 @@ public class ChatRoomController {
     public ResponseEntity<MyChatRoomResponse> findOneByChatRoomId(
             @PathVariable Long chatRoomId, @AuthenticationPrincipal User user) {
         return ResponseEntity.ok(chatRoomService.findOneMyChatRoomByChatRoomId(chatRoomId, user));
+    }
+
+    @GetMapping("/{chatRoomId}/detail")
+    public ResponseEntity<ChatRoomDetailResponse> findDetailByChatRoomId(
+            @PathVariable Long chatRoomId, @AuthenticationPrincipal User user) {
+        return ResponseEntity.ok(chatRoomService.findDetailByChatRoomId(chatRoomId, user));
     }
 }
