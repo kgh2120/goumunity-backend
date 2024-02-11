@@ -75,7 +75,8 @@ public class SecurityConfig {
                                                 "/api/users/login",
                                                 "/api/users/nickname/validation",
                                                 "/api/users/email/verification",
-                                                "/api/nicknames")
+                                                "/api/nicknames",
+                                                "/api/regions/{regionId}")
                                         .permitAll()
                                         .requestMatchers("/**")
                                         .authenticated())
