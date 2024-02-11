@@ -49,6 +49,6 @@ public class FeedScarpServiceImpl implements FeedScrapService {
                         .findOneByUserIdAndFeedId(FeedScrap.feedScrapWithUserIdAndFeedId(userId, feedId))
                         .orElseThrow(() -> new FeedException(FeedErrorCode.NO_SCRAP_DATA));
 
-        feedScrapRepository.create(FeedScrapEntity.from(feedScrap));
+        feedScrapRepository.delete(feedScrap.getId());
     }
 }
