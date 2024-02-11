@@ -20,4 +20,13 @@ public class FeedScrap {
     public static FeedScrap feedScrapWithUserIdAndFeedId(Long userId, Long feedId) {
         return FeedScrap.builder().userId(userId).feedId(feedId).build();
     }
+
+    public static FeedScrap from(Long userId, Long feedId) {
+        return FeedScrap.builder()
+                .userId(userId)
+                .feedId(feedId)
+                .createdAt(Instant.now())
+                .updatedAt(Instant.now())
+                .build();
+    }
 }
