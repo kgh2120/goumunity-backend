@@ -1,6 +1,7 @@
 package com.ssafy.goumunity.domain.chat.controller.response;
 
 import com.ssafy.goumunity.domain.chat.infra.chatroom.ChatRoomEntity;
+import com.ssafy.goumunity.domain.region.infra.RegionEntity;
 import java.util.List;
 import lombok.*;
 
@@ -21,6 +22,7 @@ public class ChatRoomDetailResponse {
     private ChatRoomUserResponse host;
     private Boolean isHost;
     private List<ChatRoomUserResponse> members;
+    private ChatRoomRegionResponse region;
 
     public ChatRoomDetailResponse(ChatRoomEntity chatRoom, Long currentUserId) {
         this.chatRoomId = chatRoom.getId();
@@ -39,5 +41,22 @@ public class ChatRoomDetailResponse {
         this.currentUserCount = members.size();
         this.hashtags =
                 chatRoom.getChatRoomHashtags().stream().map(ChatRoomHashtagResponse::from).toList();
+        this.region = new ChatRoomRegionResponse(chatRoom.getRegion());
+    }
+
+    @Getter
+    @Builder
+    @AllArgsConstructor(access = AccessLevel.PRIVATE)
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
+    public static class ChatRoomRegionResponse {
+        private Long regionId;
+        private String si;
+        private String gungu;
+
+        public ChatRoomRegionResponse(RegionEntity region) {
+            this.regionId = region.getRegionId();
+            this.si = region.getSi();
+            this.gungu = region.getGungu();
+        }
     }
 }

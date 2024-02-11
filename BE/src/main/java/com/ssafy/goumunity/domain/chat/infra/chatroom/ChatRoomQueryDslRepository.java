@@ -5,6 +5,7 @@ import static com.ssafy.goumunity.domain.chat.infra.chatroom.QChatRoomEntity.cha
 import static com.ssafy.goumunity.domain.chat.infra.chatroom.QUserChatRoomEntity.userChatRoomEntity;
 import static com.ssafy.goumunity.domain.chat.infra.hashtag.QChatRoomHashtagEntity.chatRoomHashtagEntity;
 import static com.ssafy.goumunity.domain.chat.infra.hashtag.QHashtagEntity.hashtagEntity;
+import static com.ssafy.goumunity.domain.region.infra.QRegionEntity.regionEntity;
 import static com.ssafy.goumunity.domain.user.infra.QUserEntity.userEntity;
 
 import com.querydsl.core.types.Projections;
@@ -144,6 +145,8 @@ public class ChatRoomQueryDslRepository {
                 .distinct()
                 .from(chatRoomEntity)
                 .join(chatRoomEntity.host, new QUserEntity("h"))
+                .fetchJoin()
+                .join(chatRoomEntity.region, regionEntity)
                 .fetchJoin()
                 .join(chatRoomEntity.userChatRooms, userChatRoomEntity)
                 .join(userChatRoomEntity.user, userEntity)
