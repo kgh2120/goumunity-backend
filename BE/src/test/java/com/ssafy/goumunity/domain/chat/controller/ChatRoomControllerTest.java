@@ -23,6 +23,7 @@ import com.ssafy.goumunity.domain.chat.infra.chatroom.UserChatRoomEntity;
 import com.ssafy.goumunity.domain.chat.infra.hashtag.ChatRoomHashtagEntity;
 import com.ssafy.goumunity.domain.chat.infra.hashtag.HashtagEntity;
 import com.ssafy.goumunity.domain.chat.service.ChatRoomService;
+import com.ssafy.goumunity.domain.region.infra.RegionEntity;
 import com.ssafy.goumunity.domain.user.infra.UserEntity;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -687,6 +688,7 @@ class ChatRoomControllerTest {
                         .chatRoomHashtags(List.of(crh1, crh2, crh3))
                         .userChatRooms(List.of(ucr, uc2))
                         .createdAt(Instant.ofEpochMilli(1000L))
+                        .region(RegionEntity.builder().regionId(1L).si("서울").gungu("서초구").build())
                         .build();
 
         given(chatRoomService.findDetailByChatRoomId(any(), any()))
