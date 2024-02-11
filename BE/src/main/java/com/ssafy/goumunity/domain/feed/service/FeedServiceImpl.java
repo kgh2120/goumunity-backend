@@ -70,7 +70,7 @@ public class FeedServiceImpl implements FeedService {
         }
 
         // 캐시 데이터가 저장되어있지만 유저 지역에 변경이 발생한 경우 다시 불러온다.
-        if(regionId != Long.valueOf(cacheManager.getCache("region").get(user.getNickname(), Integer.class))){
+        if(regionId != cacheManager.getCache("region").get(user.getNickname(), Long.class)){
             findAllByRecommend(user, regionId);
         }
 
