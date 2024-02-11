@@ -1,5 +1,6 @@
 package com.ssafy.goumunity.domain.chat.service.port;
 
+import com.ssafy.goumunity.domain.chat.controller.response.ChatRoomDetailResponse;
 import com.ssafy.goumunity.domain.chat.controller.response.ChatRoomSearchResponse;
 import com.ssafy.goumunity.domain.chat.controller.response.ChatRoomUserResponse;
 import com.ssafy.goumunity.domain.chat.controller.response.MyChatRoomResponse;
@@ -47,4 +48,6 @@ public interface ChatRoomRepository {
     void deleteAllUserChatRoomByUserId(Long userId);
 
     Long getOldestUserInChatRoom(Long chatRoomId, Long userId);
+
+    ChatRoomDetailResponse findDetailByChatRoomId(Long chatRoomId, Long id);
 }
