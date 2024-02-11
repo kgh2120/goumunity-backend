@@ -45,24 +45,12 @@ public class FeedScrapEntity {
     }
 
     public static FeedScrapEntity from(FeedScrap feedScrap) {
-        FeedScrapEntityBuilder builder =
-                FeedScrapEntity.builder()
-                        .id(feedScrap.getId())
-                        .feedEntity(FeedEntity.feedEntityOnlyWithId(feedScrap.getFeedId()))
-                        .userEntity(UserEntity.userEntityOnlyWithId(feedScrap.getUserId()));
-
-        if (feedScrap.getCreatedAt() == null) {
-            builder.createdAt(Instant.now());
-        } else {
-            builder.createdAt(feedScrap.getCreatedAt());
-        }
-
-        if (feedScrap.getUpdatedAt() == null) {
-            builder.updatedAt(Instant.now());
-        } else {
-            builder.updatedAt(feedScrap.getUpdatedAt());
-        }
-
-        return builder.build();
+        return FeedScrapEntity.builder()
+                .id(feedScrap.getId())
+                .feedEntity(FeedEntity.feedEntityOnlyWithId(feedScrap.getFeedId()))
+                .userEntity(UserEntity.userEntityOnlyWithId(feedScrap.getUserId()))
+                .createdAt(feedScrap.getCreatedAt())
+                .updatedAt(feedScrap.getUpdatedAt())
+                .build();
     }
 }
