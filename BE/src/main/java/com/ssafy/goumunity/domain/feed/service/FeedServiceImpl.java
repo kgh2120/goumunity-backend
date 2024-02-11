@@ -67,6 +67,11 @@ public class FeedServiceImpl implements FeedService {
             findAllByRecommend(user, regionId);
         }
 
+        // 캐시 데이터가 저장되어있지만 유저 지역에 변경이 발생한 경우 다시 불러온다.
+        if(regionId != Long.valueOf(cacheManager.getCache("region").get(user.getNickname(), Integer.class))){
+            findAllByRecommend(user, regionId);
+        }
+
         int pageNumber = cacheManager.getCache("pagenumber").get(user.getNickname(), Integer.class);
         int maxPage = cacheManager.getCache("maxpage").get(user.getNickname(), Integer.class);
         int size = cacheManager.getCache("recommends").get(user.getNickname(), List.class).size();
@@ -224,5 +229,6 @@ public class FeedServiceImpl implements FeedService {
         cacheManager.getCache("recommends").put(user.getNickname(), recommends);
         cacheManager.getCache("pagenumber").put(user.getNickname(), 1);
         cacheManager.getCache("maxpage").put(user.getNickname(), maxPage);
+        cacheManager.getCache("region").put(user.getNickname(), regionId);
     }
 }

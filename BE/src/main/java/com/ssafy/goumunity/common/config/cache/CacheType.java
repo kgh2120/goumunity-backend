@@ -6,7 +6,8 @@ import lombok.Getter;
 public enum CacheType {
     FEED_RECOMMENDS("recommends"),
     FEED_PAGE_NUMBER("pagenumber"),
-    MAX_PAGE_NUMBER("maxpage");
+    MAX_PAGE_NUMBER("maxpage"),
+    REGION("region");
 
     private String name;
     private Integer expireAfterWrite;
