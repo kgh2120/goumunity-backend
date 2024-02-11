@@ -9,4 +9,9 @@ import lombok.*;
 @Getter
 public class FeedRecommendResponse {
     private List<FeedRecommend> feedRecommends;
+    private Boolean hasNext;
+
+    public static FeedRecommendResponse from(List<FeedRecommend> recommends, Boolean hasNext) {
+        return FeedRecommendResponse.builder().feedRecommends(recommends).hasNext(hasNext).build();
+    }
 }

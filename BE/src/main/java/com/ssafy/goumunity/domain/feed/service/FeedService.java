@@ -10,7 +10,7 @@ public interface FeedService {
 
     FeedIdWithUser createFeed(User user, FeedRequest.Create feedRequest, List<MultipartFile> images);
 
-    List<FeedRecommend> findFeed(User user, Long regionId);
+    FeedRecommendResponse findFeed(User user, Long regionId);
 
     FeedResponse findOneFeed(Long userId, Long feedId);
 
