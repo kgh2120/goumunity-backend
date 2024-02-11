@@ -39,6 +39,10 @@ public class FeedQueryDslRepository {
                                 JPAExpressions.selectFrom(feedLikeEntity)
                                         .where(feedLikeEntity.userEntity.id.eq(userId))
                                         .where(feedLikeEntity.feedEntity.eq(feedEntity))
+                                        .exists(),
+                                JPAExpressions.selectFrom(feedScrapEntity)
+                                        .where(feedScrapEntity.userEntity.id.eq(userId))
+                                        .where(feedScrapEntity.feedEntity.id.eq(feedEntity.id))
                                         .exists()))
                 .from(feedEntity)
                 .leftJoin(feedEntity.images, feedImgEntity)
@@ -130,6 +134,10 @@ public class FeedQueryDslRepository {
                                 JPAExpressions.selectFrom(feedLikeEntity)
                                         .where(feedLikeEntity.userEntity.id.eq(userId))
                                         .where(feedLikeEntity.feedEntity.eq(feedEntity))
+                                        .exists(),
+                                JPAExpressions.selectFrom(feedScrapEntity)
+                                        .where(feedScrapEntity.userEntity.id.eq(userId))
+                                        .where(feedScrapEntity.feedEntity.id.eq(feedEntity.id))
                                         .exists()))
                 .from(feedEntity)
                 .leftJoin(feedEntity.images, feedImgEntity)
