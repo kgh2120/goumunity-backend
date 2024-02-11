@@ -8,6 +8,7 @@ import com.ssafy.goumunity.domain.feed.infra.feedscrap.FeedScrapEntity;
 import com.ssafy.goumunity.domain.feed.service.post.FeedRepository;
 import com.ssafy.goumunity.domain.feed.service.post.FeedScrapRepository;
 import com.ssafy.goumunity.domain.user.infra.UserEntity;
+import java.time.Instant;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,6 +35,8 @@ public class FeedScarpServiceImpl implements FeedScrapService {
                 FeedScrapEntity.builder()
                         .userEntity(UserEntity.userEntityOnlyWithId(userId))
                         .feedEntity(FeedEntity.feedEntityOnlyWithId(feedId))
+                        .createdAt(Instant.now())
+                        .updatedAt(Instant.now())
                         .build());
     }
 
