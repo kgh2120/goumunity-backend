@@ -32,6 +32,10 @@ public class FeedEntity {
     @Enumerated(EnumType.STRING)
     private FeedCategory feedCategory;
 
+    @Column(name = "saving")
+    @Enumerated(EnumType.STRING)
+    private FeedSavingCategory savingCategory;
+
     @Column(name = "price")
     private Integer price;
 
@@ -69,6 +73,7 @@ public class FeedEntity {
                 .id(id)
                 .content(content)
                 .feedCategory(feedCategory)
+                .savingCategory(savingCategory)
                 .price(price)
                 .afterPrice(afterPrice)
                 .regionId(regionEntity.getRegionId())
@@ -83,6 +88,7 @@ public class FeedEntity {
                 .id(feed.getId())
                 .content(feed.getContent())
                 .feedCategory(feed.getFeedCategory())
+                .savingCategory(feed.getSavingCategory())
                 .price(feed.getPrice())
                 .afterPrice(feed.getAfterPrice())
                 .regionEntity(RegionEntity.regionEntityOnlyWithId(feed.getRegionId()))

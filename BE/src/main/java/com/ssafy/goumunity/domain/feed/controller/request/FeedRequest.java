@@ -1,6 +1,7 @@
 package com.ssafy.goumunity.domain.feed.controller.request;
 
 import com.ssafy.goumunity.domain.feed.domain.FeedCategory;
+import com.ssafy.goumunity.domain.feed.infra.feed.FeedSavingCategory;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import java.util.List;
@@ -19,6 +20,8 @@ public class FeedRequest {
         @NotNull(message = "카테고리를 선택해야 합니다.")
         private FeedCategory feedCategory;
 
+        private FeedSavingCategory savingCategory;
+
         private Integer price;
         private Integer afterPrice;
 
@@ -36,6 +39,8 @@ public class FeedRequest {
 
         @NotNull(message = "카테고리를 선택해야 합니다.")
         private FeedCategory feedCategory;
+
+        private FeedSavingCategory savingCategory;
 
         private Integer price;
         private Integer afterPrice;

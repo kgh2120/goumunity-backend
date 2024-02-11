@@ -3,6 +3,7 @@ package com.ssafy.goumunity.domain.feed.controller.response;
 import com.querydsl.core.annotations.QueryProjection;
 import com.ssafy.goumunity.domain.feed.domain.FeedCategory;
 import com.ssafy.goumunity.domain.feed.infra.feed.FeedEntity;
+import com.ssafy.goumunity.domain.feed.infra.feed.FeedSavingCategory;
 import com.ssafy.goumunity.domain.region.controller.response.RegionResponse;
 import com.ssafy.goumunity.domain.user.controller.response.UserResponse;
 import java.util.List;
@@ -16,6 +17,7 @@ public class FeedResponse {
     private Long feedId;
     private String content;
     private FeedCategory feedCategory;
+    private FeedSavingCategory savingCategory;
     private Integer price;
     private Integer afterPrice;
 
@@ -35,6 +37,7 @@ public class FeedResponse {
         this.feedId = feed.getId();
         this.content = feed.getContent();
         this.feedCategory = feed.getFeedCategory();
+        this.savingCategory = feed.getSavingCategory();
         this.price = feed.getPrice();
         this.afterPrice = feed.getAfterPrice();
         this.region = RegionResponse.from(feed.getRegionEntity().to());

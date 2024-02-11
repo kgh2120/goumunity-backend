@@ -1,6 +1,7 @@
 package com.ssafy.goumunity.domain.feed.domain;
 
 import com.ssafy.goumunity.domain.feed.controller.request.FeedRequest;
+import com.ssafy.goumunity.domain.feed.infra.feed.FeedSavingCategory;
 import com.ssafy.goumunity.domain.user.exception.UserErrorCode;
 import com.ssafy.goumunity.domain.user.exception.UserException;
 import java.time.Instant;
@@ -15,6 +16,7 @@ public class Feed {
     private Long id;
     private String content;
     private FeedCategory feedCategory;
+    private FeedSavingCategory savingCategory;
     private Integer price;
     private Integer afterPrice;
     private Long regionId;
@@ -30,6 +32,7 @@ public class Feed {
         return Feed.builder()
                 .content(feedRequest.getContent())
                 .feedCategory(feedRequest.getFeedCategory())
+                .savingCategory(feedRequest.getSavingCategory())
                 .price(feedRequest.getPrice())
                 .afterPrice(feedRequest.getAfterPrice())
                 .regionId(feedRequest.getRegionId())
@@ -44,6 +47,7 @@ public class Feed {
                 .id(feed.getId())
                 .content(feedRequest.getContent())
                 .feedCategory(feedRequest.getFeedCategory())
+                .savingCategory(feedRequest.getSavingCategory())
                 .price(feedRequest.getPrice())
                 .afterPrice(feedRequest.getAfterPrice())
                 .regionId(feedRequest.getRegionId())
