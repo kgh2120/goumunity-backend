@@ -42,16 +42,24 @@ public class TimeUtils {
     private static TimeRange getThisWeek() {
         LocalDateTime now = LocalDateTime.now();
         Instant startOfWeek =
-                ZonedDateTime.of(now.with(DayOfWeek.MONDAY), ZoneId.of("UTC")).toInstant();
-        Instant endOfWeek = ZonedDateTime.of(now.with(DayOfWeek.SUNDAY), ZoneId.of("UTC")).toInstant();
+                ZonedDateTime.of(now.with(DayOfWeek.MONDAY).toLocalDate().atStartOfDay(), ZoneId.of("UTC"))
+                        .toInstant();
+        Instant endOfWeek =
+                ZonedDateTime.of(
+                                LocalTime.MAX.atDate(now.with(DayOfWeek.SUNDAY).toLocalDate()), ZoneId.of("UTC"))
+                        .toInstant();
         return new TimeRange(startOfWeek, endOfWeek);
     }
 
     private static TimeRange getThisMonth() {
         LocalDateTime now = LocalDateTime.now();
-        Instant startOfWeek = ZonedDateTime.of(now.withDayOfMonth(1), ZoneId.of("UTC")).toInstant();
+        Instant startOfWeek =
+                ZonedDateTime.of(now.withDayOfMonth(1).toLocalDate().atStartOfDay(), ZoneId.of("UTC"))
+                        .toInstant();
         Instant endOfWeek =
-                ZonedDateTime.of(now.with(TemporalAdjusters.lastDayOfMonth()), ZoneId.of("UTC"))
+                ZonedDateTime.of(
+                                LocalTime.MAX.atDate(now.with(TemporalAdjusters.lastDayOfMonth()).toLocalDate()),
+                                ZoneId.of("UTC"))
                         .toInstant();
         return new TimeRange(startOfWeek, endOfWeek);
     }
