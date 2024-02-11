@@ -2,6 +2,7 @@ package com.ssafy.goumunity.domain.feed.infra.reply;
 
 import static com.ssafy.goumunity.domain.feed.infra.reply.QReplyEntity.replyEntity;
 import static com.ssafy.goumunity.domain.feed.infra.replylike.QReplyLikeEntity.replyLikeEntity;
+import static com.ssafy.goumunity.domain.region.infra.QRegionEntity.regionEntity;
 import static com.ssafy.goumunity.domain.user.infra.QUserEntity.userEntity;
 
 import com.querydsl.jpa.JPAExpressions;
@@ -27,7 +28,6 @@ public class ReplyQueryDslRepository {
             Long userId, Long commentId, Instant time, Pageable pageable) {
         final List<ReplyResponse> result =
                 queryFactory
-                        .query()
                         .select(
                                 new QReplyResponse(
                                         replyEntity,
@@ -40,6 +40,9 @@ public class ReplyQueryDslRepository {
                                                 .exists()))
                         .from(replyEntity)
                         .leftJoin(replyEntity.userEntity, userEntity)
+                        .fetchJoin()
+                        .leftJoin(userEntity.regionEntity, regionEntity)
+                        .fetchJoin()
                         .where(replyEntity.commentEntity.id.eq(commentId))
                         .where(replyEntity.createdAt.before(time))
                         .orderBy(replyEntity.createdAt.desc())
@@ -52,7 +55,6 @@ public class ReplyQueryDslRepository {
 
     public ReplyResponse findOneReply(Long userId, Long replyId) {
         return queryFactory
-                .query()
                 .select(
                         new QReplyResponse(
                                 replyEntity,
@@ -65,6 +67,9 @@ public class ReplyQueryDslRepository {
                                         .exists()))
                 .from(replyEntity)
                 .leftJoin(replyEntity.userEntity, userEntity)
+                .fetchJoin()
+                .leftJoin(userEntity.regionEntity, regionEntity)
+                .fetchJoin()
                 .where(replyEntity.id.eq(replyId))
                 .fetchOne();
     }
