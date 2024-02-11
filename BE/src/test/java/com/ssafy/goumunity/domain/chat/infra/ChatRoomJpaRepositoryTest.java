@@ -176,6 +176,8 @@ class ChatRoomJpaRepositoryTest {
         em.persist(h2);
         HashtagEntity h3 = HashtagEntity.builder().name("10만원 미만").build();
         em.persist(h3);
+        RegionEntity region = RegionEntity.builder().si("서울").gungu("서초구").build();
+        em.persist(region);
         ChatRoomEntity chatRoom = null;
         chatRoom =
                 ChatRoomEntity.builder()
@@ -183,6 +185,7 @@ class ChatRoomJpaRepositoryTest {
                         .capability(10)
                         .host(users)
                         .createdAt(Instant.ofEpochMilli(1000L))
+                        .region(region)
                         .build();
         em.persist(chatRoom);
         em.persist(ChatRoomHashtagEntity.builder().chatRoom(chatRoom).hashtag(h1).sequence(1).build());

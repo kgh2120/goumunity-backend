@@ -25,6 +25,7 @@ import com.ssafy.goumunity.domain.chat.service.port.ChatRepository;
 import com.ssafy.goumunity.domain.chat.service.port.ChatRoomRepository;
 import com.ssafy.goumunity.domain.chat.service.port.ImageUploadService;
 import com.ssafy.goumunity.domain.chat.service.port.RegionFindService;
+import com.ssafy.goumunity.domain.region.infra.RegionEntity;
 import com.ssafy.goumunity.domain.user.domain.User;
 import com.ssafy.goumunity.domain.user.infra.UserEntity;
 import java.time.Instant;
@@ -626,6 +627,7 @@ class ChatRoomServiceImplTest {
                         .chatRoomHashtags(List.of(crh1, crh2, crh3))
                         .userChatRooms(List.of(ucr, uc2))
                         .createdAt(Instant.ofEpochMilli(1000L))
+                        .region(RegionEntity.builder().regionId(1L).si("서울").gungu("서초구").build())
                         .build();
 
         given(chatRoomRepository.isExistChatRoom(any())).willReturn(true);
