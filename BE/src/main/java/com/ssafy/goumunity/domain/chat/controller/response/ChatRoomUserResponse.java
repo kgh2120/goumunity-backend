@@ -15,6 +15,9 @@ public class ChatRoomUserResponse {
     private Boolean isCurrentUser;
 
     public ChatRoomUserResponse(UserEntity user, Long currentUserId) {
+        if (user == null) {
+            return;
+        }
         this.userId = user.getId();
         this.nickname = user.getNickname();
         this.profileImageSrc = user.getImgSrc();

@@ -1,15 +1,13 @@
 package com.ssafy.goumunity.domain.chat.service;
 
 import static com.ssafy.goumunity.common.exception.GlobalErrorCode.BIND_ERROR;
+import static com.ssafy.goumunity.common.exception.GlobalErrorCode.FORBIDDEN;
 import static com.ssafy.goumunity.domain.chat.exception.ChatErrorCode.*;
 
 import com.ssafy.goumunity.common.exception.CustomException;
 import com.ssafy.goumunity.common.exception.GlobalErrorCode;
 import com.ssafy.goumunity.domain.chat.controller.request.ChatRoomRequest;
-import com.ssafy.goumunity.domain.chat.controller.response.ChatRoomSearchResponse;
-import com.ssafy.goumunity.domain.chat.controller.response.ChatRoomUserResponse;
-import com.ssafy.goumunity.domain.chat.controller.response.MessageResponse;
-import com.ssafy.goumunity.domain.chat.controller.response.MyChatRoomResponse;
+import com.ssafy.goumunity.domain.chat.controller.response.*;
 import com.ssafy.goumunity.domain.chat.domain.Chat;
 import com.ssafy.goumunity.domain.chat.domain.ChatRoom;
 import com.ssafy.goumunity.domain.chat.domain.UserChatRoom;
@@ -188,6 +186,17 @@ public class ChatRoomServiceImpl implements ChatRoomService {
                     chatRepository.save(Chat.userDeleted(chatRoom.getId()));
                 });
         chatRoomRepository.deleteAllUserChatRoomByUserId(userId);
+    }
+
+    @Override
+    public ChatRoomDetailResponse findDetailByChatRoomId(Long chatRoomId, User user) {
+        if (!chatRoomRepository.isExistChatRoom(chatRoomId))
+            throw new ChatException(CHAT_ROOM_NOT_FOUND);
+
+        if (!chatRoomRepository.isAlreadyJoinedUser(chatRoomId, user.getId())) {
+            throw new CustomException(FORBIDDEN);
+        }
+        return chatRoomRepository.findDetailByChatRoomId(chatRoomId, user.getId());
     }
 
     private void clearChatRoomWhenUserHost(Long userId, ChatRoom chatRoom) {

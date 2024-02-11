@@ -16,12 +16,15 @@ import com.ssafy.goumunity.common.exception.CustomException;
 import com.ssafy.goumunity.common.exception.GlobalErrorCode;
 import com.ssafy.goumunity.common.exception.GlobalExceptionHandler;
 import com.ssafy.goumunity.domain.chat.controller.request.ChatRoomRequest;
-import com.ssafy.goumunity.domain.chat.controller.response.ChatRoomHashtagResponse;
-import com.ssafy.goumunity.domain.chat.controller.response.ChatRoomSearchResponse;
-import com.ssafy.goumunity.domain.chat.controller.response.ChatRoomUserResponse;
-import com.ssafy.goumunity.domain.chat.controller.response.MyChatRoomResponse;
+import com.ssafy.goumunity.domain.chat.controller.response.*;
 import com.ssafy.goumunity.domain.chat.exception.ChatException;
+import com.ssafy.goumunity.domain.chat.infra.chatroom.ChatRoomEntity;
+import com.ssafy.goumunity.domain.chat.infra.chatroom.UserChatRoomEntity;
+import com.ssafy.goumunity.domain.chat.infra.hashtag.ChatRoomHashtagEntity;
+import com.ssafy.goumunity.domain.chat.infra.hashtag.HashtagEntity;
 import com.ssafy.goumunity.domain.chat.service.ChatRoomService;
+import com.ssafy.goumunity.domain.user.infra.UserEntity;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.Test;
@@ -620,6 +623,121 @@ class ChatRoomControllerTest {
         String url = CHAT_ROOM_API_PREFIX + "/" + chatRoomId;
 
         given(chatRoomService.findOneMyChatRoomByChatRoomId(any(), any()))
+                .willThrow(new CustomException(FORBIDDEN));
+        // when // then
+        mockMvc
+                .perform(get(url).with(csrf()))
+                .andExpectAll(
+                        status().isForbidden(),
+                        jsonPath("$.errorName").value(FORBIDDEN.getErrorName()),
+                        jsonPath("$.errorMessage").value(FORBIDDEN.getErrorMessage()))
+                .andDo(print());
+    }
+
+    @WithMockUser
+    @Test
+    void 채팅방_상세_조회_테스트_성공() throws Exception {
+        Long chatRoomId = 1L;
+        String url = CHAT_ROOM_API_PREFIX + "/" + chatRoomId + "/detail";
+        UserEntity users =
+                UserEntity.builder()
+                        .id(1L)
+                        .nickname("1234")
+                        .email("ssafy@gmail.com")
+                        .password("1234")
+                        .build();
+
+        UserEntity users2 =
+                UserEntity.builder()
+                        .id(2L)
+                        .nickname("짭수")
+                        .email("ssafy@gmail.com")
+                        .password("1234")
+                        .build();
+
+        HashtagEntity h1 = HashtagEntity.builder().name("20대").build();
+        HashtagEntity h2 = HashtagEntity.builder().name("관악구").build();
+        HashtagEntity h3 = HashtagEntity.builder().name("10만원 미만").build();
+        ChatRoomEntity chatRoom = null;
+        ChatRoomHashtagEntity crh1 =
+                ChatRoomHashtagEntity.builder().chatRoom(chatRoom).hashtag(h1).sequence(1).build();
+        ChatRoomHashtagEntity crh2 =
+                ChatRoomHashtagEntity.builder().chatRoom(chatRoom).hashtag(h2).sequence(2).build();
+        ChatRoomHashtagEntity crh3 =
+                ChatRoomHashtagEntity.builder().chatRoom(chatRoom).hashtag(h3).sequence(3).build();
+        UserChatRoomEntity ucr =
+                UserChatRoomEntity.builder()
+                        .chatRoom(chatRoom)
+                        .user(users)
+                        .lastAccessTime(Instant.ofEpochMilli(100L))
+                        .build();
+        UserChatRoomEntity uc2 =
+                UserChatRoomEntity.builder()
+                        .chatRoom(chatRoom)
+                        .user(users2)
+                        .lastAccessTime(Instant.ofEpochMilli(100L))
+                        .build();
+
+        chatRoom =
+                ChatRoomEntity.builder()
+                        .id(1L)
+                        .title("거지방")
+                        .capability(10)
+                        .host(users)
+                        .chatRoomHashtags(List.of(crh1, crh2, crh3))
+                        .userChatRooms(List.of(ucr, uc2))
+                        .createdAt(Instant.ofEpochMilli(1000L))
+                        .build();
+
+        given(chatRoomService.findDetailByChatRoomId(any(), any()))
+                .willReturn(new ChatRoomDetailResponse(chatRoom, 2L));
+        // when // then
+        mockMvc
+                .perform(get(url).with(csrf()))
+                .andExpectAll(
+                        status().isOk(),
+                        jsonPath("$.chatRoomId").value(1L),
+                        jsonPath("$.title").value("거지방"),
+                        jsonPath("$.imgSrc").doesNotExist(),
+                        jsonPath("$.capability").value(10),
+                        jsonPath("$.currentUserCount").value(2),
+                        jsonPath("$.hashtags.length()").value(3),
+                        jsonPath("$.host.userId").value(1L),
+                        jsonPath("$.host.nickname").value("1234"),
+                        jsonPath("$.host.profileImageSrc").doesNotExist(),
+                        jsonPath("$.host.isCurrentUser").value(false),
+                        jsonPath("$.isHost").value(false),
+                        jsonPath("$.members.length()").value(2))
+                .andDo(print());
+    }
+
+    @WithMockUser
+    @Test
+    void 채팅방_상세_조회_테스트_실패_채팅방이_없는_경우() throws Exception {
+        // given
+        Long chatRoomId = 1L;
+        String url = CHAT_ROOM_API_PREFIX + "/" + chatRoomId + "/detail";
+
+        given(chatRoomService.findDetailByChatRoomId(any(), any()))
+                .willThrow(new ChatException(CHAT_ROOM_NOT_FOUND));
+        // when // then
+        mockMvc
+                .perform(get(url).with(csrf()))
+                .andExpectAll(
+                        status().isNotFound(),
+                        jsonPath("$.errorName").value(CHAT_ROOM_NOT_FOUND.getErrorName()),
+                        jsonPath("$.errorMessage").value(CHAT_ROOM_NOT_FOUND.getErrorMessage()))
+                .andDo(print());
+    }
+
+    @WithMockUser
+    @Test
+    void 채팅방_상세_조회_테스트_실패_유저가_채팅방에_속하지_않는_경우() throws Exception {
+        // given
+        Long chatRoomId = 1L;
+        String url = CHAT_ROOM_API_PREFIX + "/" + chatRoomId + "/detail";
+
+        given(chatRoomService.findDetailByChatRoomId(any(), any()))
                 .willThrow(new CustomException(FORBIDDEN));
         // when // then
         mockMvc
