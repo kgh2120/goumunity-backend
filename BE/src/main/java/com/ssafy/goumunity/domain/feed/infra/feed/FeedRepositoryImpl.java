@@ -6,6 +6,7 @@ import com.ssafy.goumunity.domain.feed.domain.FeedRecommendResource;
 import com.ssafy.goumunity.domain.feed.domain.FeedSearchResource;
 import com.ssafy.goumunity.domain.feed.domain.SavingResource;
 import com.ssafy.goumunity.domain.feed.service.post.FeedRepository;
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -55,6 +56,11 @@ public class FeedRepositoryImpl implements FeedRepository {
     @Override
     public List<FeedSearchResource> findAllScrappedFeedByUserId(Long userId) {
         return feedQueryDslRepository.findAllScrappedFeedByUserId(userId);
+    }
+
+    @Override
+    public List<FeedScrapRankingInterface> findFeedScrapRanking(Instant startTime, Instant endTime) {
+        return feedJpaRepository.findFeedScrapRanking(startTime, endTime);
     }
 
     @Override

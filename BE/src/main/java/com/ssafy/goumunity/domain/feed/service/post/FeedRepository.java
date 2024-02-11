@@ -5,6 +5,8 @@ import com.ssafy.goumunity.domain.feed.domain.Feed;
 import com.ssafy.goumunity.domain.feed.domain.FeedRecommendResource;
 import com.ssafy.goumunity.domain.feed.domain.FeedSearchResource;
 import com.ssafy.goumunity.domain.feed.domain.SavingResource;
+import com.ssafy.goumunity.domain.feed.infra.feed.FeedScrapRankingInterface;
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,6 +25,8 @@ public interface FeedRepository {
     List<SavingResource> findAllSavingByUserId(Long userId);
 
     List<FeedSearchResource> findAllScrappedFeedByUserId(Long userId);
+
+    List<FeedScrapRankingInterface> findFeedScrapRanking(Instant startTime, Instant endTime);
 
     void modify(Feed feed);
 
