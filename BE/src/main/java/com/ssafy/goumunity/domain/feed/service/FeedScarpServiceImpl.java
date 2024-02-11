@@ -3,11 +3,8 @@ package com.ssafy.goumunity.domain.feed.service;
 import com.ssafy.goumunity.domain.feed.domain.FeedScrap;
 import com.ssafy.goumunity.domain.feed.exception.FeedErrorCode;
 import com.ssafy.goumunity.domain.feed.exception.FeedException;
-import com.ssafy.goumunity.domain.feed.infra.feed.FeedEntity;
-import com.ssafy.goumunity.domain.feed.infra.feedscrap.FeedScrapEntity;
 import com.ssafy.goumunity.domain.feed.service.post.FeedRepository;
 import com.ssafy.goumunity.domain.feed.service.post.FeedScrapRepository;
-import com.ssafy.goumunity.domain.user.infra.UserEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,11 +27,7 @@ public class FeedScarpServiceImpl implements FeedScrapService {
             throw new FeedException(FeedErrorCode.ALREADY_SCARPPED);
         }
 
-        feedScrapRepository.create(
-                FeedScrapEntity.builder()
-                        .userEntity(UserEntity.userEntityOnlyWithId(userId))
-                        .feedEntity(FeedEntity.feedEntityOnlyWithId(feedId))
-                        .build());
+        feedScrapRepository.create(FeedScrap.from(userId, feedId));
     }
 
     @Override

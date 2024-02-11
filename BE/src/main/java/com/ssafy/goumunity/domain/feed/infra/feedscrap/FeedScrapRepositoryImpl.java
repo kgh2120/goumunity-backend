@@ -13,8 +13,8 @@ public class FeedScrapRepositoryImpl implements FeedScrapRepository {
     private final FeedScrapJpaRepository feedScrapJpaRepository;
 
     @Override
-    public void create(FeedScrapEntity feedScrapEntity) {
-        feedScrapJpaRepository.save(feedScrapEntity);
+    public void create(FeedScrap feedScrap) {
+        feedScrapJpaRepository.save(FeedScrapEntity.from(feedScrap));
     }
 
     @Override
