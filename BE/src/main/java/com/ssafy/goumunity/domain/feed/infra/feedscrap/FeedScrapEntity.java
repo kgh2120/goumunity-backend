@@ -48,7 +48,7 @@ public class FeedScrapEntity {
         FeedScrapEntityBuilder builder =
                 FeedScrapEntity.builder()
                         .id(feedScrap.getId())
-                        .feedEntity(FeedEntity.feedEntityOnlyWithId(feedScrap.getId()))
+                        .feedEntity(FeedEntity.feedEntityOnlyWithId(feedScrap.getFeedId()))
                         .userEntity(UserEntity.userEntityOnlyWithId(feedScrap.getUserId()));
 
         if (feedScrap.getCreatedAt() == null) {
