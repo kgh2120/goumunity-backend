@@ -1,7 +1,9 @@
 package com.ssafy.goumunity.domain.feed.domain;
 
+import com.ssafy.goumunity.domain.feed.infra.feed.FeedSavingCategory;
 import com.ssafy.goumunity.domain.user.domain.User;
 import com.ssafy.goumunity.domain.user.domain.UserCategory;
+import com.ssafy.goumunity.domain.user.domain.UserSavingCategory;
 import lombok.*;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -15,10 +17,147 @@ public class FeedWeight implements Comparable<FeedWeight> {
     public static FeedWeight from(FeedRecommendResource feedRecommendResource, User user) {
         return FeedWeight.builder()
                 .feedRecommendResource(feedRecommendResource)
-                .weight(calcWeight(feedRecommendResource, user))
+                .weight(getWeight(feedRecommendResource, user))
                 .build();
     }
 
+    private static Double getWeight(FeedRecommendResource feedRecommendResource, User user) {
+
+        // 카테고리체크
+        if (feedRecommendResource.getFeedCategory() == null
+                || feedRecommendResource.getFeedCategory() == FeedCategory.FUN) {
+            return Math.random() * 0.15;
+        }
+
+        // Feed SavingCategory nullcheck
+        // User SavingCategory nullcheck
+        // User MonthBudget check
+        if (feedRecommendResource.getSavingCategory() == null
+                || user.getSavingCategory() == null
+                || user.getMonthBudget() == null
+                || user.getMonthBudget() == 0) {
+            return 0.0;
+        }
+
+        // 1. feed savingcategory - user savingcategory간 가중치계산
+        // 2. feed savingcategory - user monthbudget간 가중치계산
+
+        double weight = 1.0;
+
+        if (user.getSavingCategory() == UserSavingCategory.HOUSING) {
+
+            if (feedRecommendResource.getSavingCategory() == FeedSavingCategory.HOUSING) {
+                weight *= 0.45;
+            } else if (feedRecommendResource.getSavingCategory()
+                    == FeedSavingCategory.TRANSPORTATION_COMMUNICATION) {
+                weight *= 0.15;
+            } else if (feedRecommendResource.getSavingCategory() == FeedSavingCategory.FOOD) {
+                weight *= 0.21;
+            } else if (feedRecommendResource.getSavingCategory() == FeedSavingCategory.ENTERTAINMENT) {
+                weight *= 0.1;
+            } else {
+                weight *= 0.05;
+            }
+        } else if (user.getSavingCategory() == UserSavingCategory.TRANSPORTATION_COMMUNICATION) {
+
+            if (feedRecommendResource.getSavingCategory() == FeedSavingCategory.HOUSING) {
+                weight *= 0.1;
+            } else if (feedRecommendResource.getSavingCategory()
+                    == FeedSavingCategory.TRANSPORTATION_COMMUNICATION) {
+                weight *= 0.55;
+            } else if (feedRecommendResource.getSavingCategory() == FeedSavingCategory.FOOD) {
+                weight *= 0.22;
+            } else if (feedRecommendResource.getSavingCategory() == FeedSavingCategory.ENTERTAINMENT) {
+                weight *= 0.05;
+            } else {
+                weight *= 0.04;
+            }
+        } else if (user.getSavingCategory() == UserSavingCategory.FOOD) {
+
+            if (feedRecommendResource.getSavingCategory() == FeedSavingCategory.HOUSING) {
+                weight *= 0.13;
+            } else if (feedRecommendResource.getSavingCategory()
+                    == FeedSavingCategory.TRANSPORTATION_COMMUNICATION) {
+                weight *= 0.2;
+            } else if (feedRecommendResource.getSavingCategory() == FeedSavingCategory.FOOD) {
+                weight *= 0.4;
+            } else if (feedRecommendResource.getSavingCategory() == FeedSavingCategory.ENTERTAINMENT) {
+                weight *= 0.08;
+            } else {
+                weight *= 0.07;
+            }
+        } else if (user.getSavingCategory() == UserSavingCategory.ENTERTAINMENT) {
+
+            if (feedRecommendResource.getSavingCategory() == FeedSavingCategory.HOUSING) {
+                weight *= 0.12;
+            } else if (feedRecommendResource.getSavingCategory()
+                    == FeedSavingCategory.TRANSPORTATION_COMMUNICATION) {
+                weight *= 0.19;
+            } else if (feedRecommendResource.getSavingCategory() == FeedSavingCategory.FOOD) {
+                weight *= 0.1;
+            } else if (feedRecommendResource.getSavingCategory() == FeedSavingCategory.ENTERTAINMENT) {
+                weight *= 0.3;
+            } else {
+                weight *= 0.1;
+            }
+        } else {
+            weight *= 0.2;
+        }
+
+        // 소비구간별 가중치조절
+        if (user.getMonthBudget() <= 1000000) {
+
+            if (feedRecommendResource.getSavingCategory() == FeedSavingCategory.HOUSING) {
+                weight *= 0.17;
+            } else if (feedRecommendResource.getSavingCategory()
+                    == FeedSavingCategory.TRANSPORTATION_COMMUNICATION) {
+                weight *= 0.09;
+            } else if (feedRecommendResource.getSavingCategory() == FeedSavingCategory.FOOD) {
+                weight *= 0.28;
+            } else if (feedRecommendResource.getSavingCategory() == FeedSavingCategory.ENTERTAINMENT) {
+                weight *= 0.15;
+            } else {
+                weight *= 0.05;
+            }
+
+        } else if (user.getMonthBudget() <= 2000000) {
+
+            if (feedRecommendResource.getSavingCategory() == FeedSavingCategory.HOUSING) {
+                weight *= 0.3;
+            } else if (feedRecommendResource.getSavingCategory()
+                    == FeedSavingCategory.TRANSPORTATION_COMMUNICATION) {
+                weight *= 0.2;
+            } else if (feedRecommendResource.getSavingCategory() == FeedSavingCategory.FOOD) {
+                weight *= 0.5;
+            } else if (feedRecommendResource.getSavingCategory() == FeedSavingCategory.ENTERTAINMENT) {
+                weight *= 0.36;
+            } else {
+                weight *= 0.12;
+            }
+
+        } else if (user.getMonthBudget() <= 3000000) {
+
+            if (feedRecommendResource.getSavingCategory() == FeedSavingCategory.HOUSING) {
+                weight *= 0.41;
+            } else if (feedRecommendResource.getSavingCategory()
+                    == FeedSavingCategory.TRANSPORTATION_COMMUNICATION) {
+                weight *= 0.35;
+            } else if (feedRecommendResource.getSavingCategory() == FeedSavingCategory.FOOD) {
+                weight *= 0.8;
+            } else if (feedRecommendResource.getSavingCategory() == FeedSavingCategory.ENTERTAINMENT) {
+                weight *= 0.5;
+            } else {
+                weight *= 0.2;
+            }
+
+        } else {
+            weight *= 0.2;
+        }
+
+        return weight;
+    }
+
+    @Deprecated
     private static Double calcWeight(FeedRecommendResource feedRecommendResource, User user) {
         // Feed Category null check
 
