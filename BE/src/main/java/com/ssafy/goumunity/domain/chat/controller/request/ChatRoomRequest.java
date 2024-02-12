@@ -44,6 +44,7 @@ public class ChatRoomRequest {
         private Integer capability;
         private Long leaderId;
         private String image;
+        private Long regionId;
 
         @MaxListSize(5)
         private List<HashtagRequest> hashtagRequests;
