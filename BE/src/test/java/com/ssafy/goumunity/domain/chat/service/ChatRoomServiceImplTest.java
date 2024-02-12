@@ -435,23 +435,6 @@ class ChatRoomServiceImplTest {
     }
 
     @Test
-    void 거지방_수정_테스트_실패_image값과_file값이_둘_다_없을때() throws Exception {
-        // given
-        Long chatRoomId = 1L;
-        User user = User.builder().id(1L).build();
-        ChatRoomRequest.Modify modify =
-                ChatRoomRequest.Modify.builder()
-                        .title("거지거지거지방")
-                        .capability(20)
-                        .hashtagRequests(new ArrayList<>())
-                        .build();
-        // when // then
-        assertThatThrownBy(() -> chatRoomService.modifyChatRoom(chatRoomId, user, modify, null))
-                .isInstanceOf(CustomException.class)
-                .hasFieldOrPropertyWithValue("errorCode", GlobalErrorCode.BIND_ERROR);
-    }
-
-    @Test
     void 거지방_수정_테스트_실패_image값과_file값이_둘_다_있을때() throws Exception {
         // given
         Long chatRoomId = 1L;

@@ -139,9 +139,8 @@ public class ChatRoomServiceImpl implements ChatRoomService {
     public void modifyChatRoom(
             Long chatRoomId, User user, ChatRoomRequest.Modify dto, MultipartFile multipartFile) {
 
-        if ((dto.getImage() == null && (multipartFile == null || multipartFile.isEmpty()))
-                || StringUtils.hasText(dto.getImage())
-                        && (multipartFile != null && !multipartFile.isEmpty())) {
+        if (StringUtils.hasText(dto.getImage())
+                && (multipartFile != null && !multipartFile.isEmpty())) {
             throw new CustomException(BIND_ERROR);
         }
 
