@@ -73,8 +73,6 @@ public class ChatRoomServiceImpl implements ChatRoomService {
     public void exitChatRoom(Long chatRoomId, User user) {
         ChatRoom chatRoom = verifyExitChatRoom(chatRoomId, user);
         exit(chatRoomId, user, chatRoom);
-        template.convertAndSend("/topic/" + chatRoomId, MessageResponse.Live.exit(user));
-        chatRepository.save(Chat.userExit(chatRoomId, user.getId()));
     }
 
     private void exit(Long chatRoomId, User user, ChatRoom chatRoom) {
@@ -82,6 +80,8 @@ public class ChatRoomServiceImpl implements ChatRoomService {
             exitByHost(chatRoom);
         } else {
             chatRoomRepository.exitChatRoom(chatRoomId, user.getId());
+            template.convertAndSend("/topic/" + chatRoomId, MessageResponse.Live.exit(user));
+            chatRepository.save(Chat.userExit(chatRoomId, user.getId()));
         }
     }
 
@@ -181,9 +181,10 @@ public class ChatRoomServiceImpl implements ChatRoomService {
                 chatRoom -> {
                     if (chatRoom.isHost(userId)) {
                         clearChatRoomWhenUserHost(userId, chatRoom);
+                    } else {
+                        template.convertAndSend("/topic/" + chatRoom.getId(), MessageResponse.Live.delete());
+                        chatRepository.save(Chat.userDeleted(chatRoom.getId()));
                     }
-                    template.convertAndSend("/topic/" + chatRoom.getId(), MessageResponse.Live.delete());
-                    chatRepository.save(Chat.userDeleted(chatRoom.getId()));
                 });
         chatRoomRepository.deleteAllUserChatRoomByUserId(userId);
     }
