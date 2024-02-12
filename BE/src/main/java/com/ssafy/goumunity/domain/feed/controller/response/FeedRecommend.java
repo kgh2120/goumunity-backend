@@ -2,6 +2,7 @@ package com.ssafy.goumunity.domain.feed.controller.response;
 
 import com.ssafy.goumunity.domain.feed.domain.FeedCategory;
 import com.ssafy.goumunity.domain.feed.domain.FeedRecommendResource;
+import com.ssafy.goumunity.domain.feed.domain.FeedSavingCategory;
 import java.util.List;
 import lombok.*;
 
@@ -13,6 +14,7 @@ public class FeedRecommend {
     private Long feedId;
     private String content;
     private FeedCategory feedCategory;
+    private FeedSavingCategory savingCategory;
     private Integer price;
     private Integer afterPrice;
 
@@ -21,6 +23,7 @@ public class FeedRecommend {
     private String gungu;
 
     private String nickname;
+    private String email;
     private String imgSrc;
 
     private Long createdAt;
@@ -31,18 +34,21 @@ public class FeedRecommend {
     private Long likeCount;
 
     private Boolean iLikeThat;
+    private Boolean isScrapped;
 
     public static FeedRecommend from(FeedRecommendResource feedRecommendResource) {
         return FeedRecommend.builder()
                 .feedId(feedRecommendResource.getFeedId())
                 .content(feedRecommendResource.getContent())
                 .feedCategory(feedRecommendResource.getFeedCategory())
+                .savingCategory(feedRecommendResource.getSavingCategory())
                 .price(feedRecommendResource.getPrice())
                 .afterPrice(feedRecommendResource.getAfterPrice())
                 .regionId(feedRecommendResource.getRegion().getRegionId())
                 .si(feedRecommendResource.getRegion().getSi())
                 .gungu(feedRecommendResource.getRegion().getGungu())
                 .nickname(feedRecommendResource.getUser().getNickname())
+                .email(feedRecommendResource.getUser().getEmail())
                 .imgSrc(feedRecommendResource.getUser().getImgSrc())
                 .createdAt(feedRecommendResource.getCreatedAt())
                 .updatedAt(feedRecommendResource.getUpdatedAt())
@@ -50,6 +56,7 @@ public class FeedRecommend {
                 .commentCount(feedRecommendResource.getCommentCount())
                 .likeCount(feedRecommendResource.getLikeCount())
                 .iLikeThat(feedRecommendResource.getILikeThat())
+                .isScrapped(feedRecommendResource.getIsScrapped())
                 .build();
     }
 }

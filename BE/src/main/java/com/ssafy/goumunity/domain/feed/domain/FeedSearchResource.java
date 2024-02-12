@@ -16,6 +16,7 @@ public class FeedSearchResource {
     private Long feedId;
     private String content;
     private FeedCategory feedCategory;
+    private FeedSavingCategory savingCategory;
     private Integer price;
     private Integer afterPrice;
 
@@ -38,6 +39,7 @@ public class FeedSearchResource {
         this.feedId = feed.getId();
         this.content = feed.getContent();
         this.feedCategory = feed.getFeedCategory();
+        this.savingCategory = feed.getSavingCategory();
         this.price = feed.getPrice();
         this.afterPrice = feed.getAfterPrice();
         this.region = RegionResponse.from(feed.getRegionEntity().to());

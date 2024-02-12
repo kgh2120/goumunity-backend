@@ -22,6 +22,7 @@ public class User {
     private Long monthBudget;
     private Integer age;
     private UserCategory userCategory;
+    private UserSavingCategory savingCategory;
     private Gender gender;
     private String nickname;
     private String imgSrc;
@@ -41,6 +42,7 @@ public class User {
                 .monthBudget(userRequest.getMonthBudget())
                 .age(userRequest.getAge())
                 .userCategory(userRequest.getUserCategory())
+                .savingCategory(userRequest.getSavingCategory())
                 .gender(userRequest.getGender())
                 .nickname(userRequest.getNickname())
                 .imgSrc(imgUrl)
@@ -87,6 +89,10 @@ public class User {
         }
         if (dto.getUserCategory() != null) {
             this.userCategory = dto.getUserCategory();
+            emptyCheckFlag = false;
+        }
+        if (dto.getSavingCategory() != null) {
+            this.savingCategory = dto.getSavingCategory();
             emptyCheckFlag = false;
         }
         if (dto.getNickname() != null) {

@@ -1,10 +1,7 @@
 package com.ssafy.goumunity.domain.user.infra;
 
 import com.ssafy.goumunity.domain.region.infra.RegionEntity;
-import com.ssafy.goumunity.domain.user.domain.Gender;
-import com.ssafy.goumunity.domain.user.domain.User;
-import com.ssafy.goumunity.domain.user.domain.UserCategory;
-import com.ssafy.goumunity.domain.user.domain.UserStatus;
+import com.ssafy.goumunity.domain.user.domain.*;
 import jakarta.persistence.*;
 import java.time.Instant;
 import lombok.*;
@@ -37,6 +34,10 @@ public class UserEntity {
     @Column(name = "category")
     @Enumerated(EnumType.STRING)
     private UserCategory userCategory;
+
+    @Column(name = "saving")
+    @Enumerated(EnumType.STRING)
+    private UserSavingCategory savingCategory;
 
     @Column(name = "gender")
     @Enumerated(EnumType.STRING)
@@ -76,6 +77,7 @@ public class UserEntity {
                 .monthBudget(user.getMonthBudget())
                 .age(user.getAge())
                 .userCategory(user.getUserCategory())
+                .savingCategory(user.getSavingCategory())
                 .gender(user.getGender())
                 .nickname(user.getNickname())
                 .imgSrc(user.getImgSrc())
@@ -96,6 +98,7 @@ public class UserEntity {
                 .monthBudget(this.monthBudget)
                 .age(this.age)
                 .userCategory(this.userCategory)
+                .savingCategory(this.savingCategory)
                 .gender(this.gender)
                 .nickname(this.nickname)
                 .imgSrc(this.imgSrc)

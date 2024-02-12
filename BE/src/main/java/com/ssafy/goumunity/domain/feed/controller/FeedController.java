@@ -48,10 +48,7 @@ public class FeedController {
 
     @GetMapping
     public ResponseEntity<FeedRecommendResponse> findFeed(@AuthenticationPrincipal User user) {
-        return ResponseEntity.ok(
-                FeedRecommendResponse.builder()
-                        .feedRecommends(feedService.findFeed(user, user.getRegionId()))
-                        .build());
+        return ResponseEntity.ok(feedService.findFeed(user, user.getRegionId()));
     }
 
     @GetMapping("/{feedId}")

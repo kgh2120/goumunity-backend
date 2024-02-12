@@ -15,6 +15,7 @@ public class Feed {
     private Long id;
     private String content;
     private FeedCategory feedCategory;
+    private FeedSavingCategory savingCategory;
     private Integer price;
     private Integer afterPrice;
     private Long regionId;
@@ -30,6 +31,7 @@ public class Feed {
         return Feed.builder()
                 .content(feedRequest.getContent())
                 .feedCategory(feedRequest.getFeedCategory())
+                .savingCategory(feedRequest.getSavingCategory())
                 .price(feedRequest.getPrice())
                 .afterPrice(feedRequest.getAfterPrice())
                 .regionId(feedRequest.getRegionId())
@@ -44,6 +46,7 @@ public class Feed {
                 .id(feed.getId())
                 .content(feedRequest.getContent())
                 .feedCategory(feedRequest.getFeedCategory())
+                .savingCategory(feedRequest.getSavingCategory())
                 .price(feedRequest.getPrice())
                 .afterPrice(feedRequest.getAfterPrice())
                 .regionId(feedRequest.getRegionId())

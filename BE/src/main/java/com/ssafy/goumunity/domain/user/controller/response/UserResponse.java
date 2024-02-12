@@ -3,6 +3,7 @@ package com.ssafy.goumunity.domain.user.controller.response;
 import com.ssafy.goumunity.domain.user.domain.Gender;
 import com.ssafy.goumunity.domain.user.domain.User;
 import com.ssafy.goumunity.domain.user.domain.UserCategory;
+import com.ssafy.goumunity.domain.user.domain.UserSavingCategory;
 import lombok.*;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
@@ -15,6 +16,7 @@ public class UserResponse {
     private Long monthBudget;
     private Integer age;
     private UserCategory userCategory;
+    private UserSavingCategory savingCategory;
     private Gender gender;
     private String nickname;
     private String imgSrc;
@@ -30,6 +32,7 @@ public class UserResponse {
                 .monthBudget(user.getMonthBudget())
                 .age(user.getAge())
                 .userCategory(user.getUserCategory())
+                .savingCategory(user.getSavingCategory())
                 .gender(user.getGender())
                 .nickname(user.getNickname())
                 .imgSrc(user.getImgSrc())

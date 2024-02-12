@@ -11,6 +11,8 @@ public class SavingResource {
     private Integer price;
     private Integer afterPrice;
 
+    private FeedSavingCategory savingCategory;
+
     private Long feedId;
     private Long userId;
 
@@ -20,6 +22,7 @@ public class SavingResource {
         return SavingResource.builder()
                 .price(feed.getPrice())
                 .afterPrice(feed.getAfterPrice())
+                .savingCategory(feed.getSavingCategory())
                 .feedId(feed.getId())
                 .userId(feed.getUserEntity().getId())
                 .createAt(feed.getCreatedAt().toEpochMilli())

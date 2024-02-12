@@ -2,6 +2,7 @@ package com.ssafy.goumunity.domain.feed.domain;
 
 import com.ssafy.goumunity.domain.user.domain.User;
 import com.ssafy.goumunity.domain.user.domain.UserCategory;
+import com.ssafy.goumunity.domain.user.domain.UserSavingCategory;
 import lombok.*;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -15,10 +16,113 @@ public class FeedWeight implements Comparable<FeedWeight> {
     public static FeedWeight from(FeedRecommendResource feedRecommendResource, User user) {
         return FeedWeight.builder()
                 .feedRecommendResource(feedRecommendResource)
-                .weight(calcWeight(feedRecommendResource, user))
+                .weight(getWeight(feedRecommendResource, user))
                 .build();
     }
 
+    private static Double getWeight(FeedRecommendResource feedRecommendResource, User user) {
+
+        // 카테고리체크
+        if (feedRecommendResource.getFeedCategory() == null
+                || feedRecommendResource.getFeedCategory() == FeedCategory.FUN) {
+            return Math.random() * 0.15;
+        }
+
+        // Feed SavingCategory nullcheck
+        // User SavingCategory nullcheck
+        // User MonthBudget check
+
+        FeedSavingCategory feedSavingCategory = feedRecommendResource.getSavingCategory();
+        UserSavingCategory userSavingCategory = user.getSavingCategory();
+
+        if (feedSavingCategory == null
+                || userSavingCategory == null
+                || user.getMonthBudget() == null
+                || user.getMonthBudget() == 0) {
+            return 0.0;
+        }
+
+        // 1. feed savingcategory - user savingcategory간 가중치계산
+        // 2. feed savingcategory - user monthbudget간 가중치계산
+
+        double weight = 1.0;
+
+        if (userSavingCategory == UserSavingCategory.HOUSING) {
+            weight *=
+                    switch (feedSavingCategory) {
+                        case HOUSING -> 0.45;
+                        case TRANSPORTATION_COMMUNICATION -> 0.15;
+                        case FOOD -> 0.21;
+                        case ENTERTAINMENT -> 0.1;
+                        default -> 0.05;
+                    };
+        } else if (userSavingCategory == UserSavingCategory.TRANSPORTATION_COMMUNICATION) {
+            weight *=
+                    switch (feedSavingCategory) {
+                        case HOUSING -> 0.1;
+                        case TRANSPORTATION_COMMUNICATION -> 0.55;
+                        case FOOD -> -0.22;
+                        case ENTERTAINMENT -> 0.05;
+                        default -> 0.04;
+                    };
+        } else if (userSavingCategory == UserSavingCategory.FOOD) {
+            weight *=
+                    switch (feedSavingCategory) {
+                        case HOUSING -> 0.13;
+                        case TRANSPORTATION_COMMUNICATION -> 0.2;
+                        case FOOD -> 0.4;
+                        case ENTERTAINMENT -> 0.08;
+                        default -> 0.07;
+                    };
+        } else if (userSavingCategory == UserSavingCategory.ENTERTAINMENT) {
+            weight *=
+                    switch (feedSavingCategory) {
+                        case HOUSING -> 0.12;
+                        case TRANSPORTATION_COMMUNICATION -> 0.19;
+                        case FOOD -> 0.1;
+                        case ENTERTAINMENT -> 0.3;
+                        default -> 0.1;
+                    };
+        } else {
+            weight *= 0.2;
+        }
+
+        // 소비구간별 가중치조절
+        if (user.getMonthBudget() <= 1000000) {
+            weight *=
+                    switch (feedSavingCategory) {
+                        case HOUSING -> 0.17;
+                        case TRANSPORTATION_COMMUNICATION -> 0.09;
+                        case FOOD -> 0.28;
+                        case ENTERTAINMENT -> 0.15;
+                        default -> 0.05;
+                    };
+        } else if (user.getMonthBudget() <= 2000000) {
+            weight *=
+                    switch (feedSavingCategory) {
+                        case HOUSING -> 0.3;
+                        case TRANSPORTATION_COMMUNICATION -> 0.2;
+                        case FOOD -> 0.5;
+                        case ENTERTAINMENT -> 0.36;
+                        default -> 0.12;
+                    };
+        } else if (user.getMonthBudget() <= 3000000) {
+            weight *=
+                    switch (feedSavingCategory) {
+                        case HOUSING -> 0.41;
+                        case TRANSPORTATION_COMMUNICATION -> 0.35;
+                        case FOOD -> 0.8;
+                        case ENTERTAINMENT -> 0.5;
+                        default -> 0.2;
+                    };
+        } else {
+            weight *= 0.2;
+        }
+
+        return weight;
+    }
+
+    @Deprecated
     private static Double calcWeight(FeedRecommendResource feedRecommendResource, User user) {
         // Feed Category null check
 

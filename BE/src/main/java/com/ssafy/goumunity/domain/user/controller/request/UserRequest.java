@@ -4,6 +4,7 @@ import com.ssafy.goumunity.common.constraint.Email;
 import com.ssafy.goumunity.common.constraint.Password;
 import com.ssafy.goumunity.domain.user.domain.Gender;
 import com.ssafy.goumunity.domain.user.domain.UserCategory;
+import com.ssafy.goumunity.domain.user.domain.UserSavingCategory;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
@@ -29,6 +30,9 @@ public class UserRequest {
         @NotNull(message = "유저 카테고리는 필수값입니다.")
         private UserCategory userCategory;
 
+        @NotNull(message = "유저 절약관심사는 필수값입니다.")
+        private UserSavingCategory savingCategory;
+
         @NotNull(message = "MALE 또는 FEMALE 값이 필요합니다.")
         private Gender gender;
 
@@ -50,6 +54,8 @@ public class UserRequest {
         private Integer age;
 
         private UserCategory userCategory;
+
+        private UserSavingCategory savingCategory;
 
         private String nickname;
 
