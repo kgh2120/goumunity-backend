@@ -34,6 +34,7 @@ public class FeedRecommend {
     private Long likeCount;
 
     private Boolean iLikeThat;
+    private Boolean isScrapped;
 
     public static FeedRecommend from(FeedRecommendResource feedRecommendResource) {
         return FeedRecommend.builder()
@@ -55,6 +56,7 @@ public class FeedRecommend {
                 .commentCount(feedRecommendResource.getCommentCount())
                 .likeCount(feedRecommendResource.getLikeCount())
                 .iLikeThat(feedRecommendResource.getILikeThat())
+                .isScrapped(feedRecommendResource.getIsScrapped())
                 .build();
     }
 }
