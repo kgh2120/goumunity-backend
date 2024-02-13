@@ -1,5 +1,6 @@
 package com.ssafy.goumunity.domain.feed.service;
 
+import com.ssafy.goumunity.common.exception.CustomException;
 import com.ssafy.goumunity.common.util.TimeUtils;
 import com.ssafy.goumunity.domain.feed.controller.request.FeedImgRequest;
 import com.ssafy.goumunity.domain.feed.controller.request.FeedRequest;
@@ -28,6 +29,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.Comparator;
 import java.util.List;
 
+import static com.ssafy.goumunity.common.exception.GlobalErrorCode.BIND_ERROR;
+
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -45,6 +48,11 @@ public class FeedServiceImpl implements FeedService {
     @Transactional
     public FeedIdWithUser createFeed(
             User user, FeedRequest.Create feedRequest, List<MultipartFile> images) {
+        if (feedRequest.getPrice() != null && feedRequest.getAfterPrice() != null
+                && feedRequest.getPrice() < feedRequest.getAfterPrice()) {
+            throw new CustomException(BIND_ERROR);
+        }
+
         Feed createdFeed = feedRepository.create(Feed.create(feedRequest, user.getId()));
         boolean isAuthenticated = false;
 
