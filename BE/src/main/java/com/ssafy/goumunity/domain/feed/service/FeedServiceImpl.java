@@ -80,10 +80,10 @@ public class FeedServiceImpl implements FeedService {
 
         int pageNumber = cacheManager.getCache("pagenumber").get(user.getNickname(), Integer.class);
         int maxPage = cacheManager.getCache("maxpage").get(user.getNickname(), Integer.class);
-        int size = cacheManager.getCache("recommends").get(user.getNickname(), List.class).size();
+        List<FeedRecommend> cacheData = cacheManager.getCache("recommends").get(user.getNickname(), List.class);
 
         // 게시글이 없는경우
-        if(size == 0){
+        if(cacheData.isEmpty()){
             List<FeedRecommend> empty = new ArrayList<>();
             return FeedRecommendResponse.from(empty, false);
         }
@@ -91,21 +91,26 @@ public class FeedServiceImpl implements FeedService {
         // 마지막페이지인 경우
         if (pageNumber == maxPage) {
             // 마지막페이지인데 게시글이 맞아떨어진 경우
-            if (maxPage * 10 == size) findAllByRecommend(user, regionId);
+            if (maxPage * 10 == cacheData.size()) findAllByRecommend(user, regionId);
             else {
                 // 마지막페이지인데 게시글이 맞아떨어지지 않은 경우
                 List<FeedRecommend> tempReturn =
-                        cacheManager.getCache("recommends").get(user.getNickname(), List.class).stream()
+                        cacheData.stream()
                                 .skip((maxPage - 1) * 10)
                                 .limit(10)
                                 .toList();
                 findAllByRecommend(user, regionId);
+
+                if(tempReturn.isEmpty()) {
+                    List<FeedRecommend> empty = new ArrayList<>();
+                    return FeedRecommendResponse.from(empty, false);
+                }
                 return FeedRecommendResponse.from(tempReturn, true);
             }
         }
 
         cacheManager.getCache("pagenumber").put(user.getNickname(), pageNumber + 1);
-        return FeedRecommendResponse.from(cacheManager.getCache("recommends").get(user.getNickname(), List.class).stream()
+        return FeedRecommendResponse.from(cacheData.stream()
                 .skip((pageNumber - 1) * 10)
                 .limit(10)
                 .toList()
