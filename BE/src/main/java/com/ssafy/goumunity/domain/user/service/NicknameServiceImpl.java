@@ -28,7 +28,7 @@ public class NicknameServiceImpl implements NicknameService {
             String last = LAST_NICKNAME_RANDOM_ENUM_GENERATOR.randomEnum().getKr();
             String code = RandomCodeGenerator.randomCode(NICKNAME_CODE_LENGTH);
 
-            String nickname = first + " " + middle + last + " #" + code;
+            String nickname = first + " " + middle + last + " " + code;
 
             if (!userService.isExistNickname(nickname)) {
                 return nickname;

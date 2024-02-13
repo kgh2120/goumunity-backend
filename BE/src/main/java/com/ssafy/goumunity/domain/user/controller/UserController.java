@@ -51,10 +51,19 @@ public class UserController {
                 .body(userService.createUser(userRequest, profileImage));
     }
 
-    @GetMapping("/{email}")
-    public ResponseEntity<UserResponse> findUserByEmail(@PathVariable(value = "email") String email) {
-        User user = userService.findUserByEmail(email);
-        return ResponseEntity.ok().body(UserResponse.from(user));
+    @GetMapping("/{userId}")
+    public ResponseEntity<UserResponse> findUserByUserId(@PathVariable Long userId) {
+        return ResponseEntity.ok().body(UserResponse.from(userService.findUserByUserId(userId)));
+    }
+
+    @GetMapping("/email/{email}")
+    public ResponseEntity<UserResponse> findUserByEmail(@PathVariable String email) {
+        return ResponseEntity.ok().body(UserResponse.from(userService.findUserByEmail(email)));
+    }
+
+    @GetMapping("/nickname/{nickname}")
+    public ResponseEntity<UserResponse> findUserByNickname(@PathVariable String nickname) {
+        return ResponseEntity.ok().body(UserResponse.from(userService.findUserByNickname(nickname)));
     }
 
     @GetMapping("/email/verification")

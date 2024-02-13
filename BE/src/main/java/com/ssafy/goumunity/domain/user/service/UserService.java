@@ -14,6 +14,10 @@ public interface UserService {
 
     User findUserByEmail(String email);
 
+    User findUserByUserId(Long userId);
+
+    User findUserByNickname(String nickname);
+
     User modifyPassword(User user, String password);
 
     User modifyUser(User user, UserRequest.Modify dto);

@@ -34,7 +34,7 @@ public class MessageResponse {
             UserEntity user = chat.getUser();
             userId = user.getId();
             nickname = user.getNickname();
-            content = user.getNickname();
+            content = chat.getContent();
             profileImageSrc = user.getImgSrc();
             chatType = chat.getChatType();
             createdAt = chat.getCreatedAt().toEpochMilli();

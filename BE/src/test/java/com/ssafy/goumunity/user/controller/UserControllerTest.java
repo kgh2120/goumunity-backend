@@ -21,6 +21,7 @@ import com.ssafy.goumunity.domain.user.controller.request.UserRequest;
 import com.ssafy.goumunity.domain.user.domain.Gender;
 import com.ssafy.goumunity.domain.user.domain.User;
 import com.ssafy.goumunity.domain.user.domain.UserCategory;
+import com.ssafy.goumunity.domain.user.domain.UserSavingCategory;
 import com.ssafy.goumunity.domain.user.exception.UserErrorCode;
 import com.ssafy.goumunity.domain.user.exception.UserException;
 import com.ssafy.goumunity.domain.user.service.UserService;
@@ -122,7 +123,7 @@ class UserControllerTest {
         given(userService.findUserByEmail(any())).willReturn(fromUserCreateDto(user));
 
         this.mockMvc
-                .perform(get("/api/users/" + user.getEmail()))
+                .perform(get("/api/users/email/" + user.getEmail()))
                 .andExpect(status().isOk())
                 .andDo(print());
     }
@@ -136,7 +137,7 @@ class UserControllerTest {
                 .willThrow(new UserException(UserErrorCode.EMAIL_NOT_FOUND));
 
         this.mockMvc
-                .perform(get("/api/users/" + user.getEmail()))
+                .perform(get("/api/users/email/" + user.getEmail()))
                 .andExpect(status().isNotFound())
                 .andDo(print());
     }
@@ -311,6 +312,7 @@ class UserControllerTest {
                 .monthBudget(100000L)
                 .age(20)
                 .userCategory(UserCategory.JOB_SEEKER)
+                .savingCategory(UserSavingCategory.ENTERTAINMENT)
                 .gender(Gender.MALE)
                 .nickname("규준")
                 .regionId(1L)
@@ -321,6 +323,7 @@ class UserControllerTest {
         return User.builder()
                 .email(dto.getEmail())
                 .password(dto.getPassword())
+                .savingCategory(dto.getSavingCategory())
                 .monthBudget(dto.getMonthBudget())
                 .age(dto.getAge())
                 .userCategory(dto.getUserCategory())
