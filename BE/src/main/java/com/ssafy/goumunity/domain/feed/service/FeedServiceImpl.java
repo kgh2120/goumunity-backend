@@ -17,6 +17,7 @@ import com.ssafy.goumunity.domain.user.service.port.UserRepository;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.CacheManager;
 import org.springframework.stereotype.Service;
@@ -50,8 +51,9 @@ public class FeedServiceImpl implements FeedService {
             if (feedRequest.getPrice() == null || feedRequest.getAfterPrice() == null) {
                 throw new CustomException(BIND_ERROR);
             }
-          if(feedRequest.getPrice() < feedRequest.getAfterPrice())
-              throw new CustomException(BIND_ERROR);
+            if (feedRequest.getPrice() < feedRequest.getAfterPrice()) {
+                throw new CustomException(BIND_ERROR);
+            }
 
         }
 
@@ -84,7 +86,7 @@ public class FeedServiceImpl implements FeedService {
         }
 
         // 캐시 데이터가 저장되어있지만 유저 지역에 변경이 발생한 경우 다시 불러온다.
-        if(regionId != cacheManager.getCache("region").get(user.getNickname(), Long.class)){
+        if (regionId != cacheManager.getCache("region").get(user.getNickname(), Long.class)) {
             findAllByRecommend(user, regionId);
         }
 
@@ -93,7 +95,7 @@ public class FeedServiceImpl implements FeedService {
         List<FeedRecommend> cacheData = cacheManager.getCache("recommends").get(user.getNickname(), List.class);
 
         // 게시글이 없는경우
-        if(cacheData.isEmpty()){
+        if (cacheData.isEmpty()) {
             List<FeedRecommend> empty = new ArrayList<>();
             return FeedRecommendResponse.from(empty, false);
         }
@@ -111,7 +113,7 @@ public class FeedServiceImpl implements FeedService {
                                 .toList();
                 findAllByRecommend(user, regionId);
 
-                if(tempReturn.isEmpty()) {
+                if (tempReturn.isEmpty()) {
                     List<FeedRecommend> empty = new ArrayList<>();
                     return FeedRecommendResponse.from(empty, false);
                 }
@@ -121,9 +123,9 @@ public class FeedServiceImpl implements FeedService {
 
         cacheManager.getCache("pagenumber").put(user.getNickname(), pageNumber + 1);
         return FeedRecommendResponse.from(cacheData.stream()
-                .skip((pageNumber - 1) * 10)
-                .limit(10)
-                .toList()
+                        .skip((pageNumber - 1) * 10)
+                        .limit(10)
+                        .toList()
                 , true
         );
     }
@@ -266,7 +268,7 @@ public class FeedServiceImpl implements FeedService {
         if (recommends.size() % 10 != 0) maxPage++;
 
         cacheManager.getCache("recommends").put(user.getNickname(), recommends);
-        if(maxPage != 0) {
+        if (maxPage != 0) {
             cacheManager.getCache("pagenumber").put(user.getNickname(), 1);
         } else {
             cacheManager.getCache("pagenumber").put(user.getNickname(), 0);
