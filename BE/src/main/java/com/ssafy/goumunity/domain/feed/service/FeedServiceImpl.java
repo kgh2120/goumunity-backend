@@ -256,7 +256,11 @@ public class FeedServiceImpl implements FeedService {
         if (recommends.size() % 10 != 0) maxPage++;
 
         cacheManager.getCache("recommends").put(user.getNickname(), recommends);
-        cacheManager.getCache("pagenumber").put(user.getNickname(), 1);
+        if(maxPage != 0) {
+            cacheManager.getCache("pagenumber").put(user.getNickname(), 1);
+        } else {
+            cacheManager.getCache("pagenumber").put(user.getNickname(), 0);
+        }
         cacheManager.getCache("maxpage").put(user.getNickname(), maxPage);
         cacheManager.getCache("region").put(user.getNickname(), regionId);
     }
