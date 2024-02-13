@@ -11,7 +11,9 @@ public interface UserRepository {
 
     Optional<User> findByEmailAndStatus(String email, UserStatus userStatus);
 
-    Optional<User> findById(Long userId);
+    Optional<User> findByIdAndUserStatus(Long userId, UserStatus userStatus);
+
+    Optional<User> findByNicknameAndUserStatus(String nickname, UserStatus userStatus);
 
     List<UserRankingInterface> findUserRanking();
 

@@ -57,8 +57,13 @@ public class UserController {
     }
 
     @GetMapping("/email/{email}")
-    public ResponseEntity<UserResponse> findUserByEmail(@PathVariable(value = "email") String email) {
+    public ResponseEntity<UserResponse> findUserByEmail(@PathVariable String email) {
         return ResponseEntity.ok().body(UserResponse.from(userService.findUserByEmail(email)));
+    }
+
+    @GetMapping("/nickname/{nickname}")
+    public ResponseEntity<UserResponse> findUserByNickname(@PathVariable String nickname) {
+        return ResponseEntity.ok().body(UserResponse.from(userService.findUserByNickname(nickname)));
     }
 
     @GetMapping("/email/verification")

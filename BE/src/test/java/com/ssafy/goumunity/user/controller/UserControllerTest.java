@@ -123,7 +123,7 @@ class UserControllerTest {
         given(userService.findUserByEmail(any())).willReturn(fromUserCreateDto(user));
 
         this.mockMvc
-                .perform(get("/api/users/" + user.getEmail()))
+                .perform(get("/api/users/email/" + user.getEmail()))
                 .andExpect(status().isOk())
                 .andDo(print());
     }
@@ -137,7 +137,7 @@ class UserControllerTest {
                 .willThrow(new UserException(UserErrorCode.EMAIL_NOT_FOUND));
 
         this.mockMvc
-                .perform(get("/api/users/" + user.getEmail()))
+                .perform(get("/api/users/email/" + user.getEmail()))
                 .andExpect(status().isNotFound())
                 .andDo(print());
     }

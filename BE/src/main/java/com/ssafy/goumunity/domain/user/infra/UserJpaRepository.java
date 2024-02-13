@@ -13,6 +13,14 @@ public interface UserJpaRepository extends JpaRepository<UserEntity, Long> {
     Optional<UserEntity> findByEmailAndUserStatus(String email, UserStatus userStatus);
 
     @Query(
+            "select u from UserEntity u join fetch u.regionEntity where u.id = :userId and u.userStatus = :userStatus")
+    Optional<UserEntity> findByIdAndUserStatus(Long userId, UserStatus userStatus);
+
+    @Query(
+            "select u from UserEntity u join fetch u.regionEntity where u.nickname = :nickname and u.userStatus = :userStatus")
+    Optional<UserEntity> findByNicknameAndUserStatus(String nickname, UserStatus userStatus);
+
+    @Query(
             value =
                     "SELECT u.user_id as id, u.email, u.nickname, u.img_src as imgSrc, IFNULL(SUM(ff.like_count), 0) AS likedSum "
                             + "FROM users AS u "
