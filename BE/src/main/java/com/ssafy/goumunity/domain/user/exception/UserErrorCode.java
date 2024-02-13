@@ -15,7 +15,8 @@ public enum UserErrorCode implements ErrorCode {
     LOGIN_FAILED(HttpStatus.BAD_REQUEST, "아이디 또는 패스워드가 올바르지 않습니다. 정확한 값을 입력해주세요"),
     IMAGE_NOT_EXISTS(HttpStatus.BAD_REQUEST, "존재하지 않는 이미지입니다."),
     CREATE_RANDOM_CODE_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "코드 생성에 실패했습니다."),
-    RANDOM_NICKNAME_CREATE_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "랜던 닉네임 생성에 실패했습니다");
+    RANDOM_NICKNAME_CREATE_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "랜던 닉네임 생성에 실패했습니다"),
+    USER_NOT_FOUND(HttpStatus.BAD_REQUEST, "사용자를 찾을 수 없습니다.");
 
     private final HttpStatus httpStatus;
     private final String errorMessage;

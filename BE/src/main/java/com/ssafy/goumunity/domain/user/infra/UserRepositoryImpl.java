@@ -25,6 +25,11 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
+    public Optional<User> findById(Long userId) {
+        return userJpaRepository.findById(userId).map(UserEntity::toModel);
+    }
+
+    @Override
     public List<UserRankingInterface> findUserRanking() {
         return userJpaRepository.findUserRanking();
     }
