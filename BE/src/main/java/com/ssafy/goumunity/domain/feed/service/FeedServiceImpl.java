@@ -5,10 +5,7 @@ import com.ssafy.goumunity.common.util.TimeUtils;
 import com.ssafy.goumunity.domain.feed.controller.request.FeedImgRequest;
 import com.ssafy.goumunity.domain.feed.controller.request.FeedRequest;
 import com.ssafy.goumunity.domain.feed.controller.response.*;
-import com.ssafy.goumunity.domain.feed.domain.Feed;
-import com.ssafy.goumunity.domain.feed.domain.FeedImg;
-import com.ssafy.goumunity.domain.feed.domain.FeedRecommendResource;
-import com.ssafy.goumunity.domain.feed.domain.FeedWeight;
+import com.ssafy.goumunity.domain.feed.domain.*;
 import com.ssafy.goumunity.domain.feed.exception.FeedErrorCode;
 import com.ssafy.goumunity.domain.feed.exception.FeedException;
 import com.ssafy.goumunity.domain.feed.service.post.FeedImageUploader;
@@ -48,9 +45,14 @@ public class FeedServiceImpl implements FeedService {
     @Transactional
     public FeedIdWithUser createFeed(
             User user, FeedRequest.Create feedRequest, List<MultipartFile> images) {
-        if (feedRequest.getPrice() != null && feedRequest.getAfterPrice() != null
-                && feedRequest.getPrice() < feedRequest.getAfterPrice()) {
-            throw new CustomException(BIND_ERROR);
+
+        if (feedRequest.getFeedCategory().equals(FeedCategory.INFO)) {
+            if (feedRequest.getPrice() == null || feedRequest.getAfterPrice() == null) {
+                throw new CustomException(BIND_ERROR);
+            }
+          if(feedRequest.getPrice() < feedRequest.getAfterPrice())
+              throw new CustomException(BIND_ERROR);
+
         }
 
         Feed createdFeed = feedRepository.create(Feed.create(feedRequest, user.getId()));
