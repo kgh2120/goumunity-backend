@@ -1,13 +1,11 @@
 package com.ssafy.goumunity.domain.feed.service;
 
+import com.ssafy.goumunity.common.exception.CustomException;
 import com.ssafy.goumunity.common.util.TimeUtils;
 import com.ssafy.goumunity.domain.feed.controller.request.FeedImgRequest;
 import com.ssafy.goumunity.domain.feed.controller.request.FeedRequest;
 import com.ssafy.goumunity.domain.feed.controller.response.*;
-import com.ssafy.goumunity.domain.feed.domain.Feed;
-import com.ssafy.goumunity.domain.feed.domain.FeedImg;
-import com.ssafy.goumunity.domain.feed.domain.FeedRecommendResource;
-import com.ssafy.goumunity.domain.feed.domain.FeedWeight;
+import com.ssafy.goumunity.domain.feed.domain.*;
 import com.ssafy.goumunity.domain.feed.exception.FeedErrorCode;
 import com.ssafy.goumunity.domain.feed.exception.FeedException;
 import com.ssafy.goumunity.domain.feed.service.post.FeedImageUploader;
@@ -19,6 +17,7 @@ import com.ssafy.goumunity.domain.user.service.port.UserRepository;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.CacheManager;
 import org.springframework.stereotype.Service;
@@ -27,6 +26,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Comparator;
 import java.util.List;
+
+import static com.ssafy.goumunity.common.exception.GlobalErrorCode.BIND_ERROR;
 
 @Service
 @RequiredArgsConstructor
@@ -45,6 +46,17 @@ public class FeedServiceImpl implements FeedService {
     @Transactional
     public FeedIdWithUser createFeed(
             User user, FeedRequest.Create feedRequest, List<MultipartFile> images) {
+
+        if (feedRequest.getFeedCategory().equals(FeedCategory.INFO)) {
+            if (feedRequest.getPrice() == null || feedRequest.getAfterPrice() == null) {
+                throw new CustomException(BIND_ERROR);
+            }
+            if (feedRequest.getPrice() < feedRequest.getAfterPrice()) {
+                throw new CustomException(BIND_ERROR);
+            }
+
+        }
+
         Feed createdFeed = feedRepository.create(Feed.create(feedRequest, user.getId()));
         boolean isAuthenticated = false;
 
@@ -74,7 +86,7 @@ public class FeedServiceImpl implements FeedService {
         }
 
         // 캐시 데이터가 저장되어있지만 유저 지역에 변경이 발생한 경우 다시 불러온다.
-        if(regionId != cacheManager.getCache("region").get(user.getNickname(), Long.class)){
+        if (regionId != cacheManager.getCache("region").get(user.getNickname(), Long.class)) {
             findAllByRecommend(user, regionId);
         }
 
@@ -83,7 +95,7 @@ public class FeedServiceImpl implements FeedService {
         List<FeedRecommend> cacheData = cacheManager.getCache("recommends").get(user.getNickname(), List.class);
 
         // 게시글이 없는경우
-        if(cacheData.isEmpty()){
+        if (cacheData.isEmpty()) {
             List<FeedRecommend> empty = new ArrayList<>();
             return FeedRecommendResponse.from(empty, false);
         }
@@ -101,7 +113,7 @@ public class FeedServiceImpl implements FeedService {
                                 .toList();
                 findAllByRecommend(user, regionId);
 
-                if(tempReturn.isEmpty()) {
+                if (tempReturn.isEmpty()) {
                     List<FeedRecommend> empty = new ArrayList<>();
                     return FeedRecommendResponse.from(empty, false);
                 }
@@ -111,9 +123,9 @@ public class FeedServiceImpl implements FeedService {
 
         cacheManager.getCache("pagenumber").put(user.getNickname(), pageNumber + 1);
         return FeedRecommendResponse.from(cacheData.stream()
-                .skip((pageNumber - 1) * 10)
-                .limit(10)
-                .toList()
+                        .skip((pageNumber - 1) * 10)
+                        .limit(10)
+                        .toList()
                 , true
         );
     }
@@ -256,7 +268,7 @@ public class FeedServiceImpl implements FeedService {
         if (recommends.size() % 10 != 0) maxPage++;
 
         cacheManager.getCache("recommends").put(user.getNickname(), recommends);
-        if(maxPage != 0) {
+        if (maxPage != 0) {
             cacheManager.getCache("pagenumber").put(user.getNickname(), 1);
         } else {
             cacheManager.getCache("pagenumber").put(user.getNickname(), 0);
