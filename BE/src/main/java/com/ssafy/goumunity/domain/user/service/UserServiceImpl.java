@@ -56,7 +56,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findUserByUserId(Long userId) {
         return userRepository
-                .findById(userId)
+                .findByIdAndUserStatus(userId, UserStatus.ACTIVE)
                 .orElseThrow(() -> new UserException(UserErrorCode.USER_NOT_FOUND));
     }
 
