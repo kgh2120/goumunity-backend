@@ -20,7 +20,7 @@ public enum FirstNickname {
     RICH_OF_EXCITEMENT("흥부자"),
     MILK_COLOR("우유빛깔"),
     HACK_CUTE("핵귀욤"),
-    STRONGEST("세계 최강"),
+    STRONGEST("세계_최강"),
     POOR_HEAD("왕초"),
     POOR_CHILD("거린이"),
     QUICK_LOVER("금사빠"),
@@ -36,6 +36,9 @@ public enum FirstNickname {
     EOMBOKDONG("엄복동"),
     TROUBLE_MAKER("트러블메이커"),
     TOO_MUCH_TALKER("투머치토커"),
+    CHICKEN_OWNER("치킨집사장"),
+    RIDER("폭주족"),
+    YOUTUBER("구독자_10명_유튜버"),
     ;
 
     private String kr;
