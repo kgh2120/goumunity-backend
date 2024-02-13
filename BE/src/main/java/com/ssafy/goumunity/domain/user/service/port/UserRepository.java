@@ -13,6 +13,8 @@ public interface UserRepository {
 
     Optional<User> findByIdAndUserStatus(Long userId, UserStatus userStatus);
 
+    Optional<User> findByNicknameAndUserStatus(String nickname, UserStatus userStatus);
+
     List<UserRankingInterface> findUserRanking();
 
     boolean existsByNickname(String nickname);

@@ -30,6 +30,13 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
+    public Optional<User> findByNicknameAndUserStatus(String nickname, UserStatus userStatus) {
+        return userJpaRepository
+                .findByNicknameAndUserStatus(nickname, userStatus)
+                .map(UserEntity::toModel);
+    }
+
+    @Override
     public List<UserRankingInterface> findUserRanking() {
         return userJpaRepository.findUserRanking();
     }

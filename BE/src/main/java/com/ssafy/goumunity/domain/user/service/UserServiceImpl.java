@@ -61,6 +61,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User findUserByNickname(String nickname) {
+        return userRepository
+                .findByNicknameAndUserStatus(nickname, UserStatus.ACTIVE)
+                .orElseThrow(() -> new UserException(UserErrorCode.USER_NOT_FOUND));
+    }
+
+    @Override
     @Transactional
     public User modifyPassword(User user, String password) {
         user.modifyPassword(encoder.encode(password));
