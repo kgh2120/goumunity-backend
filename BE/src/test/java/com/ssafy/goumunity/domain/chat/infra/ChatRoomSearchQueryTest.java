@@ -452,6 +452,5 @@ class ChatRoomSearchQueryTest {
         MyChatRoomResponse sut =
                 chatRoomQueryDslRepository.findOneMyChatRoomByChatRoomId(53259L, users.getId());
         assertThat(sut).isNull();
-        ;
     }
 }

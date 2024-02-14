@@ -23,7 +23,7 @@ class FeedRepositoryTest {
             feedJpaRepository.save(FeedEntity.builder().userEntity(user).build());
         }
         List<Long> sut = feedJpaRepository.findAllFeedIdsByUserId(user.getId());
-        System.out.println(sut);
+
         //        JPAQueryFactory jpaQueryFactory = new JPAQueryFactory(em);
         //
         // jpaQueryFactory.delete(feedEntity).where(feedEntity.userEntity.id.eq(user.getId())).execute();
