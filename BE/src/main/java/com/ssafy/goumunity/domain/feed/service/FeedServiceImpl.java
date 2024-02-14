@@ -179,13 +179,13 @@ public class FeedServiceImpl implements FeedService {
         }
 
         // feed 이미지 수정
-        if (feedRequest.getFeedImages() == null && images != null) {
+        if ((feedRequest.getFeedImages() == null || feedRequest.getFeedImages().isEmpty()) && images != null) {
             // 기존에 있던 사진이 모두 없고 새로운 사진만 생겼을 경우
             for (int seq = 1; seq <= images.size(); seq++) {
                 String savedUrl = feedImageUploader.uploadFeedImage(images.get(seq - 1));
                 feedImgRepository.save(FeedImg.from(originalFeed.getId(), savedUrl, seq));
             }
-        } else if (feedRequest.getFeedImages() != null && images == null) {
+        } else if ((feedRequest.getFeedImages() != null && !feedRequest.getFeedImages().isEmpty()) && images == null) {
             // 새로운 사진은 없고 기존에 있던 사진에 대한 수정 사항만 있을 경우
             List<FeedImgRequest.Modify> feedImages = feedRequest.getFeedImages();
             feedImages.sort(Comparator.comparingInt(FeedImgRequest.Modify::getSequence));
@@ -194,7 +194,7 @@ public class FeedServiceImpl implements FeedService {
                 feedImgRepository.save(
                         FeedImg.from(originalFeed.getId(), img.getImgSrc(), img.getSequence()));
             }
-        } else if (feedRequest.getFeedImages() != null && images != null) {
+        } else if ((feedRequest.getFeedImages() != null && !feedRequest.getFeedImages().isEmpty()) && images != null) {
             // 기존에 있던 사진도 있고 새로운 사진도 있을 경우
             List<FeedImgRequest.Modify> feedImages = feedRequest.getFeedImages();
             feedImages.sort(Comparator.comparingInt(FeedImgRequest.Modify::getSequence));
