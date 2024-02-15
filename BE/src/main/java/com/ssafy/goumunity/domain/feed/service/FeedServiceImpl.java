@@ -285,6 +285,8 @@ public class FeedServiceImpl implements FeedService {
             }
             cacheManager.getCache("maxpage").put(user.getNickname(), maxPage);
             cacheManager.getCache("region").put(user.getNickname(), regionId);
+        } else {
+            cacheManager.getCache("recommends").put(user.getNickname(), null);
         }
     }
 }
