@@ -118,9 +118,10 @@ public class FeedServiceImpl implements FeedService {
                             .limit(10)
                             .toList()
                     , true
+                    , pageNumber
             );
         } else {
-            return FeedRecommendResponse.from(result, false);
+            return FeedRecommendResponse.from(result, false, 0);
         }
     }
 

@@ -10,8 +10,14 @@ import lombok.*;
 public class FeedRecommendResponse {
     private List<FeedRecommend> feedRecommends;
     private Boolean hasNext;
+    private Integer pageNumber;
 
-    public static FeedRecommendResponse from(List<FeedRecommend> recommends, Boolean hasNext) {
-        return FeedRecommendResponse.builder().feedRecommends(recommends).hasNext(hasNext).build();
+    public static FeedRecommendResponse from(
+            List<FeedRecommend> recommends, Boolean hasNext, Integer pageNumber) {
+        return FeedRecommendResponse.builder()
+                .feedRecommends(recommends)
+                .hasNext(hasNext)
+                .pageNumber(pageNumber)
+                .build();
     }
 }
