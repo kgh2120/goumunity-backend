@@ -24,9 +24,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Comparator;
-import java.util.List;
-
 import static com.ssafy.goumunity.common.exception.GlobalErrorCode.BIND_ERROR;
 
 @Service
@@ -110,8 +107,12 @@ public class FeedServiceImpl implements FeedService {
                 }
             }
         }
+        // 마지막 페이지가 아닌 경우
+        else {
+            result = cacheData.stream().skip((pageNumber - 1) * 10).limit(10).toList();
+            cacheManager.getCache("pagenumber").put(user.getNickname(), pageNumber + 1);
+        }
 
-        cacheManager.getCache("pagenumber").put(user.getNickname(), pageNumber + 1);
         if(!result.isEmpty()) {
             return FeedRecommendResponse.from(result.stream()
                             .skip((pageNumber - 1) * 10)
