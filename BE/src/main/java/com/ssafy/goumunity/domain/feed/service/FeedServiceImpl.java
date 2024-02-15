@@ -115,12 +115,17 @@ public class FeedServiceImpl implements FeedService {
         }
 
         cacheManager.getCache("pagenumber").put(user.getNickname(), pageNumber + 1);
-        return FeedRecommendResponse.from(cacheData.stream()
-                        .skip((pageNumber - 1) * 10)
-                        .limit(10)
-                        .toList()
-                , true
-        );
+
+        if(cacheData.isEmpty()){
+            return FeedRecommendResponse.from(new ArrayList<>(), false);
+        } else {
+            return FeedRecommendResponse.from(cacheData.stream()
+                            .skip((pageNumber - 1) * 10)
+                            .limit(10)
+                            .toList()
+                    , true
+            );
+        }
     }
 
     @Override
