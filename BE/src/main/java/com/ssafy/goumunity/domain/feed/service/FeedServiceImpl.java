@@ -86,8 +86,9 @@ public class FeedServiceImpl implements FeedService {
         int maxPage = cacheManager.getCache("maxpage").get(user.getNickname(), Integer.class);
         List<FeedRecommend> cacheData = cacheManager.getCache("recommends").get(user.getNickname(), List.class);
 
-        // 게시글이 없는경우
-        if (cacheData.isEmpty()) {
+        // 게시글이 없는경우, 페이지가 너무 빠르게 갱신되어 정합성 불일치인 경우
+        if (cacheData.isEmpty() || pageNumber > maxPage) {
+            findAllByRecommend(user, regionId);
             List<FeedRecommend> empty = new ArrayList<>();
             return FeedRecommendResponse.from(empty, false);
         }
@@ -275,13 +276,15 @@ public class FeedServiceImpl implements FeedService {
         int maxPage = recommends.size() / 10;
         if (recommends.size() % 10 != 0) maxPage++;
 
-        cacheManager.getCache("recommends").put(user.getNickname(), recommends);
-        if (maxPage != 0) {
-            cacheManager.getCache("pagenumber").put(user.getNickname(), 1);
-        } else {
-            cacheManager.getCache("pagenumber").put(user.getNickname(), 0);
+        if(!recommends.isEmpty()) {
+            cacheManager.getCache("recommends").put(user.getNickname(), recommends);
+            if (maxPage != 0) {
+                cacheManager.getCache("pagenumber").put(user.getNickname(), 1);
+            } else {
+                cacheManager.getCache("pagenumber").put(user.getNickname(), 0);
+            }
+            cacheManager.getCache("maxpage").put(user.getNickname(), maxPage);
+            cacheManager.getCache("region").put(user.getNickname(), regionId);
         }
-        cacheManager.getCache("maxpage").put(user.getNickname(), maxPage);
-        cacheManager.getCache("region").put(user.getNickname(), regionId);
     }
 }
