@@ -47,15 +47,7 @@ public class FeedServiceImpl implements FeedService {
     public FeedIdWithUser createFeed(
             User user, FeedRequest.Create feedRequest, List<MultipartFile> images) {
 
-        if (feedRequest.getFeedCategory().equals(FeedCategory.INFO)) {
-            if (feedRequest.getPrice() == null || feedRequest.getAfterPrice() == null) {
-                throw new CustomException(BIND_ERROR);
-            }
-            if (feedRequest.getPrice() < feedRequest.getAfterPrice()) {
-                throw new CustomException(BIND_ERROR);
-            }
-
-        }
+        verifyPriceIsBiggerThanAfterPrice(feedRequest.getFeedCategory(), feedRequest.getPrice(), feedRequest.getAfterPrice());
 
         Feed createdFeed = feedRepository.create(Feed.create(feedRequest, user.getId()));
         boolean isAuthenticated = false;
@@ -164,6 +156,11 @@ public class FeedServiceImpl implements FeedService {
     @Transactional
     public void modifyFeed(
             Long userId, Long feedId, FeedRequest.Modify feedRequest, List<MultipartFile> images) {
+
+
+
+        verifyPriceIsBiggerThanAfterPrice(feedRequest.getFeedCategory(), feedRequest.getPrice(), feedRequest.getAfterPrice());
+
         Feed originalFeed =
                 feedRepository
                         .findOneById(feedId)
@@ -224,6 +221,17 @@ public class FeedServiceImpl implements FeedService {
 
         // feed 내용 수정
         feedRepository.modify(Feed.create(originalFeed, feedRequest));
+    }
+
+    private void verifyPriceIsBiggerThanAfterPrice(FeedCategory feedCategory, Integer price, Integer afterPrice) {
+        if (feedCategory.equals(FeedCategory.INFO)) {
+            if (price == null || afterPrice == null) {
+                throw new CustomException(BIND_ERROR);
+            }
+            if (price < afterPrice) {
+                throw new CustomException(BIND_ERROR);
+            }
+        }
     }
 
     @Override
