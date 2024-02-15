@@ -86,14 +86,14 @@ public class FeedServiceImpl implements FeedService {
         int maxPage = cacheManager.getCache("maxpage").get(user.getNickname(), Integer.class);
         List<FeedRecommend> cacheData = cacheManager.getCache("recommends").get(user.getNickname(), List.class);
 
-        // 게시글이 없는경우
-        if (cacheData.isEmpty()) {
-            List<FeedRecommend> empty = new ArrayList<>();
-            return FeedRecommendResponse.from(empty, false);
-        }
+        List<FeedRecommend> result = new ArrayList<>();
 
+        // 게시글이 없는경우, 페이지가 너무 빠르게 갱신되어 정합성 불일치인 경우
+        if (cacheData.isEmpty() || pageNumber > maxPage) {
+            findAllByRecommend(user, regionId);
+        }
         // 마지막페이지인 경우
-        if (pageNumber == maxPage) {
+        else if (pageNumber == maxPage) {
             // 마지막페이지인데 게시글이 맞아떨어진 경우
             if (maxPage * 10 == cacheData.size()) findAllByRecommend(user, regionId);
             else {
@@ -105,21 +105,25 @@ public class FeedServiceImpl implements FeedService {
                                 .toList();
                 findAllByRecommend(user, regionId);
 
-                if (tempReturn.isEmpty()) {
-                    List<FeedRecommend> empty = new ArrayList<>();
-                    return FeedRecommendResponse.from(empty, false);
+                if (!tempReturn.isEmpty()) {
+                    result = tempReturn;
                 }
-                return FeedRecommendResponse.from(tempReturn, true);
             }
         }
 
         cacheManager.getCache("pagenumber").put(user.getNickname(), pageNumber + 1);
-        return FeedRecommendResponse.from(cacheData.stream()
-                        .skip((pageNumber - 1) * 10)
-                        .limit(10)
-                        .toList()
-                , true
-        );
+        if(!result.isEmpty()) {
+            return FeedRecommendResponse.from(result.stream()
+                            .skip((pageNumber - 1) * 10)
+                            .limit(10)
+                            .toList()
+                    , true
+                    , pageNumber
+                    , maxPage
+            );
+        } else {
+            return FeedRecommendResponse.from(result, false, 0, 0);
+        }
     }
 
     @Override
@@ -275,13 +279,17 @@ public class FeedServiceImpl implements FeedService {
         int maxPage = recommends.size() / 10;
         if (recommends.size() % 10 != 0) maxPage++;
 
-        cacheManager.getCache("recommends").put(user.getNickname(), recommends);
-        if (maxPage != 0) {
-            cacheManager.getCache("pagenumber").put(user.getNickname(), 1);
+        if(!recommends.isEmpty()) {
+            cacheManager.getCache("recommends").put(user.getNickname(), recommends);
+            if (maxPage != 0) {
+                cacheManager.getCache("pagenumber").put(user.getNickname(), 1);
+            } else {
+                cacheManager.getCache("pagenumber").put(user.getNickname(), 0);
+            }
+            cacheManager.getCache("maxpage").put(user.getNickname(), maxPage);
+            cacheManager.getCache("region").put(user.getNickname(), regionId);
         } else {
-            cacheManager.getCache("pagenumber").put(user.getNickname(), 0);
+            cacheManager.getCache("recommends").put(user.getNickname(), null);
         }
-        cacheManager.getCache("maxpage").put(user.getNickname(), maxPage);
-        cacheManager.getCache("region").put(user.getNickname(), regionId);
     }
 }
