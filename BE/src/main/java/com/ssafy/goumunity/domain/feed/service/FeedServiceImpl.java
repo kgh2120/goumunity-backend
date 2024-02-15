@@ -86,15 +86,14 @@ public class FeedServiceImpl implements FeedService {
         int maxPage = cacheManager.getCache("maxpage").get(user.getNickname(), Integer.class);
         List<FeedRecommend> cacheData = cacheManager.getCache("recommends").get(user.getNickname(), List.class);
 
+        List<FeedRecommend> result = new ArrayList<>();
+
         // 게시글이 없는경우, 페이지가 너무 빠르게 갱신되어 정합성 불일치인 경우
         if (cacheData.isEmpty() || pageNumber > maxPage) {
             findAllByRecommend(user, regionId);
-            List<FeedRecommend> empty = new ArrayList<>();
-            return FeedRecommendResponse.from(empty, false);
         }
-
         // 마지막페이지인 경우
-        if (pageNumber == maxPage) {
+        else if (pageNumber == maxPage) {
             // 마지막페이지인데 게시글이 맞아떨어진 경우
             if (maxPage * 10 == cacheData.size()) findAllByRecommend(user, regionId);
             else {
@@ -106,25 +105,22 @@ public class FeedServiceImpl implements FeedService {
                                 .toList();
                 findAllByRecommend(user, regionId);
 
-                if (tempReturn.isEmpty()) {
-                    List<FeedRecommend> empty = new ArrayList<>();
-                    return FeedRecommendResponse.from(empty, false);
+                if (!tempReturn.isEmpty()) {
+                    result = tempReturn;
                 }
-                return FeedRecommendResponse.from(tempReturn, true);
             }
         }
 
         cacheManager.getCache("pagenumber").put(user.getNickname(), pageNumber + 1);
-
-        if(cacheData.isEmpty()){
-            return FeedRecommendResponse.from(new ArrayList<>(), false);
-        } else {
-            return FeedRecommendResponse.from(cacheData.stream()
+        if(!result.isEmpty()) {
+            return FeedRecommendResponse.from(result.stream()
                             .skip((pageNumber - 1) * 10)
                             .limit(10)
                             .toList()
                     , true
             );
+        } else {
+            return FeedRecommendResponse.from(result, false);
         }
     }
 
