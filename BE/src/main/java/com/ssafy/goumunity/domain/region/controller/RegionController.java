@@ -21,7 +21,8 @@ public class RegionController {
 
     @GetMapping
     public ResponseEntity<List<RegionResponse>> findAll() {
-        return ResponseEntity.ok(regionService.findAll());
+        List<RegionResponse> all = regionService.findAll();
+        return ResponseEntity.ok(all);
     }
 
     @GetMapping("/{regionId}")

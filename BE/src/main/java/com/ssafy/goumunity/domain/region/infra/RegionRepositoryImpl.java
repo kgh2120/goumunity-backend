@@ -6,6 +6,8 @@ import com.ssafy.goumunity.domain.region.service.port.RegionRepository;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -14,6 +16,7 @@ public class RegionRepositoryImpl implements RegionRepository {
 
     private final RegionJpaRepository regionRepository;
 
+    // @Cacheable("regions")
     @Override
     public List<Region> findAll() {
         return regionRepository.findAll().stream().map(RegionEntity::to).toList();
