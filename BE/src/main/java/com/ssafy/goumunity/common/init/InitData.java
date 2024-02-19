@@ -2,6 +2,9 @@ package com.ssafy.goumunity.common.init;
 
 import java.util.List;
 
+import com.ssafy.goumunity.domain.feed.infra.comment.CommentEntity;
+import com.ssafy.goumunity.domain.feed.infra.feed.FeedEntity;
+import com.ssafy.goumunity.domain.feed.infra.reply.ReplyEntity;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.cache.CacheManager;
 import org.springframework.context.annotation.Profile;
@@ -30,7 +33,7 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
 import lombok.RequiredArgsConstructor;
 
-@Profile("local")
+@Profile({"local", "perf"})
 @RequiredArgsConstructor
 @Component
 public class InitData implements InitializingBean {
@@ -157,6 +160,36 @@ public class InitData implements InitializingBean {
 
 		em.persist(UserChatRoomEntity.create(user, chatRoom));
 		em.persist(UserChatRoomEntity.create(user2, chatRoom));
+
+
+		for (int i = 0; i < 100; i++) {
+			FeedEntity feed = FeedEntity.builder()
+					.content("1234")
+					.userEntity(user)
+					.build();
+
+			em.persist(feed);
+
+
+			for (int j = 0; j < 100; j++) {
+				CommentEntity comment = CommentEntity.builder()
+						.userEntity(user)
+						.feedEntity(feed)
+						.build();
+
+				em.persist(comment);
+
+				for (int k = 0; k < 10; k++) {
+					em.persist(ReplyEntity.builder()
+							.commentEntity(comment)
+							.userEntity(user)
+							.build());
+
+				}
+
+			}
+
+		}
 
 		tx.commit();
 	}

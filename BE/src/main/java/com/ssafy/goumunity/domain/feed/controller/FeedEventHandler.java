@@ -21,7 +21,8 @@ public class FeedEventHandler {
     @TransactionalEventListener
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void handleUserDeletedEvent(UserDeletedEvent event) {
-        log.info("userDeleteEvent : {}", event.getUserId());
+        long start = System.currentTimeMillis();
         feedService.clearUserFeed(event.getUserId());
+        log.info("Feed-UserDeletedEvent - cost {}ms", System.currentTimeMillis() - start);
     }
 }
