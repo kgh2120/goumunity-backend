@@ -1,9 +1,14 @@
 package com.ssafy.goumunity.common.init;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.ssafy.goumunity.domain.feed.infra.comment.CommentEntity;
+import com.ssafy.goumunity.domain.feed.infra.commentlike.CommentLikeEntity;
 import com.ssafy.goumunity.domain.feed.infra.feed.FeedEntity;
+import com.ssafy.goumunity.domain.feed.infra.feedimg.FeedImgEntity;
+import com.ssafy.goumunity.domain.feed.infra.feedlike.FeedLikeEntity;
+import com.ssafy.goumunity.domain.feed.infra.feedscrap.FeedScrapEntity;
 import com.ssafy.goumunity.domain.feed.infra.reply.ReplyEntity;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.cache.CacheManager;
@@ -18,6 +23,7 @@ import com.ssafy.goumunity.domain.chat.infra.chatroom.ChatRoomEntity;
 import com.ssafy.goumunity.domain.chat.infra.chatroom.UserChatRoomEntity;
 import com.ssafy.goumunity.domain.chat.infra.hashtag.ChatRoomHashtagEntity;
 import com.ssafy.goumunity.domain.chat.infra.hashtag.HashtagEntity;
+import com.ssafy.goumunity.domain.feed.infra.replylike.ReplyLikeEntity;
 import com.ssafy.goumunity.domain.region.controller.request.RegionRequest;
 import com.ssafy.goumunity.domain.region.controller.response.RegionResponse;
 import com.ssafy.goumunity.domain.region.domain.Region;
@@ -161,6 +167,29 @@ public class InitData implements InitializingBean {
 		em.persist(UserChatRoomEntity.create(user, chatRoom));
 		em.persist(UserChatRoomEntity.create(user2, chatRoom));
 
+		List<UserEntity> testingUser = new ArrayList<>();
+		for (int i = 0; i < 10; i++) {
+			UserRequest.Create testUserDomain =
+				UserRequest.Create.builder()
+					.email("t3@naver.com")
+					.password(encode)
+					.nickname("잠실 프린세스 예은 5599")
+					.age(28)
+					.gender(Gender.FEMALE)
+					.monthBudget(100_0000L)
+					.regionId(region.getRegionId())
+					.userCategory(UserCategory.JOB_SEEKER)
+					.build();
+
+			UserEntity testUserEntity =
+				UserEntity.fromModel(
+					User.create(
+						testUserDomain,
+						"https://goumunity.s3.ap-northeast-2.amazonaws.com/static/%EA%B9%9D%EC%B9%98%EC%A7%80%EB%A7%88.jpg",
+						encode));
+			em.persist(testUserEntity);
+			testingUser.add(testUserEntity);
+		}
 
 		for (int i = 0; i < 100; i++) {
 			FeedEntity feed = FeedEntity.builder()
@@ -168,7 +197,27 @@ public class InitData implements InitializingBean {
 					.userEntity(user)
 					.build();
 
+
+
 			em.persist(feed);
+
+			for (int j = 0; j < 5; j++) {
+				em.persist(FeedImgEntity.builder()
+					.feedEntity(feed)
+					.build());
+			}
+
+			for (UserEntity testUser : testingUser) {
+				em.persist(FeedLikeEntity.builder()
+					.feedEntity(feed)
+					.userEntity(testUser)
+					.build());
+				em.persist(FeedScrapEntity.builder()
+					.feedEntity(feed)
+					.userEntity(testUser)
+					.build());
+			}
+
 
 
 			for (int j = 0; j < 100; j++) {
@@ -179,11 +228,26 @@ public class InitData implements InitializingBean {
 
 				em.persist(comment);
 
+				for (UserEntity testUser : testingUser) {
+					em.persist(CommentLikeEntity.builder()
+						.commentEntity(comment)
+						.userEntity(testUser)
+						.build());
+				}
+
 				for (int k = 0; k < 10; k++) {
-					em.persist(ReplyEntity.builder()
-							.commentEntity(comment)
-							.userEntity(user)
+					ReplyEntity reply = ReplyEntity.builder()
+						.commentEntity(comment)
+						.userEntity(user)
+						.build();
+					em.persist(reply);
+
+					for (UserEntity testUser : testingUser) {
+						em.persist(ReplyLikeEntity.builder()
+							.replyEntity(reply)
+							.userEntity(testUser)
 							.build());
+					}
 
 				}
 
