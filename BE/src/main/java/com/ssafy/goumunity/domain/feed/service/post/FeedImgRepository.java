@@ -10,4 +10,6 @@ public interface FeedImgRepository {
     List<FeedImg> findAllFeedImgByFeedId(Long feedId);
 
     void delete(Long feedImgId);
+
+    void deleteAllByFeedIds(List<Long> feedIds);
 }

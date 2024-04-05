@@ -1,5 +1,6 @@
 package com.ssafy.goumunity.domain.feed.controller;
 
+import com.ssafy.goumunity.domain.feed.service.FeedDeleteService;
 import com.ssafy.goumunity.domain.feed.service.FeedService;
 import com.ssafy.goumunity.domain.user.event.UserDeletedEvent;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +15,7 @@ import org.springframework.transaction.event.TransactionalEventListener;
 @RequiredArgsConstructor
 @Component
 public class FeedEventHandler {
-
+    private final FeedDeleteService feedDeleteService;
     private final FeedService feedService;
 
     @Async
@@ -22,7 +23,8 @@ public class FeedEventHandler {
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void handleUserDeletedEvent(UserDeletedEvent event) {
         long start = System.currentTimeMillis();
-        feedService.clearUserFeed(event.getUserId());
+        // feedService.clearUserFeed(event.getUserId());
+        feedDeleteService.clearUsersFeed(event.getUserId());
         log.info("Feed-UserDeletedEvent - cost {}ms", System.currentTimeMillis() - start);
     }
 }

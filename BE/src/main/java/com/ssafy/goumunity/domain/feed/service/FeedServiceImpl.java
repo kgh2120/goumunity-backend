@@ -264,7 +264,7 @@ public class FeedServiceImpl implements FeedService {
             5. feedIds 전체 삭제
          */
 
-//        List<Long> feedIds = feedRepository.findAllFeedIdsByUserId(userId);
+        List<Long> feedIds = feedRepository.findAllFeedIdsByUserId(userId);
         feedRepository.deleteAllFeedByUserId(userId);
     }
 

@@ -6,8 +6,6 @@ import com.ssafy.goumunity.domain.region.service.port.RegionRepository;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Repository;
 
 @Repository
