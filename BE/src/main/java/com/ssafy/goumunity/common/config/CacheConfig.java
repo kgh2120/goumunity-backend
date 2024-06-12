@@ -18,10 +18,9 @@ import org.springframework.context.annotation.Primary;
 public class CacheConfig {
 
     @Primary
-    @Bean
+    @Bean("cfCacheManager")
     public CacheManager cacheManager() {
         SimpleCacheManager cacheManager = new SimpleCacheManager();
-
         List<CaffeineCache> caches =
                 Arrays.stream(CacheType.values())
                         .map(

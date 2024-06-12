@@ -51,7 +51,6 @@ public class FeedDeleteServiceImpl implements FeedDeleteService {
         replyRepository.deleteAllByReplyIds(commentsIds);
 
         commentRepository.deleteAllByIds(feedIds);
-//        feedRepository.deleteAllByFeedIds(feedIds);
         feedRepository.deleteAllByUserId(userId);
 
 

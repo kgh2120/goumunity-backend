@@ -7,14 +7,6 @@ import com.ssafy.goumunity.domain.chat.infra.chatroom.ChatRoomEntity;
 import com.ssafy.goumunity.domain.chat.infra.chatroom.UserChatRoomEntity;
 import com.ssafy.goumunity.domain.chat.infra.hashtag.ChatRoomHashtagEntity;
 import com.ssafy.goumunity.domain.chat.infra.hashtag.HashtagEntity;
-import com.ssafy.goumunity.domain.feed.infra.comment.CommentEntity;
-import com.ssafy.goumunity.domain.feed.infra.commentlike.CommentLikeEntity;
-import com.ssafy.goumunity.domain.feed.infra.feed.FeedEntity;
-import com.ssafy.goumunity.domain.feed.infra.feedimg.FeedImgEntity;
-import com.ssafy.goumunity.domain.feed.infra.feedlike.FeedLikeEntity;
-import com.ssafy.goumunity.domain.feed.infra.feedscrap.FeedScrapEntity;
-import com.ssafy.goumunity.domain.feed.infra.reply.ReplyEntity;
-import com.ssafy.goumunity.domain.feed.infra.replylike.ReplyLikeEntity;
 import com.ssafy.goumunity.domain.region.controller.request.RegionRequest;
 import com.ssafy.goumunity.domain.region.domain.Region;
 import com.ssafy.goumunity.domain.region.infra.RegionEntity;
@@ -31,20 +23,18 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.cache.CacheManager;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Slf4j
-@Profile({"local", "perf"})
+@Profile({"local"})
 @RequiredArgsConstructor
 @Component
 public class InitData implements InitializingBean {
 
     private final EntityManagerFactory emf;
     private final PasswordEncoder encoder;
-    private final CacheManager cacheManager;
 
     private String[] regionNames = {
         "강남구", "강동구", "강북구", "강서구", "관악구", "광진구", "구로구", "금천구", "노원구", "도봉구", "동대문구", "동작구", "마포구",
@@ -191,40 +181,44 @@ public class InitData implements InitializingBean {
         }
         log.info("save additional user!");
 
-        for (int i = 0; i < 100; i++) {
-            FeedEntity feed = FeedEntity.builder().content("1234").userEntity(user).build();
-
-            em.persist(feed);
-
-            for (int j = 0; j < 5; j++) {
-                em.persist(FeedImgEntity.builder().sequence(j).feedEntity(feed).build());
-            }
-
-            for (UserEntity testUser : testingUser) {
-                em.persist(FeedLikeEntity.builder().feedEntity(feed).userEntity(testUser).build());
-                em.persist(FeedScrapEntity.builder().feedEntity(feed).userEntity(testUser).build());
-            }
-            for (int j = 0; j < 100; j++) {
-                CommentEntity comment = CommentEntity.builder().userEntity(user).feedEntity(feed).build();
-
-                em.persist(comment);
-
-                for (UserEntity testUser : testingUser) {
-                    em.persist(
-                            CommentLikeEntity.builder().commentEntity(comment).userEntity(testUser).build());
-                }
-
-                for (int k = 0; k < 100; k++) {
-                    ReplyEntity reply = ReplyEntity.builder().commentEntity(comment).userEntity(user).build();
-                    em.persist(reply);
-
-                    for (UserEntity testUser : testingUser) {
-                        em.persist(ReplyLikeEntity.builder().replyEntity(reply).userEntity(testUser).build());
-                    }
-                }
-            }
-            log.info("feed{} saved!", i);
-        }
+        // for (int i = 0; i < 1; i++) {
+        //     FeedEntity feed = FeedEntity.builder().content("1234").userEntity(user).build();
+        //
+        //     em.persist(feed);
+        //
+        //     for (int j = 0; j < 5; j++) {
+        //         em.persist(FeedImgEntity.builder().sequence(j).feedEntity(feed).build());
+        //     }
+        //
+        //     for (UserEntity testUser : testingUser) {
+        //         em.persist(FeedLikeEntity.builder().feedEntity(feed).userEntity(testUser).build());
+        //         em.persist(FeedScrapEntity.builder().feedEntity(feed).userEntity(testUser).build());
+        //     }
+        //     for (int j = 0; j < 100; j++) {
+        //         CommentEntity comment =
+        // CommentEntity.builder().userEntity(user).feedEntity(feed).build();
+        //
+        //         em.persist(comment);
+        //
+        //         for (UserEntity testUser : testingUser) {
+        //             em.persist(
+        //
+        // CommentLikeEntity.builder().commentEntity(comment).userEntity(testUser).build());
+        //         }
+        //
+        //         for (int k = 0; k < 100; k++) {
+        //             ReplyEntity reply =
+        // ReplyEntity.builder().commentEntity(comment).userEntity(user).build();
+        //             em.persist(reply);
+        //
+        //             for (UserEntity testUser : testingUser) {
+        //
+        // em.persist(ReplyLikeEntity.builder().replyEntity(reply).userEntity(testUser).build());
+        //             }
+        //         }
+        //     }
+        //     log.info("feed{} saved!", i);
+        // }
 
         tx.commit();
         log.info("commit!");
