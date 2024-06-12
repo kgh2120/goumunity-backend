@@ -7,7 +7,8 @@ public enum CacheType {
     FEED_RECOMMENDS("recommends"),
     FEED_PAGE_NUMBER("pagenumber"),
     MAX_PAGE_NUMBER("maxpage"),
-    REGION("region");
+    REGION("region"),
+    REGION_ALL("regions");
 
     private String name;
     private Integer expireAfterWrite;

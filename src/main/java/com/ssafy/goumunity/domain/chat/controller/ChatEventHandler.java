@@ -21,6 +21,6 @@ public class ChatEventHandler {
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     @EventListener
     public void handleUserDeletedEvent(UserDeletedEvent event) {
-        chatRoomService.clearChatRoom(event.getUserId());
+        // chatRoomService.clearChatRoom(event.getUserId());
     }
 }

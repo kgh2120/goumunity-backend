@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.goumunity.common.config.SecurityConfig;
 import com.ssafy.goumunity.domain.region.controller.request.RegionRequest;
 import com.ssafy.goumunity.domain.region.controller.response.RegionResponse;
+import com.ssafy.goumunity.domain.region.controller.response.RegionsResponse;
 import com.ssafy.goumunity.domain.region.service.RegionService;
 import com.ssafy.goumunity.domain.region.service.port.RegionRepository;
 import java.nio.charset.StandardCharsets;
@@ -190,14 +191,14 @@ class RegionControllerTest {
                             .perform(get("/api/regions").contentType(MediaType.APPLICATION_JSON_UTF8))
                             .andExpect(status().isOk());
 
-            List<RegionResponse> result =
+            RegionsResponse result =
                     mapper.readValue(
                             resultActions.andReturn().getResponse().getContentAsString(StandardCharsets.UTF_8),
-                            List.class);
+                            RegionsResponse.class);
 
             SoftAssertions sa = new SoftAssertions();
 
-            sa.assertThat(result.size()).isEqualTo(1);
+            sa.assertThat(result.getRegions().size()).isEqualTo(1);
 
             sa.assertAll();
         }

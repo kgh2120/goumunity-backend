@@ -11,15 +11,16 @@ import org.springframework.cache.caffeine.CaffeineCache;
 import org.springframework.cache.support.SimpleCacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 
 @EnableCaching
 @Configuration
 public class CacheConfig {
 
-    @Bean
+    @Primary
+    @Bean("cfCacheManager")
     public CacheManager cacheManager() {
         SimpleCacheManager cacheManager = new SimpleCacheManager();
-
         List<CaffeineCache> caches =
                 Arrays.stream(CacheType.values())
                         .map(
