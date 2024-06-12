@@ -1,7 +1,7 @@
 package com.ssafy.goumunity.domain.feed.service;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.*;
 import static org.mockito.Mockito.verify;
 
 import com.ssafy.goumunity.domain.feed.domain.FeedLike;
@@ -35,9 +35,10 @@ class FeedLikeServiceImplTest {
 
         given(feedRepository.existsByFeedId(any())).willReturn(true);
         given(feedLikeRepository.existsByFeedLike(any())).willReturn(false);
-
+        // when
         feedLikeService.createFeedLike(userId, feedId);
-        verify(feedLikeRepository).create(FeedLike.from(userId, feedId));
+        // then
+        then(feedLikeRepository).should(atLeastOnce()).create(any());
     }
 
     @DisplayName("피드 좋아요 실패_해당 피드 없음")

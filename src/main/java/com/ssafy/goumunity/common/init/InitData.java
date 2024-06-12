@@ -18,14 +18,17 @@ import com.ssafy.goumunity.domain.user.infra.UserEntity;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-@Profile("local")
+@Slf4j
+@Profile({"local"})
 @RequiredArgsConstructor
 @Component
 public class InitData implements InitializingBean {
@@ -51,6 +54,7 @@ public class InitData implements InitializingBean {
                             Region.from(RegionRequest.builder().si("서울").gungu(regionName).build()));
             em.persist(region);
         }
+        log.info("save region!");
 
         String encode = encoder.encode("1q2w3e4rQ!");
         UserRequest.Create ur1 =
@@ -127,7 +131,7 @@ public class InitData implements InitializingBean {
         em.persist(monthBudget);
         HashtagEntity nakseungdae = HashtagEntity.from(Hashtag.create("낙성대"));
         em.persist(nakseungdae);
-
+        log.info("save hashtag!");
         ChatRoomEntity chatRoom =
                 ChatRoomEntity.from(
                         ChatRoom.create(
@@ -151,7 +155,72 @@ public class InitData implements InitializingBean {
 
         em.persist(UserChatRoomEntity.create(user, chatRoom));
         em.persist(UserChatRoomEntity.create(user2, chatRoom));
+        log.info("save chatRoom!");
+        List<UserEntity> testingUser = new ArrayList<>();
+        for (int i = 0; i < 10; i++) {
+            UserRequest.Create testUserDomain =
+                    UserRequest.Create.builder()
+                            .email("t3@naver.com")
+                            .password(encode)
+                            .nickname("잠실 프린세스 예은 5599")
+                            .age(28)
+                            .gender(Gender.FEMALE)
+                            .monthBudget(100_0000L)
+                            .regionId(region.getRegionId())
+                            .userCategory(UserCategory.JOB_SEEKER)
+                            .build();
+
+            UserEntity testUserEntity =
+                    UserEntity.fromModel(
+                            User.create(
+                                    testUserDomain,
+                                    "https://goumunity.s3.ap-northeast-2.amazonaws.com/static/%EA%B9%9D%EC%B9%98%EC%A7%80%EB%A7%88.jpg",
+                                    encode));
+            em.persist(testUserEntity);
+            testingUser.add(testUserEntity);
+        }
+        log.info("save additional user!");
+
+        // for (int i = 0; i < 1; i++) {
+        //     FeedEntity feed = FeedEntity.builder().content("1234").userEntity(user).build();
+        //
+        //     em.persist(feed);
+        //
+        //     for (int j = 0; j < 5; j++) {
+        //         em.persist(FeedImgEntity.builder().sequence(j).feedEntity(feed).build());
+        //     }
+        //
+        //     for (UserEntity testUser : testingUser) {
+        //         em.persist(FeedLikeEntity.builder().feedEntity(feed).userEntity(testUser).build());
+        //         em.persist(FeedScrapEntity.builder().feedEntity(feed).userEntity(testUser).build());
+        //     }
+        //     for (int j = 0; j < 100; j++) {
+        //         CommentEntity comment =
+        // CommentEntity.builder().userEntity(user).feedEntity(feed).build();
+        //
+        //         em.persist(comment);
+        //
+        //         for (UserEntity testUser : testingUser) {
+        //             em.persist(
+        //
+        // CommentLikeEntity.builder().commentEntity(comment).userEntity(testUser).build());
+        //         }
+        //
+        //         for (int k = 0; k < 100; k++) {
+        //             ReplyEntity reply =
+        // ReplyEntity.builder().commentEntity(comment).userEntity(user).build();
+        //             em.persist(reply);
+        //
+        //             for (UserEntity testUser : testingUser) {
+        //
+        // em.persist(ReplyLikeEntity.builder().replyEntity(reply).userEntity(testUser).build());
+        //             }
+        //         }
+        //     }
+        //     log.info("feed{} saved!", i);
+        // }
 
         tx.commit();
+        log.info("commit!");
     }
 }

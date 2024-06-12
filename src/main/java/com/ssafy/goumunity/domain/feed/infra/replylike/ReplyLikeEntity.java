@@ -12,7 +12,7 @@ import lombok.*;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "reply_like")
+@Table(name = "reply_like", indexes = @Index(name = "reply_like_to_reply", columnList = "reply_id"))
 public class ReplyLikeEntity {
 
     @Id

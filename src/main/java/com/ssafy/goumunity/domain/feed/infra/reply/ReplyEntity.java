@@ -14,7 +14,7 @@ import lombok.*;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "reply")
+@Table(name = "reply", indexes = @Index(name = "reply_to_comment_index", columnList = "comment_id"))
 public class ReplyEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

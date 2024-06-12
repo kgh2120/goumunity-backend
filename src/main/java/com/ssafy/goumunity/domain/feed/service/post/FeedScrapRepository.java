@@ -1,6 +1,7 @@
 package com.ssafy.goumunity.domain.feed.service.post;
 
 import com.ssafy.goumunity.domain.feed.domain.FeedScrap;
+import java.util.List;
 import java.util.Optional;
 
 public interface FeedScrapRepository {
@@ -12,4 +13,6 @@ public interface FeedScrapRepository {
     Optional<FeedScrap> findOneByUserIdAndFeedId(FeedScrap feedScrap);
 
     boolean existByUserIdAndFeedId(Long userId, Long feedId);
+
+    void deleteAllByFeedIds(List<Long> feedIds);
 }
