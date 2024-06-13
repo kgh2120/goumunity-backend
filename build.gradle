@@ -62,9 +62,9 @@ dependencies {
 
 	//Config-Server By Yun
 	// https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-starter-config
-	implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-config', version: '4.1.0'
+	//implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-config', version: '4.1.0'
 	// https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-starter-bootstrap
-	implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-bootstrap', version: '4.1.0'
+//	implementation group: 'org.springframework.cloud', name: 'spring-cloud-starter-bootstrap', version: '4.1.0'
 
 }
 

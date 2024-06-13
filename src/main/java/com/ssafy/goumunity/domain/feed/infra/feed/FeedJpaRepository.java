@@ -3,6 +3,7 @@ package com.ssafy.goumunity.domain.feed.infra.feed;
 import java.time.Instant;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 public interface FeedJpaRepository extends JpaRepository<FeedEntity, Long> {
@@ -23,4 +24,12 @@ public interface FeedJpaRepository extends JpaRepository<FeedEntity, Long> {
                             + "LIMIT 10;",
             nativeQuery = true)
     List<FeedScrapRankingInterface> findFeedScrapRanking(Instant startTime, Instant endTime);
+
+    @Query("delete from FeedEntity f where f.id in :feedIds")
+    @Modifying
+    void deleteAllByFeedIds(List<Long> feedIds);
+
+    @Query("delete from FeedEntity f where f.userEntity.id = :userId")
+    @Modifying
+    void deleteAllByUserId(Long userId);
 }

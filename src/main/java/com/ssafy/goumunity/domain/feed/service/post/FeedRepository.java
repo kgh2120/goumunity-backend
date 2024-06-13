@@ -39,4 +39,8 @@ public interface FeedRepository {
     void deleteAllFeedByUserId(Long userId);
 
     List<Long> findAllFeedIdsByUserId(Long userId);
+
+    void deleteAllByFeedIds(List<Long> feedIds);
+
+    void deleteAllByUserId(Long userId);
 }

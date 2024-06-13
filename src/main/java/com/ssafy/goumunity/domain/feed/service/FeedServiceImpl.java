@@ -19,7 +19,9 @@ import java.util.Comparator;
 import java.util.List;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cache.CacheManager;
+import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -27,7 +29,6 @@ import org.springframework.web.multipart.MultipartFile;
 import static com.ssafy.goumunity.common.exception.GlobalErrorCode.BIND_ERROR;
 
 @Service
-@RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class FeedServiceImpl implements FeedService {
 
@@ -36,6 +37,14 @@ public class FeedServiceImpl implements FeedService {
     private final FeedImageUploader feedImageUploader;
     private final UserRepository userRepository;
     private final CacheManager cacheManager;
+
+    public FeedServiceImpl(FeedRepository feedRepository, FeedImgRepository feedImgRepository, FeedImageUploader feedImageUploader, UserRepository userRepository, @Qualifier("cfCacheManager") CacheManager cacheManager) {
+        this.feedRepository = feedRepository;
+        this.feedImgRepository = feedImgRepository;
+        this.feedImageUploader = feedImageUploader;
+        this.userRepository = userRepository;
+        this.cacheManager = cacheManager;
+    }
 
     private final int AUTHENICATE_BASELINE_FEED_NUM = 5;
 
@@ -263,7 +272,7 @@ public class FeedServiceImpl implements FeedService {
             5. feedIds 전체 삭제
          */
 
-//        List<Long> feedIds = feedRepository.findAllFeedIdsByUserId(userId);
+        List<Long> feedIds = feedRepository.findAllFeedIdsByUserId(userId);
         feedRepository.deleteAllFeedByUserId(userId);
     }
 
