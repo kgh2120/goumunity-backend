@@ -20,6 +20,12 @@ public enum CacheType {
         this.maximumSize = ConstConfig.DEFAULT_MAX_SIZE;
     }
 
+    CacheType(String name, int ttl) {
+        this.name = name;
+        this.expireAfterWrite = ttl;
+        this.maximumSize = ConstConfig.DEFAULT_MAX_SIZE;
+    }
+
     static class ConstConfig {
         static final Integer DEFAULT_TTL_SEC = 600;
         static final Integer DEFAULT_MAX_SIZE = 10240;
