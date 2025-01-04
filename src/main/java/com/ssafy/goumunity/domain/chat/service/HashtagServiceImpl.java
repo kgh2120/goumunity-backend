@@ -7,11 +7,13 @@ import com.ssafy.goumunity.domain.chat.exception.ChatErrorCode;
 import com.ssafy.goumunity.domain.chat.exception.ChatException;
 import com.ssafy.goumunity.domain.chat.service.port.HashtagRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 @Service
@@ -24,7 +26,7 @@ public class HashtagServiceImpl implements HashtagService {
             String hashtagName, Pageable pageable, Long time) {
         return hashtagRepository.findAllByHashtagName(hashtagName, time, pageable);
     }
-    @Cacheable(cacheNames = "hashtag", cacheManager = "cfCacheManager", key = "#name")
+    @Cacheable(cacheNames = "hashtag", cacheManager = "cfCacheManager")
     @Override
     public Hashtag getHashtag(String name) {
         return hashtagRepository
