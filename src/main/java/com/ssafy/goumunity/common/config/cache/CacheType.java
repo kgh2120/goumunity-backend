@@ -8,7 +8,9 @@ public enum CacheType {
     FEED_PAGE_NUMBER("pagenumber"),
     MAX_PAGE_NUMBER("maxpage"),
     REGION("region", 86400),
-    REGION_ALL("regions", 86400);
+    REGION_ALL("regions", 86400),
+    HASHTAG("hashtag", 3600)
+    ;
 
     private String name;
     private Integer expireAfterWrite;
