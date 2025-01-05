@@ -5,12 +5,13 @@ import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 public interface UserJpaRepository extends JpaRepository<UserEntity, Long> {
 
     @Query(
             "select u from UserEntity u join fetch u.regionEntity where u.email = :email and u.userStatus = :userStatus")
-    Optional<UserEntity> findByEmailAndUserStatus(String email, UserStatus userStatus);
+    Optional<UserEntity> findByEmailAndUserStatus(@Param("email") String email, @Param("userStatus") UserStatus userStatus);
 
     @Query(
             "select u from UserEntity u join fetch u.regionEntity where u.id = :userId and u.userStatus = :userStatus")
@@ -18,7 +19,7 @@ public interface UserJpaRepository extends JpaRepository<UserEntity, Long> {
 
     @Query(
             "select u from UserEntity u join fetch u.regionEntity where u.nickname = :nickname and u.userStatus = :userStatus")
-    Optional<UserEntity> findByNicknameAndUserStatus(String nickname, UserStatus userStatus);
+    Optional<UserEntity> findByNicknameAndUserStatus(@Param("nickname") String nickname, @Param("userStatus") UserStatus userStatus);
 
     @Query(
             value =

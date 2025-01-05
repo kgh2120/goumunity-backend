@@ -14,6 +14,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -47,9 +48,10 @@ public class UserServiceImpl implements UserService {
                 User.create(userCreateRequest, imgPath, encoder.encode(userCreateRequest.getPassword()));
         return userRepository.create(user).getId();
     }
-
+    @Cacheable(cacheNames = "userEmail", cacheManager = "cfCacheManager")
     @Override
     public User findUserByEmail(String email) {
+        log.info("findUserByEmail cache Miss");
         return userRepository
                 .findByEmailAndStatus(email, UserStatus.ACTIVE)
                 .orElseThrow(() -> new UserException(UserErrorCode.EMAIL_NOT_FOUND));
@@ -62,6 +64,7 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new UserException(UserErrorCode.USER_NOT_FOUND));
     }
 
+    @Cacheable(cacheNames = "userNickname", cacheManager = "cfCacheManager")
     @Override
     public User findUserByNickname(String nickname) {
         return userRepository

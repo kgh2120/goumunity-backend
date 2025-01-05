@@ -9,7 +9,9 @@ public enum CacheType {
     MAX_PAGE_NUMBER("maxpage"),
     REGION("region", 86400),
     REGION_ALL("regions", 86400),
-    HASHTAG("hashtag", 3600)
+    HASHTAG("hashtag", 3600),
+    USER_NICKNAME("userNickname"),
+    USER_EMAIL("userEmail"),
     ;
 
     private String name;
