@@ -16,10 +16,8 @@ public class RegionRepositoryImpl implements RegionRepository {
 
     private final RegionJpaRepository regionRepository;
 
-    // @Cacheable("regions")
     @Override
     public List<Region> findAll() {
-        log.info("db hit");
         return regionRepository.findAll().stream().map(RegionEntity::to).toList();
     }
 

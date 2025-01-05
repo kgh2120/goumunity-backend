@@ -10,6 +10,7 @@ import com.ssafy.goumunity.domain.region.service.port.RegionRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,11 +22,13 @@ public class RegionServiceImpl implements RegionService {
 
     private final RegionRepository regionRepository;
 
+    @Cacheable(value = "regions", cacheManager = "cfCacheManager")
     @Override
     public List<RegionResponse> findAll() {
         return regionRepository.findAll().stream().map(RegionResponse::from).toList();
     }
 
+    @Cacheable(cacheNames = "region", cacheManager = "cfCacheManager", key = "#regionId")
     @Override
     public RegionResponse findOneByRegionId(Long regionId) {
         return RegionResponse.from(

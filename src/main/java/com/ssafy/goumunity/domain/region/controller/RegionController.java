@@ -20,11 +20,12 @@ public class RegionController {
 
     private final RegionService regionService;
 
-    @Cacheable(value = "regions", cacheManager = "cfCacheManager")
+
     @GetMapping
     public ResponseEntity<RegionsResponse> findAllCf() {
         return ResponseEntity.ok(RegionsResponse.of(regionService.findAll()));
     }
+
 
     @GetMapping("/{regionId}")
     public ResponseEntity<RegionResponse> findOneByRegionId(@PathVariable Long regionId) {
