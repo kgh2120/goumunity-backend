@@ -67,6 +67,7 @@ public class UserServiceImpl implements UserService {
     @Cacheable(cacheNames = "userNickname", cacheManager = "cfCacheManager")
     @Override
     public User findUserByNickname(String nickname) {
+        log.info("findUserByNickname cache Miss");
         return userRepository
                 .findByNicknameAndUserStatus(nickname, UserStatus.ACTIVE)
                 .orElseThrow(() -> new UserException(UserErrorCode.USER_NOT_FOUND));
@@ -80,6 +81,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Caching(
+            evict = {
+                    @CacheEvict(cacheNames = "userNickname", cacheManager = "cfCacheManager", key = "#user.nickname"),
+                    @CacheEvict(cacheNames = "userEmail", cacheManager = "cfCacheManager", key = "#user.email"),
+            }
+    )
     @Transactional
     public User modifyUser(User user, UserRequest.Modify dto) {
         user.modifyUserInfo(dto);
@@ -93,6 +100,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Caching(
+            evict = {
+                    @CacheEvict(cacheNames = "userNickname", cacheManager = "cfCacheManager", key = "#user.nickname"),
+                    @CacheEvict(cacheNames = "userEmail", cacheManager = "cfCacheManager", key = "#user.email"),
+            }
+    )
     @Transactional
     public User modifyProfileImage(User user, String imgSrc) {
         if (!profileImageUploader.isExistsImgSrc(imgSrc)) {
@@ -107,7 +120,6 @@ public class UserServiceImpl implements UserService {
     public boolean isExistNickname(String nickname) {
         return userRepository.existsByNickname(nickname);
     }
-    
     @Override
     @Transactional
     public void deleteUser(User user) {
