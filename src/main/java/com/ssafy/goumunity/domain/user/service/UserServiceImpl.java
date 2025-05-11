@@ -1,5 +1,7 @@
 package com.ssafy.goumunity.domain.user.service;
 
+import com.ssafy.goumunity.common.config.cache.CacheEvictMessage;
+import com.ssafy.goumunity.common.event.Events;
 import com.ssafy.goumunity.domain.chat.controller.response.MyChatRoomResponse;
 import com.ssafy.goumunity.domain.user.controller.request.UserRequest;
 import com.ssafy.goumunity.domain.user.controller.response.UserRankingResponse;
@@ -51,7 +53,6 @@ public class UserServiceImpl implements UserService {
     @Cacheable(cacheNames = "userEmail", cacheManager = "cfCacheManager")
     @Override
     public User findUserByEmail(String email) {
-        log.info("findUserByEmail cache Miss");
         return userRepository
                 .findByEmailAndStatus(email, UserStatus.ACTIVE)
                 .orElseThrow(() -> new UserException(UserErrorCode.EMAIL_NOT_FOUND));
@@ -67,7 +68,6 @@ public class UserServiceImpl implements UserService {
     @Cacheable(cacheNames = "userNickname", cacheManager = "cfCacheManager")
     @Override
     public User findUserByNickname(String nickname) {
-        log.info("findUserByNickname cache Miss");
         return userRepository
                 .findByNicknameAndUserStatus(nickname, UserStatus.ACTIVE)
                 .orElseThrow(() -> new UserException(UserErrorCode.USER_NOT_FOUND));
@@ -90,7 +90,11 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public User modifyUser(User user, UserRequest.Modify dto) {
         user.modifyUserInfo(dto);
-        return userRepository.modify(user);
+        user =  userRepository.modify(user);
+
+        Events.raise(new CacheEvictMessage("userNickname", user.getNickname()));
+        Events.raise(new CacheEvictMessage("userEmail", user.getEmail()));
+        return user;
     }
 
     @Override
@@ -113,7 +117,11 @@ public class UserServiceImpl implements UserService {
         }
 
         user.modifyProfileImage(imgSrc);
-        return userRepository.modify(user);
+        user = userRepository.modify(user);
+
+        Events.raise(new CacheEvictMessage("userNickname", user.getNickname()));
+        Events.raise(new CacheEvictMessage("userEmail", user.getEmail()));
+        return user;
     }
 
     @Override
@@ -123,9 +131,11 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void deleteUser(User user) {
+
         user.deleteUser();
         userRepository.delete(user);
     }
+
 
     @Override
     public Slice<MyChatRoomResponse> findMyChatRoom(User user, Long time, Pageable pageable) {

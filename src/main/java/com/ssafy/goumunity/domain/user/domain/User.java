@@ -1,5 +1,6 @@
 package com.ssafy.goumunity.domain.user.domain;
 
+import com.ssafy.goumunity.common.config.cache.CacheEvictMessage;
 import com.ssafy.goumunity.common.event.Events;
 import com.ssafy.goumunity.common.exception.CustomException;
 import com.ssafy.goumunity.domain.user.controller.request.UserRequest;
@@ -112,7 +113,10 @@ public class User {
 
     public void deleteUser() {
         this.userStatus = UserStatus.DELETED;
+        String tempNickname = nickname;
         this.nickname = null;
         Events.raise(UserDeletedEvent.create(this.id));
+        Events.raise(new CacheEvictMessage("userNickname", tempNickname));
+        Events.raise(new CacheEvictMessage("userEmail", this.getEmail()));
     }
 }
