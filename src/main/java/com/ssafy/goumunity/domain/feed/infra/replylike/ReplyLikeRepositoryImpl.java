@@ -7,10 +7,12 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+@Slf4j
 @Repository
 @RequiredArgsConstructor
 public class ReplyLikeRepositoryImpl implements ReplyLikeRepository {
@@ -55,10 +57,8 @@ public class ReplyLikeRepositoryImpl implements ReplyLikeRepository {
                     @Override
                     public int getBatchSize() {
                         return replyIds.size();
-                        //                return 100;
                     }
                 });
 
-        //        replyLikeJpaRepository.deleteAllByReplyIds(replyIds);
     }
 }

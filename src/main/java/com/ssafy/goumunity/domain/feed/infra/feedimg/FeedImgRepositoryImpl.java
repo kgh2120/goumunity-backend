@@ -2,14 +2,17 @@ package com.ssafy.goumunity.domain.feed.infra.feedimg;
 
 import com.ssafy.goumunity.domain.feed.domain.FeedImg;
 import com.ssafy.goumunity.domain.feed.service.post.FeedImgRepository;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.List;
+
+@Slf4j
 @Repository
 @RequiredArgsConstructor
 public class FeedImgRepositoryImpl implements FeedImgRepository {
@@ -36,7 +39,6 @@ public class FeedImgRepositoryImpl implements FeedImgRepository {
 
     @Override
     public void deleteAllByFeedIds(List<Long> feedIds) {
-
         jdbcTemplate.batchUpdate(
                 "delete from Feed_Img f where f.feed_id = ? ",
                 new BatchPreparedStatementSetter() {
@@ -48,9 +50,7 @@ public class FeedImgRepositoryImpl implements FeedImgRepository {
                     @Override
                     public int getBatchSize() {
                         return feedIds.size();
-                        //                return 100;
                     }
                 });
-        //        feedImgJpaRepository.deleteAllByFeedIds(feedIds);
     }
 }

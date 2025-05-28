@@ -67,13 +67,10 @@ public class ReplyRepositoryImpl implements ReplyRepository {
                 String.format("select r.reply_id from Reply r where r.comment_id in (%s)", inSql),
                 commentsIds.toArray(),
                 Long.class);
-
-        //        return replyJpaRepository.findAllReplyIdsInCommentIds(commentsIds);
     }
 
     @Override
     public void deleteAllByReplyIds(List<Long> replyIds) {
-
         jdbcTemplate.batchUpdate(
                 "delete from Reply r where r.comment_id = ? ",
                 new BatchPreparedStatementSetter() {
@@ -85,10 +82,7 @@ public class ReplyRepositoryImpl implements ReplyRepository {
                     @Override
                     public int getBatchSize() {
                         return replyIds.size();
-                        //                return 100;
                     }
                 });
-
-        //        replyJpaRepository.deleteAllByCommentIds(replyIds);
     }
 }

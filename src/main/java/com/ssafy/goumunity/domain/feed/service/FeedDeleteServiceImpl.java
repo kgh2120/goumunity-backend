@@ -14,6 +14,7 @@ import java.util.List;
 @Service
 public class FeedDeleteServiceImpl implements FeedDeleteService {
 
+    public static final int PERFORMANCE_CROSSOVER_POINT = 200_000;
     private final FeedRepository feedRepository;
     private final FeedImgRepository feedImgRepository;
     private final FeedLikeRepository feedLikeRepository;
@@ -24,35 +25,25 @@ public class FeedDeleteServiceImpl implements FeedDeleteService {
     private final ReplyLikeRepository replyLikeRepository;
 
     @Override
-    public void deleteFeed() {
-
-    }
-
-    /*
-        FeedIds에 해당하는 CommentIds 불러오기.
-        CommentsIds에 해당하는 ReplyIds 불러오기.
-        1차 삭제 스크랩, 이미지, 피드 좋아요, 답글 좋아요
-        2차 답글, 댓글 좋아요
-        3차 댓글
-        4차 피드
- */
-    @Override
     public void clearUsersFeed(Long userId) {
         List<Long> feedIds = feedRepository.findAllFeedIdsByUserId(userId);
         List<Long> commentsIds = commentRepository.findAllCommentIdsInFeedIds(feedIds);
         List<Long> replyIds = replyRepository.findAllReplyIdsInFeedIds(commentsIds);
 
-        replyLikeRepository.deleteAllByReplyIds(replyIds);
+        int totalSize = feedIds.size() + commentsIds.size() + replyIds.size();
 
+        if (totalSize > PERFORMANCE_CROSSOVER_POINT) {
+            feedRepository.deleteAllFeedByUserId(userId);
+            return;
+        }
+
+        replyLikeRepository.deleteAllByReplyIds(replyIds);
         feedImgRepository.deleteAllByFeedIds(feedIds);
         feedLikeRepository.deleteAllByFeedIds(feedIds);
         feedScrapRepository.deleteAllByFeedIds(feedIds);
         commentLikeRepository.deleteAllByCommentsIds(commentsIds);
         replyRepository.deleteAllByReplyIds(commentsIds);
-
         commentRepository.deleteAllByIds(feedIds);
         feedRepository.deleteAllByUserId(userId);
-
-
     }
 }

@@ -42,7 +42,6 @@ public class FeedScrapRepositoryImpl implements FeedScrapRepository {
 
     @Override
     public void deleteAllByFeedIds(List<Long> feedIds) {
-
         jdbcTemplate.batchUpdate(
                 "delete from scrap f where f.feed_id = ? ",
                 new BatchPreparedStatementSetter() {
@@ -54,10 +53,7 @@ public class FeedScrapRepositoryImpl implements FeedScrapRepository {
                     @Override
                     public int getBatchSize() {
                         return feedIds.size();
-                        //                return 100;
                     }
                 });
-
-        //        feedScrapJpaRepository.deleteAllByFeedIds(feedIds);
     }
 }

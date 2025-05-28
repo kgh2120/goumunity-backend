@@ -43,7 +43,6 @@ public class FeedLikeRepositoryImpl implements FeedLikeRepository {
 
     @Override
     public void deleteAllByFeedIds(List<Long> feedIds) {
-
         jdbcTemplate.batchUpdate(
                 "delete from Feed_Like f where f.feed_id = ? ",
                 new BatchPreparedStatementSetter() {
@@ -55,9 +54,7 @@ public class FeedLikeRepositoryImpl implements FeedLikeRepository {
                     @Override
                     public int getBatchSize() {
                         return feedIds.size();
-                        //                return 100;
                     }
                 });
-        //        feedLikeJpaRepository.deleteAllByFeedIds(feedIds);
     }
 }

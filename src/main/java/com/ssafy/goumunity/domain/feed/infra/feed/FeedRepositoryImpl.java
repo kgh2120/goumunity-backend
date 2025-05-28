@@ -10,9 +10,11 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+@Slf4j
 @Repository
 @RequiredArgsConstructor
 public class FeedRepositoryImpl implements FeedRepository {
@@ -87,22 +89,12 @@ public class FeedRepositoryImpl implements FeedRepository {
 
     @Override
     public void deleteAllFeedByUserId(Long userId) {
-
-
-        /*
-            1. userId에 해당하는 feedIds 찾기.
-            2. 1차
-         */
-
-
         feedJpaRepository.deleteAllById(feedJpaRepository.findAllFeedIdsByUserId(userId));
-        //        feedQueryDslRepository.deleteAllByUserId(userId);
     }
 
     @Override
     public List<Long> findAllFeedIdsByUserId(Long userId) {
-//        return feedJpaRepository.findAllFeedIdsByUserId(userId);
-        return jdbcTemplate.queryForList("select f.feed_id from Feed f where f.user_id = ?",new Object[]{userId}, Long.class);
+        return jdbcTemplate.queryForList("select f.feed_id from Feed f where f.user_id = ?", new Object[]{userId}, Long.class);
     }
 
     @Override
@@ -112,7 +104,6 @@ public class FeedRepositoryImpl implements FeedRepository {
 
     @Override
     public void deleteAllByUserId(Long userId) {
-        jdbcTemplate.update("delete from Feed f where f.user_id = ?", userId);
-//        feedJpaRepository.deleteAllByUserId(userId);
+        feedJpaRepository.deleteAllByUserId(userId);
     }
 }

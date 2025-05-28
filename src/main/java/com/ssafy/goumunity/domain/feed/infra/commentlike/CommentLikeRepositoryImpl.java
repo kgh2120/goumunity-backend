@@ -7,10 +7,12 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+@Slf4j
 @Repository
 @RequiredArgsConstructor
 public class CommentLikeRepositoryImpl implements CommentLikeRepository {
@@ -43,7 +45,6 @@ public class CommentLikeRepositoryImpl implements CommentLikeRepository {
 
     @Override
     public void deleteAllByCommentsIds(List<Long> commentsIds) {
-
         jdbcTemplate.batchUpdate(
                 "delete from Comment_Like c where c.comment_id = ? ",
                 new BatchPreparedStatementSetter() {
@@ -55,10 +56,7 @@ public class CommentLikeRepositoryImpl implements CommentLikeRepository {
                     @Override
                     public int getBatchSize() {
                         return commentsIds.size();
-                        //                return 100;
                     }
                 });
-
-        //        commentLikeJpaRepository.deleteAllByCommentsIds(commentsIds);
     }
 }
