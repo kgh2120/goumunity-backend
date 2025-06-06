@@ -27,7 +27,6 @@ spring:
   #    password: 1q2w3e3r
   #    url: jdbc:mariadb://192.168.219.100:3307/goumunity?useSSL=false&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
 
-
   servlet:
     multipart:
       max-request-size: 5MB
@@ -42,6 +41,12 @@ spring:
     #    host: redis
     host: localhost
     password:
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: ["health", "prometheus"]
 
 server:
   tomcat:
