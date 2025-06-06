@@ -15,4 +15,6 @@ public interface CommentLikeRepository {
     boolean existByCommentLike(CommentLike commentLike);
 
     void deleteAllByCommentsIds(List<Long> commentsIds);
+
+    int countCommentLikeInCommentId(List<Long> commentsIds);
 }

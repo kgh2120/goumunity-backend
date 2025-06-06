@@ -4,6 +4,7 @@ import com.ssafy.goumunity.domain.feed.domain.ReplyLike;
 import com.ssafy.goumunity.domain.feed.service.post.ReplyLikeRepository;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -60,5 +61,15 @@ public class ReplyLikeRepositoryImpl implements ReplyLikeRepository {
                     }
                 });
 
+    }
+
+    @Override
+    public int countReplyLikeInReplyId(List<Long> replyIds) {
+        String inSql = String.join(",", Collections.nCopies(replyIds.size(), "?"));
+        return jdbcTemplate.queryForObject(
+                String.format("select count(*) from reply_like as rl where rl.reply_id in (%s)", inSql),
+                replyIds.toArray(),
+                Integer.class
+        );
     }
 }

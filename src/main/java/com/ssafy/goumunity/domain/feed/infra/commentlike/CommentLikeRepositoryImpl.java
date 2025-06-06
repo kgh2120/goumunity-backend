@@ -4,6 +4,7 @@ import com.ssafy.goumunity.domain.feed.domain.CommentLike;
 import com.ssafy.goumunity.domain.feed.service.post.CommentLikeRepository;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -58,5 +59,15 @@ public class CommentLikeRepositoryImpl implements CommentLikeRepository {
                         return commentsIds.size();
                     }
                 });
+    }
+
+    @Override
+    public int countCommentLikeInCommentId(List<Long> commentsIds) {
+        String inSql = String.join(",", Collections.nCopies(commentsIds.size(), "?"));
+        return jdbcTemplate.queryForObject(
+                String.format("select count(*) from comment_like as cl where cl.comment_id in (%s)", inSql),
+                commentsIds.toArray(),
+                Integer.class
+        );
     }
 }

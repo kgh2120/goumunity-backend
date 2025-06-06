@@ -15,4 +15,6 @@ public interface ReplyLikeRepository {
     boolean existsByReplyLike(ReplyLike replyLike);
 
     void deleteAllByReplyIds(List<Long> replyIds);
+
+    int countReplyLikeInReplyId(List<Long> replyIds);
 }

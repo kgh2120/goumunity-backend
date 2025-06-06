@@ -28,9 +28,11 @@ public class FeedDeleteServiceImpl implements FeedDeleteService {
     public void clearUsersFeed(Long userId) {
         List<Long> feedIds = feedRepository.findAllFeedIdsByUserId(userId);
         List<Long> commentsIds = commentRepository.findAllCommentIdsInFeedIds(feedIds);
+        int commentLikeCount = commentLikeRepository.countCommentLikeInCommentId(commentsIds);
         List<Long> replyIds = replyRepository.findAllReplyIdsInFeedIds(commentsIds);
+        int replyLikeCount = replyLikeRepository.countReplyLikeInReplyId(replyIds);
 
-        int totalSize = feedIds.size() + commentsIds.size() + replyIds.size();
+        int totalSize = feedIds.size() + commentsIds.size() + replyIds.size() + replyLikeCount + commentLikeCount;
 
         if (totalSize > PERFORMANCE_CROSSOVER_POINT) {
             feedRepository.deleteAllFeedByUserId(userId);
